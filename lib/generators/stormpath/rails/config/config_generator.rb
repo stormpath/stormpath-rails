@@ -3,17 +3,18 @@ module Stormpath
     module Generators
       class ConfigGenerator < ::Rails::Generators::Base
         def create_initializer_file
-          create_file "config/stormpath.yml", "development:
+          create_file "config/stormpath.yml", "common:
   href: <%= ENV['STORMPATH_URL'] %>
-  root: https://api.stormpath.com/v1/directories/<root directory uid>
+  application: https://api.stormpath.com/v1/applications/<application id>
+
+development:
+  root: https://api.stormpath.com/v1/directories/<root directory id>
 
 test:
-  href: <%= ENV['STORMPATH_URL'] %>
-  root: https://api.stormpath.com/v1/directories/<root directory uid>
+  root: https://api.stormpath.com/v1/directories/<root directory id>
 
 production:
-  href: <%= ENV['STORMPATH_URL'] %>
-  root: https://api.stormpath.com/v1/directories/<root directory uid>
+  root: https://api.stormpath.com/v1/directories/<root directory id>
 "
         end
       end

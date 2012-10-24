@@ -12,9 +12,11 @@ edit config/stormpath.yml
 
 export stormpath connection string to STORMPATH_URL (optional)
 
+```ruby
 class User < ActiveRecord:Base
     include Stormpath::Rails::Account
 end
+```
 
 add stormpath_url column to store stormpath UID.
 

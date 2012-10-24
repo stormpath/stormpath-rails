@@ -5,11 +5,11 @@ require "stormpath-rails/account"
 module Stormpath
   module Rails
     class Config
-      cattr_accessor :_variables
+      cattr_accessor :vars
 
       def self.[](name)
-        self._variables ||= YAML.load(ERB.new(File.read("#{::Rails.root}/config/stormpath.yml")).result)[::Rails.env]
-        self._variables[name.to_s]
+        self.vars ||= YAML.load(ERB.new(File.read("#{::Rails.root}/config/stormpath.yml")).result)
+        self.vars["common"].update(self.vars[::Rails.env])[name.to_s]
       end
     end
   end
