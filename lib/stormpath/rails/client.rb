@@ -5,7 +5,13 @@ include Stormpath::Resource
 module Stormpath
   module Rails
     class Client
-      cattr_accessor :_connection
+      cattr_accessor :connection
+
+      def self.authenticate_account(login, password)
+        #TODO remove app href from config
+        auth_result = self.application.authenticate_account UsernamePasswordRequest.new(login, password)
+        auth_result.get_account
+      end
 
       def self.create_account!(attributes)
         account = self.ds.instantiate ::Account
@@ -36,8 +42,13 @@ module Stormpath
       end
 
       def self.ds
-        self._connection ||= ::ClientApplicationBuilder.new.set_application_href(Config[:href]).build
-        self._connection.client.data_store
+        self.connection ||= ::ClientApplicationBuilder.new.set_application_href(Config[:href]).build
+        self.connection.client.data_store
+      end
+
+      def self.application
+        self.connection ||= ::ClientApplicationBuilder.new.set_application_href(Config[:href]).build
+        self.connection.application
       end
     end
   end

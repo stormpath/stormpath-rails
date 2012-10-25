@@ -21,7 +21,7 @@ module Stormpath
           begin
             account = Client.find_account(user.stormpath_url)
             (STORMPATH_FIELDS - [:password]).each { |field| self.send("#{field}=", account.send("get_#{field}")) }
-          rescue => e
+          rescue ResourceError => error
             #somehow mark as data not loaded
           end
         end
