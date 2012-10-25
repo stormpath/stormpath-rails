@@ -1,6 +1,6 @@
-require "stormpath-rails/version"
-require "stormpath-rails/client"
-require "stormpath-rails/account"
+require "stormpath/rails/version"
+require "stormpath/rails/client"
+require "stormpath/rails/account"
 
 module Stormpath
   module Rails
