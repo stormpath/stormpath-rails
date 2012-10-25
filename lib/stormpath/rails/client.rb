@@ -9,7 +9,7 @@ module Stormpath
 
       def self.authenticate_account(login, password)
         #TODO remove app href from config
-        auth_result = self.application.authenticate_account UsernamePasswordRequest.new(login, password)
+        auth_result = self.application.authenticate_account ::UsernamePasswordRequest.new(login, password)
         auth_result.get_account
       end
 
