@@ -1,6 +1,7 @@
 require "stormpath-sdk"
 include Stormpath::Client
 include Stormpath::Resource
+include Stormpath::Authentication
 
 module Stormpath
   module Rails
@@ -8,8 +9,8 @@ module Stormpath
       cattr_accessor :connection
 
       def self.authenticate_account(login, password)
-        #TODO remove app href from config
-        auth_result = self.application.authenticate_account ::UsernamePasswordRequest.new(login, password)
+        application = self.ds.get_resource Config[:application], ::Application
+        auth_result = application.authenticate_account ::UsernamePasswordRequest.new(login, password)
         auth_result.get_account
       end
 
@@ -44,11 +45,6 @@ module Stormpath
       def self.ds
         self.connection ||= ::ClientApplicationBuilder.new.set_application_href(Config[:href]).build
         self.connection.client.data_store
-      end
-
-      def self.application
-        self.connection ||= ::ClientApplicationBuilder.new.set_application_href(Config[:href]).build
-        self.connection.application
       end
     end
   end
