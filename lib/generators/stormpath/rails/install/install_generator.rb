@@ -1,7 +1,7 @@
 module Stormpath
   module Rails
     module Generators
-      class ConfigGenerator < ::Rails::Generators::Base
+      class InstallGenerator < ::Rails::Generators::Base
         def create_initializer_file
           create_file "config/stormpath.yml", "common:
   href: <%= ENV['STORMPATH_URL'] %>
