@@ -3,4 +3,4 @@ rvm:
   - 1.9.3
 gemfile:
   - Gemfile
-script: bundle exec rake
+script: bundle exec rake spec
