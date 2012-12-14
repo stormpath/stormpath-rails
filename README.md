@@ -1,5 +1,7 @@
 # Stormpath::Rails
 
+[![Build Status](https://secure.travis-ci.org/stormpath/stormpath-rails.png)](http://travis-ci.org/stormpath/stormpath-rails)
+
 Ruby on Rails support for Stormpath
 
 ## Usage
