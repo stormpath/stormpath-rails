@@ -6,7 +6,9 @@ include Stormpath::Authentication
 module Stormpath
   module Rails
     class Client
-      cattr_accessor :connection
+      class << self
+        attr_accessor :connection
+      end
 
       def self.authenticate_account(login, password)
         application = self.ds.get_resource Config[:application], ::Application

@@ -20,6 +20,10 @@ Gem::Specification.new do |gem|
 
   gem.add_development_dependency('rake', '~> 10.0.2')
   gem.add_development_dependency('rspec', '~> 2.12.0')
+  gem.add_development_dependency('activerecord')
+  gem.add_development_dependency('sqlite3')
+  gem.add_development_dependency('mongoid')
+  gem.add_development_dependency('railties')
   gem.add_development_dependency('guard-rspec', '~> 2.2.1')
   gem.add_development_dependency('rb-inotify', '~> 0.8.8')
 end

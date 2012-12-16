@@ -1,0 +1,12 @@
+common:
+  href: stormpath_url
+  application: application_url
+
+development:
+  root: development_root
+
+test:
+  root: test_root
+
+production:
+  root: production_root
