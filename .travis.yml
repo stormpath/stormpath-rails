@@ -4,3 +4,5 @@ rvm:
 gemfile:
   - Gemfile
 script: bundle exec rake spec
+services:
+  - mongodb
