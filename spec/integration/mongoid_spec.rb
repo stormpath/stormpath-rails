@@ -2,7 +2,7 @@ require "spec_helper"
 require 'mongoid'
 require "stormpath-rails"
 
-describe "Mongoid integration" do
+describe "Mongoid document" do
   class MongoidEntity
     include Mongoid::Document
     include Stormpath::Rails::Account

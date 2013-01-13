@@ -16,6 +16,16 @@ module Stormpath
         auth_result.get_account
       end
 
+      def self.send_password_reset_email(login_or_email)
+        application = self.ds.get_resource Config[:application], ::Application
+        application.send_password_reset_email login_or_email
+      end
+
+      def self.verify_password_reset_token(token)
+        application = self.ds.get_resource Config[:application], ::Application
+        application.verify_password_reset_token token
+      end
+
       def self.create_account!(attributes)
         account = self.ds.instantiate ::Account
         attributes.each { |field, value| account.send("set_#{field}", value) }

@@ -2,7 +2,7 @@ require "spec_helper"
 require "active_record"
 require "stormpath-rails"
 
-describe "ActiveRecord integration" do
+describe "ActiveRecord record" do
   class ArEntity < ActiveRecord::Base
     include Stormpath::Rails::Account
   end
