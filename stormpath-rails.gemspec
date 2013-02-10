@@ -7,7 +7,7 @@ Gem::Specification.new do |gem|
   gem.version       = Stormpath::Rails::VERSION
   gem.authors       = ["Denis Grankin"]
   gem.email         = ["liquidautumn@gmail.com"]
-  gem.homepage      = "http://stormpath.com"
+  gem.homepage      = "http://www.stormpath.com"
   gem.description   = %q{Stormpath Rails integration}
   gem.summary       = %q{Stormpath SDK API Wrapper}
 

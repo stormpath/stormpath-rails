@@ -8,7 +8,7 @@ module Stormpath
     module Account
       extend ActiveSupport::Concern
 
-      STORMPATH_FIELDS = [ :email, :password, :username, :given_name, :middle_name, :surname ]
+      STORMPATH_FIELDS = [ :email, :password, :username, :given_name, :middle_name, :surname, :status ]
 
       included do
         #AR specific workaround
