@@ -26,6 +26,10 @@ module Stormpath
         application.verify_password_reset_token token
       end
 
+      def self.verify_account_email(token)
+        self.connection.client.current_tenant.verify_account_email token
+      end
+
       def self.create_account!(attributes)
         account = self.ds.instantiate ::Account
         attributes.each { |field, value| account.send("set_#{field}", value) }
