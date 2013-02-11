@@ -27,7 +27,7 @@ module Stormpath
       end
 
       def self.verify_account_email(token)
-        self.connection.client.current_tenant.verify_account_email token
+        self.client.current_tenant.verify_account_email token
       end
 
       def self.create_account!(attributes)
@@ -59,8 +59,12 @@ module Stormpath
       end
 
       def self.ds
+        self.client.data_store
+      end
+
+      def self.client
         self.connection ||= ::ClientApplicationBuilder.new.set_application_href(Config[:href]).build
-        self.connection.client.data_store
+        self.connection.client
       end
     end
   end
