@@ -4,29 +4,20 @@
 # Ruby on Rails support for Stormpath
 
 ## Gem Setup
-
 Reference gem from Gemfile.
-
 ```ruby
 gem 'stormpath-rails'
 ```
-
 Generate configuration file, then create directory per environment at stormpath and update stormpath.yml with corresponding directory hrefs.
-
 ```sh
 rails g stormpath:rails:install
 ```
-
-
 Generate and run migration, if you're on ActiveRecord. Skip this step for Mongoid.
-
 ```sh
 rails g stormpath:rails:migration user
 rake db:migrate
 ```
-
 Update your model file.
-
 ```ruby
 class User < ActiveRecord:Base
   include Stormpath::Rails::Account
