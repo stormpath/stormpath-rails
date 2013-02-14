@@ -8,7 +8,7 @@
 Reference gem from Gemfile.
 
 ```ruby
-add gem 'stormpath-rails' to Gemfile
+gem 'stormpath-rails'
 ```
 
 Generate configuration file, then create directory per environment at stormpath and update stormpath.yml with corresponding directory hrefs.
