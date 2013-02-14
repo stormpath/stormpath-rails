@@ -15,8 +15,8 @@ module Stormpath
         self.partial_updates = false if self.respond_to?(:partial_updates)
 
         #Mongoid specific declaration
-        #TODO index?
         field(:stormpath_url, type: String) if self.respond_to?(:field)
+        index({ stormpath_url: 1 }, { unique: true }) if self.respond_to?(:index)
 
         attr_accessor *STORMPATH_FIELDS
         attr_accessible  *STORMPATH_FIELDS

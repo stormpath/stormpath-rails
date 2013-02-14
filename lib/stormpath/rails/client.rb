@@ -11,18 +11,18 @@ module Stormpath
       end
 
       def self.authenticate_account(login, password)
-        application = self.ds.get_resource Config[:application], ::Application
+        application = self.ds.get_resource Config[:stormpath_url], ::Application
         auth_result = application.authenticate_account ::UsernamePasswordRequest.new(login, password)
         auth_result.get_account
       end
 
       def self.send_password_reset_email(login_or_email)
-        application = self.ds.get_resource Config[:application], ::Application
+        application = self.ds.get_resource Config[:stormpath_url], ::Application
         application.send_password_reset_email login_or_email
       end
 
       def self.verify_password_reset_token(token)
-        application = self.ds.get_resource Config[:application], ::Application
+        application = self.ds.get_resource Config[:stormpath_url], ::Application
         application.verify_password_reset_token token
       end
 
@@ -63,7 +63,7 @@ module Stormpath
       end
 
       def self.client
-        self.connection ||= ::ClientApplicationBuilder.new.set_application_href(Config[:href]).build
+        self.connection ||= ::ClientApplicationBuilder.new.set_application_href(Config[:stormpath_url] || Config[:href]).build
         self.connection.client
       end
     end
