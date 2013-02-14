@@ -1,30 +1,43 @@
-# Stormpath::Rails
-
 [![Build Status](https://secure.travis-ci.org/stormpath/stormpath-rails.png)](http://travis-ci.org/stormpath/stormpath-rails)
 
-Ruby on Rails support for Stormpath
+# Ruby on Rails support for Stormpath
 
-## Usage
+## Gem Setup
 
+Reference gem from Gemfile
+
+```ruby
 add gem 'stormpath-rails' to Gemfile
+```
 
-run rails g stormpath:rails:install
+Generate configuration file
+Create directory per environment at stormpath and update stormpath.yml.
 
-edit config/stormpath.yml
+```bash
+rails g stormpath:rails:install
+```
 
-export stormpath connection string to STORMPATH_URL (optional)
+Generate and run migration, if you're on ActiveRecord. Skip this step for Mongoid.
+
+```bash
+rails g stormpath:rails:migration user
+rake db:migrate
+```
+
+and update your model file
 
 ```ruby
 class User < ActiveRecord:Base
-    include Stormpath::Rails::Account
+  include Stormpath::Rails::Account
 end
 ```
 
-add stormpath_url column to store stormpath UID.
-
 ## TODO
 
-Preventive validation to not send invalid data to stormpath.
++ Automatic directory layout (test, development, production) creation
++ Preventive validation to not send invalid data to stormpath.
++ Preventive validation to not send invalid data to stormpath.
++ Solve n+1 request problem when requesting account collection.
 
 ## Contributing
 
