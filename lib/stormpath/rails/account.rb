@@ -44,7 +44,10 @@ module Stormpath
         before_update do
           return true unless self.stormpath_url
           begin
-            Client.update_account!(self.stormpath_url, Hash[*STORMPATH_FIELDS.map { |f| { f => self.send(f) } }.map(&:to_a).flatten])
+            updated_fields = Hash[*STORMPATH_FIELDS.map { |f| { f => self.send(f) } }.map(&:to_a).flatten]
+            logger.info updated_fields.inspect
+            updated_fields.delete(:password) if updated_fields[:password].blank?
+            Client.update_account!(self.stormpath_url, updated_fields)
           rescue ResourceError => error
             self.errors[:base] << error.to_s
             return false
