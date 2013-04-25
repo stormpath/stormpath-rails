@@ -1,7 +1,5 @@
 require 'active_support/concern'
 require "stormpath-sdk"
-include Stormpath::Client
-include Stormpath::Resource
 
 module Stormpath
   module Rails
@@ -25,8 +23,8 @@ module Stormpath
           return true unless user.stormpath_url
           begin
             account = Client.find_account(user.stormpath_url)
-            (STORMPATH_FIELDS - [:password]).each { |field| self.send("#{field}=", account.send("get_#{field}")) }
-          rescue ResourceError => error
+            (STORMPATH_FIELDS - [:password]).each { |field| self.send("#{field}=", account.send("#{field}")) }
+          rescue Stormpath::ResourceError => error
             Logger.new(STDERR).warn "Error loading Stormpath account (#{error})"
           end
         end
@@ -34,18 +32,18 @@ module Stormpath
         before_create do
           begin
             account = Stormpath::Rails::Client.create_account!(Hash[*STORMPATH_FIELDS.map { |f| { f => self.send(f) } }.map(&:to_a).flatten])
-          rescue ResourceError => error
+          rescue Stormpath::ResourceError => error
             self.errors[:base] << error.to_s
             return false
           end
-          self.stormpath_url = account.get_href
+          self.stormpath_url = account.href
         end
 
         before_update do
           return true unless self.stormpath_url
           begin
             Client.update_account!(self.stormpath_url, Hash[*STORMPATH_FIELDS.map { |f| { f => self.send(f) } }.map(&:to_a).flatten])
-          rescue ResourceError => error
+          rescue Stormpath::ResourceError => error
             self.errors[:base] << error.to_s
             return false
           end
@@ -55,7 +53,7 @@ module Stormpath
           return true unless self.stormpath_url
           begin
             account = Client.delete_account!(self.stormpath_url)
-          rescue ResourceError => error
+          rescue Stormpath::ResourceError => error
             Logger.new(STDERR).warn "Error destroying Stormpath account (#{error})"
           end
         end

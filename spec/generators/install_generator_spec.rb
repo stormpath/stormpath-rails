@@ -1,3 +1,4 @@
+require "spec_helper"
 require "active_support/core_ext/class/attribute_accessors"
 require "generator_spec/test_case"
 require "generators/stormpath/rails/install/install_generator"

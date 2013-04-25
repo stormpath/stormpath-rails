@@ -1,6 +1,4 @@
 require "stormpath-sdk"
-include Stormpath::Client
-include Stormpath::Resource
 include Stormpath::Authentication
 
 module Stormpath
@@ -11,18 +9,18 @@ module Stormpath
       end
 
       def self.authenticate_account(login, password)
-        application = self.ds.get_resource Config[:stormpath_url], ::Application
+        application = self.ds.get_resource Config[:stormpath_url], Stormpath::Application
         auth_result = application.authenticate_account ::UsernamePasswordRequest.new(login, password)
         auth_result.get_account
       end
 
       def self.send_password_reset_email(login_or_email)
-        application = self.ds.get_resource Config[:stormpath_url], ::Application
+        application = self.ds.get_resource Config[:stormpath_url], Stormpath::Application
         application.send_password_reset_email login_or_email
       end
 
       def self.verify_password_reset_token(token)
-        application = self.ds.get_resource Config[:stormpath_url], ::Application
+        application = self.ds.get_resource Config[:stormpath_url], Stormpath::Application
         application.verify_password_reset_token token
       end
 
@@ -31,8 +29,8 @@ module Stormpath
       end
 
       def self.create_account!(attributes)
-        account = self.ds.instantiate ::Account
-        attributes.each { |field, value| account.send("set_#{field}", value) }
+        account = self.ds.instantiate Stormpath::Account
+        attributes.each { |field, value| account.send("#{field}=", value) }
         self.root_directory.create_account account
       end
 
@@ -41,21 +39,21 @@ module Stormpath
       end
 
       def self.find_account(href)
-        self.ds.get_resource href, ::Account
+        self.ds.get_resource href, Stormpath::Account
       end
 
       def self.update_account!(href, attributes)
-        account = self.ds.get_resource href, ::Account
-        attributes.each { |field, value| account.send("set_#{field}", value) }
+        account = self.ds.get_resource href, Stormpath::Account
+        attributes.each { |field, value| account.send("#{field}=", value) }
         account.save
       end
 
       def self.delete_account!(href)
-        self.ds.delete self.ds.get_resource href, ::Account
+        self.ds.delete self.ds.get_resource href, Stormpath::Account
       end
 
       def self.root_directory
-        self.ds.get_resource Config[:root], ::Directory
+        self.ds.get_resource Config[:root], Stormpath::Directory
       end
 
       def self.ds
@@ -63,7 +61,9 @@ module Stormpath
       end
 
       def self.client
-        self.connection ||= ::ClientApplicationBuilder.new.set_application_href(Config[:stormpath_url] || Config[:href]).build
+        self.connection ||= Stormpath::Client.new({
+          application_href: Config[:stormpath_url] || Config[:href]
+        })
         self.connection.client
       end
     end
