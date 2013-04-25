@@ -7,7 +7,7 @@ describe Stormpath::Rails::Generators::MigrationGenerator do
   destination File.expand_path("../tmp", __FILE__)
   arguments %w(person)
 
-  before(:all) do
+  before do
     Time.stub_chain(:now, :utc, :strftime).and_return("0")
     prepare_destination
     run_generator
