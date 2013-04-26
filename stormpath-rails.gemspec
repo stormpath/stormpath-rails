@@ -26,5 +26,5 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency('mongoid')
   gem.add_development_dependency('railties')
   gem.add_development_dependency('guard-rspec', '~> 2.2.1')
-  gem.add_development_dependency('rb-inotify', '~> 0.8.8')
+  gem.add_development_dependency('simplecov', '~> 0.7.1')
 end

@@ -1,8 +1,27 @@
+---
 language: ruby
 rvm:
-  - 1.9.3
+- 1.9.3
 gemfile:
-  - Gemfile
+- Gemfile
 script: bundle exec rake spec
 services:
-  - mongodb
+- mongodb
+env:
+  global:
+  - secure: |-
+      TFLI7BpxBBSoVV5x/tyr1iCqcQHcbzJeQPSR67J32VWbMDjM3mA9mz4SERvK
+      j9VD7pEAknEBNpYUYdBR4Ut0m5/0F+XiX1eDOVMbfpmEefJ8e38CgGz7HZbu
+      KdaWJhxTL8k/efyvJ+/UVPyzM4M0ADdyZIoDCDgRhj6AG5DqDJs=
+  - secure: |-
+      eu8VkY1iR5RYHvOobDQ7Miz8aG894F/BR/zEH8c3gpIhs7kItkBy0SKEMi5J
+      A1yMlQsONU7aq6pbqiJEiBKSDWf9OOoFBxHYm46fop+xaLVLuuK484O9VzDW
+      P6lV6Z06LolZaZsc2ENKf+2qfoO1XdN9gMTWD7QkT4x6OgRWiok=
+  - secure: |-
+      fMUOQUfUNkEDWmx5d4vIMIbqTuHIX1lu1PmbUnR25hHN9JFZnroxSvsvUlvH
+      qB+GCk5q7kMuvqYC+Mbx0Ndb3NSuLSKYGYhHw/39ZyMPHgBhPKQyZuDiK3OJ
+      g3Pv8Ot3lScgATu1lm5EzoGfN3ZVlSgmg5PJOwsafVaRlAUaHz4=
+  - secure: |-
+      UDTunvFjUyTaLHPa3iNOVwdAg37FzfKHRYdOiUoPH3aNA6pOgrtQYzkbhbJA
+      chBcZBdD+SnEyY6PmI1NsLzcNrqBP3tdyH4c5vVy3KQAzc5TfU6RocWTrqRP
+      FQKm/r0cbpjdydkpEzOKMk77Y56g6MTEk5cGFZjYoqhGKdz66O0=
