@@ -39,7 +39,7 @@ shared_examples "stormpath account" do
       end
 
       it "should log warning if stormpath account update failed" do
-        Stormpath::Rails::Client.stub!(:find_account).and_raise(Stormpath::ResourceError.new(mock("error", message: "Find failed")))
+        Stormpath::Rails::Client.stub!(:find_account).and_raise(Stormpath::Error.new(mock("error", message: "Find failed")))
         logger.should_receive(:warn).with("Error loading Stormpath account (Find failed)")
         found = subject.class.where(stormpath_url: 'account_href').first
         subject.class::STORMPATH_FIELDS.each do |field_name|
@@ -59,7 +59,7 @@ shared_examples "stormpath account" do
     end
 
     it "should add error if stormpath account creation failed" do
-      Stormpath::Rails::Client.stub!(:create_account!).and_raise(Stormpath::ResourceError.new(mock("error", message: "Create failed")))
+      Stormpath::Rails::Client.stub!(:create_account!).and_raise(Stormpath::Error.new(mock("error", message: "Create failed")))
       subject.save
       subject.errors[:base].should == ["Create failed"]
     end
@@ -85,7 +85,7 @@ shared_examples "stormpath account" do
     end
 
     it "should add error if stormpath account update failed" do
-      Stormpath::Rails::Client.stub!(:update_account!).and_raise(Stormpath::ResourceError.new(mock("error", message: "Update failed")))
+      Stormpath::Rails::Client.stub!(:update_account!).and_raise(Stormpath::Error.new(mock("error", message: "Update failed")))
       subject.save.should be_false
       subject.errors[:base].should == ["Update failed"]
     end
@@ -114,7 +114,7 @@ shared_examples "stormpath account" do
     end
 
     it "should log warning if stormpath account update failed" do
-      Stormpath::Rails::Client.stub!(:delete_account!).and_raise(Stormpath::ResourceError.new(mock("error", message: "Delete failed")))
+      Stormpath::Rails::Client.stub!(:delete_account!).and_raise(Stormpath::Error.new(mock("error", message: "Delete failed")))
       logger.should_receive(:warn).with("Error destroying Stormpath account (Delete failed)")
       subject.destroy.should be_true
     end

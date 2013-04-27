@@ -11,8 +11,8 @@ describe Stormpath::Rails::Client do
       it "should instantiate a Stormpath Client" do
         client.should be
         client.should be_kind_of Stormpath::Client
-        client.current_tenant.should be
-        client.current_tenant.should be_kind_of Stormpath::Tenant
+        client.tenant.should be
+        client.tenant.should be_kind_of Stormpath::Resource::Tenant
       end
     end
   end
@@ -35,7 +35,7 @@ describe Stormpath::Rails::Client do
 
       it "should create an account" do
         account.should be
-        account.should be_kind_of Stormpath::Account
+        account.should be_kind_of Stormpath::Resource::Account
         account.given_name.should == attributes["given_name"]
       end
     end
@@ -64,7 +64,7 @@ describe Stormpath::Rails::Client do
 
       it "authenticates the user" do
         authenticated_user.should be
-        authenticated_user.should be_kind_of Stormpath::Account
+        authenticated_user.should be_kind_of Stormpath::Resource::Account
         authenticated_user.username.should == username
       end
     end
@@ -115,7 +115,7 @@ describe Stormpath::Rails::Client do
 
       it "returns the account" do
         returned_account.should be
-        returned_account.should be_kind_of Stormpath::Account
+        returned_account.should be_kind_of Stormpath::Resource::Account
         returned_account.href.should == created_account.href
       end
     end
@@ -133,7 +133,7 @@ describe Stormpath::Rails::Client do
 
       it "sends the reset email" do
         returned_account.should be
-        returned_account.should be_kind_of Stormpath::Account
+        returned_account.should be_kind_of Stormpath::Resource::Account
         returned_account.href.should == created_account.href
       end
     end
