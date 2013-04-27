@@ -15,7 +15,7 @@ module Stormpath
     end
 
     def destroy_all_stormpath_test_accounts
-      Stormpath::Rails::Client.root_directory.accounts.each do |account|
+      Stormpath::Rails::Client.directory.accounts.each do |account|
         Stormpath::Rails::Client.delete_account! account.href
       end
     end

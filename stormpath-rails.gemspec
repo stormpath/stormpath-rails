@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Stormpath SDK API Wrapper}
 
   gem.add_dependency "activesupport"
-  gem.add_dependency "stormpath-sdk", '~> 0.4.0'
+  gem.add_dependency "stormpath-sdk" #, '~> 0.4.0'
 
   gem.files         = `git ls-files`.split($/)
   gem.test_files    = gem.files.grep(%r{^(spec|features)/})
