@@ -25,7 +25,7 @@ module Stormpath
       end
 
       def self.create_account!(attributes)
-        self.root_directory.accounts.create attributes
+        self.directory.accounts.create attributes
       end
 
       def self.all_accounts
