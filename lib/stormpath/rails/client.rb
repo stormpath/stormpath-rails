@@ -12,8 +12,8 @@ module Stormpath
         auth_result.account
       end
 
-      def self.send_password_reset_email(username_or_email)
-        application.send_password_reset_email username_or_email
+      def self.send_password_reset_email(email)
+        application.send_password_reset_email email
       end
 
       def self.verify_password_reset_token(token)
