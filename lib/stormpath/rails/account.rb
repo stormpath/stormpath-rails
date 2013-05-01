@@ -22,7 +22,7 @@ module Stormpath
         after_initialize do |user|
           return true unless user.stormpath_url
           begin
-            account = Client.find_account(user.stormpath_url)
+            account = Stormpath::Rails::Client.find_account(user.stormpath_url)
             (STORMPATH_FIELDS - [:password]).each { |field| self.send("#{field}=", account.send("#{field}")) }
           rescue Stormpath::Error => error
             Logger.new(STDERR).warn "Error loading Stormpath account (#{error})"
@@ -44,7 +44,7 @@ module Stormpath
           begin
             updated_stormpath_fields = Hash[*STORMPATH_FIELDS.map { |f| { f => self.send(f) } }.map(&:to_a).flatten]
             updated_stormpath_fields.delete(:password) if updated_stormpath_fields[:password].blank?
-            Client.update_account!(self.stormpath_url, updated_stormpath_fields)
+            Stormpath::Rails::Client.update_account!(self.stormpath_url, updated_stormpath_fields)
           rescue Stormpath::Error => error
             self.errors[:base] << error.to_s
             return false
@@ -54,7 +54,7 @@ module Stormpath
         after_destroy do
           return true unless self.stormpath_url
           begin
-            Client.delete_account!(self.stormpath_url)
+            Stormpath::Rails::Client.delete_account!(self.stormpath_url)
           rescue Stormpath::Error => error
             Logger.new(STDERR).warn "Error destroying Stormpath account (#{error})"
           end
