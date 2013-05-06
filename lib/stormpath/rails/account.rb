@@ -19,44 +19,71 @@ module Stormpath
         attr_accessor(*STORMPATH_FIELDS)
         attr_accessible(*STORMPATH_FIELDS)
 
-        after_initialize do |user|
-          return true unless user.stormpath_url
-          begin
-            account = Stormpath::Rails::Client.find_account(user.stormpath_url)
-            (STORMPATH_FIELDS - [:password]).each { |field| self.send("#{field}=", account.send("#{field}")) }
-          rescue Stormpath::Error => error
-            Logger.new(STDERR).warn "Error loading Stormpath account (#{error})"
+        def stormpath_account
+          if stormpath_url
+            @stormpath_account ||= begin
+                                     Stormpath::Rails::Client.find_account(stormpath_url)
+                                   rescue Stormpath::Error => error
+                                     Logger.new(STDERR).warn "Error loading Stormpath account (#{error})"
+                                   end
+          end
+        end
+
+        def stormpath_pre_create_attrs
+          @stormpath_pre_create_attrs ||= {}
+        end
+
+        (STORMPATH_FIELDS - [:password]).each do |name|
+          define_method(name) do
+            if stormpath_account.present?
+              stormpath_account.send(name)
+            else
+              stormpath_pre_create_attrs[name]
+            end
+          end
+
+          define_method("#{name}=") do |val|
+            if stormpath_account.present?
+              stormpath_account.send("#{name}=", val)
+            else
+              stormpath_pre_create_attrs[name] = val
+            end
           end
         end
 
         before_create do
           begin
-            account = Stormpath::Rails::Client.create_account!(Hash[*STORMPATH_FIELDS.map { |f| { f => self.send(f) } }.map(&:to_a).flatten])
+            @stormpath_account = Stormpath::Rails::Client.create_account! stormpath_pre_create_attrs
+            stormpath_pre_create_attrs.clear
+            self.stormpath_url = @stormpath_account.href
           rescue Stormpath::Error => error
             self.errors[:base] << error.to_s
-            return false
+            false
           end
-          self.stormpath_url = account.href
         end
 
         before_update do
-          return true unless self.stormpath_url
-          begin
-            updated_stormpath_fields = Hash[*STORMPATH_FIELDS.map { |f| { f => self.send(f) } }.map(&:to_a).flatten]
-            updated_stormpath_fields.delete(:password) if updated_stormpath_fields[:password].blank?
-            Stormpath::Rails::Client.update_account!(self.stormpath_url, updated_stormpath_fields)
-          rescue Stormpath::Error => error
-            self.errors[:base] << error.to_s
-            return false
+          if self.stormpath_url.present?
+            begin
+              stormpath_account.save
+            rescue Stormpath::Error => error
+              self.errors[:base] << error.to_s
+              false
+            end
+          else
+            true
           end
         end
 
         after_destroy do
-          return true unless self.stormpath_url
-          begin
-            Stormpath::Rails::Client.delete_account!(self.stormpath_url)
-          rescue Stormpath::Error => error
-            Logger.new(STDERR).warn "Error destroying Stormpath account (#{error})"
+          if self.stormpath_url.present?
+            begin
+              stormpath_account.delete
+            rescue Stormpath::Error => error
+              Logger.new(STDERR).warn "Error destroying Stormpath account (#{error})"
+            end
+          else
+            true
           end
         end
       end
