@@ -21,7 +21,7 @@ module Stormpath
       end
 
       def self.verify_account_email(token)
-        self.client.tenant.verify_account_email token
+        self.client.accounts.verify_email_token token
       end
 
       def self.create_account!(attributes)
