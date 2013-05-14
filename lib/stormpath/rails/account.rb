@@ -19,6 +19,10 @@ module Stormpath
         attr_accessor(*STORMPATH_FIELDS)
         attr_accessible(*STORMPATH_FIELDS)
 
+        before_create :create_account_on_stormpath
+        before_update :update_account_on_stormpath
+        after_destroy :delete_account_on_stormpath
+
         def stormpath_account
           if stormpath_url
             @stormpath_account ||= begin
@@ -53,7 +57,7 @@ module Stormpath
           end
         end
 
-        before_create do
+        def create_account_on_stormpath
           begin
             @stormpath_account = Stormpath::Rails::Client.create_account! stormpath_pre_create_attrs
             stormpath_pre_create_attrs.clear
@@ -64,7 +68,7 @@ module Stormpath
           end
         end
 
-        before_update do
+        def update_account_on_stormpath
           if self.stormpath_url.present?
             begin
               stormpath_account.save
@@ -77,7 +81,7 @@ module Stormpath
           end
         end
 
-        after_destroy do
+        def delete_account_on_stormpath
           if self.stormpath_url.present?
             begin
               stormpath_account.delete
