@@ -59,12 +59,22 @@ module Stormpath
       end
 
       def self.client
-        self.connection ||= Stormpath::Client.new client_options
+        unless self.connection
+          composite_url = ENV['STORMPATH_URL']
+
+          if composite_url
+            self.root_application = Stormpath::Resource::Application.load composite_url
+            self.connection = self.root_application.client
+          else
+            self.connection = Stormpath::Client.new client_options
+          end
+        end
+
+        self.connection
       end
 
       def self.client_options
         Hash.new.tap do |o|
-          set_if_not_empty(o, :application_url, ENV["STORMPATH_APPLICATION_URL"])
           set_if_not_empty(o, "api_key_file_location", ENV["STORMPATH_API_KEY_FILE_LOCATION"])
           set_if_not_empty(o, "api_key_id_property_name", ENV["STORMPATH_API_KEY_ID_PROPERTY_NAME"])
           set_if_not_empty(o, "api_key_secret_property_name", ENV["STORMPATH_API_KEY_SECRET_PROPERTY_NAME"])
