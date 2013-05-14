@@ -41,7 +41,9 @@ module Stormpath
               stormpath_pre_create_attrs[name]
             end
           end
+        end
 
+        STORMPATH_FIELDS.each do |name|
           define_method("#{name}=") do |val|
             if stormpath_account.present?
               stormpath_account.send("#{name}=", val)
