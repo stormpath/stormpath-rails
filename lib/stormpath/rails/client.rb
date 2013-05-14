@@ -55,7 +55,7 @@ module Stormpath
       end
 
       def self.application
-        self.root_application ||= self.client.application
+        self.root_application ||= self.client.applications.get ENV["STORMPATH_APPLICATION_URL"]
       end
 
       def self.client
