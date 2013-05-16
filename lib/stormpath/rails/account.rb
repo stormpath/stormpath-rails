@@ -28,7 +28,7 @@ module Stormpath
             @stormpath_account ||= begin
                                      Stormpath::Rails::Client.find_account(stormpath_url)
                                    rescue Stormpath::Error => error
-                                     Logger.new(STDERR).warn "Error loading Stormpath account (#{error})"
+                                     Stormpath::Rails.logger.warn "Error loading Stormpath account (#{error})"
                                    end
           end
         end
@@ -86,7 +86,7 @@ module Stormpath
             begin
               stormpath_account.delete
             rescue Stormpath::Error => error
-              Logger.new(STDERR).warn "Error destroying Stormpath account (#{error})"
+              Stormpath::Rails.logger.warn "Error destroying Stormpath account (#{error})"
             end
           else
             true

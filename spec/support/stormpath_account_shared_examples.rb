@@ -1,5 +1,6 @@
 require "logger"
 require 'pry'
+require 'rails'
 
 shared_examples "stormpath account" do
   let(:mock_account) do
@@ -9,11 +10,10 @@ shared_examples "stormpath account" do
       end
     end
   end
-  let!(:logger) { Logger.new(STDERR) }
 
   before(:each) do
-    Logger.stub!(:new).and_return(logger)
     Stormpath::Rails::Client.stub!(:find_account).and_return(mock_account)
+    Stormpath::Rails.logger = Logger.new(STDERR)
   end
 
   context "after initialize" do
@@ -57,7 +57,7 @@ shared_examples "stormpath account" do
 
           it "logs a warning to standard output" do
             Stormpath::Rails::Client.stub!(:find_account).and_raise(Stormpath::Error.new(mock("error", message: "Find failed")))
-            logger.should_receive(:warn).with("Error loading Stormpath account (Find failed)")
+            Stormpath::Rails.logger.should_receive(:warn).with("Error loading Stormpath account (Find failed)")
             reloaded_subject.send(field_name).should be_nil
           end
         end
@@ -148,7 +148,7 @@ shared_examples "stormpath account" do
 
     it "should log warning if stormpath account update failed" do
       subject.stormpath_account.stub!(:delete).and_raise(Stormpath::Error.new(mock("error", message: "Delete failed")))
-      logger.should_receive(:warn).with("Error destroying Stormpath account (Delete failed)")
+      Stormpath::Rails.logger.should_receive(:warn).with("Error destroying Stormpath account (Delete failed)")
       subject.destroy.should be_true
     end
   end
