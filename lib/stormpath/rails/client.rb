@@ -8,7 +8,9 @@ module Stormpath
       end
 
       def self.authenticate_account(username, password)
-        auth_result = application.authenticate_account Stormpath::Authentication::UsernamePasswordRequest.new(username, password)
+        auth_result = application.authenticate_account(
+          Stormpath::Authentication::UsernamePasswordRequest.new(username, password)
+        )
         auth_result.account
       end
 
