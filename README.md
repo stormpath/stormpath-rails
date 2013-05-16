@@ -37,8 +37,7 @@ This is the Rails gem to ease integration of its features with any Rails-based a
 
 4. Through the [Stormpath Admin][stormpath-admin] interface, note your application's REST URL.
   You'll want to create an environment variable called STORMPATH\_APPLICATION\_URL whose value
-  is this URL. Also, create an environment variable called STORMPATH\_DIRECTORY\_URL whose value
-  is the URL of the directory you created (and added as a Login Source) earlier.
+  is this URL.
 
 5. Generate and run migration, if you're on ActiveRecord. Skip this step for Mongoid.
   ```sh
