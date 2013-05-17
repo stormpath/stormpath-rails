@@ -15,7 +15,7 @@ module Stormpath
     end
 
     def destroy_all_stormpath_test_accounts
-      Stormpath::Rails::Client.directory.accounts.each do |account|
+      Stormpath::Rails::Client.all_accounts.each do |account|
         Stormpath::Rails::Client.delete_account! account.href
       end
     end
@@ -43,7 +43,6 @@ RSpec.configure do |config|
     ENV["STORMPATH_API_KEY_SECRET"]               = ENV["STORMPATH_RAILS_TEST_API_KEY_SECRET"]
     ENV["STORMPATH_API_KEY_ID"]                   = ENV["STORMPATH_RAILS_TEST_API_KEY_ID"]
     ENV["STORMPATH_APPLICATION_URL"]              = ENV["STORMPATH_RAILS_TEST_APPLICATION_URL"]
-    ENV["STORMPATH_DIRECTORY_URL"]                = ENV["STORMPATH_RAILS_TEST_DIRECTORY_URL"]
     ENV["STORMPATH_API_KEY_FILE_LOCATION"]        = ENV["STORMPATH_RAILS_TEST_API_KEY_FILE_LOCATION"]
     ENV["STORMPATH_API_KEY_ID_PROPERTY_NAME"]     = ENV["STORMPATH_RAILS_TEST_API_KEY_ID_PROPERTY_NAME"]
     ENV["STORMPATH_API_KEY_SECRET_PROPERTY_NAME"] = ENV["STORMPATH_RAILS_TEST_API_KEY_SECRET_PROPERTY_NAME"]

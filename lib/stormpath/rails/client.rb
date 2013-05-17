@@ -10,7 +10,7 @@ module Stormpath
 
     class Client
       class << self
-        attr_accessor :connection, :root_directory, :root_application
+        attr_accessor :connection, :root_application
       end
 
       def self.authenticate_account(username, password)
@@ -33,11 +33,11 @@ module Stormpath
       end
 
       def self.create_account!(attributes)
-        self.directory.accounts.create attributes
+        self.application.accounts.create attributes
       end
 
       def self.all_accounts
-        self.directory.accounts
+        self.application.accounts
       end
 
       def self.find_account(href)
@@ -52,10 +52,6 @@ module Stormpath
 
       def self.delete_account!(href)
         self.client.accounts.get(href).delete
-      end
-
-      def self.directory
-        self.root_directory ||= self.client.directories.get ENV["STORMPATH_DIRECTORY_URL"]
       end
 
       def self.ds
