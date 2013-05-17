@@ -3,6 +3,21 @@ require 'pry'
 require 'rails'
 
 shared_examples "stormpath account" do
+  context 'class methods' do
+    context '.authenticate' do
+      let(:username) { 'test@example.com' }
+      let(:password) { 'adsf1234' }
+
+      before do
+        Stormpath::Rails::Client.should_receive(:authenticate_account).with username, password
+      end
+
+      it 'delegates to client api' do
+        subject.class.authenticate username, password
+      end
+    end
+  end
+
   let(:mock_account) do
     mock("account", href: "account_href").tap do |account|
       subject.class::STORMPATH_FIELDS.each do |field_name|

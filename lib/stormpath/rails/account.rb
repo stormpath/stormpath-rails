@@ -8,6 +8,12 @@ module Stormpath
 
       STORMPATH_FIELDS = [ :email, :password, :username, :given_name, :middle_name, :surname, :status ]
 
+      module ClassMethods
+        def authenticate username, password
+          Stormpath::Rails::Client.authenticate_account username, password
+        end
+      end
+
       included do
         #AR specific workaround
         self.partial_updates = false if self.respond_to?(:partial_updates)
