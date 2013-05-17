@@ -1,27 +1,28 @@
 require "logger"
-require 'pry'
-require 'rails'
 
 shared_examples "stormpath account" do
-  context 'class methods' do
-    context '.authenticate' do
-      let(:username) { 'test@example.com' }
-      let(:password) { 'adsf1234' }
-
-      before do
-        Stormpath::Rails::Client.should_receive(:authenticate_account).with username, password
-      end
-
-      it 'delegates to client api' do
-        subject.class.authenticate username, password
-      end
-    end
-  end
-
   let(:mock_account) do
     mock("account", href: "account_href").tap do |account|
       subject.class::STORMPATH_FIELDS.each do |field_name|
         account.stub!("#{field_name}").and_return(field_name.to_s)
+      end
+    end
+  end
+
+  context 'class methods' do
+    context '.authenticate' do
+      let(:username) { 'test@example.com' }
+      let(:password) { 'adsf1234' }
+      let(:mock_user) { subject.class.new }
+
+      before do
+        Stormpath::Rails::Client.stub!(:authenticate_account).and_return(mock_account)
+        subject.class.stub_chain(:where, :first).and_return(mock_user)
+      end
+
+      it 'returns an instance of the class into which the Account module was mixed in' do
+        instance = subject.class.authenticate username, password
+        instance.should be_a_kind_of(subject.class)
       end
     end
   end

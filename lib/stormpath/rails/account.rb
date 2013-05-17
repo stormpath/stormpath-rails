@@ -10,7 +10,8 @@ module Stormpath
 
       module ClassMethods
         def authenticate username, password
-          Stormpath::Rails::Client.authenticate_account username, password
+          @stormpath_account = Stormpath::Rails::Client.authenticate_account username, password
+          self.where(stormpath_url: @stormpath_account.href).first
         end
       end
 
