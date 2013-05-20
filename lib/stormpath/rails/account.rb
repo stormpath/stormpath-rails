@@ -10,8 +10,18 @@ module Stormpath
 
       module ClassMethods
         def authenticate username, password
-          @stormpath_account = Stormpath::Rails::Client.authenticate_account username, password
-          self.where(stormpath_url: @stormpath_account.href).first
+          account = Stormpath::Rails::Client.authenticate_account username, password
+          self.where(stormpath_url: account.href).first
+        end
+
+        def send_password_reset_email email
+          account = Stormpath::Rails::Client.send_password_reset_email email
+          self.where(stormpath_url: account.href).first
+        end
+
+        def verify_password_reset_token token
+          account = Stormpath::Rails::Client.verify_password_reset_token token
+          self.where(stormpath_url: account.href).first
         end
       end
 
