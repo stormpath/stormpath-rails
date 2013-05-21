@@ -10,11 +10,12 @@ shared_examples "stormpath account" do
   end
 
   context 'class methods' do
-    context '.authenticate' do
-      let(:username) { 'test@example.com' }
-      let(:password) { 'adsf1234' }
-      let(:mock_user) { subject.class.new }
+    let(:username) { 'test@example.com' }
+    let(:email) { username }
+    let(:password) { 'adsf1234' }
+    let(:mock_user) { subject.class.new }
 
+    describe '.authenticate' do
       before do
         Stormpath::Rails::Client.stub!(:authenticate_account).and_return(mock_account)
         subject.class.stub_chain(:where, :first).and_return(mock_user)
@@ -22,6 +23,32 @@ shared_examples "stormpath account" do
 
       it 'returns an instance of the class into which the Account module was mixed in' do
         instance = subject.class.authenticate username, password
+        instance.should be_a_kind_of(subject.class)
+      end
+    end
+
+    describe '.send_password_reset_email' do
+      before do
+        Stormpath::Rails::Client.stub!(:send_password_reset_email).and_return(mock_account)
+        subject.class.stub_chain(:where, :first).and_return(mock_user)
+      end
+
+      it 'returns an instance of the class into which the Account module was mixed in' do
+        instance = subject.class.send_password_reset_email email
+        instance.should be_a_kind_of(subject.class)
+      end
+    end
+
+    describe '.verify_password_reset_token' do
+      let(:token) { 'ASDF1324' }
+
+      before do
+        Stormpath::Rails::Client.stub!(:verify_password_reset_token).and_return(mock_account)
+        subject.class.stub_chain(:where, :first).and_return(mock_user)
+      end
+
+      it 'returns an instance of the class into which the Account module was mixed in' do
+        instance = subject.class.verify_password_reset_token token
         instance.should be_a_kind_of(subject.class)
       end
     end
