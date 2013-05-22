@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Stormpath::Rails::Client do
+describe Stormpath::Rails::Client, :vcr do
 
   describe ".client" do
     context "given a valid Stormpath API key ID and secret" do
@@ -21,11 +21,11 @@ describe Stormpath::Rails::Client do
     context "given a hash of account attributes" do
       let(:attributes) do
         o = {
-          "email" => "#{generate_resource_name}@example.com",
+          "email" => "test+foo+bar@example.com",
           "given_name" => "bazzy",
           "surname" => "foo",
           "password" => "P@66w0rd!",
-          "username" => generate_resource_name
+          "username" => 'testfoobar'
         }
       end
 
@@ -38,34 +38,42 @@ describe Stormpath::Rails::Client do
         account.should be_kind_of Stormpath::Resource::Account
         account.given_name.should == attributes["given_name"]
       end
+
+      after do
+        account.delete
+      end
     end
   end
 
   describe ".authenticate_account" do
     context "given a valid username and password" do
       let(:username) do
-        s = "6john@example.com"
+        "testfoobar"
       end
 
       let(:password) do
-        s = "P@66w0rd!"
+        'Succ3ss!'
       end
 
-      let(:authenticated_user) do
+      let(:authenticated_account) do
         Stormpath::Rails::Client.authenticate_account(username, password)
       end
 
       before do
-        create_test_user({
+        obtain_test_account({
           "username" => username,
           "password" => password
         })
       end
 
-      it "authenticates the user" do
-        authenticated_user.should be
-        authenticated_user.should be_kind_of Stormpath::Resource::Account
-        authenticated_user.username.should == username
+      it "authenticates the account" do
+        authenticated_account.should be
+        authenticated_account.should be_kind_of Stormpath::Resource::Account
+        authenticated_account.username.should == username
+      end
+
+      after do
+        authenticated_account.delete
       end
     end
   end
@@ -75,7 +83,7 @@ describe Stormpath::Rails::Client do
       let(:new_name) { "Bartholomew" }
 
       let(:created_account) do
-        create_test_user({
+        obtain_test_account({
           "given_name" => "Foo"
         })
       end
@@ -100,13 +108,17 @@ describe Stormpath::Rails::Client do
         reloaded_account.should be
         reloaded_account.given_name.should == new_name
       end
+
+      after do
+        created_account.delete
+      end
     end
   end
 
   describe ".find_account" do
     context "given a valid account" do
       let(:created_account) do
-        create_test_user
+        obtain_test_account
       end
 
       let(:returned_account) do
@@ -118,13 +130,17 @@ describe Stormpath::Rails::Client do
         returned_account.should be_kind_of Stormpath::Resource::Account
         returned_account.href.should == created_account.href
       end
+
+      after do
+        created_account.delete
+      end
     end
   end
 
   describe ".send_password_reset_email" do
     context "given a valid account" do
       let(:created_account) do
-        create_test_user
+        obtain_test_account
       end
 
       let(:returned_account) do
@@ -135,6 +151,10 @@ describe Stormpath::Rails::Client do
         returned_account.should be
         returned_account.should be_kind_of Stormpath::Resource::Account
         returned_account.href.should == created_account.href
+      end
+
+      after do
+        created_account.delete
       end
     end
   end

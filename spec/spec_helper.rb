@@ -4,32 +4,35 @@
 require 'simplecov'
 SimpleCov.start
 
-require "stormpath-rails"
+require "vcr"
+require "webmock"
+require "pry"
+require "pry-debugger"
+require 'stormpath-rails'
 
 Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
 
 module Stormpath
   module TestResourceHelpers
-    def generate_resource_name
-      "Test#{SecureRandom.uuid}"
+    def reload_client()
+      Stormpath::Rails.send(:remove_const, :Client)
+      load 'lib/stormpath/rails/client.rb'
     end
 
-    def destroy_all_stormpath_test_accounts
-      Stormpath::Rails::Client.all_accounts.each do |account|
-        Stormpath::Rails::Client.delete_account! account.href
-      end
-    end
-
-    def create_test_user(opts={})
+    def obtain_test_account(opts={})
       opts.tap do |o|
-        o["surname"]    = (!opts["surname"].blank? && opts["surname"]) || generate_resource_name
-        o["given_name"] = (!opts["given_name"].blank? && opts["given_name"]) || generate_resource_name
-        o["username"]   = (!opts["username"].blank? && opts["username"]) || generate_resource_name
-        o["password"]   = (!opts["password"].blank? && opts["password"]) || generate_resource_name
-        o["email"]      = (!opts["email"].blank? && opts["email"]) || "#{generate_resource_name}@example.com"
+        o['surname']    = (!opts['surname'].blank? && opts['surname']) || 'testsurname'
+        o['given_name'] = (!opts['given_name'].blank? && opts['given_name']) || 'testgivenname'
+        o['username']   = (!opts['username'].blank? && opts['username']) || 'testfoobar'
+        o['password']   = (!opts['password'].blank? && opts['password']) || 'Succ3ss!'
+        o['email']      = (!opts['email'].blank? && opts['email']) || 'test+foo+bar@example.com'
       end
 
-      Stormpath::Rails::Client.create_account! opts
+      begin
+        Stormpath::Rails::Client.create_account! opts
+      rescue Stormpath::Error => e
+        Stormpath::Rails::Client.authenticate_account(opts['username'], opts['password'])
+      end
     end
   end
 end
@@ -46,11 +49,17 @@ RSpec.configure do |config|
     ENV["STORMPATH_API_KEY_FILE_LOCATION"]        = ENV["STORMPATH_RAILS_TEST_API_KEY_FILE_LOCATION"]
     ENV["STORMPATH_API_KEY_ID_PROPERTY_NAME"]     = ENV["STORMPATH_RAILS_TEST_API_KEY_ID_PROPERTY_NAME"]
     ENV["STORMPATH_API_KEY_SECRET_PROPERTY_NAME"] = ENV["STORMPATH_RAILS_TEST_API_KEY_SECRET_PROPERTY_NAME"]
-
-    destroy_all_stormpath_test_accounts
   end
 
-  config.after(:all) do
-    destroy_all_stormpath_test_accounts
+  config.before(:each) do
+    reload_client
   end
+
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+end
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
+  c.hook_into :webmock
+  c.configure_rspec_metadata!
 end
