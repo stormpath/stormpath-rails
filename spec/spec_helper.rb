@@ -14,22 +14,22 @@ Dir["./spec/support/**/*.rb"].sort.each {|f| require f}
 
 module Stormpath
   module TestResourceHelpers
-    def reload_client()
+    def reload_client
       Stormpath::Rails.send(:remove_const, :Client)
       load 'lib/stormpath/rails/client.rb'
     end
 
     def obtain_test_account(opts={})
-      opts.tap do |o|
-        o['surname']    = (!opts['surname'].blank? && opts['surname']) || 'testsurname'
-        o['given_name'] = (!opts['given_name'].blank? && opts['given_name']) || 'testgivenname'
-        o['username']   = (!opts['username'].blank? && opts['username']) || 'testfoobar'
-        o['password']   = (!opts['password'].blank? && opts['password']) || 'Succ3ss!'
-        o['email']      = (!opts['email'].blank? && opts['email']) || 'test+foo+bar@example.com'
-      end
+      defaults = {
+        'surname' => 'testsurname',
+        'given_name' => 'testgivenname',
+        'username' => 'testfoobar',
+        'password' => 'Succ3ss!',
+        'email' => 'test+foo+bar@example.com'
+      }
 
       begin
-        Stormpath::Rails::Client.create_account! opts
+        Stormpath::Rails::Client.create_account! defaults.merge!(opts)
       rescue Stormpath::Error => e
         Stormpath::Rails::Client.authenticate_account(opts['username'], opts['password'])
       end
