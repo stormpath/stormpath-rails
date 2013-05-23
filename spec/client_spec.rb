@@ -13,9 +13,38 @@ describe Stormpath::Rails::Client, :vcr do
         expect(client).to be_kind_of Stormpath::Client
       end
 
-      it "should instantiate a Stormpath Client" do
+      it "should instantiate a Stormpath Tenant" do
         expect(client.tenant).to be
         expect(client.tenant).to be_kind_of Stormpath::Resource::Tenant
+      end
+    end
+
+    context 'given a composite url' do
+      let(:composite_url) { 'http://ASDF1234:ZXCV5678@example.com/foo/bar' }
+      let(:application) { double 'application' }
+      let(:loaded_client) { double 'client' }
+      let(:returned_client) { Stormpath::Rails::Client.client }
+
+      before do
+        ENV['STORMPATH_URL'] = composite_url
+      end
+
+      it 'loads the client from the application' do
+        Stormpath::Resource::Application
+          .should_receive(:load)
+          .with(composite_url)
+          .and_return(application)
+
+        application
+          .should_receive(:client)
+          .and_return(loaded_client)
+
+        expect(returned_client).to be
+        expect(returned_client).to eq(loaded_client)
+      end
+
+      after do
+        ENV['STORMPATH_URL'] = nil
       end
     end
   end
@@ -152,6 +181,42 @@ describe Stormpath::Rails::Client, :vcr do
       after do
         created_account.delete
       end
+    end
+  end
+
+  describe '.verify_password_reset_token' do
+    let(:password_reset_token) { 'ASDF1234' }
+    let(:application) { double('application') }
+
+    it 'delegates to the application instance' do
+      Stormpath::Rails::Client
+        .should_receive(:application)
+        .and_return application
+
+      application
+        .should_receive(:verify_password_reset_token)
+        .with(password_reset_token)
+
+      Stormpath::Rails::Client.verify_password_reset_token(
+        password_reset_token
+      )
+    end
+  end
+
+  describe '.verify_account_email' do
+    let(:email_verification_token) { 'ASDF1234' }
+    let(:accounts) { double('accounts') }
+
+    it 'delegates to the application instance' do
+      Stormpath::Rails::Client
+        .stub_chain(:client, :accounts)
+        .and_return(accounts)
+
+      accounts
+        .should_receive(:verify_email_token)
+        .with email_verification_token
+
+      Stormpath::Rails::Client.verify_account_email email_verification_token
     end
   end
 end
