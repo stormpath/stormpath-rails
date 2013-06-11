@@ -93,7 +93,7 @@ module Stormpath
       private
 
       def self.set_if_not_empty(object, property, value)
-        object[property] = value unless value.blank?
+        object[property.to_sym] = value unless value.blank?
       end
     end
   end
