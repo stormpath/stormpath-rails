@@ -52,6 +52,20 @@ shared_examples "stormpath account" do
         instance.should be_a_kind_of(subject.class)
       end
     end
+
+    describe '.verify_account_email' do
+      let(:token) { 'ASDF1324' }
+
+      before do
+        Stormpath::Rails::Client.stub!(:verify_account_email).and_return(mock_account)
+        subject.class.stub_chain(:where, :first).and_return(mock_user)
+      end
+
+      it 'returns an instance of the class into which the Account module was mixed in' do
+        instance = subject.class.verify_account_email token
+        instance.should be_a_kind_of(subject.class)
+      end
+    end
   end
 
   before(:each) do

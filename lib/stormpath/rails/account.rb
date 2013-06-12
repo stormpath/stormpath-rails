@@ -23,6 +23,11 @@ module Stormpath
           account = Stormpath::Rails::Client.verify_password_reset_token token
           self.where(stormpath_url: account.href).first
         end
+
+        def verify_account_email token
+          account = Stormpath::Rails::Client.verify_email_token token
+          self.where(stormpath_url: account.href).first
+        end
       end
 
       included do
