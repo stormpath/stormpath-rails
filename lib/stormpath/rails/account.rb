@@ -25,7 +25,7 @@ module Stormpath
         end
 
         def verify_account_email token
-          account = Stormpath::Rails::Client.verify_email_token token
+          account = Stormpath::Rails::Client.verify_account_email token
           self.where(stormpath_url: account.href).first
         end
       end
