@@ -4,10 +4,6 @@ module Stormpath
   module Rails
     class ConfigurationError < StandardError; end
 
-    if ENV['STORMPATH_URL'].nil? && ENV['STORMPATH_APPLICATION_URL'].nil?
-      raise ConfigurationError, 'Either STORMPATH_URL or STORMPATH_APPLICATION_URL must be set'
-    end
-
     class Client
       class << self
         attr_accessor :connection, :root_application
@@ -64,6 +60,10 @@ module Stormpath
 
       def self.client
         unless self.connection
+          if ENV['STORMPATH_URL'].nil? && ENV['STORMPATH_APPLICATION_URL'].nil?
+            raise ConfigurationError, 'Either STORMPATH_URL or STORMPATH_APPLICATION_URL must be set'
+          end
+
           composite_url = ENV['STORMPATH_URL']
 
           if composite_url
