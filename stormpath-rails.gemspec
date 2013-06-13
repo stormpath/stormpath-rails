@@ -5,6 +5,7 @@ require 'stormpath/rails/version'
 Gem::Specification.new do |gem|
   gem.name          = 'stormpath-rails'
   gem.version       = Stormpath::Rails::VERSION
+  gem.date          = Stormpath::Rails::VERSION_DATE
   gem.authors       = ['Denis Grankin']
   gem.email         = ['liquidautumn@gmail.com']
   gem.homepage      = 'http://www.stormpath.com'
