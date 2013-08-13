@@ -1,6 +1,14 @@
 stormpath-rails Changelog
 =========================
 
+Version 1.0.0.beta.2
+------------------
+
+Released on August 13, 2013
+
+- Changed the version of the stormpath-sdk dependency.
+
+
 Version 1.0.0.beta
 ------------------
 
