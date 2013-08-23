@@ -11,6 +11,8 @@ The bulk of this guide assumes that you are creating a new Rails application fro
 
 ## Setup
 
+### Create A New Rails Application
+
 1. Navigate to where you'd like to start your new app.
 
 2. Use Rails to create a new application and cd into it:
@@ -34,7 +36,7 @@ The bulk of this guide assumes that you are creating a new Rails application fro
   root :to => 'users#index'
   ```
 
-## <a name="signup"></a>Sign Up For A Stormpath Account
+### <a name="signup"></a>Sign Up For A Stormpath Account
 
 1. Create a [Stormpath][stormpath] developer account and [create your API Keys][create-api-keys]
   downloading the "apiKey.properties" file into a ".stormpath"
@@ -52,7 +54,7 @@ The bulk of this guide assumes that you are creating a new Rails application fro
   You'll want to create an environment variable called STORMPATH\_APPLICATION\_URL whose value
   is this URL.
 
-## Integrating Stormpath Rails
+### Integrate Stormpath Rails
 
 1. Install the <code>stormpath-rails</code> gem, either via the command line:
 
