@@ -7,13 +7,13 @@ This is the Rails gem to ease integration of its features with any Rails-based a
 
 ## Assumptions
 
-The bulk of this guide assumes that you are creating a new Rails application from scratch and want to user Stormpath for use management out of the box. If you have an existing application into which you want to integrate Stormpath, and that application already has the notion of a user in it, skip to the "[Sign Up For A Stormpath Account](#signup)" section.
+The bulk of this guide assumes that you are creating a new Rails application from scratch and want to user Stormpath for user management out of the box. If you have an existing application into which you want to integrate Stormpath, and that application already has the notion of a user in it, skip to the "[Sign Up For A Stormpath Account](#signup)" section.
 
 ## Setup
 
 1. Navigate to where you'd like to start your new app.
 
-2. Use rails to create a new application and cd into it:
+2. Use Rails to create a new application and cd into it:
   
     ```
     rails new myApp
@@ -75,7 +75,7 @@ The bulk of this guide assumes that you are creating a new Rails application fro
   rake db:migrate
   ```
 
-6. Update your "user" model file under app/models/ as follows:.
+6. Update your "user" model file (e.g., user.rb) under app/models/ as follows:
   
   ```ruby
   require 'stormpath-rails'
@@ -86,12 +86,12 @@ The bulk of this guide assumes that you are creating a new Rails application fro
 
 7. Modify any views that interact with the user controller and model (e.g., create, edit, etc.) to use the specific fields specific to [Stormpath's notion of a user](http://stormpath.com/docs/ruby/product-guide#!Accounts):
 
-    * username
-    * email
-    * given_name
-    * middle_name
-    * surname
-    * password
+  * username 
+  * email
+  * given_name
+  * middle_name
+  * surname
+  * password
 
   For example, if you have a form for your editing your user object, you'll need to change the view (e.g., app/views/users/edit.html.erb) to include something like the following:
 
