@@ -88,12 +88,12 @@ The bulk of this guide assumes that you are creating a new Rails application fro
 
 7. Modify any views that interact with the user controller and model (e.g., create, edit, etc.) to use the specific fields specific to [Stormpath's notion of a user](http://stormpath.com/docs/ruby/product-guide#!Accounts):
 
-  * username 
-  * email
-  * given_name
-  * middle_name
-  * surname
-  * password
+      * username 
+      * email
+      * given_name
+      * middle_name
+      * surname
+      * password
 
   For example, if you have a form for your editing your user object, you'll need to change the view (e.g., app/views/users/edit.html.erb) to include something like the following:
 
