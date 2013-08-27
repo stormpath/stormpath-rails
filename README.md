@@ -48,24 +48,26 @@ The bulk of this guide assumes that you are creating a new Rails application fro
     export STORMPATH_API_KEY_FILE_LOCATION="/Users/john/.stormpath/apiKey.properties"
     ```
 
-2. Within Stormpath's Admin Console, create an application  and a directory to store your users' accounts through the [Stormpath Admin][stormpath-admin] interface. Make sure to add the newly-created directory as a Login Source for your newly-created application.
+2. Within Stormpath's Admin Console, create an application  and a directory to store your users' accounts through the [Stormpath Admin][stormpath-admin] interface. Make sure to add the newly-created directory as a Account Store for your newly-created application.
 
-3. Through the [Stormpath Admin][stormpath-admin] interface, note your application's REST URL.
-  You'll want to create an environment variable called STORMPATH\_APPLICATION\_URL whose value
-  is this URL.
+3. Through the [Stormpath Admin][stormpath-admin] interface, note your application's REST URL. You'll want to create an environment variable called "STORMPATH\_APPLICATION\_URL" whose value is this URL. For example, add into your ~/.bashrc file on OS X:
+
+    ```
+    export STORMPATH_APPLICATION_URL="https://api.stormpath.com/v1/applications/YOUR_APP_ID"
+    ```
 
 ### Integrate Stormpath Rails
 
-1. Install the <code>stormpath-rails</code> gem, either via the command line:
+1. Install the <code>stormpath-rails</code> gem, either via the command line...
 
     ```
-    $ gem install stormpath-rails --pre
+    $ gem install stormpath-rails
     ```
 
-  or adding the gem to your [Bundler][bundler] Gemspec...
+  ...or adding the gem to your [Bundler][bundler] Gemspec...
 
     ```
-    gem 'stormpath-rails', '>= 1'
+    gem 'stormpath-rails'
     ```
 
   ...and then run `bundle install`.
@@ -97,33 +99,33 @@ The bulk of this guide assumes that you are creating a new Rails application fro
 
   For example, if you have a form for your editing your user object, you'll need to change the view (e.g., app/views/users/edit.html.erb) to include something like the following:
 
-        <div class="field">
-          <%= f.label :username %><br />
-          <%= f.text_field :username %>
-        </div>
-        <div class="field">
-          <%= f.label :email %><br />
-          <%= f.text_field :email %>
-        </div>
-         <div class="field">
-          <%= f.label :given_name %><br />
-          <%= f.text_field :given_name %>
-        </div>
-         <div class="field">
-          <%= f.label :middle_name %><br />
-          <%= f.text_field :middle_name %>
-        </div>
-         <div class="field">
-          <%= f.label :surname %><br />
-          <%= f.text_field :surname %>
-        </div>  
-        <div class="field">
-          <%= f.label :password %><br />
-          <%= f.text_field :password %>
-        </div>
-        <div class="actions">
-          <%= f.submit %>
-        </div>
+      <div class="field">
+        <%= f.label :username %><br />
+        <%= f.text_field :username %>
+      </div>
+      <div class="field">
+        <%= f.label :email %><br />
+        <%= f.text_field :email %>
+      </div>
+      <div class="field">
+        <%= f.label :given_name %><br />
+        <%= f.text_field :given_name %>
+      </div>
+      <div class="field">
+        <%= f.label :middle_name %><br />
+        <%= f.text_field :middle_name %>
+      </div>
+      <div class="field">
+        <%= f.label :surname %><br />
+        <%= f.text_field :surname %>
+      </div>  
+      <div class="field">
+        <%= f.label :password %><br />
+        <%= f.text_field :password %>
+      </div>
+      <div class="actions">
+        <%= f.submit %>
+      </div>
 
 Now, start your local server with `rails s` and try to create a user (e.g., http://0.0.0.0:3000/users/new). You'll need to create a user in your application before you can authenticate it via your Ruby application. 
 
@@ -131,19 +133,15 @@ Voila! Your application is now connected to Stormpath.
 
 ## Testing The Stormpath-Rails Gem
 
-To run the test suite on the gem itself (and not your integration), simple run:
+To run the test suite on the gem itself (and not your integration), simply run:
 
 ```sh
 $ rake spec
 ```
 
-Note that this will make requests to the Stormpath API; you'll need to have set
-environment variables enabling the client to interact with your Stormpath
-account. You'll also need to have environment variables set that will enable
-the client to interact with a test directory and application.
+Note that this will make requests to the Stormpath API; you'll need to have set environment variables enabling the client to interact with your Stormpath account. You'll also need to have environment variables set that will enable the client to interact with a test directory and application.
 
-The test run will also generate a code-coverage report, viewable in the
-coverage subdirectory.
+The test run will also generate a code-coverage report, viewable in the coverage subdirectory.
 
 ## Contributing
 
