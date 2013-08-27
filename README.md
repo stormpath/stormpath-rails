@@ -61,13 +61,13 @@ The bulk of this guide assumes that you are creating a new Rails application fro
 1. Install the <code>stormpath-rails</code> gem, either via the command line...
 
     ```
-    $ gem install stormpath-rails
+    $ gem install stormpath-rails --pre
     ```
 
   ...or adding the gem to your [Bundler][bundler] Gemspec...
 
     ```
-    gem 'stormpath-rails'
+    gem "stormpath-rails", "~> 1.0.0.beta.2"
     ```
 
   ...and then run `bundle install`.
