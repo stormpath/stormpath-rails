@@ -139,6 +139,7 @@ Now, start your local server with `rails s` and try to create a user (e.g., http
 
 Voila! Your application is now connected to Stormpath.
 
+<!--
 ## Testing The Stormpath-Rails Gem
 
 To run the test suite on the gem itself (and not your integration), simply run:
@@ -152,6 +153,7 @@ You will need to have all of the required testing dependencies in order for the 
 Note that this will make requests to the Stormpath API; you'll need to have set environment variables enabling the client to interact with your Stormpath account. You'll also need to have environment variables set that will enable the client to interact with a test directory and application.
 
 The test run will also generate a code-coverage report, viewable in the coverage subdirectory.
+-->
 
 ## Contributing
 
@@ -176,6 +178,7 @@ $ gem install pkg/stormpath-rails-{version}.gem
 + Preventive validation to not send invalid data to stormpath.
 + Preventive validation to not send invalid data to stormpath.
 + Solve n+1 request problem when requesting account collection.
++ Get rake spec working properly with environment variables
 
 ## Copyright & Licensing
 
