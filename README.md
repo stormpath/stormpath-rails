@@ -174,11 +174,11 @@ $ gem install pkg/stormpath-rails-{version}.gem
 
 ## TODO
 
-+ Automatic directory layout (test, development, production) creation
++ Automatic directory layout (test, development, production) creation.
 + Preventive validation to not send invalid data to stormpath.
 + Preventive validation to not send invalid data to stormpath.
 + Solve n+1 request problem when requesting account collection.
-+ Get rake spec working properly with environment variables
++ Get rake spec working properly with environment variables.
 
 ## Copyright & Licensing
 
