@@ -26,15 +26,15 @@ The bulk of this guide assumes that you are creating a new Rails application fro
 
     ```
     rake db:create
-    rails generate scaffold User username:string email:string
+    rails generate scaffold User username:string email:string given_name:string middle_name:string surname:string password:string
     rake db:migrate
     ```
 
 4. Delete the public HTML file (public/index.html) and modify your "routes.rb" file (app/config) to point to your user controller:
 
-  ```
-  root :to => 'users#index'
-  ```
+    ```
+    root :to => 'users#index'
+    ```
 
 ### <a name="signup"></a>Sign Up For A Stormpath Account
 
@@ -44,7 +44,7 @@ The bulk of this guide assumes that you are creating a new Rails application fro
   add an environment variable called `STORMPATH_API_KEY_FILE_LOCATION` whose value is the full
   path to this new .properties file:
 
-    ```sh
+    ```
     export STORMPATH_API_KEY_FILE_LOCATION="/Users/john/.stormpath/apiKey.properties"
     ```
 
@@ -58,37 +58,45 @@ The bulk of this guide assumes that you are creating a new Rails application fro
 
 ### Integrate Stormpath Rails
 
-1. Install the <code>stormpath-rails</code> gem, either via the command line...
+1. Navigate to your application's directory.
+
+2. Install the <code>stormpath-rails</code> gem, either via the command line...
 
     ```
     $ gem install stormpath-rails --pre
     ```
 
-  ...or adding the gem to your [Bundler][bundler] Gemspec...
+    ...or adding the gem to your application's [Bundler][bundler] Gemspec.
 
-    ```
-    gem "stormpath-rails", "~> 1.0.0.beta.2"
-    ```
+      ```
+      gem "stormpath-rails", "~> 1.0.0.beta.2"
+      ```
 
-  ...and then run `bundle install`.
+    If you're running Rails > 4.0, you'll also need to add the following gem:
 
-5. Generate and run the migration script. Skip this step if you've configured your app to use Mongoid instead of ActiveRecord.
+      ```
+      gem "protected_attributes"
+      ```
+
+    Then, run `bundle install`.
+
+3. Generate and run the migration script in the root of your application directory. Skip this step if you've configured your app to use Mongoid instead of ActiveRecord.
   
-  ```sh
-  rails g stormpath:rails:migration user
-  rake db:migrate
-  ```
+      ```
+      rails g stormpath:rails:migration user
+      rake db:migrate
+      ```
 
-6. Update your "user" model file (e.g., user.rb) under app/models/ as follows:
+4. Update your "user" model file (e.g., user.rb) under app/models/ as follows:
   
-  ```ruby
-  require 'stormpath-rails'
-  class User < ActiveRecord::Base
+    ```
+    require 'stormpath-rails'
+    class User < ActiveRecord::Base
       include Stormpath::Rails::Account
-  end
-  ```
+    end
+    ```
 
-7. Modify any views that interact with the user controller and model (e.g., create, edit, etc.) to use the specific fields specific to [Stormpath's notion of a user](http://stormpath.com/docs/ruby/product-guide#!Accounts):
+5. Modify any views that interact with the user controller and model (e.g., create, edit, etc.) to use the specific fields specific to [Stormpath's notion of a user](http://stormpath.com/docs/ruby/product-guide#!Accounts):
 
       * username 
       * email
@@ -97,7 +105,7 @@ The bulk of this guide assumes that you are creating a new Rails application fro
       * surname
       * password
 
-  For example, if you have a form for your editing your user object, you'll need to change the view (e.g., app/views/users/edit.html.erb) to include something like the following:
+  For example, if you have a form for your editing your user object, you'll need to change the view (e.g., app/views/users/_form.html.erb) to include something like the following:
 
       <div class="field">
         <%= f.label :username %><br />
@@ -121,7 +129,7 @@ The bulk of this guide assumes that you are creating a new Rails application fro
       </div>  
       <div class="field">
         <%= f.label :password %><br />
-        <%= f.text_field :password %>
+        <%= f.password_field :password %>
       </div>
       <div class="actions">
         <%= f.submit %>
@@ -131,6 +139,7 @@ Now, start your local server with `rails s` and try to create a user (e.g., http
 
 Voila! Your application is now connected to Stormpath.
 
+<!--
 ## Testing The Stormpath-Rails Gem
 
 To run the test suite on the gem itself (and not your integration), simply run:
@@ -139,9 +148,12 @@ To run the test suite on the gem itself (and not your integration), simply run:
 $ rake spec
 ```
 
+You will need to have all of the required testing dependencies in order for the rake to execute correctly.
+
 Note that this will make requests to the Stormpath API; you'll need to have set environment variables enabling the client to interact with your Stormpath account. You'll also need to have environment variables set that will enable the client to interact with a test directory and application.
 
 The test run will also generate a code-coverage report, viewable in the coverage subdirectory.
+-->
 
 ## Contributing
 
@@ -162,10 +174,11 @@ $ gem install pkg/stormpath-rails-{version}.gem
 
 ## TODO
 
-+ Automatic directory layout (test, development, production) creation
++ Automatic directory layout (test, development, production) creation.
 + Preventive validation to not send invalid data to stormpath.
 + Preventive validation to not send invalid data to stormpath.
 + Solve n+1 request problem when requesting account collection.
++ Get rake spec working properly with environment variables.
 
 ## Copyright & Licensing
 
