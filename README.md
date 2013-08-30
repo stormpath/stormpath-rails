@@ -30,7 +30,7 @@ The bulk of this guide assumes that you are creating a new Rails application fro
     rake db:migrate
     ```
 
-4. Delete the public HTML file (public/index.html) and modify your "routes.rb" file (app/config) to point to your user controller:
+4. Delete the public HTML file (public/index.html) if it exists and modify your "routes.rb" file (app/config) to point to your user controller:
 
     ```
     root :to => 'users#index'
