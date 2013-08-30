@@ -165,11 +165,21 @@ branch, making your changes, and issuing pull-requests on the
 
 To build and install the development branch yourself from the latest source:
 
+<!-- 
+
 ```
 $ git clone git@github.com:stormpath/stormpath-rails.git
 $ cd stormpath-rails
 $ rake gem
 $ gem install pkg/stormpath-rails-{version}.gem
+```
+--> 
+
+```
+$ git clone git@github.com:stormpath/stormpath-rails.git
+$ cd stormpath-rails
+$ gem build stormpath-rails.gemspec
+$ gem install stormpath-rails-{version}.gem
 ```
 
 ## TODO
