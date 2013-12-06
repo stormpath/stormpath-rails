@@ -6,7 +6,7 @@ module Stormpath
     module Account
       extend ActiveSupport::Concern
 
-      STORMPATH_FIELDS = [ :email, :password, :username, :given_name, :middle_name, :surname, :status ]
+      STORMPATH_FIELDS = [ :email, :password, :username, :given_name, :middle_name, :surname, :status, :full_name ]
 
       module ClassMethods
         def authenticate username, password
@@ -38,9 +38,6 @@ module Stormpath
         field(:stormpath_url, type: String) if self.respond_to?(:field)
         index({ stormpath_url: 1 }, { unique: true }) if self.respond_to?(:index)
 
-        # attr_accessor(*STORMPATH_FIELDS)
-        # attr_accessible(*STORMPATH_FIELDS)
-
         before_create :create_account_on_stormpath
         before_update :update_account_on_stormpath
         after_destroy :delete_account_on_stormpath
@@ -69,7 +66,7 @@ module Stormpath
           end
         end
 
-        STORMPATH_FIELDS.each do |name|
+        (STORMPATH_FIELDS - [:full_name]).each do |name|
           define_method("#{name}=") do |val|
             if stormpath_account.present?
               stormpath_account.send("#{name}=", val)
