@@ -38,6 +38,11 @@ module Stormpath
         field(:stormpath_url, type: String) if self.respond_to?(:field)
         index({ stormpath_url: 1 }, { unique: true }) if self.respond_to?(:index)
 
+        begin
+          attr_accessible :given_name, :surname, :email, :username, :password, :middle_name
+        rescue RuntimeError
+        end
+
         before_create :create_account_on_stormpath
         before_update :update_account_on_stormpath
         after_destroy :delete_account_on_stormpath
