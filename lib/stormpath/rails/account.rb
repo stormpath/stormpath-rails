@@ -39,7 +39,7 @@ module Stormpath
         index({ stormpath_url: 1 }, { unique: true }) if self.respond_to?(:index)
 
         begin
-          attr_accessible :given_name, :surname, :email, :username, :password, :middle_name
+          attr_accessible *STORMPATH_FIELDS
         rescue RuntimeError
         end
 
