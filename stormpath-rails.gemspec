@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'stormpath/rails/version'
+require 'stormpath/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "stormpath-rails"
-  spec.version       = Stormpath::Rails::VERSION
+  spec.version       = Stormpath::VERSION
   spec.authors       = ["Nenad Nikolic"]
   spec.email         = ["nenad.nikolic@infinum.hr"]
 
