@@ -1,7 +1,7 @@
-require "rails"
+#require "rails"
 
 module Stormpath
-  class Enging < Rails::Engine
+  class Engine < Rails::Engine
 
   end
 end

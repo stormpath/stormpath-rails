@@ -1,11 +1,15 @@
+#require 'rails'
+#require 'rails/engine'
+#require 'stormpath/rails/engine'
 require 'stormpath-sdk'
+require 'stormpath/rails'
 require 'stormpath/engine'
-require 'stormpath/controller'
-require 'stormpath/configuration'
+#require 'stormpath/rails/configuration'
+#require 'stormpath/rails/client'
+#require 'stormpath/rails/version'
 
-module Stormpath
-  module Rails
-    autoload :Client, 'stormpath/rails/client'
-    autoload :Account, 'stormpath/rails/account'
-  end
-end
+# binding.pry
+# module Stormpath
+#   module Rails
+#   end
+# end
