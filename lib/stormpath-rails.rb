@@ -1,8 +1,11 @@
 require 'stormpath-sdk'
 require 'stormpath/engine'
+require 'stormpath/controller'
+require 'stormpath/configuration'
 
 module Stormpath
-  autoload :Client, 'stormpath/client'
-  autoload :Account, 'stormpath/account'
-  autoload :Configuration, 'stormpath/configuration'
+  module Rails
+    autoload :Client, 'stormpath/rails/client'
+    autoload :Account, 'stormpath/rails/account'
+  end
 end
