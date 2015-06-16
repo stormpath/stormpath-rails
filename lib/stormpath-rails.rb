@@ -1,3 +1,4 @@
+require 'stormpath-sdk'
 require 'stormpath/engine'
 
 module Stormpath
