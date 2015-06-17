@@ -1,5 +1,3 @@
-require 'stormpath-sdk'
-
 module Stormpath
   module Rails
     class Client
@@ -19,7 +17,7 @@ module Stormpath
       end
 
       def self.application
-        self.client.applications.get Stormpath.config.application
+        self.client.applications.get Stormpath::Rails.config.application
       end
 
       def self.client
@@ -27,7 +25,7 @@ module Stormpath
       end
 
       def self.client_options
-        Hash.new.tap { |options| options[:api_key_file_location] = Stormpath.config.api_key_file }
+        Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key_file }
       end
     end
   end

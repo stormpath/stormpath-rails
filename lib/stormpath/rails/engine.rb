@@ -1,6 +1,6 @@
 module Stormpath
   module Rails
-    class Account
+    class Engine < ::Rails::Engine
     end
   end
 end
