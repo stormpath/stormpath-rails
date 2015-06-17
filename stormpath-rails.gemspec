@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'stormpath-sdk', "~> 1.0.0.beta.7"
+  spec.add_dependency 'rails', '>= 3.1'
 
   spec.add_development_dependency "bundler", "~> 1.9"
   spec.add_development_dependency "rake", "~> 10.0"
