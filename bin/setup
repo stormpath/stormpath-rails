@@ -1,7 +1,8 @@
-#!/bin/bash
-set -euo pipefail
-IFS=$'\n\t'
+#!/bin/sh
+set -e
 
+# Install required gems
 bundle install
 
-# Do any other automated setup that you need to do here
+# Set up database for the application that Clearance tests against
+RAILS_ENV=test bundle exec rake dummy:db:reset
