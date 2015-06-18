@@ -2,9 +2,10 @@
   <p>Sign up form</p>
 
   <%= form_for @user do |form| %>
-
     <%= render partial: 'users/form', object: form %>
 
     <%= form.submit %>
+
+    <%= link_to "Sign in", sign_in_path %>
   <% end %>
 </div>
