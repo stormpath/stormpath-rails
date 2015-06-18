@@ -4,6 +4,7 @@ class Stormpath::UsersController < Stormpath::BaseController
 
     if @user.save
       sign_in @user
+      set_flash_message :notice, 'Your account was created successfully'
       redirect_to root_path
     else
       render template: "users/new"
