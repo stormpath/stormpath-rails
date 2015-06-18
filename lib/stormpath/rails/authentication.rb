@@ -1,8 +1,8 @@
 module Stormpath
   module Rails
     module Authentication
-      def sign_in(user)
-        client = Stormpath::Rails::Client.sign_in(user)
+      def create_stormpath_account(user)
+        Stormpath::Rails::Client.create_stormpath_account(user)
       end
     end
   end

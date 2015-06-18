@@ -5,7 +5,7 @@ module Stormpath
         attr_accessor :connection
       end
 
-      def self.sign_in(user)
+      def self.create_stormpath_account(user)
         account = Stormpath::Resource::Account.new account_params(user)
         account = application.accounts.create account
       end

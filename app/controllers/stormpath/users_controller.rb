@@ -3,7 +3,7 @@ class Stormpath::UsersController < Stormpath::BaseController
     @user = user_from_params
 
     if @user.save
-      sign_in @user
+      create_stormpath_account @user
       set_flash_message :notice, 'Your account was created successfully'
       redirect_to root_path
     else
