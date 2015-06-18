@@ -9,5 +9,6 @@ module Stormpath
     autoload :Controller, 'stormpath/rails/controller'
     autoload :Account, 'stormpath/rails/account'
     autoload :Version, 'stormpath/rails/version'
+    autoload :User, 'stormpath/rails/user'
   end
 end
