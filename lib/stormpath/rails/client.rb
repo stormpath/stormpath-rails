@@ -10,6 +10,10 @@ module Stormpath
         account = application.accounts.create account
       end
 
+      def self.authenticate(user)
+        application.authenticate_account build_username_password_request(user)
+      end
+
       def self.account_params(user)
         account_params = user.attributes.select do |k, v|
           %W[given_name surname email username password].include?(k) && !v.nil?
@@ -26,6 +30,12 @@ module Stormpath
 
       def self.client_options
         Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key_file }
+      end
+
+      private
+
+      def self.build_username_password_request(user)
+        Stormpath::Authentication::UsernamePasswordRequest.new user.email, user.password
       end
     end
   end
