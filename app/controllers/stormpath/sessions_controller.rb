@@ -13,6 +13,12 @@ class Stormpath::SessionsController < Stormpath::BaseController
     end
   end
 
+  def destroy
+    destroy_session
+    set_flash_message :notice, 'You have been logged out successfully.'
+    redirect_to root_url
+  end
+
   def new
     render template: "sessions/new"
   end
