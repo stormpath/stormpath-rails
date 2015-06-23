@@ -25,7 +25,7 @@ module Stormpath
       end
 
       def self.client
-        self.connection = Stormpath::Client.new(client_options)
+        self.connection ||= Stormpath::Client.new(client_options)
       end
 
       def self.client_options
