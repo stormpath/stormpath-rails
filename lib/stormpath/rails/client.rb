@@ -18,6 +18,8 @@ module Stormpath
         account_params = user.attributes.select do |k, v|
           %W[given_name surname email username password].include?(k) && !v.nil?
         end
+
+        account_params.merge!("password" => user.password) unless user.password.empty?
       end
 
       def self.application
