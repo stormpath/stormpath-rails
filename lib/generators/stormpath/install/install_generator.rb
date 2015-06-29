@@ -9,6 +9,12 @@ module Stormpath
       def create_stormpath_initializer
         copy_file 'stormpath.rb', 'config/initializers/stormpath.rb'
       end
+
+      def create_user_model
+        unless File.exists? 'app/models/user.rb'
+          copy_file 'user.rb', 'app/models/user.rb'
+        end
+      end
     end
   end
 end
