@@ -1,0 +1,11 @@
+Description:
+  Override the default stormpath views. This generator will copy all off the
+  base stormpath views into your project.
+
+Examples:
+    rails generate stormpath:views
+
+      View: app/views/sessions/_form.html.erb
+      View: app/views/sessions/new.html.erb
+      View: app/views/users/_form.html.erb
+      View: app/views/users/new.html.erb
