@@ -4,6 +4,11 @@ ENV["RAILS_ENV"] ||= "test"
 require 'webmock'
 require 'webmock/rspec'
 require 'vcr'
+require 'pry'
+
+binding.pry
+require 'ammeter/init'
+require 'support/generator_spec_helpers.rb'
 
 require "rails/all"
 require 'stormpath/rails'
