@@ -1,12 +1,10 @@
 class Stormpath::SessionsController < Stormpath::BaseController
   def create
-    @user = find_user params[:session][:email]
+    @user = find_user_by_email params[:session][:email]
     if @user
       result = authenticate @user
-      initialize_session @user.email, result.account.href
 
-      set_flash_message :notice, 'Successfully signed in'
-      redirect_to root_path
+      redirect_to root_path, notice: 'Successfully signed in'
     else
       set_flash_message :notice, 'User not found'
       render template: "sessions/new"
@@ -14,7 +12,7 @@ class Stormpath::SessionsController < Stormpath::BaseController
   end
 
   def destroy
-    destroy_session
+    logout
     set_flash_message :notice, 'You have been logged out successfully.'
     redirect_to root_url
   end

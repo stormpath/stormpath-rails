@@ -14,6 +14,10 @@ module Stormpath
         application.authenticate_account build_username_password_request(user)
       end
 
+      def self.reset_password(email)
+        application.send_password_reset_email email
+      end
+
       def self.account_params(user)
         account_params = user.attributes.select do |k, v|
           %W[given_name surname email username password].include?(k) && !v.nil?

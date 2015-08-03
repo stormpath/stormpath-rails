@@ -6,24 +6,19 @@
     <div class="form-group group-email">
       <%= form.label :email, class: "col-sm-4" %>
       <div class="col-sm-8">
-        <%= form.text_field :email, type: 'email', class: "form-control", id: "session-email" %>
+        <%= form.text_field :email, type: 'text', placeholder: 'Email', class: "form-control", id: "session-email" %>
       </div>
     </div>
 
     <div class="form-group group-password">
       <%= form.label :password, class: "col-sm-4" %>
       <div class="col-sm-8">
-        <%= form.password_field :password, class: "form-control" %>
+        <%= form.password_field :password, type: 'password', placeholder: 'Password', class: "form-control" %>
       </div>
     </div>
 
     <div class="submit-field">
-      <%= form.submit %>
-      <%= button_tag "“" %>
-    </div>
-
-    <div class="other-links">
-      <%= link_to "Sign up", sign_up_path %>
+      <%= button_tag "Log in", :class => "login btn-login btn-sp-green btn", :type => "submit" %>
     </div>
   <% end %>
 </div>
