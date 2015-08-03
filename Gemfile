@@ -15,5 +15,5 @@ group :test do
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'webmock'
   gem 'vcr'
-  gem 'ammeter'
+  gem 'ammeter', git: "https://github.com/alexrothenberg/ammeter", branch: "bigtunacan-master"
 end
