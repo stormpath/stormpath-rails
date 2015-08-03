@@ -5,13 +5,7 @@ module Stormpath
 
       module ClassMethods
         def find_user(email)
-          if user = find_by_normalized_email(email)
-            return user
-          end
-        end
-
-        def find_by_normalized_email(email)
-          find_by_email normalize_email(email)
+          find_by email: normalize_email(email)
         end
 
         def normalize_email(email)

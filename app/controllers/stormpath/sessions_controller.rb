@@ -4,8 +4,7 @@ class Stormpath::SessionsController < Stormpath::BaseController
     if @user
       result = authenticate @user
 
-      set_flash_message :notice, 'Successfully signed in'
-      redirect_to root_path
+      redirect_to root_path, notice: 'Successfully signed in'
     else
       set_flash_message :notice, 'User not found'
       render template: "sessions/new"
