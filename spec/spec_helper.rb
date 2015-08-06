@@ -6,9 +6,6 @@ require 'webmock/rspec'
 require 'vcr'
 require 'pry'
 
-#require 'ammeter/init'
-#require 'support/generator_spec_helpers.rb'
-
 require "rails/all"
 require 'stormpath/rails'
 require "dummy/config/environment"
@@ -16,6 +13,8 @@ require "rspec/rails"
 require 'stormpath/testing/helpers'
 
 require 'factories'
+
+require "support/generator_spec_helpers"
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
