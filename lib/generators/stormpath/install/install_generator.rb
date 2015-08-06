@@ -10,7 +10,17 @@ module Stormpath
         copy_file 'stormpath.rb', 'config/initializers/stormpath.rb'
       end
 
+      def inject_clearance_into_application_controller
+        inject_into_class(
+          "app/controllers/application_controller.rb",
+          ApplicationController,
+          "  include Stormpath::Rails::Controller\n"
+        )
+      end
+
       def create_user_model
+        # the problem here is that is looking in the wrong root
+        # if I put tmp/app it will work correctly
         if File.exists? 'app/models/user.rb'
           inject_into_file(
             "app/models/user.rb",
