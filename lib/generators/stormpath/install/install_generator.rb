@@ -11,7 +11,13 @@ module Stormpath
       end
 
       def create_user_model
-        unless File.exists? 'app/models/user.rb'
+        if File.exists? 'app/models/user.rb'
+          inject_into_file(
+            "app/models/user.rb",
+            "include Stormpath::Rails::User\n\n",
+            after: "class User < ActiveRecord::Base\n"
+          )
+        else
           copy_file 'user.rb', 'app/models/user.rb'
         end
       end
