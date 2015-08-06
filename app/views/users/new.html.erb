@@ -1,11 +1,9 @@
-<div id="stormpath" class="sign-up">
-  <p>Sign up form</p>
-
-  <%= form_for @user do |form| %>
-    <%= render partial: 'users/form', object: form %>
-
-    <%= form.submit %>
-
-    <%= link_to "Sign in", sign_in_path %>
-  <% end %>
+<div class="container custom-container">
+  <div class="va-wrapper">
+    <div class="view registration-view container">
+      <div class="box row">
+        <%= render partial: '/users/form' %>
+      </div>
+    </div>
+  </div>
 </div>
