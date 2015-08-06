@@ -3,6 +3,8 @@ module Stormpath
     module User
       extend ActiveSupport::Concern
 
+      attr_accessor :password
+
       module ClassMethods
         def find_user(email)
           find_by email: normalize_email(email)

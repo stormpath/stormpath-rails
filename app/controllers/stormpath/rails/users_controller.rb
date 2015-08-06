@@ -24,7 +24,7 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
     given_name = user_params.delete(:given_name)
     surname = user_params.delete(:surname)
 
-    User.new(user_params).tap do |user|
+    ::User.new(user_params).tap do |user|
       user.email = email
       user.password = password
       user.given_name = given_name
