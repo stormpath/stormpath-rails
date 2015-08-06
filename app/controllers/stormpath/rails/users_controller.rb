@@ -1,4 +1,4 @@
-class Stormpath::UsersController < Stormpath::BaseController
+class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
   def create
     @user = user_from_params
 

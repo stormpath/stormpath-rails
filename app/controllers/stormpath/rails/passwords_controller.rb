@@ -1,4 +1,4 @@
-class Stormpath::PasswordsController < Stormpath::BaseController
+class Stormpath::Rails::PasswordsController < Stormpath::Rails::BaseController
   def create
     if find_user_by_email(params[:password][:email])
       reset_password(params[:password][:email])

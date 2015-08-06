@@ -1,7 +1,7 @@
 require "spec_helper"
 
-describe Stormpath::UsersController, type: :controller do
-  it { should be_a Stormpath::BaseController }
+describe Stormpath::Rails::UsersController, type: :controller do
+  it { should be_a Stormpath::Rails::BaseController }
 
   before do
     create_test_account

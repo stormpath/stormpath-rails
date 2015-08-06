@@ -1,4 +1,5 @@
-class Stormpath::BaseController < ApplicationController
+class Stormpath::Rails::BaseController < ApplicationController
+
   layout 'stormpath'
 
   private

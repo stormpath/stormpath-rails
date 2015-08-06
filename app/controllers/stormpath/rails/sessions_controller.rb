@@ -1,4 +1,4 @@
-class Stormpath::SessionsController < Stormpath::BaseController
+class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
   def create
     @user = find_user_by_email params[:session][:email]
     if @user
