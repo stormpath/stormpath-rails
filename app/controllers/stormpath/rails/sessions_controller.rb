@@ -2,6 +2,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
   def create
     @user = find_user_by_email params[:session][:email]
     if @user
+      @user.password = params[:session][:password]
       result = authenticate @user
 
       redirect_to root_path, notice: 'Successfully signed in'
