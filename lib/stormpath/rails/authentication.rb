@@ -32,6 +32,10 @@ module Stormpath
         initialize_session(user)
       end
 
+      def reset_password(email)
+        Stormpath::Rails::Client.reset_password(email)
+      end
+
       def logout
         reset_session
       end
