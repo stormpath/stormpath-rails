@@ -4,6 +4,7 @@ require 'rails/generators/active_record'
 module Stormpath
   module Generators
     class InstallGenerator < ::Rails::Generators::Base
+      include ::Rails::Generators::Migration
       source_root File.expand_path('../templates', __FILE__)
 
       def create_stormpath_configuration_file
@@ -34,7 +35,7 @@ module Stormpath
 
       def create_stormpath_migration
         unless user_table_exists?
-          copy migration 'create_users.rb'
+          copy_migration 'create_users.rb'
         end
       end
 
@@ -42,6 +43,35 @@ module Stormpath
 
       def user_table_exists?
         ActiveRecord::Base.connection.table_exists?(:users)
+      end
+
+      def copy_migration(migration_name, config = {})
+        unless migration_exists?(migration_name)
+          migration_template(
+            "db/migrate/#{migration_name}",
+            "db/migrate/#{migration_name}",
+            config
+          )
+        end
+      end
+
+      def migration_exists?(name)
+        existing_migrations.include?(name)
+      end
+
+      def existing_migrations
+        @existing_migrations ||= Dir.glob("db/migrate/*.rb").map do |file|
+          migration_name_without_timestamp(file)
+        end
+      end
+
+      def migration_name_without_timestamp(file)
+        file.sub(%r{^.*(db/migrate/)(?:\d+_)?}, '')
+      end
+
+      # for generating a timestamp when using `create_migration`
+      def self.next_migration_number(dir)
+        ActiveRecord::Generators::Base.next_migration_number(dir)
       end
     end
   end
