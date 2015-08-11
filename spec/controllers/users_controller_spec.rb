@@ -20,9 +20,37 @@ describe Stormpath::Rails::UsersController, type: :controller do
         expect(response).to render_template(:new)
       end
     end
+  end
 
-    context "when signed in" do
-      it "redirects to the root url" do
+  describe "on POST to #create" do
+    let(:user_attributes) { attributes_for(:user) }
+
+    context "user verification enabled" do
+      before do
+        Stormpath::Rails.config.verify_email = true
+      end
+
+      it "renders verified template" do
+        expect {
+          post :create, user: user_attributes
+        }.to change(User, :count).by(1)
+
+        expect(response).to be_success
+        expect(response).to render_template(:verified)
+      end
+    end
+
+    context "user verification disabled" do
+      before do
+        Stormpath::Rails.config.verify_email = false
+      end
+
+      it "redirects to root_path on successfull login" do
+        expect {
+          post :create, user: user_attributes
+        }.to change(User, :count).by(1)
+
+        expect(response).to redirect_to(root_path)
       end
     end
   end
