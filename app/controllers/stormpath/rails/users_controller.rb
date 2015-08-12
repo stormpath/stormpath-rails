@@ -4,8 +4,14 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
 
     if @user.save
       create_stormpath_account @user
-      set_flash_message :notice, 'Your account was created successfully'
-      redirect_to root_path
+
+      if Stormpath::Rails.config.verify_email
+        render template: "users/verified"
+      else
+        initialize_session(@user)
+        set_flash_message :notice, 'Your account was created successfully'
+        redirect_to root_path
+      end
     else
       render template: "users/new"
     end
@@ -18,13 +24,19 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
 
   private
 
+  def verified
+    verify_email_token params[:sptoken]
+    set_flash_message :notice, 'Your account has been verified and you are now able to log in.'
+    render template: "sessions/new"
+  end
+
   def user_from_params
     email = user_params.delete(:email)
     password = user_params.delete(:password)
     given_name = user_params.delete(:given_name)
     surname = user_params.delete(:surname)
 
-    ::User.new(user_params).tap do |user|
+    ::User.new.tap do |user|
       user.email = email
       user.password = password
       user.given_name = given_name
