@@ -7,7 +7,7 @@
             <span>Forgot your password?</span>
             <p>Enter your email address below to reset your password. You will be sent an email which you will need to open to continue. You may need to check your spam folder.</p>
           </div>
-          <%= form_for :password, html: { class: "login-form form-horizontal" }, url: passwords_path do |form| %>
+          <%= form_for :password, html: { class: "login-form form-horizontal" }, url: forgot_path do |form| %>
             <div class="form-group group-email">
               <%= form.label :email, class: "col-sm-4" %>
               <div class="col-sm-8">
@@ -24,15 +24,3 @@
     </div>
   </div>
 </div>
-
-<!-- <form method="post" role="form" class="login-form form-horizontal">
-  <div class="form-group group-email">
-    <label class="col-sm-4">Email</label>
-    <div class="col-sm-8">
-      <input placeholder="Email" required="" name="email" type="text" class="form-control">
-    </div>
-  </div>
-  <div>
-    <button type="submit" class="login btn btn-login btn-sp-green">Submit</button>
-  </div>
-</form> -->

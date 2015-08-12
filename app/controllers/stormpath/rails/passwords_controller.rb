@@ -8,7 +8,7 @@ class Stormpath::Rails::PasswordsController < Stormpath::Rails::BaseController
     end
   end
 
-  def new
-    render template: 'passwords/new'
+  def forgot
+    render template: 'passwords/forgot'
   end
 end
