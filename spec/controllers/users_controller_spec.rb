@@ -30,10 +30,12 @@ describe Stormpath::Rails::UsersController, type: :controller do
         Stormpath::Rails.config.verify_email = true
       end
 
+      it "creates a user" do
+        expect { post :create, user: user_attributes }.to change(User, :count).by(1)
+      end
+
       it "renders verified template" do
-        expect {
-          post :create, user: user_attributes
-        }.to change(User, :count).by(1)
+        post :create, user: user_attributes
 
         expect(response).to be_success
         expect(response).to render_template(:verified)
@@ -45,12 +47,18 @@ describe Stormpath::Rails::UsersController, type: :controller do
         Stormpath::Rails.config.verify_email = false
       end
 
-      it "redirects to root_path on successfull login" do
-        expect {
-          post :create, user: user_attributes
-        }.to change(User, :count).by(1)
+      it "creates a user" do
+        expect { post :create, user: user_attributes }.to change(User, :count).by(1)
+      end
 
+      it "redirects to root_path on successfull login" do
+        post :create, user: user_attributes
         expect(response).to redirect_to(root_path)
+      end
+
+      it "stores user_id in session" do
+        post :create, user: user_attributes
+        expect(session[:user_id]).to_not be_nil
       end
     end
   end
