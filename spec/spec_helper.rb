@@ -22,8 +22,8 @@ VCR.configure do |c|
   c.allow_http_connections_when_no_cassette = true
   c.around_http_request do |request|
     uri = URI(request.uri)
-    name = "#{[uri.host, uri.path, request.method].join('/')}"
-    VCR.use_cassette(name, &request)
+    name = "#{[uri.host, uri.path, request.method, request.body].join('/')}"
+    VCR.use_cassette(name, :match_requests_on => [:method, :uri, :body], &request)
   end
 end
 
