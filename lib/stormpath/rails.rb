@@ -10,5 +10,6 @@ module Stormpath
     autoload :Account, 'stormpath/rails/account'
     autoload :Version, 'stormpath/rails/version'
     autoload :User, 'stormpath/rails/user'
+    autoload :AuthenticationStatus, 'stormpath/rails/authentication_status'
   end
 end
