@@ -7,7 +7,7 @@ describe Stormpath::Generators::ViewsGenerator, :generator do
 
     views = %w(
       layouts/stormpath.html.erb
-      passwords/create.html.erb
+      passwords/email_sent.html.erb
       passwords/edit.html.erb
       passwords/forgot.html.erb
       sessions/_form.html.erb

@@ -2,11 +2,13 @@ class Stormpath::Rails::PasswordsController < Stormpath::Rails::BaseController
   before_filter :redirect_password_reset_disabled, only: :forgot
 
   def forgot_send
-    if find_user_by_email(params[:password][:email])
-      reset_password(params[:password][:email])
+    result = reset_password(params[:password][:email])
+
+    if result.success?
       render template: 'passwords/email_sent'
     else
-      render template: 'passwords/forget'
+      set_flash_message :error, "Invalid email address."
+      render template: 'passwords/forgot'
     end
   end
 

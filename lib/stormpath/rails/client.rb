@@ -26,7 +26,13 @@ module Stormpath
       end
 
       def self.reset_password(email)
-        application.send_password_reset_email email
+        begin
+          result = application.send_password_reset_email email
+        rescue Stormpath::Error => error
+          result = error.message
+        end
+
+        Stormpath::Rails::AccountStatus.new(result)
       end
 
       def self.account_params(user)
