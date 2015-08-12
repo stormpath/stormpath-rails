@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   delete '/sign_out' => 'stormpath/rails/sessions#destroy', as: 'sign_out'
   get '/verified' => 'stormpath/rails/users#verified', as: 'verified'
   get '/forgot' => 'stormpath/rails/passwords#forgot', as: 'forgot'
+  post '/forgot' => 'stormpath/rails/passwords#forgot_send', as: 'forgot_send'
 end
