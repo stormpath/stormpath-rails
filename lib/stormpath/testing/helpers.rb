@@ -2,7 +2,9 @@ module Stormpath
   module Testing
     module Helpers
       def sign_in
+        create_test_account
         @controller.authenticate test_user
+        @controller.initialize_session test_user
         test_user
       end
 

@@ -23,13 +23,10 @@ module Stormpath
       def create_stormpath_account(user)
         #TODO handle error if there is no user
         Stormpath::Rails::Client.create_stormpath_account(user)
-        initialize_session(user)
       end
 
       def authenticate(user)
-        #TODO handle error if there is no user
         Stormpath::Rails::Client.authenticate(user)
-        initialize_session(user)
       end
 
       def reset_password(email)

@@ -11,7 +11,13 @@ module Stormpath
       end
 
       def self.authenticate(user)
-        application.authenticate_account build_username_password_request(user)
+        begin
+          result = application.authenticate_account build_username_password_request(user)
+        rescue Stormpath::Error => error
+          result = error.message
+        end
+
+        Stormpath::Rails::AuthenticationStatus.new(result)
       end
 
       def self.reset_password(email)
@@ -23,7 +29,7 @@ module Stormpath
           %W[given_name surname email username password].include?(k) && !v.nil?
         end
 
-        account_params.merge!("password" => user.password) unless user.password.empty?
+        account_params.merge!("password" => user.password) unless user.password.blank?
       end
 
       def self.application
