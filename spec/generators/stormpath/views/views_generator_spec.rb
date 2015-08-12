@@ -9,7 +9,7 @@ describe Stormpath::Generators::ViewsGenerator, :generator do
       layouts/stormpath.html.erb
       passwords/create.html.erb
       passwords/edit.html.erb
-      passwords/new.html.erb
+      passwords/forgot.html.erb
       sessions/_form.html.erb
       sessions/new.html.erb
       users/_form.html.erb
