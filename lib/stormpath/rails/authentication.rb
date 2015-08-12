@@ -21,7 +21,6 @@ module Stormpath
       end
 
       def create_stormpath_account(user)
-        #TODO handle error if there is no user
         Stormpath::Rails::Client.create_stormpath_account(user)
       end
 

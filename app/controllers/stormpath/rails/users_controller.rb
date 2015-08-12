@@ -1,9 +1,10 @@
 class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
   def create
     @user = user_from_params
+    result = create_stormpath_account @user
 
-    if @user.save
-      create_stormpath_account @user
+    if result.success?
+      @user.save
 
       if Stormpath::Rails.config.verify_email
         render template: "users/verified"
@@ -13,6 +14,7 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
         redirect_to root_path
       end
     else
+      set_flash_message :error, result.error_message
       render template: "users/new"
     end
   end

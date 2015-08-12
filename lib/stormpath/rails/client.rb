@@ -6,8 +6,13 @@ module Stormpath
       end
 
       def self.create_stormpath_account(user)
-        account = Stormpath::Resource::Account.new account_params(user)
-        account = application.accounts.create account
+        begin
+          result = application.accounts.create build_account(user)
+        rescue Stormpath::Error => error
+          result = error.message
+        end
+
+        Stormpath::Rails::AccountStatus.new(result)
       end
 
       def self.authenticate(user)
@@ -48,6 +53,10 @@ module Stormpath
 
       def self.build_username_password_request(user)
         Stormpath::Authentication::UsernamePasswordRequest.new user.email, user.password
+      end
+
+      def self.build_account(user)
+        Stormpath::Resource::Account.new account_params(user)
       end
     end
   end
