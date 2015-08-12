@@ -54,7 +54,7 @@ describe Stormpath::Rails::SessionsController, type: :controller do
 
         expect(response).to be_success
         expect(response).to render_template(:new)
-        expect(flash[:notice]).to eq("Invalid username or password.")
+        expect(flash[:error]).to eq("Invalid username or password.")
       end
     end
   end

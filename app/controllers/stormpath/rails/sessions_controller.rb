@@ -10,7 +10,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
 
       redirect_to root_path, notice: 'Successfully signed in'
     else
-      set_flash_message :notice, result.error_message
+      set_flash_message :error, result.error_message
       render template: "sessions/new"
     end
   end
