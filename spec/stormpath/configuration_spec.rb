@@ -35,4 +35,28 @@ describe Stormpath::Rails::Configuration do
       expect(Stormpath::Rails.config.expand_custom_data).to eq true
     end
   end
+
+  context 'when enable forgot password is specified' do
+    before do
+      Stormpath::Rails.configure do |config|
+        config.enable_forgot_password = true
+      end
+    end
+
+    it "returns configured value" do
+      expect(Stormpath::Rails.config.enable_forgot_password).to eq true
+    end
+  end
+
+  context 'when enable forgot password is specified' do
+    before do
+      Stormpath::Rails.configure do |config|
+        config.verify_email = true
+      end
+    end
+
+    it "returns configured value" do
+      expect(Stormpath::Rails.config.verify_email).to eq true
+    end
+  end
 end
