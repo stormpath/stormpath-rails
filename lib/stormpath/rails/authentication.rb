@@ -21,15 +21,15 @@ module Stormpath
       end
 
       def create_stormpath_account(user)
-        Stormpath::Rails::Client.create_stormpath_account(user)
+        Client.create_stormpath_account(user)
       end
 
       def authenticate(user)
-        Stormpath::Rails::Client.authenticate(user)
+        Client.authenticate(user)
       end
 
       def reset_password(email)
-        Stormpath::Rails::Client.reset_password(email)
+        Client.reset_password(email)
       end
 
       def logout

@@ -12,7 +12,7 @@ module Stormpath
           result = error.message
         end
 
-        Stormpath::Rails::AccountStatus.new(result)
+        AccountStatus.new(result)
       end
 
       def self.authenticate(user)
@@ -22,7 +22,7 @@ module Stormpath
           result = error.message
         end
 
-        Stormpath::Rails::AuthenticationStatus.new(result)
+        AuthenticationStatus.new(result)
       end
 
       def self.reset_password(email)
@@ -32,7 +32,7 @@ module Stormpath
           result = error.message
         end
 
-        Stormpath::Rails::AccountStatus.new(result)
+        AccountStatus.new(result)
       end
 
       def self.account_params(user)
