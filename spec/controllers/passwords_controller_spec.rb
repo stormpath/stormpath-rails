@@ -57,4 +57,29 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
       end
     end
   end
+
+  describe "GET #forgot_change" do
+    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true) }
+    let(:account_failed) { double(Stormpath::Rails::AccountStatus, success?: false) }
+
+    context "valid token" do
+      it "renders form for password change" do
+        allow(controller).to receive(:verify_email_token).and_return(account_success)
+        get :forgot_change
+
+        expect(response).to be_success
+        expect(response).to render_template(:forgot_change)
+      end
+    end
+
+    context "invalid token" do
+      it "renders form for password change" do
+        allow(controller).to receive(:verify_email_token).and_return(account_failed)
+        get :forgot_change
+
+        expect(response).to be_success
+        expect(response).to render_template(:forgot_change_failed)
+      end
+    end
+  end
 end
