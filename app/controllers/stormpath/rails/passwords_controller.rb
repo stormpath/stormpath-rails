@@ -16,6 +16,16 @@ class Stormpath::Rails::PasswordsController < Stormpath::Rails::BaseController
     render template: 'passwords/forgot'
   end
 
+  def forgot_change
+    result = verify_email_token params[:sptoken]
+
+    if result.success?
+      render template: "passwords/forgot_change"
+    else
+      render template: "passwords/forgot_change_failed"
+    end
+  end
+
   private
 
   def redirect_password_reset_disabled

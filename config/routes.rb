@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   get '/verified' => 'stormpath/rails/users#verified', as: 'verified'
   get '/forgot' => 'stormpath/rails/passwords#forgot', as: 'forgot'
   post '/forgot' => 'stormpath/rails/passwords#forgot_send', as: 'forgot_send'
+  get '/forgot/change' => 'stormpath/rails/passwords#forgot_change', as: 'forgot_change'
 end

@@ -26,12 +26,6 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
 
   private
 
-  def verified
-    verify_email_token params[:sptoken]
-    set_flash_message :notice, 'Your account has been verified and you are now able to log in.'
-    render template: "sessions/new"
-  end
-
   def user_from_params
     email = user_params.delete(:email)
     password = user_params.delete(:password)
