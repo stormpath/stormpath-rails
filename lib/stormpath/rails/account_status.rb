@@ -17,6 +17,11 @@ module Stormpath
           ''
         end
       end
+
+      def account_url
+        return '' unless success?
+        @response.href.split('/').last
+      end
     end
   end
 end
