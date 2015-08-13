@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   get '/forgot' => 'stormpath/rails/passwords#forgot', as: 'forgot'
   post '/forgot' => 'stormpath/rails/passwords#forgot_send', as: 'forgot_send'
   get '/forgot/change' => 'stormpath/rails/passwords#forgot_change', as: 'forgot_change'
+  post '/forgot/change/:account_url' => 'stormpath/rails/passwords#forgot_update', as: 'forgot_update'
 end
