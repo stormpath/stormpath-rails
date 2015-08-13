@@ -53,6 +53,18 @@ module Stormpath
         account_params.merge!("password" => user.password) unless user.password.blank?
       end
 
+      def self.update_password(account, password)
+        begin
+          account = client.accounts.get account
+          account.password = password
+          result = account.save
+        rescue Stormpath::Error => error
+          result = error.message
+        end
+
+        AccountStatus.new(result)
+      end
+
       def self.application
         self.client.applications.get Stormpath::Rails.config.application
       end

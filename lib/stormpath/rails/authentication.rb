@@ -36,6 +36,10 @@ module Stormpath
         Client.verify_email_token(token)
       end
 
+      def update_password(password, account)
+        Client.update_password(password, account)
+      end
+
       def logout
         reset_session
       end
