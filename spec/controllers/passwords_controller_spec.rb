@@ -59,8 +59,8 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
   end
 
   describe "GET #forgot_change" do
-    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true) }
-    let(:account_failed) { double(Stormpath::Rails::AccountStatus, success?: false) }
+    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }
+    let(:account_failed) { double(Stormpath::Rails::AccountStatus, success?: false, account_url: 'xyz') }
 
     context "valid token" do
       it "renders form for password change" do
@@ -79,6 +79,38 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
 
         expect(response).to be_success
         expect(response).to render_template(:forgot_change_failed)
+      end
+    end
+  end
+
+  describe "POST #change_password" do
+    let(:test_account) { create_test_account }
+    let(:valid_passwords)     { { password: { original: 'Somepass123', repeated: 'Somepass123' } } }
+    let(:different_passwords) { { password: { original: 'Somepass123', repeated: 'Somepass' } } }
+    let(:invalid_passwords)   { { password: { original: 'invalid', repeated: 'invalid' } } }
+
+    context "valid passwords" do
+      it "something" do
+        post :forgot_update, valid_passwords.merge(account_url: test_account.account_url)
+
+        expect(response).to be_success
+        expect(response).to render_template(:forgot_complete)
+      end
+    end
+
+    context "invalid passwords" do
+      it "renders change form with do not match error" do
+        post :forgot_update, different_passwords.merge(account_url: test_account.account_url)
+
+        expect(response).to render_template(:forgot_change)
+        expect(flash[:error]).to eq('Passwords do not match.')
+      end
+
+      it "renders change form with response errors" do
+        post :forgot_update, invalid_passwords.merge(account_url: test_account.account_url)
+
+        expect(response).to render_template(:forgot_change)
+        expect(flash[:error]).to_not be_empty
       end
     end
   end
