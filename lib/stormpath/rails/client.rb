@@ -35,6 +35,16 @@ module Stormpath
         AccountStatus.new(result)
       end
 
+      def self.verify_email_token(token)
+        begin
+          result = application.verify_password_reset_token token
+        rescue Stormpath::Error => error
+          result = error.message
+        end
+
+         AccountStatus.new(result)
+      end
+
       def self.account_params(user)
         account_params = user.attributes.select do |k, v|
           %W[given_name surname email username password].include?(k) && !v.nil?

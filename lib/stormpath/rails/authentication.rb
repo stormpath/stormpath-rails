@@ -32,6 +32,10 @@ module Stormpath
         Client.reset_password(email)
       end
 
+      def verify_email_token(token)
+        Client.verify_email_token(token)
+      end
+
       def logout
         reset_session
       end
