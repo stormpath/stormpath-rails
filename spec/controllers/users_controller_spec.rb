@@ -3,7 +3,7 @@ require "spec_helper"
 describe Stormpath::Rails::UsersController, type: :controller do
   it { should be_a Stormpath::Rails::BaseController }
 
-  describe "on GET to #new" do
+  describe "GET #new" do
     context "when signed out" do
       it "renders a form for a new user" do
         get :new
@@ -14,7 +14,32 @@ describe Stormpath::Rails::UsersController, type: :controller do
     end
   end
 
-  describe "on POST to #create" do
+  describe "GET #verify" do
+    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }
+    let(:account_failed) { double(Stormpath::Rails::AccountStatus, success?: false, account_url: 'xyz') }
+
+    context "valid sptoken" do
+      it "renders success verification view" do
+        allow(controller).to receive(:verify_email_token).and_return(account_success)
+        get :verify
+
+        expect(response).to be_success
+        expect(response).to render_template(:verification_complete)
+      end
+    end
+
+    context "invalid sptoken" do
+      it "renders failed verification view" do
+        allow(controller).to receive(:verify_email_token).and_return(account_failed)
+        get :verify
+
+        expect(response).to be_success
+        expect(response).to render_template(:verification_failed)
+      end
+    end
+  end
+
+  describe "POST #create" do
     let(:user_attributes) { attributes_for(:user) }
 
     context "invalid data" do
@@ -62,7 +87,7 @@ describe Stormpath::Rails::UsersController, type: :controller do
         post :create, user: user_attributes
 
         expect(response).to be_success
-        expect(response).to render_template(:verified)
+        expect(response).to render_template(:verification_email_sent)
       end
     end
 
