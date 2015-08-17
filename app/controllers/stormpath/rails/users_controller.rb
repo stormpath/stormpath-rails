@@ -7,7 +7,7 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
       @user.save
 
       if Stormpath::Rails.config.verify_email
-        render template: "users/verified"
+        render template: "users/verification_email_sent"
       else
         initialize_session(@user)
         set_flash_message :notice, 'Your account was created successfully'
@@ -22,6 +22,17 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
   def new
     @user = user_from_params
     render template: "users/new"
+  end
+
+  def verify
+    result = verify_email_token params[:sptoken]
+
+    if result.success?
+      @account_url = result.account_url
+      render template: "users/verification_complete"
+    else
+      render template: "users/verification_failed"
+    end
   end
 
   private
