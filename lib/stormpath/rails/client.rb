@@ -37,12 +37,12 @@ module Stormpath
 
       def self.verify_email_token(token)
         begin
-          result = application.verify_password_reset_token token
+          result = client.accounts.verify_email_token token
         rescue Stormpath::Error => error
           result = error.message
         end
 
-         AccountStatus.new(result)
+        AccountStatus.new(result)
       end
 
       def self.account_params(user)
