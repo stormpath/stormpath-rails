@@ -55,6 +55,11 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
         post :forgot_send, password: { email: "test@testable.com" }
         expect(flash[:error]).to eq('Invalid email address.')
       end
+
+      it "shows error message" do
+        post :forgot_send, password: { email: "" }
+        expect(flash[:error]).to eq('Invalid email address.')
+      end
     end
   end
 
