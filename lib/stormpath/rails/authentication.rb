@@ -48,12 +48,16 @@ module Stormpath
         reset_session
       end
 
+      def configuration
+        Stormpath::Rails.config
+      end
+
       def find_user_by_email(email)
-        Stormpath::Rails.config.user_model.find_user email
+        configuration.user_model.find_user email
       end
 
       def find_user_by_id(id)
-        Stormpath::Rails.config.user_model.find(id)
+        configuration.user_model.find(id)
       end
 
       def signed_in?
@@ -65,7 +69,7 @@ module Stormpath
       end
 
       def current_user
-        @current_user ||= Stormpath::Rails.config.user_model.find(session[:user_id]) if session[:user_id]
+        @current_user ||= configuration.user_model.find(session[:user_id]) if session[:user_id]
       end
 
       def initialize_session(user)

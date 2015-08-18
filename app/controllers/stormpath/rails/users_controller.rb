@@ -6,7 +6,7 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
     if result.success?
       @user.save
 
-      if Stormpath::Rails.config.verify_email
+      if configuration.verify_email
         render template: "users/verification_email_sent"
       else
         initialize_session(@user)
@@ -20,8 +20,8 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
   end
 
   def new
-    if Stormpath::Rails.config.id_site.enabled
-      redirect_to id_site_url callback_uri: (request.base_url + Stormpath::Rails.config.id_site.uri), path: '/#register'
+    if configuration.id_site.enabled
+      redirect_to id_site_url callback_uri: (request.base_url + configuration.id_site.uri), path: '/#register'
     else
       if signed_in?
         redirect_to root_path
