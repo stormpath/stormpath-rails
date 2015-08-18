@@ -3,6 +3,10 @@ require "spec_helper"
 describe Stormpath::Rails::UsersController, type: :controller do
   it { should be_a Stormpath::Rails::BaseController }
 
+  before do
+    Stormpath::Rails.config.id_site = { enabled: false }
+  end
+
   describe "GET #new" do
     context "when signed out" do
       it "renders a form for a new user" do
