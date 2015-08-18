@@ -21,6 +21,20 @@ describe Stormpath::Rails::SessionsController, type: :controller do
         expect(response).to redirect_to(root_path)
       end
     end
+
+    context "id site enabled" do
+      before do
+        Stormpath::Rails.config.id_site = { enabled: true, uri: "/redirect" }
+      end
+
+      it "calls id_site_url on client with correct options" do
+        expect(Stormpath::Rails::Client).to receive(:id_site_url)
+          .with({ callback_uri: @controller.request.base_url + "/redirect" })
+          .and_return(root_path)
+
+        get :new
+      end
+    end
   end
 
   describe "DELTE #destroy" do
