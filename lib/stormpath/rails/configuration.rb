@@ -1,11 +1,10 @@
 module Stormpath
   module Rails
     class Configuration
-      attr_accessor :api_key_file, :secret_key, :application, :expand_custom_data, :id_site, :user_model, :verify_email,
+      attr_accessor :api_key_file, :secret_key, :application, :expand_custom_data, :user_model, :verify_email,
         :enable_forgot_password
 
       def initialize
-        @id_site = false
         @expand_custom_data = true
         @verify_email = false
         @enable_forgot_password = false
@@ -13,6 +12,14 @@ module Stormpath
 
       def user_model
         @user_model ||= ::User
+      end
+
+      def id_site=(options)
+        @id_site = IdSite.new(options)
+      end
+
+      def id_site
+        @id_site ||= IdSite.new
       end
     end
 
