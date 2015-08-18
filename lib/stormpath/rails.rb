@@ -1,6 +1,7 @@
 require 'stormpath-sdk'
 require 'stormpath/rails/engine'
 require 'stormpath/rails/configuration'
+require 'virtus'
 
 module Stormpath
   module Rails
@@ -12,5 +13,6 @@ module Stormpath
     autoload :User, 'stormpath/rails/user'
     autoload :AuthenticationStatus, 'stormpath/rails/authentication_status'
     autoload :AccountStatus, 'stormpath/rails/account_status'
+    autoload :IdSite, 'stormpath/rails/id_site'
   end
 end
