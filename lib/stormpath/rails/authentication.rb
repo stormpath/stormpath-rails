@@ -40,6 +40,10 @@ module Stormpath
         Client.update_password(password, account)
       end
 
+      def id_site_url(options)
+        Client.id_site_url(options)
+      end
+
       def logout
         reset_session
       end

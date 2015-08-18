@@ -45,6 +45,10 @@ module Stormpath
         AccountStatus.new(result)
       end
 
+      def self.id_site_url(options)
+        application.create_id_site_url callback_uri: options[:callback_uri], path: options[:path]
+      end
+
       def self.account_params(user)
         account_params = user.attributes.select do |k, v|
           %W[given_name surname email username password].include?(k) && !v.nil?
