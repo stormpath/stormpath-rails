@@ -3,7 +3,14 @@ module Stormpath
     module User
       extend ActiveSupport::Concern
 
-      attr_accessor :password
+      included do
+        attr_accessor :password
+
+        validates_presence_of :email
+        validates_uniqueness_of :email
+        validates_presence_of :given_name
+        validates_presence_of :surname
+      end
 
       module ClassMethods
         def find_user(email)
