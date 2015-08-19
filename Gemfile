@@ -17,4 +17,5 @@ group :test do
   gem 'webmock'
   gem 'vcr'
   gem 'ammeter', git: "https://github.com/alexrothenberg/ammeter", branch: "bigtunacan-master"
+  gem 'simplecov', :require => false
 end
