@@ -6,6 +6,7 @@ module Stormpath
       extend ActiveSupport::Concern
 
       include Stormpath::Rails::Authentication
+      include Stormpath::Rails::Session
     end
   end
 end

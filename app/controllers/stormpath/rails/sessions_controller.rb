@@ -23,7 +23,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
 
   def new
     if configuration.id_site.enabled
-      redirect_to id_site_url callback_uri: (request.base_url + configuration.id_site.uri)
+      redirect_to id_site_login_url
     else
       render template: "sessions/new"
     end

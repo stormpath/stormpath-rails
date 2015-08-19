@@ -21,7 +21,7 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
 
   def new
     if configuration.id_site.enabled
-      redirect_to id_site_url callback_uri: (request.base_url + configuration.id_site.uri), path: '/#register'
+      redirect_to id_site_register_url
     else
       if signed_in?
         redirect_to root_path
