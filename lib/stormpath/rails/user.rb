@@ -6,8 +6,7 @@ module Stormpath
       included do
         attr_accessor :password
 
-        validates_presence_of :email
-        validates_uniqueness_of :email
+        validates :email, presence: true, uniqueness: true
         validates_presence_of :given_name
         validates_presence_of :surname
       end
