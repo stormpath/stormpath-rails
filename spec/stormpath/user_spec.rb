@@ -19,4 +19,20 @@ describe User do
       expect(subject.password).to eq password
     end
   end
+
+  describe ".normalize_email" do
+    it "downcases the address and strips spaces" do
+      email = "Jo hn.Do e @exa mp le.c om"
+
+      expect(User.normalize_email(email)).to eq "john.doe@example.com"
+    end
+  end
+
+  describe ".find_user" do
+    it "finds user by email" do
+      user = create(:user)
+
+      expect(User.find_user(user.email.upcase)).to eq(user)
+    end
+  end
 end
