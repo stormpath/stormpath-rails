@@ -28,6 +28,7 @@ VCR.configure do |c|
 end
 
 RSpec.configure do |config|
+  config.use_transactional_fixtures = true
   config.include FactoryGirl::Syntax::Methods
   config.include Stormpath::Testing::Helpers, type: :controller
 end
