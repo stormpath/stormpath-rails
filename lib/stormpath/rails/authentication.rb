@@ -3,6 +3,21 @@ module Stormpath
     module Authentication
       extend ActiveSupport::Concern
 
+      included do
+        hide_action(
+          :create_stormpath_account,
+          :authenticate,
+          :reset_password,
+          :verify_email_token,
+          :update_password,
+          :id_site_login_url,
+          :id_site_register_url,
+          :configuration,
+          :find_user_by_email,
+          :find_user_by_id
+        )
+      end
+
       def create_stormpath_account(user)
         Client.create_stormpath_account(user)
       end
