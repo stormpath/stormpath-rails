@@ -46,6 +46,10 @@ module Stormpath
         Client.id_site_url callback_uri: (request.base_url + configuration.id_site.uri), path: '/#register'
       end
 
+      def handle_id_site_callback(url)
+        Client.handle_id_site_callback(url)
+      end
+
       def configuration
         Stormpath::Rails.config
       end

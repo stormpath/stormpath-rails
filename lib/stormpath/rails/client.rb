@@ -45,6 +45,11 @@ module Stormpath
         AccountStatus.new(result)
       end
 
+      def self.handle_id_site_callback(url)
+        response = application.handle_id_site_callback(url)
+        client.accounts.get response.account_href
+      end
+
       def self.id_site_url(options)
         application.create_id_site_url callback_uri: options[:callback_uri], path: options[:path]
       end
