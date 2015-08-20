@@ -29,6 +29,14 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
     end
   end
 
+  def redirect
+    user_data = handle_id_site_callback(request.url)
+    @user = find_user_by_email user_data.email
+    initialize_session(@user)
+
+    redirect_to root_path, notice: 'Successfully signed in'
+  end
+
   private
 
   def user_from_params
