@@ -5,9 +5,24 @@ module ConfigSpecHelpers
     })
   end
 
+  def disable_forgot_password
+    Stormpath::Rails.configure({
+      web: { forgot_password: { enabled: false } }
+    })
+  end
+
   def enable_id_site
     Stormpath::Rails.configure({
-      web: { id_site: { enabled: true } }
+      web: { id_site: {
+        enabled: true,
+        uri: "/redirect"
+      } }
+    })
+  end
+
+  def disable_id_site
+    Stormpath::Rails.configure({
+      web: { id_site: { enabled: false } }
     })
   end
 
@@ -17,9 +32,9 @@ module ConfigSpecHelpers
     })
   end
 
-  def disable_forgot_password
+  def disable_verify_email
     Stormpath::Rails.configure({
-      web: { forgot_password: { enabled: false } }
+      web: { verify_email: { enabled: false } }
     })
   end
 end

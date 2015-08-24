@@ -4,7 +4,7 @@ describe Stormpath::Rails::UsersController, type: :controller do
   it { should be_a Stormpath::Rails::BaseController }
 
   before do
-    Stormpath::Rails.config.id_site = { enabled: false }
+    disable_id_site
   end
 
   describe "GET #new" do
@@ -28,7 +28,7 @@ describe Stormpath::Rails::UsersController, type: :controller do
 
     context "id site enabled" do
       before do
-        Stormpath::Rails.config.id_site = { enabled: true, uri: "/redirect" }
+        enable_id_site
       end
 
       it "calls id_site_url on client with correct options" do
@@ -103,7 +103,7 @@ describe Stormpath::Rails::UsersController, type: :controller do
 
     context "user verification enabled" do
       before do
-        Stormpath::Rails.config.verify_email = { enabled: true }
+        enable_verify_email
       end
 
       it "creates a user" do
@@ -120,7 +120,7 @@ describe Stormpath::Rails::UsersController, type: :controller do
 
     context "user verification disabled" do
       before do
-        Stormpath::Rails.config.verify_email = { enabled: false }
+        disable_verify_email
       end
 
       it "creates a user" do
