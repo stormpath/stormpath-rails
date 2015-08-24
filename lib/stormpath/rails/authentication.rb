@@ -14,7 +14,8 @@ module Stormpath
           :id_site_register_url,
           :configuration,
           :find_user_by_email,
-          :find_user_by_id
+          :find_user_by_id,
+          :handle_id_site_callback
         )
       end
 
