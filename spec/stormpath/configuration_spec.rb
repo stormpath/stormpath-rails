@@ -14,11 +14,7 @@ describe Stormpath::Rails::Configuration do
 
   context 'when is_site is set to true' do
     before do
-      Stormpath::Rails.configure({
-        web: {
-          id_site: { enabled: true }
-        }
-      })
+      enable_id_site
     end
 
     it 'returns true' do
@@ -34,11 +30,7 @@ describe Stormpath::Rails::Configuration do
 
   context 'when enable forgot password is specified' do
     before do
-      Stormpath::Rails.configure({
-        web: {
-          forgot_password: { enabled: true }
-        }
-      })
+      enable_forgot_password
     end
 
     it "returns configured value" do
@@ -48,11 +40,7 @@ describe Stormpath::Rails::Configuration do
 
   context 'when enable forgot password is specified' do
     before do
-      Stormpath::Rails.configure({
-        web: {
-          verify_email: { enabled: true }
-        }
-      })
+      enable_verify_email
     end
 
     it "returns configured value" do
