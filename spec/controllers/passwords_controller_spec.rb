@@ -6,7 +6,12 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
   describe "GET #forgot" do
     context "password reset enabled" do
       before do
-        Stormpath::Rails.config.enable_forgot_password = true
+        #Stormpath::Rails.config.enable_forgot_password = true
+        Stormpath::Rails.configure({
+          web: {
+            forgot_password: { enabled: true }
+          }
+        })
       end
 
       it "renders forgot password view" do
@@ -19,7 +24,11 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
 
     context "password reset disabled" do
       before do
-        Stormpath::Rails.config.enable_forgot_password = false
+        Stormpath::Rails.configure({
+          web: {
+            forgot_password: { enabled: false }
+          }
+        })
       end
 
       it "redirects to root_path" do
@@ -33,7 +42,11 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
   describe "POST #forgot_send" do
     before do
       create_test_account
-      Stormpath::Rails.config.enable_forgot_password = true
+      Stormpath::Rails.configure({
+        web: {
+          forgot_password: { enabled: true }
+        }
+      })
     end
 
     context "valid data" do

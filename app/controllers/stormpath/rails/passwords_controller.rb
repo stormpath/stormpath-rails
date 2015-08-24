@@ -51,6 +51,6 @@ class Stormpath::Rails::PasswordsController < Stormpath::Rails::BaseController
   end
 
   def redirect_password_reset_disabled
-    redirect_to root_path unless configuration.enable_forgot_password
+    redirect_to root_path unless configuration.forgot_password.enabled
   end
 end
