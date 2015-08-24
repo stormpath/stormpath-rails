@@ -1,57 +1,31 @@
 module Stormpath
   module Rails
     class Configuration
-      attr_accessor :api_key_file, :secret_key, :application, :expand_custom_data, :user_model, :verify_email,
-        :enable_forgot_password
+      attr_accessor :secret_key, :expand_custom_data, :user_model
 
       def initialize
         @expand_custom_data = true
-        @verify_email = false
-        @enable_forgot_password = false
       end
 
       def user_model
         @user_model ||= ::User
       end
 
-      def id_site=(options)
-        @id_site = UserConfig::IdSite.new(options)
+      [:id_site, :api_key, :application, :verify_email, :forgot_password].each do |action|
+        define_method("#{action}=") do |options|
+          klass = user_config_class(action)
+          instance_variable_set("@#{action}", klass.new(options))
+        end
+
+        define_method("#{action}") do
+          instance_variable_get("@#{action}")
+        end
       end
 
-      def id_site
-        @id_site ||= UserConfig::IdSite.new
-      end
+      private
 
-      def api_key=(options)
-        @api_key = UserConfig::ApiKey.new(options)
-      end
-
-      def api_key
-        @api_key ||= UserConfig::ApiKey.new
-      end
-
-      def application=(options)
-        @application = UserConfig::Application.new(options)
-      end
-
-      def application
-        @application ||= UserConfig::Application.new
-      end
-
-      def verify_email=(options)
-        @verify_email = UserConfig::VerifyEmail.new(options)
-      end
-
-      def verify_email
-        @verify_email ||= UserConfig::VerifyEmail.new
-      end
-
-      def forgot_password=(options)
-        @forgot_password = UserConfig::ForgotPassword.new(options)
-      end
-
-      def forgot_password
-        @forgot_password ||= UserConfig::ForgotPassword.new
+      def user_config_class(action)
+        UserConfig.const_get(action.to_s.camelize)
       end
     end
 
