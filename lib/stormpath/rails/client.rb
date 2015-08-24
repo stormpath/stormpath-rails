@@ -75,7 +75,7 @@ module Stormpath
       end
 
       def self.application
-        self.client.applications.get Stormpath::Rails.config.application
+        self.client.applications.get Stormpath::Rails.config.application.href
       end
 
       def self.client
@@ -83,7 +83,7 @@ module Stormpath
       end
 
       def self.client_options
-        Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key_file }
+        Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key.file }
       end
 
       private
