@@ -4,9 +4,7 @@ describe Stormpath::Rails::Configuration do
 
   context 'when id_site is not specified' do
     before do
-      Stormpath::Rails.configure do |config|
-        config.id_site = {}
-      end
+      Stormpath::Rails.configure({})
     end
 
     it 'defaults to false' do
@@ -16,9 +14,11 @@ describe Stormpath::Rails::Configuration do
 
   context 'when is_site is set to true' do
     before do
-      Stormpath::Rails.configure do |config|
-        config.id_site = { enabled: true }
-      end
+      Stormpath::Rails.configure({
+        web: {
+          id_site: { enabled: true }
+        }
+      })
     end
 
     it 'returns true' do
@@ -34,25 +34,29 @@ describe Stormpath::Rails::Configuration do
 
   context 'when enable forgot password is specified' do
     before do
-      Stormpath::Rails.configure do |config|
-        config.enable_forgot_password = true
-      end
+      Stormpath::Rails.configure({
+        web: {
+          forgot_password: { enabled: true }
+        }
+      })
     end
 
     it "returns configured value" do
-      expect(Stormpath::Rails.config.enable_forgot_password).to eq true
+      expect(Stormpath::Rails.config.forgot_password.enabled).to eq true
     end
   end
 
   context 'when enable forgot password is specified' do
     before do
-      Stormpath::Rails.configure do |config|
-        config.verify_email = true
-      end
+      Stormpath::Rails.configure({
+        web: {
+          verify_email: { enabled: true }
+        }
+      })
     end
 
     it "returns configured value" do
-      expect(Stormpath::Rails.config.verify_email).to eq true
+      expect(Stormpath::Rails.config.verify_email.enabled).to eq true
     end
   end
 end
