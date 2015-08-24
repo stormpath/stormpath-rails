@@ -103,7 +103,7 @@ describe Stormpath::Rails::UsersController, type: :controller do
 
     context "user verification enabled" do
       before do
-        Stormpath::Rails.config.verify_email = true
+        Stormpath::Rails.config.verify_email = { enabled: true }
       end
 
       it "creates a user" do
@@ -120,7 +120,7 @@ describe Stormpath::Rails::UsersController, type: :controller do
 
     context "user verification disabled" do
       before do
-        Stormpath::Rails.config.verify_email = false
+        Stormpath::Rails.config.verify_email = { enabled: false }
       end
 
       it "creates a user" do

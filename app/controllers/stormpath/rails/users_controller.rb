@@ -6,7 +6,7 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
     if result.success?
       @user.save
 
-      if configuration.verify_email
+      if configuration.verify_email.enabled
         render template: "users/verification_email_sent"
       else
         initialize_session(@user)
