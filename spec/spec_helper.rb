@@ -17,6 +17,7 @@ require 'stormpath/testing/helpers'
 require 'factories'
 
 require "support/generator_spec_helpers"
+require "support/config_spec_helpers"
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
