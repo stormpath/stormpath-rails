@@ -13,16 +13,16 @@ module Stormpath
 
       def inject_stormpath_into_application_controller
         inject_into_class(
-          "app/controllers/application_controller.rb",
+          'app/controllers/application_controller.rb',
           ApplicationController,
           "  include Stormpath::Rails::Controller\n"
         )
       end
 
       def create_user_model
-        if File.exists?(destination_root + "/app/models/user.rb")
+        if File.exist?(destination_root + '/app/models/user.rb')
           inject_into_file(
-            "app/models/user.rb",
+            'app/models/user.rb',
             "include Stormpath::Rails::User\n\n",
             after: "class User < ActiveRecord::Base\n"
           )
@@ -42,14 +42,14 @@ module Stormpath
       private
 
       def create_add_columns_migration
-        if migration_needed?
-          config = {
-            new_columns: new_columns,
-            new_indexes: new_indexes
-          }
+        return unless migration_needed?
 
-          copy_migration('add_stormpath_to_users.rb', config)
-        end
+        config = {
+          new_columns: new_columns,
+          new_indexes: new_indexes
+        }
+
+        copy_migration('add_stormpath_to_users.rb', config)
       end
 
       def migration_needed?
@@ -60,13 +60,13 @@ module Stormpath
         @new_columns ||= {
           email: 't.string :email, null: false',
           given_name: 't.string :given_name, null: false',
-          surname: 't.string :surname, null: false',
+          surname: 't.string :surname, null: false'
         }.reject { |column| existing_users_columns.include?(column.to_s) }
       end
 
       def new_indexes
         @new_indexes ||= {
-          index_users_on_email: 'add_index :users, :email',
+          index_users_on_email: 'add_index :users, :email'
         }.reject { |index| existing_users_indexes.include?(index.to_s) }
       end
 
@@ -75,13 +75,12 @@ module Stormpath
       end
 
       def copy_migration(migration_name, config = {})
-        unless migration_exists?(migration_name)
-          migration_template(
-            "db/migrate/#{migration_name}",
-            "db/migrate/#{migration_name}",
-            config
-          )
-        end
+        return if migration_exists?(migration_name)
+        migration_template(
+          "db/migrate/#{migration_name}",
+          "db/migrate/#{migration_name}",
+          config
+        )
       end
 
       def migration_exists?(name)
@@ -89,7 +88,7 @@ module Stormpath
       end
 
       def existing_migrations
-        @existing_migrations ||= Dir.glob("db/migrate/*.rb").map do |file|
+        @existing_migrations ||= Dir.glob('db/migrate/*.rb').map do |file|
           migration_name_without_timestamp(file)
         end
       end
