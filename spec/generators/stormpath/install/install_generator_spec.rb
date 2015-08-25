@@ -43,10 +43,9 @@ describe Stormpath::Generators::InstallGenerator, type: :generator do
   end
 
   context "user class already exists" do
-    it "includes Clearance::User" do
+    it "includes Stormpath::Rails::User" do
       provide_existing_application_controller
       provide_existing_user_class
-      #binding.pry
 
       run_generator
       user_class = file("app/models/user.rb")
@@ -73,5 +72,47 @@ describe Stormpath::Generators::InstallGenerator, type: :generator do
         expect(migration).to contain("create_table :users")
       end
     end
+
+    context "existing users table with all stormpath columns and indexes" do
+      it "does not create a migration" do
+        provide_existing_application_controller
+
+        run_generator
+        create_migration = migration_file("db/migrate/create_users.rb")
+        add_migration = migration_file("db/migrate/add_stormpath_to_users.rb")
+
+        expect(create_migration).not_to exist
+        expect(add_migration).not_to exist
+      end
+    end
+
+    context "existing users table missing some columns and indexes" do
+      it "create a migration to add missing columns and indexes" do
+        provide_existing_application_controller
+
+        Struct.new("Named", :name)
+        existing_columns = [Struct::Named.new("email")]
+
+        allow(ActiveRecord::Base.connection).to receive(:columns).
+          with(:users).
+          and_return(existing_columns)
+
+        allow(ActiveRecord::Base.connection).to receive(:indexes).
+          with(:users).
+          and_return([])
+
+        run_generator
+        migration = migration_file("db/migrate/add_stormpath_to_users.rb")
+
+        expect(migration).to exist
+        expect(migration).to have_correct_syntax
+        expect(migration).to contain("change_table :users")
+        expect(migration).to contain("t.string :given_name")
+        expect(migration).to contain("t.string :surname")
+        expect(migration).to contain("add_index :users, :email")
+        expect(migration).not_to contain("t.string :email")
+      end
+    end
+
   end
 end
