@@ -16,6 +16,6 @@ group :test do
   gem 'shoulda'
   gem 'webmock'
   gem 'vcr'
-  gem 'ammeter', git: "https://github.com/alexrothenberg/ammeter", branch: "bigtunacan-master"
+  gem 'ammeter', git: "https://github.com/alexrothenberg/ammeter"
   gem 'simplecov', :require => false
 end
