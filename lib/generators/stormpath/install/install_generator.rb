@@ -20,9 +20,7 @@ module Stormpath
       end
 
       def create_user_model
-        # the problem here is that is looking in the wrong root
-        # if I put tmp/app it will work correctly
-        if File.exists? 'app/models/user.rb'
+        if File.exists?(destination_root + "/app/models/user.rb")
           inject_into_file(
             "app/models/user.rb",
             "include Stormpath::Rails::User\n\n",
