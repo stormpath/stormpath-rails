@@ -11,7 +11,7 @@ module Stormpath
         copy_file 'stormpath.rb', 'config/initializers/stormpath.rb'
       end
 
-      def inject_clearance_into_application_controller
+      def inject_stormpath_into_application_controller
         inject_into_class(
           "app/controllers/application_controller.rb",
           ApplicationController,
@@ -32,12 +32,43 @@ module Stormpath
       end
 
       def create_stormpath_migration
-        unless user_table_exists?
+        if user_table_exists?
+          create_add_columns_migration
+        else
           copy_migration 'create_users.rb'
         end
       end
 
       private
+
+      def create_add_columns_migration
+        if migration_needed?
+          config = {
+            new_columns: new_columns,
+            new_indexes: new_indexes
+          }
+
+          copy_migration('add_stormpath_to_users.rb', config)
+        end
+      end
+
+      def migration_needed?
+        new_columns.any? || new_indexes.any?
+      end
+
+      def new_columns
+        @new_columns ||= {
+          email: 't.string :email, null: false',
+          given_name: 't.string :given_name, null: false',
+          surname: 't.string :surname, null: false',
+        }.reject { |column| existing_users_columns.include?(column.to_s) }
+      end
+
+      def new_indexes
+        @new_indexes ||= {
+          index_users_on_email: 'add_index :users, :email',
+        }.reject { |index| existing_users_indexes.include?(index.to_s) }
+      end
 
       def user_table_exists?
         ActiveRecord::Base.connection.table_exists?(:users)
@@ -70,6 +101,14 @@ module Stormpath
       # for generating a timestamp when using `create_migration`
       def self.next_migration_number(dir)
         ActiveRecord::Generators::Base.next_migration_number(dir)
+      end
+
+      def existing_users_columns
+        ActiveRecord::Base.connection.columns(:users).map(&:name)
+      end
+
+      def existing_users_indexes
+        ActiveRecord::Base.connection.indexes(:users).map(&:name)
       end
     end
   end
