@@ -26,6 +26,16 @@ module ConfigSpecHelpers
     })
   end
 
+  def config_not_specified
+    Stormpath::Rails.configure({
+      web: {
+        id_site: {},
+        verify_email: {},
+        forgot_password: {}
+      }
+    })
+  end
+
   def enable_verify_email
     Stormpath::Rails.configure({
       web: { verify_email: { enabled: true } }
