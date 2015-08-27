@@ -71,7 +71,6 @@ describe Stormpath::Rails::SessionsController, type: :controller do
   describe "GET #redirect" do
     let(:user) { create(:user) }
     it "redirects to root_path" do
-      #stub(:handle_id_site_callback).and_return(user)
       allow(controller).to receive(:handle_id_site_callback).and_return(user)
       get :redirect
 

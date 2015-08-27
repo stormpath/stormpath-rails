@@ -34,4 +34,8 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.include FactoryGirl::Syntax::Methods
   config.include Stormpath::Testing::Helpers, type: :controller
+
+  config.after(:all, type: :controller) do
+    delete_test_account
+  end
 end
