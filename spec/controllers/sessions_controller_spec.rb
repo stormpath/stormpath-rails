@@ -37,6 +37,36 @@ describe Stormpath::Rails::SessionsController, type: :controller do
     end
   end
 
+  describe "POST #create" do
+    context "valida user params" do
+      let(:user) { create(:user) }
+
+      before do
+        post :create, session: user.attributes.merge(password: "Password1337") 
+      end
+
+      it "redirects to root_path with succesfull message" do
+        expect(flash[:notice]).to eq('Successfully signed in')
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "initializes the session" do
+        expect(session[:user_id]).to_not be_nil
+      end
+    end
+
+    context "invalid user params" do
+      let(:user) { create(:user) }
+
+      it "renders new template with errors" do
+        post :create, session: user.attributes
+
+        expect(flash[:error]).to_not be_nil
+        expect(response).to render_template(:new)
+      end
+    end
+  end
+
   describe "DELTE #destroy" do
     it "signs out the user" do
       sign_in
