@@ -67,6 +67,18 @@ describe Stormpath::Rails::SessionsController, type: :controller do
     end
   end
 
+
+  describe "GET #redirect" do
+    let(:user) { create(:user) }
+    it "redirects to root_path" do
+      #stub(:handle_id_site_callback).and_return(user)
+      allow(controller).to receive(:handle_id_site_callback).and_return(user)
+      get :redirect
+
+      expect(response).to redirect_to(root_path)
+    end
+  end
+
   describe "DELTE #destroy" do
     it "signs out the user" do
       sign_in
