@@ -11,7 +11,7 @@ module Stormpath
         @user_model ||= ::User
       end
 
-      [:id_site, :api_key, :application, :verify_email, :forgot_password].each do |action|
+      [:id_site, :api_key, :application, :verify_email, :forgot_password, :facebook].each do |action|
         define_method("#{action}=") do |options|
           klass = user_config_class(action)
           instance_variable_set("@#{action}", klass.new(options))
@@ -43,6 +43,7 @@ module Stormpath
       config.application = config_data[:application] if config_data[:application]
       config.verify_email = config_data[:web][:verify_email] if config_data[:web] && config_data[:web][:verify_email]
       config.forgot_password = config_data[:web][:forgot_password] if config_data[:web] && config_data[:web][:forgot_password]
+      config.facebook = config_data[:social][:facebook] if config_data[:social] && config_data[:social][:facebook]
     end
   end
 end
