@@ -14,6 +14,7 @@ module Stormpath
     autoload :User, 'stormpath/rails/user'
     autoload :AuthenticationStatus, 'stormpath/rails/authentication_status'
     autoload :AccountStatus, 'stormpath/rails/account_status'
+    autoload :Social, 'stormpath/rails/social'
 
     module UserConfig
       autoload :ApiKey, 'stormpath/rails/user_config/api_key'
@@ -21,6 +22,7 @@ module Stormpath
       autoload :ForgotPassword, 'stormpath/rails/user_config/forgot_password'
       autoload :IdSite, 'stormpath/rails/user_config/id_site'
       autoload :VerifyEmail, 'stormpath/rails/user_config/verify_email'
+      autoload :Facebook, 'stormpath/rails/user_config/facebook'
     end
   end
 end

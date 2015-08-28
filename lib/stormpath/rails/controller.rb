@@ -7,6 +7,7 @@ module Stormpath
 
       include Stormpath::Rails::Authentication
       include Stormpath::Rails::Session
+      include Stormpath::Rails::Social
     end
   end
 end
