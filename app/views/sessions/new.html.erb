@@ -3,6 +3,9 @@
     <div class="view login-view container">
       <div class="box row">
         <%= render partial: '/sessions/form' %>
+        <% if facebook_login_enabled? %>
+          <%= render partial: '/sessions/facebook_login_form' %>
+        <% end %>
       </div>
       <% if Stormpath::Rails.config.forgot_password.enabled %>
         <%= link_to "Forgot Password?", forgot_path, class: "forgot" %>
