@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get    '/login'    => 'stormpath/rails/sessions#new', as: 'sign_in'
   delete '/sign_out' => 'stormpath/rails/sessions#destroy', as: 'sign_out'
   get    '/redirect' => 'stormpath/rails/sessions#redirect', as: 'redirect'
-  get    '/omniauth_login' => 'stormpath/rails/sessions#omniauth_login', as: 'omniauth_login' 
+  get    '/omniauth_login' => 'stormpath/rails/omniauth#create', as: 'omniauth_login' 
 
   get    '/forgot'   => 'stormpath/rails/passwords#forgot', as: 'forgot'
   post   '/forgot'   => 'stormpath/rails/passwords#forgot_send', as: 'forgot_send'
