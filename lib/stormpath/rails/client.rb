@@ -73,6 +73,11 @@ module Stormpath
 
         AccountStatus.new(result)
       end
+      
+      def self.create_omniauth_user(provider, access_token)
+        request = Stormpath::Provider::AccountRequest.new(provider, :access_token, access_token)
+        application.get_provider_account(request)
+      end 
 
       def self.application
         self.client.applications.get Stormpath::Rails.config.application.href

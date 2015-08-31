@@ -15,7 +15,8 @@ module Stormpath
           :configuration,
           :find_user_by_email,
           :find_user_by_id,
-          :handle_id_site_callback
+          :handle_id_site_callback,
+          :create_omniauth_user
         )
       end
 
@@ -33,6 +34,18 @@ module Stormpath
 
       def verify_email_token(token)
         Client.verify_email_token(token)
+      end
+
+      def create_omniauth_user(provider, access_token)
+        Client.create_omniauth_user(provider, access_token)
+      end
+
+      def create_user_from_account_result(account_result)
+        user = ::User.new
+        user.email = account_result.email
+        user.given_name = account.given_name
+        user.surname = account.surname
+        user.save
       end
 
       def update_password(password, account)
