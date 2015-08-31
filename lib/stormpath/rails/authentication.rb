@@ -40,9 +40,16 @@ module Stormpath
         Client.create_omniauth_user(provider, access_token)
       end
 
-      def create_user_from_account_result(account_result)
+      def find_or_create_user_from_account(account)
+        user = find_user_by_email(account.email)
+        return user if user
+
+        create_user_from_account(account)
+      end
+
+      def create_user_from_account(account)
         user = ::User.new
-        user.email = account_result.email
+        user.email = account.email
         user.given_name = account.given_name
         user.surname = account.surname
         user.save
