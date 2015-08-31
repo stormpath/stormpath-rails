@@ -5,6 +5,9 @@ module Stormpath
 
       included do
         helper_method :facebook_login_enabled?
+        hide_action(
+          :facebook_login_enabled?
+        )
       end
 
       def facebook_login_enabled?

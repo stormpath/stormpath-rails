@@ -16,7 +16,9 @@ module Stormpath
           :find_user_by_email,
           :find_user_by_id,
           :handle_id_site_callback,
-          :create_omniauth_user
+          :create_omniauth_user,
+          :find_or_create_user_from_account,
+          :create_user_from_account
         )
       end
 
