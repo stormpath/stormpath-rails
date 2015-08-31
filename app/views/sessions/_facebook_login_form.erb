@@ -3,5 +3,35 @@
     &nbsp;
   </div>
   <label>Easy 1-click login:</label>
-  <%= button_tag "Facebook", class: "btn btn-social btn-facebook" %>
+  <%= button_tag "Facebook", class: "btn btn-social btn-facebook", "onclick" => "facebookLogin()" %>
 </div>
+
+<script type="text/javascript">
+  function facebookLogin() {
+    var FB = window.FB;
+
+    FB.login(function(response) {
+      console.log(response);
+
+      if (response.status === 'connected') {
+        window.location.replace("<%= omniauth_login_path %>" + '?access_token=' + response.authResponse.accessToken);
+      }
+    });
+  }
+
+  window.fbAsyncInit = function() {
+    FB.init({
+      appId      : <%= facebook_app_id %>,
+      xfbml      : true,
+      version    : 'v2.4'
+    });
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));
+</script>

@@ -10,4 +10,8 @@ module SocialHelper
   def input_class
     facebook_login_enabled? ? 'col-sm-12' : 'col-sm-8'
   end
+
+  def facebook_app_id
+    Stormpath::Rails.config.facebook.app_id
+  end
 end
