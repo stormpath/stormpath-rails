@@ -29,6 +29,17 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
     end
   end
 
+  def omniauth_login
+    result = create_omniauth_user('facebook', params[:access_token])
+
+    flash[:notice] = "Successfully signed in"
+ 
+    account = result.account
+    initialize_session account.full_name, account.href
+
+    redirect_to root_path
+  end
+
   def redirect
     user_data = handle_id_site_callback(request.url)
     @user = find_user_by_email user_data.email
