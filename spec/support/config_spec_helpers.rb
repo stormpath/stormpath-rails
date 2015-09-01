@@ -11,6 +11,18 @@ module ConfigSpecHelpers
     })
   end
 
+  def disable_facebook_login
+    Stormpath::Rails.configure({
+      social: { facebook: {} }
+    })
+  end
+
+  def enable_facebook_login
+    Stormpath::Rails.configure({
+      social: { facebook: { app_id: "test_app_id" } }
+    })
+  end
+
   def enable_id_site
     Stormpath::Rails.configure({
       web: { id_site: {
