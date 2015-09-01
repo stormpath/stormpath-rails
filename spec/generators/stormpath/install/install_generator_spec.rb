@@ -57,9 +57,28 @@ describe Stormpath::Generators::InstallGenerator, type: :generator do
   end
 
   describe "user migration" do
+    context "create users migration already exists" do
+      it "does not copy the migration" do
+        provide_existing_application_controller
+        
+        allow(ActiveRecord::Base.connection).to receive(:table_exists?).
+          with(:users).
+          and_return(false)
+
+        allow(Dir).to receive(:glob). 
+          and_return(["create_users.rb"])
+
+        run_generator
+        migration = migration_file("db/migrate/create_users.rb")
+
+        expect(migration).not_to exist
+      end
+    end
+
     context "users table does not exist" do
       it "creates a migration to create the users table" do
         provide_existing_application_controller
+
         allow(ActiveRecord::Base.connection).to receive(:table_exists?).
           with(:users).
           and_return(false)
@@ -72,7 +91,7 @@ describe Stormpath::Generators::InstallGenerator, type: :generator do
         expect(migration).to contain("create_table :users")
       end
     end
-
+ 
     context "existing users table with all stormpath columns and indexes" do
       it "does not create a migration" do
         provide_existing_application_controller
