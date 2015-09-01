@@ -1,15 +1,7 @@
 module Stormpath
   module Rails
     module UserConfig
-      class IdSite
-        include Virtus.model
-
-        def initialize(options = {})
-          #binding.pry
-          yield(self) if block_given?
-          super(options)
-        end
-
+      class IdSite < Base
         attribute :enabled, Boolean, default: false
         attribute :uri, String
         attribute :login_uri, String
