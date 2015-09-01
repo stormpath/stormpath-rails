@@ -55,6 +55,8 @@ module Stormpath
         user.given_name = account.given_name
         user.surname = account.surname
         user.save
+
+        user
       end
 
       def update_password(password, account)
