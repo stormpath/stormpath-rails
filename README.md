@@ -34,10 +34,6 @@ end
 # USAGE
 
 ### Helper Methods
-you can access user session for this scope:
-```ruby
-user_session
-```
 
 Use `current_user`, `signed_in?`, `signed_out?` in controllers, views, and helpers. For example:
 ```erb
@@ -73,8 +69,8 @@ In order to enable Facebook login you first you need to create a Facebook applic
 ```ruby
 Stormpath::Rails.configure do |config|
   config.facebook do |c|
-    c.app_id = '913427355397270'
-    c.app_secret = 'eddfb07802b3f3984989696bfb70a0ee'
+    c.app_id = 'app_id'
+    c.app_secret = 'app_secret'
   end
 end
 ```
