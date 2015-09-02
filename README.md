@@ -33,24 +33,13 @@ end
 
 # USAGE
 
-### Access Control
-Use the `require_login` to control access to controller actions
-```ruby
-class ArticlesController < ApplicationController
-  before_action :require_login
-
-  def index
-  end
-end
-```
-
 ### Helper Methods
 you can access user session for this scope:
 ```ruby
 user_session
 ```
 
-Use `current_user`, `signed_in?` in controllers, views, and helpers. For example:
+Use `current_user`, `signed_in?`, `signed_out?` in controllers, views, and helpers. For example:
 ```erb
 <% if signed_in? %>
   <%= current_user.email %>
@@ -59,3 +48,20 @@ Use `current_user`, `signed_in?` in controllers, views, and helpers. For example
   <%= link_to "Sign in", sign_in_path %>
 <% end %>
 ```
+
+### ID Site
+
+If you'd like to not worry about building your own registration and login screens at all, you can use Stormpath's new [ID site](https://docs.stormpath.com/guides/using-id-site/) feature. This is a hosted login subdomain which handles authentication for you automatically.
+
+To make ID Site work in Rails, you need to change stormpath configuration file:
+
+```ruby
+Stormpath::Rails.configure do |config|
+  config.id_site do |c|
+    c.enabled = true
+    c.uri = "/redirect"
+  end
+end
+```
+
+
