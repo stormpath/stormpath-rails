@@ -17,12 +17,17 @@ module Stormpath
           instance_variable_set("@#{action}", klass.new(options))
         end
 
-        define_method("#{action}") do
+        define_method("#{action}") do |&block|
           action_value = instance_variable_get("@#{action}")
+
           if action_value.nil?
             klass = user_config_class(action)
             instance_variable_set("@#{action}", klass.new())
           end 
+
+          if block
+            block.call(instance_variable_get("@#{action}"))
+          end
 
           instance_variable_get("@#{action}")
         end
@@ -44,14 +49,7 @@ module Stormpath
     # Configure the settings for this module
     # @param [lambda] which will be passed isntance of configuration class
     def self.configure
-      #config.id_site = config_data[:web][:id_site] if config_data[:web] && config_data[:web][:id_site]
-      #config.api_key = config_data[:client][:api_key] if config_data[:client] && config_data[:client][:api_key]
-      #config.application = config_data[:application] if config_data[:application]
-      #config.verify_email = config_data[:web][:verify_email] if config_data[:web] && config_data[:web][:verify_email]
-      #config.forgot_password = config_data[:web][:forgot_password] if config_data[:web] && config_data[:web][:forgot_password]
-      #config.facebook = config_data[:social][:facebook] if config_data[:social] && config_data[:social][:facebook]
-      binding.pry
-      yield(config) if block_given?
+      yield(config)
     end
   end
 end
