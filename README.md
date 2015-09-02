@@ -30,3 +30,32 @@ Stormpath::Rails.configure do |config|
   config.application.href = ENV['STORMPATH_SDK_TEST_APPLICATION_URL']
 end
 ```
+
+# USAGE
+
+### Access Control
+Use the `require_login` to control access to controller actions
+```ruby
+class ArticlesController < ApplicationController
+  before_action :require_login
+
+  def index
+  end
+end
+```
+
+### Helper Methods
+you can access user session for this scope:
+```ruby
+user_session
+```
+
+Use `current_user`, `signed_in?` in controllers, views, and helpers. For example:
+```erb
+<% if signed_in? %>
+  <%= current_user.email %>
+  <%= button_to "Sign out", sign_out_path, method: :delete %>
+<% else %>
+  <%= link_to "Sign in", sign_in_path %>
+<% end %>
+```
