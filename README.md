@@ -45,6 +45,24 @@ Use `current_user`, `signed_in?`, `signed_out?` in controllers, views, and helpe
 <% end %>
 ```
 
+### Verify Email
+
+By default verify email is disabled. Which means after your user fills in the register form and submits if his credentials are valid he will be automaticly logged in without email verification.
+
+If you want to enable email verification you can edit the configuration file.
+
+```erb
+Stormpath::Rails.configure do |config|
+  config.verify_email do |c|
+    c.enabled = true
+    c.uri = '/verify'
+    c.next_uri
+  end
+end
+```
+
+If verify email set to enable after user registers he will first receive an email with the link and token with which he can verify his account. uri is the link which is used to verify the account and next_uri is location where user will be redirected after his account has been verified.
+
 ### ID Site
 
 If you'd like to not worry about building your own registration and login screens at all, you can use Stormpath's new [ID site](https://docs.stormpath.com/guides/using-id-site/) feature. This is a hosted login subdomain which handles authentication for you automatically.
