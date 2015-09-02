@@ -47,21 +47,37 @@ Use `current_user`, `signed_in?`, `signed_out?` in controllers, views, and helpe
 
 ### Verify Email
 
-By default verify email is disabled. Which means after your user fills in the register form and submits if his credentials are valid he will be automaticly logged in without email verification.
+By default verify email is disabled. Which means after user fills in the registration form and submits, if his credentials are valid, he will be automaticly logged in without email verification.
 
-If you want to enable email verification you can edit the configuration file.
+If you want to enable email verification you can add the following code to the configuration file.
 
 ```erb
 Stormpath::Rails.configure do |config|
   config.verify_email do |c|
     c.enabled = true
     c.uri = '/verify'
-    c.next_uri
+    c.next_uri = '/'
   end
 end
 ```
 
 If verify email set to enable after user registers he will first receive an email with the link and token with which he can verify his account. uri is the link which is used to verify the account and next_uri is location where user will be redirected after his account has been verified.
+
+### Forgot Password
+
+By default forgot password is disabled. To enable it add the following code to the configuration file
+
+```erb
+Stormpath::Rails.configure do |config|
+  config.verify_email do |c|
+    c.enabled = true
+    c.uri = '/forgot'
+    c.next_uri = '/'
+  end
+end
+```
+
+After the forgot password option has been enabled on the login form there will appear a link for user to reset his password. User first needs to enter an email to which a link will be send. When user clicks on a link he will be redirected to the final form where he can reset his passwod.
 
 ### ID Site
 
