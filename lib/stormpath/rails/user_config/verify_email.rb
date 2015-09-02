@@ -6,7 +6,7 @@ module Stormpath
 
         attribute :enabled, Boolean, default: false
         attribute :uri, String
-        attribute :nextUri, String
+        attribute :next_uri, String
         attribute :view, String
       end
     end
