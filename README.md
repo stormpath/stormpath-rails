@@ -51,7 +51,7 @@ By default verify email is disabled. Which means after user fills in the registr
 
 If you want to enable email verification you can add the following code to the configuration file.
 
-```erb
+```ruby
 Stormpath::Rails.configure do |config|
   config.verify_email do |c|
     c.enabled = true
@@ -67,7 +67,7 @@ If verify email set to enable after user registers he will first receive an emai
 
 By default forgot password is disabled. To enable it add the following code to the configuration file
 
-```erb
+```ruby
 Stormpath::Rails.configure do |config|
   config.verify_email do |c|
     c.enabled = true
