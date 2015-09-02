@@ -64,4 +64,17 @@ Stormpath::Rails.configure do |config|
 end
 ```
 
+### Social Login
 
+Stormpath Rails supports social login as well. Currently only Facebook is supported,  Providers for: Google, Github and Linkedin are currently in development. 
+
+In order to enable Facebook login you first you need to create a Facebook application and create a Facebook directory in your stormpath account. More info can be found [here](https://docs.stormpath.com/rest/product-guide/#integrating-with-facebook). After that you need to enable id from storm paths configuration file and provide facebook app_id and app_secret which is provided to you after Facebook app creation.
+
+```ruby
+Stormpath::Rails.configure do |config|
+  config.facebook do |c|
+    c.app_id = '913427355397270'
+    c.app_secret = 'eddfb07802b3f3984989696bfb70a0ee'
+  end
+end
+```
