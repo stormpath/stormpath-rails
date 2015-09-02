@@ -74,3 +74,5 @@ Stormpath::Rails.configure do |config|
   end
 end
 ```
+
+When user navigates to `/login` he will see a facebook login button. If he is authenticated succesfully he will be redirected back to rails root_path.
