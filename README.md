@@ -155,9 +155,3 @@ app/views/users/verification_email_sent.html.erb
 app/views/users/verification_failed.html.erb
 app/views/users/verification_resend.html.erb
 ```
-
-if you would like to generate just only a few set of views, like the sessions you can pass a list of modules to the generator with the -v flag
-```sh
-rails generate stormpath:views -v sessions
-```
-
