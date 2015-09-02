@@ -21,7 +21,7 @@ The generator:
 * Creates a migration that either creates a users table or adds any necessary
   columns to the existing table.
 
-# CONFIGURE
+## CONFIGURE
 Override any of these defaults in config/initializers/stormpath.rb
 
 ```ruby
@@ -31,7 +31,7 @@ Stormpath::Rails.configure do |config|
 end
 ```
 
-# USAGE
+## USAGE
 
 ### Helper Methods
 
@@ -110,3 +110,54 @@ end
 ```
 
 When user navigates to `/login` he will see a facebook login button. If he is authenticated succesfully he will be redirected back to rails root_path.
+
+## Overriding Stormpath
+
+### Routes
+You can optionally run `rails generate stormpath:routes` to dump a copy of the default routes into your application for modification
+
+```sh
+rails generate stormpath:routes
+```
+
+### Controllers
+To override a Stormpath controller, subclass it and update the routes to point to your new controller (see the "Routes" section).
+```ruby
+class PasswordsController < Stormpath::PasswordsController
+class SessionsController < Stormpath::SessionsController
+class UsersController < Stormpath::UsersController
+```
+
+### Views
+You can use the stormpath views generator to copy the default views to your application for modification.
+```sh
+rails generate stormpath:views
+```
+
+```
+app/views/layouts/stormpath.html.erb
+
+app/views/passwords/edit.html.erb
+app/views/passwords/email_sent.html.erb
+app/views/passwords/forgot.html.erb
+app/views/passwords/forgot_change.html.erb
+app/views/passwords/forgot_change_failed.html.erb
+app/views/passwords/forgot_complete.html.erb
+
+app/views/sessions/_facebook_login_form.erb
+app/views/sessions/_form.html.erb
+app/views/sessions/new.html.erb
+
+app/views/users/_form.html.erb
+app/views/users/new.html.erb
+app/views/users/verification_complete.html.erb
+app/views/users/verification_email_sent.html.erb
+app/views/users/verification_failed.html.erb
+app/views/users/verification_resend.html.erb
+```
+
+if you would like to generate just only a few set of views, like the sessions you can pass a list of modules to the generator with the -v flag
+```sh
+rails generate stormpath:views -v sessions
+```
+
