@@ -4,6 +4,8 @@ module Stormpath
       class ForgotPassword
         include Virtus.model
 
+        alias_method :enabled?, :enabled
+
         attribute :enabled, Boolean, default: false
         attribute :uri, String
         attribute :view, String
