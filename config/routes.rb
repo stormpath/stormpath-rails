@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get    '/verify'   => 'stormpath/rails/users#verify', as: 'verify'
 
   get    Stormpath::Rails.config.login.uri => 'stormpath/rails/sessions#new', as: 'sign_in'
-  delete '/sign_out' => 'stormpath/rails/sessions#destroy', as: 'sign_out'
+  delete Stormpath::Rails.config.logout.uri => 'stormpath/rails/sessions#destroy', as: 'sign_out'
   get    Stormpath::Rails.config.id_site.uri => 'stormpath/rails/sessions#redirect', as: 'redirect'
   get    '/omniauth_login' => 'stormpath/rails/omniauth#create', as: 'omniauth_login' 
 
