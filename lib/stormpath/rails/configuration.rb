@@ -11,7 +11,7 @@ module Stormpath
         @user_model ||= ::User
       end
 
-      [:login, :id_site, :api_key, :application, :verify_email, :forgot_password, :facebook].each do |action|
+      [:login, :logout, :id_site, :api_key, :application, :verify_email, :forgot_password, :facebook].each do |action|
         define_method("#{action}=") do |options|
           klass = user_config_class(action)
           instance_variable_set("@#{action}", klass.new(options))

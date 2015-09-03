@@ -24,6 +24,7 @@ module Stormpath
       autoload :VerifyEmail, 'stormpath/rails/user_config/verify_email'
       autoload :Facebook, 'stormpath/rails/user_config/facebook'
       autoload :Login, 'stormpath/rails/user_config/login'
+      autoload :Logout, 'stormpath/rails/user_config/logout'
     end
   end
 end
