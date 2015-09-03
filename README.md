@@ -72,7 +72,6 @@ Stormpath::Rails.configure do |config|
   config.verify_email do |c|
     c.enabled = true
     c.uri = '/forgot'
-    c.next_uri = '/'
   end
 end
 ```
