@@ -45,6 +45,37 @@ Use `current_user`, `signed_in?`, `signed_out?` in controllers, views, and helpe
 <% end %>
 ```
 
+### Login 
+
+Stormpath Rails automaticly provides route to `/login`. If the attempt is successsfull, the user will be send to the next_uri whcih is by default `/` and create the propper session cookies.
+
+If you wish to change this you can modify login options in configuration file
+
+```ruby
+Stormpath::Rails.configure do |config|
+  config.login do |c|
+    c.login = true
+    c.uri = '/login'
+    c.next_uri = '/'
+  end
+end
+```
+
+### Logout
+Stormpath Rails automaticly provides route to `/logout`.
+
+If you wish to change the logout URI or the redirect url, you can provide the following configuration
+
+```ruby
+Stormpath::Rails.configure do |config|
+  config.logout do |c|
+    c.logout = true
+    c.uri = '/logout'
+    c.next_uri = '/'
+  end
+end
+```
+
 ### Verify Email
 
 By default verify email is disabled. Which means after user fills in the registration form and submits, if his credentials are valid, he will be automaticly logged in without email verification.
