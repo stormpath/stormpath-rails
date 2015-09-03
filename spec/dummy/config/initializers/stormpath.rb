@@ -1,5 +1,4 @@
 Stormpath::Rails.configure do |config|
-  binding.pry
   config.id_site do |c|
     c.enabled = false
     c.uri = "/idSiteResult"
