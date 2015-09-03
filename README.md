@@ -90,9 +90,12 @@ Stormpath::Rails.configure do |config|
   config.id_site do |c|
     c.enabled = true
     c.uri = "/redirect"
+    c.next_uri = '/'
   end
 end
 ```
+
+When ID Site is enabled any request for `/login` or `/register` will cause a redirect to ID Site. When the user is finished at ID Site they will be redirected to uri which is defined in configuration, by default `/redirect`. Stormpath Rails will handle this request, and then redirect the user to `next_uri`
 
 ### Social Login
 
