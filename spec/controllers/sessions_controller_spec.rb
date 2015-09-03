@@ -70,6 +70,19 @@ describe Stormpath::Rails::SessionsController, type: :controller do
       expect(flash[:notice]).to eq('You have been logged out successfully.')
       expect(response).to redirect_to(root_path)
     end
+
+    context "custom next_uri" do
+      before do
+        Stormpath::Rails.config.logout.next_uri = '/custom'
+      end
+
+      it "redirects to next_uri" do
+        sign_in
+        delete :destroy
+
+        expect(response).to redirect_to('/custom')
+      end
+    end
   end
 
   describe "POST #create" do
