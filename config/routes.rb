@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resource :session, controller: 'stormpath/rails/sessions', only: [:create]
   resource :users, controller: 'stormpath/rails/users', only: :create
-  get    '/register' => 'stormpath/rails/users#new', as: 'sign_up'
+  get    Stormpath::Rails.config.register.uri => 'stormpath/rails/users#new', as: 'sign_up'
   get    '/verify'   => 'stormpath/rails/users#verify', as: 'verify'
 
   get    Stormpath::Rails.config.login.uri => 'stormpath/rails/sessions#new', as: 'sign_in'

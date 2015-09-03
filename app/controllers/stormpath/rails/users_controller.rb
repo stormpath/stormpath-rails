@@ -11,7 +11,7 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
       else
         initialize_session(@user)
         set_flash_message :notice, 'Your account was created successfully'
-        redirect_to root_path
+        redirect_to configuration.register.next_uri
       end
     else
       set_flash_message :error, result.error_message

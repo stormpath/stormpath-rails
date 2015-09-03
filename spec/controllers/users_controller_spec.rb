@@ -137,5 +137,17 @@ describe Stormpath::Rails::UsersController, type: :controller do
         expect(session[:user_id]).to_not be_nil
       end
     end
+
+    context "custom next_uri" do
+      before do
+        disable_verify_email
+        Stormpath::Rails.config.register.next_uri = '/custom'
+      end
+
+      it "redirects to next_uri" do
+        post :create, user: user_attributes
+        expect(response).to redirect_to('/custom')
+      end
+    end
   end
 end
