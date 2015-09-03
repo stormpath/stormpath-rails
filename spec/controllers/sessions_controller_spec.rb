@@ -37,37 +37,6 @@ describe Stormpath::Rails::SessionsController, type: :controller do
     end
   end
 
-  describe "POST #create" do
-    context "valida user params" do
-      let(:user) { create(:user) }
-
-      before do
-        post :create, session: user.attributes.merge(password: "Password1337") 
-      end
-
-      it "redirects to root_path with succesfull message" do
-        expect(flash[:notice]).to eq('Successfully signed in')
-        expect(response).to redirect_to(root_path)
-      end
-
-      it "initializes the session" do
-        expect(session[:user_id]).to_not be_nil
-      end
-    end
-
-    context "invalid user params" do
-      let(:user) { create(:user) }
-
-      it "renders new template with errors" do
-        post :create, session: user.attributes
-
-        expect(flash[:error]).to_not be_nil
-        expect(response).to render_template(:new)
-      end
-    end
-  end
-
-
   describe "GET #redirect" do
     let(:user) { create(:user) }
 
@@ -124,6 +93,17 @@ describe Stormpath::Rails::SessionsController, type: :controller do
         expect(response).to be_success
         expect(response).to render_template(:new)
         expect(flash[:error]).to eq("Invalid username or password.")
+      end
+    end
+
+    context "custom next_uri" do
+      before do
+        Stormpath::Rails.config.login.next_uri = '/custom'
+      end
+
+      it "redirects to next_uri" do
+        post :create, session: { email: test_user.email, password: test_user.password } 
+        expect(response).to redirect_to('/custom')
       end
     end
   end

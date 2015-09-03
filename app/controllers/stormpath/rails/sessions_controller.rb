@@ -8,7 +8,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
       @user = find_user_by_email params[:session][:email]
       initialize_session(@user)
 
-      redirect_to root_path, notice: 'Successfully signed in'
+      redirect_to configuration.login.next_uri, notice: 'Successfully signed in'
     else
       set_flash_message :error, result.error_message
       render template: "sessions/new"
