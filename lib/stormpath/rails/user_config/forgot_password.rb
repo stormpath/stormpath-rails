@@ -5,9 +5,7 @@ module Stormpath
         include Virtus.model
 
         attribute :enabled, Boolean, default: false
-        attribute :uri, String
-        attribute :view, String
-        attribute :next_uri, String
+        attribute :uri, String, default: '/forgot'
       end
     end
   end

@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   get    Stormpath::Rails.config.id_site.uri => 'stormpath/rails/sessions#redirect', as: 'redirect'
   get    '/omniauth_login' => 'stormpath/rails/omniauth#create', as: 'omniauth_login' 
 
-  get    '/forgot'   => 'stormpath/rails/passwords#forgot', as: 'forgot'
-  post   '/forgot'   => 'stormpath/rails/passwords#forgot_send', as: 'forgot_send'
+  get    Stormpath::Rails.config.forgot_password.uri => 'stormpath/rails/passwords#forgot', as: 'forgot'
+  post   Stormpath::Rails.config.forgot_password.uri => 'stormpath/rails/passwords#forgot_send', as: 'forgot_send'
   get    '/forgot/change' => 'stormpath/rails/passwords#forgot_change', as: 'forgot_change'
   post   '/forgot/change/:account_url' => 'stormpath/rails/passwords#forgot_update', as: 'forgot_update'
 end
