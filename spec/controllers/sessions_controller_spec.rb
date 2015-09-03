@@ -70,11 +70,25 @@ describe Stormpath::Rails::SessionsController, type: :controller do
 
   describe "GET #redirect" do
     let(:user) { create(:user) }
-    it "redirects to root_path" do
+
+    it "redirects to id_site next_uri" do
       allow(controller).to receive(:handle_id_site_callback).and_return(user)
       get :redirect
 
       expect(response).to redirect_to(root_path)
+    end
+
+    context "custom next_uri" do
+      before do
+        Stormpath::Rails.config.id_site.next_uri = '/custom'
+      end
+
+      it "redirects to next_uri" do
+        allow(controller).to receive(:handle_id_site_callback).and_return(user)
+        get :redirect
+
+        expect(response).to redirect_to('/custom')
+      end
     end
   end
 
