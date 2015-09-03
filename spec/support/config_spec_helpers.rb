@@ -20,6 +20,7 @@ module ConfigSpecHelpers
   def enable_id_site
    Stormpath::Rails.config.id_site.enabled = true
    Stormpath::Rails.config.id_site.uri = "/redirect"
+   Stormpath::Rails.config.id_site.next_uri = "/"
   end
 
   def disable_id_site
