@@ -25,6 +25,7 @@ module Stormpath
       autoload :Facebook, 'stormpath/rails/user_config/facebook'
       autoload :Login, 'stormpath/rails/user_config/login'
       autoload :Logout, 'stormpath/rails/user_config/logout'
+      autoload :Register, 'stormpath/rails/user_config/register'
     end
   end
 end
