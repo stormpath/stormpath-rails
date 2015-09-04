@@ -2,36 +2,37 @@
 
 Stormpath is the first easy, secure user management and authentication service for developers. This is the Rails gem to ease integration of its features with any Rails-based application.
 
-stormpath makes it incredibly simple to add users and user data to your application. It aims to completely abstract away all user registration, login, authentication, and authorization problems, and make building secure websites painless.
+Stormpath makes it incredibly simple to add users and user data to your application. It aims to completely abstract away all user registration, login, authentication, and authorization problems, and make building secure websites painless.
 
-## INSTALL
+## Installation
 
-To get started, add Stormpath to your `Gemfile`, `bundle install`, and run the
+To get started, add Stormpath to your `Gemfile`, `bundle install`, and run
 `install generator`:
 
-generates inital config and setup files
+To generate the inital config and setup files
 ```sh
 $ rails generate stormpath:install
 ```
 
-The generator:
+When you run the above generator, it: 
 
 * Inserts `Stormpath::Controller` into your `ApplicationController`
 * Creates an initializer to allow further configuration.
 * Creates a migration that either creates a users table or adds any necessary
   columns to the existing table.
 
-## CONFIGURE
+## Configuration
 Override any of these defaults in config/initializers/stormpath.rb
 
 ```ruby
 Stormpath::Rails.configure do |config|
   config.api_key.file = ENV['STORMPATH_API_KEY_FILE_LOCATION']
-  config.application.href = ENV['STORMPATH_SDK_TEST_APPLICATION_URL']
+  config.application.href = ENV['STORMPATH_APPLICATION_HREF']
 end
 ```
+The `STORMPATH_API_KEY_FILE_LOCATION` is the location of your Stormpath API Key file.  Information about getting this file is found in the [Ruby Quickstart](http://docs.stormpath.com/ruby/quickstart/).  The `STORMPATH_APPLICATION_HREF` represents the Application in Stormpath that is your Rails application.  You can get the href from the Stormpath Admin Console or the API.
 
-## USAGE
+## Useage
 
 ### Helper Methods
 
@@ -49,7 +50,7 @@ Use `current_user`, `signed_in?`, `signed_out?` in controllers, views, and helpe
 
 Stormpath Rails automaticly provides route to `/login`. If the attempt is successsfull, the user will be send to the next_uri whcih is by default `/` and create the propper session cookies.
 
-If you wish to change this you can modify login options in configuration file
+If you wish to change this you can modify login options in configuration file:
 
 ```ruby
 Stormpath::Rails.configure do |config|
@@ -64,7 +65,7 @@ end
 ### Logout
 Stormpath Rails automaticly provides route to `/logout`.
 
-If you wish to change the logout URI or the redirect url, you can provide the following configuration
+If you wish to change the logout URI or the next_uri, you can provide the following configuration
 
 ```ruby
 Stormpath::Rails.configure do |config|
@@ -80,7 +81,7 @@ end
 
 By default verify email is disabled. Which means after user fills in the registration form and submits, if his credentials are valid, he will be automaticly logged in without email verification.
 
-If you want to enable email verification you can add the following code to the configuration file.
+If you want to enable email verification you can add the following code to the configuration file.  
 
 ```ruby
 Stormpath::Rails.configure do |config|
@@ -93,6 +94,8 @@ end
 ```
 
 If verify email set to enable after user registers he will first receive an email with the link and token with which he can verify his account. uri is the link which is used to verify the account and next_uri is location where user will be redirected after his account has been verified.
+
+The email that is sent to the account is configurable through the Stormpath Admin Console. 
 
 ### Forgot Password
 
@@ -107,7 +110,9 @@ Stormpath::Rails.configure do |config|
 end
 ```
 
-After the forgot password option has been enabled on the login form there will appear a link for user to reset his password. User first needs to enter an email to which a link will be send. When user clicks on a link he will be redirected to the final form where he can reset his passwod.
+After the forgot password option has been enabled on the login form there will appear a link for user to reset his password. User first needs to enter an email to which a link will be send. When user clicks on a link he will be redirected to the final form where he can reset his password.
+
+The email that is sent to the account is configurable through the Stormpath Admin Console.
 
 ### ID Site
 
