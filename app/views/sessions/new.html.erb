@@ -4,7 +4,12 @@
       <div class="box row">
         <%= render partial: '/sessions/form' %>
         <% if facebook_login_enabled? %>
-          <%= render partial: '/sessions/facebook_login_form' %>
+          <div class="social-area col-xs-12 col-sm-4">
+            <div class="header">
+              &nbsp;
+            </div>
+            <%= render partial: '/sessions/facebook_login_form' %>
+          </div>
         <% end %>
       </div>
       <% if Stormpath::Rails.config.forgot_password.enabled %>
