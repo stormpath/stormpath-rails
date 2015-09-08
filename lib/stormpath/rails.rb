@@ -23,6 +23,7 @@ module Stormpath
       autoload :IdSite, 'stormpath/rails/user_config/id_site'
       autoload :VerifyEmail, 'stormpath/rails/user_config/verify_email'
       autoload :Facebook, 'stormpath/rails/user_config/facebook'
+      autoload :Google, 'stormpath/rails/user_config/google'
       autoload :Login, 'stormpath/rails/user_config/login'
       autoload :Logout, 'stormpath/rails/user_config/logout'
       autoload :Register, 'stormpath/rails/user_config/register'
