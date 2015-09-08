@@ -3,12 +3,13 @@
     <div class="view login-view container">
       <div class="box row">
         <%= render partial: '/sessions/form' %>
-        <% if facebook_login_enabled? %>
+        <% if social_auth? %>
           <div class="social-area col-xs-12 col-sm-4">
             <div class="header">
               &nbsp;
             </div>
-            <%= render partial: '/sessions/facebook_login_form' %>
+            <label>Easy 1-click login:</label>
+            <%= render partial: '/sessions/social_auth' %>
           </div>
         <% end %>
       </div>
