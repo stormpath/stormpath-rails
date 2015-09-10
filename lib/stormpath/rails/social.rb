@@ -10,7 +10,8 @@ module Stormpath
           :facebook_login_enabled?,
           :google_login_enabled?,
           :facebook_app_id,
-          :google_client_id
+          :google_client_id,
+          :social_auth?
         )
       end
 
