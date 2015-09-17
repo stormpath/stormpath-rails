@@ -88,7 +88,15 @@ module Stormpath
       end
 
       def self.client_options
-        Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key.file }
+        if Stormpath::Rails.config.api_key.file_location_provided?
+          Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key.file }
+        else
+          Hash.new.tap do |options| 
+            options[:api_key] = {}
+            options[:api_key][:id] = Stormpath::Rails.config.api_key.id
+            options[:api_key][:secret] = Stormpath::Rails.config.api_key.secret
+          end
+        end
       end
 
       private
