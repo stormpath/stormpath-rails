@@ -3,8 +3,8 @@ module Stormpath
     module Helpers
       def sign_in
         create_test_account
-        @controller.authenticate test_user
-        @controller.initialize_session test_user
+        @controller.send(:authenticate, test_user)
+        @controller.send(:initialize_session, test_user)
         test_user
       end
 
