@@ -36,6 +36,10 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
       enable_forgot_password
     end
 
+    after do
+      delete_test_account
+    end
+
     context "valid data" do
       it "renders email sent view" do
         post :forgot_send, password: { email: test_user.email }
@@ -93,9 +97,15 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
     let(:valid_passwords)     { { password: { original: 'Somepass123', repeated: 'Somepass123' } } }
     let(:different_passwords) { { password: { original: 'Somepass123', repeated: 'Somepass' } } }
     let(:invalid_passwords)   { { password: { original: 'invalid', repeated: 'invalid' } } }
+    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }
+    
+    after do
+      delete_test_account
+    end
 
     context "valid passwords" do
       it "something" do
+        allow(controller).to receive(:update_password).and_return(account_success)
         post :forgot_update, valid_passwords.merge(account_url: test_account.account_url)
 
         expect(response).to be_success
