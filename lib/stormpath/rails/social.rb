@@ -6,14 +6,9 @@ module Stormpath
       included do
         helper_method :facebook_login_enabled?, :facebook_app_id,
           :google_login_enabled?, :google_client_id, :social_auth?
-        hide_action(
-          :facebook_login_enabled?,
-          :google_login_enabled?,
-          :facebook_app_id,
-          :google_client_id,
-          :social_auth?
-        )
       end
+      
+      private
 
       def facebook_login_enabled?
         configuration.facebook.enabled? 

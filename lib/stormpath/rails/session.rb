@@ -5,15 +5,9 @@ module Stormpath
 
       included do
         helper_method :current_user, :signed_in?, :signed_out?
-        hide_action(
-          :current_user,
-          :signed_in?,
-          :signed_out?,
-          :logout,
-          :initialize_session,
-          :reset_session
-        )
       end
+
+      private
 
       def initialize_session(user)
         session[:user_id] = user.id
