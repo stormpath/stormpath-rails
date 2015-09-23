@@ -90,6 +90,10 @@ describe Stormpath::Rails::SessionsController, type: :controller do
       create_test_account
     end
 
+    after do
+      delete_test_account
+    end
+
     context "valid parameters" do
       it "signs in user" do
         post :create, session: { email: test_user.email, password: test_user.password }
