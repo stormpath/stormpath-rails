@@ -16,7 +16,7 @@ describe Stormpath::Rails::Social do
       end
 
       it "return false" do
-        expect(subject.facebook_login_enabled?).to be false
+        expect(subject.send(:facebook_login_enabled?)).to be false
       end
     end
 
@@ -26,7 +26,7 @@ describe Stormpath::Rails::Social do
       end
 
       it "return true" do
-        expect(subject.facebook_login_enabled?).to be true
+        expect(subject.send(:facebook_login_enabled?)).to be true
       end
     end
   end
@@ -37,7 +37,7 @@ describe Stormpath::Rails::Social do
     end
 
     it "return true" do
-      expect(subject.facebook_app_id).to eq "test_app_id"
+      expect(subject.send(:facebook_app_id)).to eq "test_app_id"
     end
   end
 end

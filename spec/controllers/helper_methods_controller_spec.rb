@@ -16,12 +16,12 @@ describe HelperMethodsController, type: :controller do
     it "returnes true when user signed_in" do
       sign_in
       get :index
-      expect(controller.signed_in?).to be true
+      expect(controller.send(:signed_in?)).to be true
     end
 
     it "returnes false when user not signed_in" do
       get :index
-      expect(controller.signed_in?).to be false
+      expect(controller.send(:signed_in?)).to be false
     end
   end
 
@@ -29,12 +29,12 @@ describe HelperMethodsController, type: :controller do
     it "returnes true when user signed_in" do
       sign_in
       get :index
-      expect(controller.signed_out?).to be false
+      expect(controller.send(:signed_out?)).to be false
     end
 
     it "returnes false when user not signed_in" do
       get :index
-      expect(controller.signed_out?).to be true
+      expect(controller.send(:signed_out?)).to be true
     end
   end
 
@@ -42,7 +42,7 @@ describe HelperMethodsController, type: :controller do
     it "returnes current_user" do
       sign_in
       get :index
-      expect(controller.current_user).to eq(test_user)
+      expect(controller.send(:current_user)).to eq(test_user)
     end
   end
 end
