@@ -1,0 +1,21 @@
+<div class="container custom-container">
+  <div class="va-wrapper">
+    <div class="view login-view container">
+      <div class="box row">
+        <%= render partial: '/sessions/form' %>
+        <% if social_auth? %>
+          <div class="social-area col-xs-12 col-sm-4">
+            <div class="header">
+              &nbsp;
+            </div>
+            <label>Easy 1-click login:</label>
+            <%= render partial: '/sessions/social_auth' %>
+          </div>
+        <% end %>
+      </div>
+      <% if Stormpath::Rails.config.forgot_password.enabled %>
+        <%= link_to "Forgot Password?", forgot_path, class: "forgot" %>
+      <% end %>
+    </div>
+  </div>
+</div>
