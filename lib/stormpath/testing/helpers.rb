@@ -13,7 +13,7 @@ module Stormpath
       end
 
       def delete_test_account
-        @test_account.delete if @test_account
+        @test_account.response.delete if @test_account
       end
 
       def test_user
