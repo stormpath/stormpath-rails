@@ -1,6 +1,7 @@
 module Stormpath
   module Rails
     class AccountStatus
+      attr_accessor :response
 
       def initialize(response)
         @response = response
