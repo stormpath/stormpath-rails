@@ -9,11 +9,13 @@ module Stormpath
       end
 
       def create_test_account
-        @test_account ||= Stormpath::Rails::Client.create_stormpath_account(test_user)
+        @test_account_result ||= Stormpath::Rails::Client.create_stormpath_account(test_user)
       end
 
       def delete_test_account
-        @test_account.response.delete if @test_account
+        if @test_account_result && @test_account_result.success?
+          @test_account_result.response.delete 
+        end
       end
 
       def test_user
