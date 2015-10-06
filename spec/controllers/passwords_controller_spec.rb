@@ -31,6 +31,8 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
   end
 
   describe "POST #forgot_send" do
+    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }  
+
     before do
       create_test_account
       enable_forgot_password
@@ -42,6 +44,7 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
 
     context "valid data" do
       it "renders email sent view" do
+        allow(controller).to receive(:reset_password).and_return(account_success)
         post :forgot_send, password: { email: test_user.email }
 
         expect(response).to be_success
