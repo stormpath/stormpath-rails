@@ -35,7 +35,21 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Stormpath::Testing::Helpers, type: :controller
 
-  config.after(:all, type: :controller) do
+  config.before(:suite) do
+    Stormpath::Rails::Client.client.account_store_mappings.create(
+      application: Stormpath::Rails::Client.application,
+      account_store: Stormpath::Rails::Client.client.directories.create(name: 'test-directory'),
+      is_default_account_store: true,
+      is_default_group_store: true
+    )
+  end
+
+  config.after(:suite) do
+    test_directory = Stormpath::Rails::Client.client.directories.search(name: 'test-directory').first
+    test_directory.delete
+  end
+
+  config.after(:each, type: :controller) do
     delete_test_account
   end
 end
