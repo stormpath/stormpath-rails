@@ -4,9 +4,9 @@ Stormpath::Rails.configure do |config|
     c.uri = "/idSiteResult"
   end
 
-  config.api_key.id = ENV['STORMPATH_API_KEY_ID']
-  config.api_key.secret = ENV['STORMPATH_API_KEY_SECRET']
-  config.application.href = ENV['STORMPATH_APPLICATION_URL']
+  config.api_key.id = ENV['STORMPATH_SDK_TEST_API_KEY_ID']
+  config.api_key.secret = ENV['STORMPATH_SDK_TEST_API_KEY_SECRET']
+  config.application.href = ENV['STORMPATH_SDK_TEST_APPLICATION_URL']
 
   config.facebook do |c|
     c.app_id = '913427355397270'
