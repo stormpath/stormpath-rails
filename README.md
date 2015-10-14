@@ -219,3 +219,13 @@ app/views/users/verification_email_sent.html.erb
 app/views/users/verification_failed.html.erb
 app/views/users/verification_resend.html.erb
 ```
+
+### Supported Ruby Versions
+
+Ruby 2.0.0
+Ruby 2.1
+Ruby 2.2
+
+### Suported Rails Versions
+
+above Rails 3.2
