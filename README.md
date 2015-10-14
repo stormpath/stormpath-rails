@@ -8,20 +8,44 @@ Stormpath makes it incredibly simple to add users and user data to your applicat
 
 ## Installation
 
-To get started, add Stormpath to your `Gemfile`, `bundle install`, and run
-`install generator`:
+Add the following line to your Gemfile. Stormpath is currently in beta so it is necessary to include the gem version
 
-To generate the inital config and setup files
-```sh
-$ rails generate stormpath:install
+```ruby
+gem 'stormpath-rails', '~> 1.1.0.beta'
 ```
 
-When you run the above generator, it: 
+Bundle the Gemfile
 
-* Inserts `Stormpath::Controller` into your `ApplicationController`
-* Creates an initializer to allow further configuration.
-* Creates a migration that either creates a users table or adds any necessary
-  columns to the existing table.
+```ruby
+bundle install
+```
+
+Run the install script which will create a migration file and a config file.
+
+```sh
+rails generate stormpath:install
+```
+
+Migrate your database
+```ruby
+rake db:migrate
+```
+
+Create a stormpath account if you havent already, and be sure to set up environment variables 
+
+'STORMPATH_API_KEY_FILE_LOCATION' should be the location of your apiKey.properties file which you downloaded form stormpaths site
+'STORMPATH_APPLICATION_HREF' should contain the href to your application, can also be found on stormpahs site
+
+environment variables are set up in you .bashrc file or .zshrc if you use myzsh. So for example this should look something like this
+
+```sh
+export STORMPATH_API_KEY_FILE_LOCATION=~/.stormpathKey
+export STORMPATH_APPLICATION_URL=https://api.stormpath.com/v1/applications/12345abc
+```
+
+environment variables can be named differently but the stormpath config file should be edited accordingly
+
+also make sure that you have a root_path defined in your rails router.rb
 
 ## Configuration
 Override any of these defaults in config/initializers/stormpath.rb
