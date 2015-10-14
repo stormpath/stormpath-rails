@@ -11,7 +11,7 @@ Stormpath makes it incredibly simple to add users and user data to your applicat
 Add the following line to your Gemfile. Stormpath is currently in beta so it is necessary to include the gem version
 
 ```ruby
-gem 'stormpath-rails', '~> 1.1.0.beta'
+gem 'stormpath-rails', '~> 1.1.1.beta'
 ```
 
 Bundle the Gemfile
