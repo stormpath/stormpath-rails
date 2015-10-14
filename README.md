@@ -222,9 +222,9 @@ app/views/users/verification_resend.html.erb
 
 ### Supported Ruby Versions
 
-Ruby 2.0.0
-Ruby 2.1
-Ruby 2.2
+* Ruby 2.0.0
+* Ruby 2.1
+* Ruby 2.2
 
 ### Suported Rails Versions
 
