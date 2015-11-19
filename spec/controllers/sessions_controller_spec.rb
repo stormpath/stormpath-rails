@@ -94,6 +94,32 @@ describe Stormpath::Rails::SessionsController, type: :controller do
       delete_test_account
     end
 
+    context "application/json request" do
+      before do
+        request.env['CONTENT_TYPE'] = 'application/json'
+      end
+
+      context "valid parameters" do
+        it "signs in user" do
+          post :create, session: { email: test_user.email, password: test_user.password }
+          
+          response_body = JSON.parse(response.body)
+          expect(response_body["user"]["email"]).to eq(test_user.email)
+          expect(response_body["user"]["given_name"]).to eq(test_user.given_name)
+          expect(response_body["user"]["surname"]).to eq(test_user.surname)
+        end
+      end
+      
+      context "invalid parameters" do
+        it "reuterns list of errors" do
+          post :create, session: { email: "test@testable.com", password: test_user.password }        
+
+          response_body = JSON.parse(response.body)
+          expect(response_body["error"]).to eq("Invalid username or password.")
+        end
+      end 
+    end
+
     context "valid parameters" do
       it "signs in user" do
         post :create, session: { email: test_user.email, password: test_user.password }
