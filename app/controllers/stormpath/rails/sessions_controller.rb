@@ -9,7 +9,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
       initialize_session(@user)
 
       if api_request?
-        render json: { user: @user}
+        render json: { user: @user }
       else
         redirect_to configuration.login.next_uri, notice: 'Successfully signed in'
       end
