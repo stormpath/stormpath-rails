@@ -8,17 +8,17 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
       @user = find_user_by_email params[:session][:email]
       initialize_session(@user)
 
-      if api_request?
-        render json: { user: @user }
-      else
-        redirect_to configuration.login.next_uri, notice: 'Successfully signed in'
+      respond_to do |format|
+        format.json { render json: { user: @user } }
+        format.html { redirect_to configuration.login.next_uri, notice: 'Successfully signed in' }
       end
     else
-      if api_request?
-        render json: { error: result.error_message }
-      else
-        set_flash_message :error, result.error_message
-        render template: "sessions/new"
+      respond_to do |format|
+        format.json { render json: { error: result.error_message } }
+        format.html do
+          set_flash_message :error, result.error_message
+          render template: "sessions/new"
+        end
       end
     end
   end
