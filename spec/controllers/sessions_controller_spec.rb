@@ -38,10 +38,14 @@ describe Stormpath::Rails::SessionsController, type: :controller do
   end
 
   describe "GET #redirect" do
-    let(:user) { create(:user) }
+    let(:account) do
+      user = create(:user)
+      user.stub(:href).and_return('/test_accounr_href')
+      user
+    end
 
     it "redirects to id_site next_uri" do
-      allow(controller).to receive(:handle_id_site_callback).and_return(user)
+      allow(controller).to receive(:handle_id_site_callback).and_return(account)
       get :redirect
 
       expect(response).to redirect_to(root_path)
@@ -53,7 +57,7 @@ describe Stormpath::Rails::SessionsController, type: :controller do
       end
 
       it "redirects to next_uri" do
-        allow(controller).to receive(:handle_id_site_callback).and_return(user)
+        allow(controller).to receive(:handle_id_site_callback).and_return(account)
         get :redirect
 
         expect(response).to redirect_to('/custom')
