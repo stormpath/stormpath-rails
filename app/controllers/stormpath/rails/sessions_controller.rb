@@ -6,7 +6,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
 
     if result.success?
       @user = find_user_by_email params[:session][:email]
-      initialize_session(@user)
+      initialize_session(@user, result.account.href)
 
       respond_to do |format|
         format.json { render json: { user: @user } }
