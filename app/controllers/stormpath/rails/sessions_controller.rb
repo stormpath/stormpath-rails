@@ -52,7 +52,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
   def redirect
     user_data = handle_id_site_callback(request.url)
     @user = find_user_by_email user_data.email
-    initialize_session(@user)
+    initialize_session(@user, user_data.href)
 
     redirect_to configuration.id_site.next_uri, notice: 'Successfully signed in'
   end
