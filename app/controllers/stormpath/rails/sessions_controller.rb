@@ -61,9 +61,14 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
 
   def user_from_params
     ::User.new.tap do |user|
-      user.email = params[:session][:email]
-      user.password = params[:session][:password]
+      user.email = user_params[:email]
+      user.password = user_params[:password]
     end
+  end
+
+  def user_params
+    return params[:session] if params[:session]
+    params
   end
 
   def redirect_signed_in_users
