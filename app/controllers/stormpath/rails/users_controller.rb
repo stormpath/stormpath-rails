@@ -9,7 +9,7 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
       if configuration.verify_email.enabled?
         render template: "users/verification_email_sent"
       else
-        initialize_session(@user)
+        initialize_session(@user, result.account.href)
         set_flash_message :notice, 'Your account was created successfully'
         redirect_to configuration.register.next_uri
       end
