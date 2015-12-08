@@ -46,6 +46,15 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
     end
   end
 
+  def profile
+    if signed_in? 
+      account = get_account current_user_href 
+      render json: account.properties 
+    else
+      render nothing: true, status: 401 
+    end
+  end
+
   def verify
     result = verify_email_token params[:sptoken]
 
