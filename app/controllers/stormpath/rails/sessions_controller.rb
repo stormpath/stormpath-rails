@@ -25,12 +25,6 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
 
   def destroy
     logout
-    set_flash_message :notice, 'You have been logged out successfully.'
-    redirect_to configuration.logout.next_uri
-  end
-  
-  def destroy
-    logout
 
     respond_to do |format|
       format.json { render nothing: true, status: 200 }
