@@ -40,7 +40,7 @@ describe Stormpath::Rails::SessionsController, type: :controller do
   describe "GET #redirect" do
     let(:account) do
       user = create(:user)
-      user.stub(:href).and_return('/test_accounr_href')
+      allow(user).to receive(:href).and_return('/tets_account_href')
       user
     end
 
