@@ -7,15 +7,29 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
       @user.save
 
       if configuration.verify_email.enabled?
-        render template: "users/verification_email_sent"
+        respond_to do |format|
+          format.json { render json: @user }
+          format.html { render template: "users/verification_email_sent" }
+        end
       else
         initialize_session(@user, result.account.href)
-        set_flash_message :notice, 'Your account was created successfully'
-        redirect_to configuration.register.next_uri
+
+        respond_to do |format|
+          format.json { render json: @user }
+          format.html do
+            set_flash_message :notice, 'Your account was created successfully'
+            redirect_to configuration.register.next_uri
+          end
+        end
       end
     else
-      set_flash_message :error, result.error_message
-      render template: "users/new"
+      respond_to do |format|
+        format.json { render json: { error: result.error_message }, status: 400 }
+        format.html do
+          set_flash_message :error, result.error_message
+          render template: "users/new"
+        end
+      end
     end
   end
 
