@@ -14,7 +14,6 @@ Rails.application.routes.draw do
   get    '/forgot/change' => 'stormpath/rails/passwords#forgot_change', as: 'forgot_change'
   post   '/forgot/change/:account_url' => 'stormpath/rails/passwords#forgot_update', as: 'forgot_update'
 
-  get    '/spa-config' => 'stormpath/rails/users#spa_config', as: 'spa_config'
   post   '/login' => 'stormpath/rails/sessions#create', as: 'login_user'
   get    '/logout' => 'stormpath/rails/sessions#destroy', as: 'logout_user'
   post   '/register' => 'stormpath/rails/users#create', as: 'register_user'
