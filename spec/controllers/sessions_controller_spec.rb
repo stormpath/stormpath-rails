@@ -71,7 +71,7 @@ describe Stormpath::Rails::SessionsController, type: :controller do
         sign_in
         delete :destroy, format: :json
 
-        expect(response.status).to eq(200)
+        expect(response).to be_success 
         expect(response.body).to be_empty
         expect(session[:user_id]).to be_nil      
         expect(session[:href]).to be_nil      
