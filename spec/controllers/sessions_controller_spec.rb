@@ -74,6 +74,7 @@ describe Stormpath::Rails::SessionsController, type: :controller do
         expect(response.status).to eq(200)
         expect(response.body).to be_empty
         expect(session[:user_id]).to be_nil      
+        expect(session[:href]).to be_nil      
       end
     end
 
@@ -82,6 +83,7 @@ describe Stormpath::Rails::SessionsController, type: :controller do
       delete :destroy
 
       expect(session[:user_id]).to be_nil
+      expect(session[:href]).to be_nil
       expect(flash[:notice]).to eq('You have been logged out successfully.')
       expect(response).to redirect_to(root_path)
     end
