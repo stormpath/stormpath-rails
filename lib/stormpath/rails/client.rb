@@ -87,6 +87,10 @@ module Stormpath
         self.connection ||= Stormpath::Client.new(client_options)
       end
 
+      def self.get_account(href)
+        application.accounts.get href
+      end
+
       def self.client_options
         if Stormpath::Rails.config.api_key.file_location_provided?
           Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key.file }
