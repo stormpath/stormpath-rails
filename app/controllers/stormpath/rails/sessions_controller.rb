@@ -5,7 +5,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
     result = authenticate user_from_params
 
     if result.success?
-      @user = find_user_by_email params[:session][:email]
+      @user = find_user_by_email user_from_params.email 
       initialize_session(@user, result.account.href)
 
       respond_to do |format|
@@ -14,7 +14,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
       end
     else
       respond_to do |format|
-        format.json { render json: { error: result.error_message } }
+        format.json { render json: { error: result.error_message }, status: 400 }
         format.html do
           set_flash_message :error, result.error_message
           render template: "sessions/new"
