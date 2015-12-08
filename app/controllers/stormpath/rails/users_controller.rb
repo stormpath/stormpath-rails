@@ -46,20 +46,25 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
   private
 
   def user_from_params
-    email = user_params.delete(:email)
-    password = user_params.delete(:password)
-    given_name = user_params.delete(:given_name)
-    surname = user_params.delete(:surname)
-
-    ::User.new.tap do |user|
-      user.email = email
-      user.password = password
-      user.given_name = given_name
-      user.surname = surname
+    @user_from_params ||= ::User.new.tap do |user|
+      user.email = user_params[:email]
+      user.password = user_params[:password] 
+      user.given_name = user_params[:given_name]
+      user.surname = user_params[:surname] 
     end
   end
 
   def user_params
-    params[:user] || Hash.new
+    normalize_params
+    @user_params ||= params[:user] || params 
+  end
+
+  def normalize_params 
+    @normalized_params ||= params.keys.each do |key|
+      if key != key.underscore
+        params[key.underscore] = params[key]
+        params.delete(key) 
+      end
+    end
   end
 end
