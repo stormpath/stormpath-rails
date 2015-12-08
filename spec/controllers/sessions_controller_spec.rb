@@ -66,6 +66,17 @@ describe Stormpath::Rails::SessionsController, type: :controller do
   end
 
   describe "DELTE #destroy" do
+    context "application/json request" do
+      it "signs out the user" do
+        sign_in
+        delete :destroy, format: :json
+
+        expect(response.status).to eq(200)
+        expect(response.body).to be_empty
+        expect(session[:user_id]).to be_nil      
+      end
+    end
+
     it "signs out the user" do
       sign_in
       delete :destroy
