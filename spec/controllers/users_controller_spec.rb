@@ -69,6 +69,35 @@ describe Stormpath::Rails::UsersController, type: :controller do
   describe "POST #create" do
     let(:user_attributes) { attributes_for(:user) }
 
+    context "application/json request" do
+      context "invalid data" do
+        it "without email render email error" do
+          post :create, format: :json, user: attributes_for(:user, email: "")
+          response_body = JSON.parse(response.body)
+
+          expect(response_body["error"]).to eq('Account email address cannot be null, empty, or blank.')
+        end
+      end
+
+      context "user verification enabled" do
+        before do
+          enable_verify_email
+        end
+
+        it "creates a user" do
+          expect { post :create, format: :json, user: user_attributes }.to change(User, :count).by(1)
+        end
+
+        it "returnes user data as response" do
+          post :create, format: :json, user: user_attributes
+          response_body = JSON.parse(response.body)
+          expect(response_body["email"]).to eq(user_attributes[:email])
+          expect(response_body["given_name"]).to eq(user_attributes[:given_name])
+          expect(response_body["surname"]).to eq(user_attributes[:surname])
+        end
+      end
+    end
+
     context "invalid data" do
       it "without email render email error" do
         post :create, user: attributes_for(:user, email: "")
