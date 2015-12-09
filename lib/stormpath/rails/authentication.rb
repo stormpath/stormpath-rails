@@ -64,6 +64,13 @@ module Stormpath
         Stormpath::Rails.config
       end
 
+      def find_or_create_user(user)
+        user = find_user_by_email(user.email)
+        user = user.save if user.nil?
+
+        user
+      end
+
       def find_user_by_email(email)
         configuration.user_model.find_user email
       end

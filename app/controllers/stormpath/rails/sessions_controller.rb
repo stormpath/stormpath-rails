@@ -5,7 +5,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
     result = authenticate user_from_params
 
     if result.success?
-      @user = find_user_by_email user_from_params.email 
+      @user = find_or_create_user user_from_params
       initialize_session(@user, result.account.href)
 
       respond_to do |format|
