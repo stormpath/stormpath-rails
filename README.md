@@ -83,7 +83,7 @@ If you wish to change this you can modify login options in configuration file:
 ```ruby
 Stormpath::Rails.configure do |config|
   config.login do |c|
-    c.login = true
+    c.enabled = true
     c.uri = '/login'
     c.next_uri = '/'
   end
@@ -98,7 +98,7 @@ If you wish to change the logout URI or the next_uri, you can provide the follow
 ```ruby
 Stormpath::Rails.configure do |config|
   config.logout do |c|
-    c.logout = true
+    c.enabled = true
     c.uri = '/logout'
     c.next_uri = '/'
   end
