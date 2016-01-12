@@ -22,7 +22,9 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
   end
 
   def new
-    if configuration.id_site.enabled?
+    if !configuration.login.enabled?
+      redirect_to configuration.login.next_uri 
+    elsif configuration.id_site.enabled?
       redirect_to id_site_login_url
     else
       render template: "sessions/new"

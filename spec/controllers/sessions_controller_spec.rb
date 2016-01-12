@@ -35,6 +35,19 @@ describe Stormpath::Rails::SessionsController, type: :controller do
         get :new
       end
     end
+
+    context "login not enabled" do
+      before do
+        Stormpath::Rails.config.login = { enabled: false, next_uri: "/" }
+      end
+
+      it "redirects to next_uri" do
+        sign_in
+        get :new
+
+        expect(response).to redirect_to(Stormpath::Rails.config.login.next_uri)
+      end
+    end
   end
 
   describe "GET #redirect" do
