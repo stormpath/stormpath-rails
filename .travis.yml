@@ -1,6 +1,8 @@
 language: ruby
 rvm:
   - 2.1.5
+before_install:
+  - gem install bundler
 env:
   global:
   - STORMPATH_APPLICATION_URL=https://api.stormpath.com/v1/applications/2RbTfV9wx59glWwChd9NQC
