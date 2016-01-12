@@ -189,9 +189,9 @@ rails generate stormpath:routes
 ### Controllers
 To override a Stormpath controller, subclass it and update the routes to point to your new controller (see the "Routes" section).
 ```ruby
-class PasswordsController < Stormpath::PasswordsController
-class SessionsController < Stormpath::SessionsController
-class UsersController < Stormpath::UsersController
+class PasswordsController < Stormpath::Rails::PasswordsController
+class SessionsController < Stormpath::Rails::SessionsController
+class UsersController < Stormpath::Rails::UsersController
 ```
 
 ### Views
