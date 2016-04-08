@@ -33,21 +33,27 @@ Migrate your database
 rake db:migrate
 ```
 
-Create a stormpath account if you havent already, and be sure to set up environment variables 
+## Prerequisites
 
-'STORMPATH_API_KEY_FILE_LOCATION' should be the location of your apiKey.properties file which you downloaded form stormpaths site
-'STORMPATH_APPLICATION_HREF' should contain the href to your application, can also be found on stormpahs site
+Create a Stormpath account if you haven't already, and be sure to set up the following environment variables:
 
-environment variables are set up in you .bashrc file or .zshrc if you use myzsh. So for example this should look something like this
+  - `STORMPATH_API_KEY_FILE_LOCATION` should be the location of your apiKey.properties file which you downloaded from the Stormpath site
+  - `STORMPATH_APPLICATION_HREF` should contain the href to your application, can also be found on the Stormpath site
+
+Environment variables should be set up in you .bashrc file or .zshrc if you use myzsh.
+
+Example setup:
 
 ```sh
 export STORMPATH_API_KEY_FILE_LOCATION=~/.stormpathKey
 export STORMPATH_APPLICATION_URL=https://api.stormpath.com/v1/applications/12345abc
 ```
 
-environment variables can be named differently but the stormpath config file should be edited accordingly
+Alternatively you can use gems such as [Dotenv](https://github.com/bkeepers/dotenv) or [Figaro](https://github.com/laserlemon/figaro) to preload environment variables.
 
-also make sure that you have a root_path defined in your rails router.rb
+Environment variables can be named differently but the Stormpath config file should be edited accordingly.
+
+Make sure that you have a `root_path` defined in your rails `routes.rb`
 
 ## Configuration
 Override any of these defaults in config/initializers/stormpath.rb
@@ -58,9 +64,11 @@ Stormpath::Rails.configure do |config|
   config.application.href = ENV['STORMPATH_APPLICATION_HREF']
 end
 ```
-The `STORMPATH_API_KEY_FILE_LOCATION` is the location of your Stormpath API Key file.  Information about getting this file is found in the [Ruby Quickstart](http://docs.stormpath.com/ruby/quickstart/).  The `STORMPATH_APPLICATION_HREF` represents the Application in Stormpath that is your Rails application.  You can get the href from the Stormpath Admin Console or the API.
+The `STORMPATH_API_KEY_FILE_LOCATION` is the location of your Stormpath API Key file.  Information about getting this file can be found in the [Ruby Quickstart](http://docs.stormpath.com/ruby/quickstart/).
 
-## Useage
+The `STORMPATH_APPLICATION_HREF` represents the Application in Stormpath that is your Rails application. You can get the href from the Stormpath Admin Console or the API.
+
+## Usage
 
 ### Helper Methods
 
@@ -74,9 +82,9 @@ Use `current_user`, `signed_in?`, `signed_out?` in controllers, views, and helpe
 <% end %>
 ```
 
-### Login 
+### Login
 
-Stormpath Rails automaticly provides route to `/login`. If the attempt is successsfull, the user will be send to the next_uri whcih is by default `/` and create the propper session cookies.
+Stormpath Rails automatically provides a `/login` route. If the attempt is successful, the user will be send to the `next_uri` which is by default `/` and create the proper session cookies.
 
 If you wish to change this you can modify login options in configuration file:
 
@@ -91,9 +99,9 @@ end
 ```
 
 ### Logout
-Stormpath Rails automaticly provides route to `/logout`.
+Stormpath Rails automatically provides route to `/logout`.
 
-If you wish to change the logout URI or the next_uri, you can provide the following configuration
+If you wish to change the logout URI or the `next_uri`, you can provide the following configuration:
 
 ```ruby
 Stormpath::Rails.configure do |config|
@@ -107,7 +115,7 @@ end
 
 ### Verify Email
 
-By default verify email is disabled. Which means after user fills in the registration form and submits, if his credentials are valid, he will be automaticly logged in without email verification.
+By default verify email is disabled, so after the user fills in the registration form and submits, if his credentials are valid, he will automatically be logged in without email verification.
 
 If you want to enable email verification you can add the following code to the configuration file.  
 
@@ -121,13 +129,13 @@ Stormpath::Rails.configure do |config|
 end
 ```
 
-If verify email set to enable after user registers he will first receive an email with the link and token with which he can verify his account. uri is the link which is used to verify the account and next_uri is location where user will be redirected after his account has been verified.
+If email verification is enabled, after the user registers he will first receive an email with the link and token with which he can verify his account. `uri` is the link which is used to verify the account and `next_uri` is the location where the user will be redirected after his account has been verified.
 
-The email that is sent to the account is configurable through the Stormpath Admin Console. 
+The email that is sent to the account is configurable through the [Stormpath Admin Console](https://api.stormpath.com).
 
 ### Forgot Password
 
-By default forgot password is disabled. To enable it add the following code to the configuration file
+By default forgot password is disabled. To enable it add the following code to the configuration file:
 
 ```ruby
 Stormpath::Rails.configure do |config|
@@ -138,15 +146,15 @@ Stormpath::Rails.configure do |config|
 end
 ```
 
-After the forgot password option has been enabled on the login form there will appear a link for user to reset his password. User first needs to enter an email to which a link will be send. When user clicks on a link he will be redirected to the final form where he can reset his password.
+After the forgot password option has been enabled on the login form, a reset password link will appear. After the user fills in his email and clicks on the link, he will be redirected to the final form where he can reset his password.
 
-The email that is sent to the account is configurable through the Stormpath Admin Console.
+The forgot password email is configurable through the [Stormpath Admin Console](https://api.stormpath.com).
 
 ### ID Site
 
 If you'd like to not worry about building your own registration and login screens at all, you can use Stormpath's new [ID site](https://docs.stormpath.com/guides/using-id-site/) feature. This is a hosted login subdomain which handles authentication for you automatically.
 
-To make ID Site work in Rails, you need to change stormpath configuration file:
+To make the ID Site work in Rails, you need to change the Stormpath config file:
 
 ```ruby
 Stormpath::Rails.configure do |config|
@@ -158,13 +166,13 @@ Stormpath::Rails.configure do |config|
 end
 ```
 
-When ID Site is enabled any request for `/login` or `/register` will cause a redirect to ID Site. When the user is finished at ID Site they will be redirected to uri which is defined in configuration, by default `/redirect`. Stormpath Rails will handle this request, and then redirect the user to `next_uri`
+When the ID Site is enabled, any request on `/login` or `/register` will redirect to the ID Site. When the user finishes the process at the ID Site, they will be redirected to an uri which is defined in configuration (the default route is `'/redirect'`). Stormpath Rails will handle this request and redirect the user to `next_uri`.
 
 ### Social Login
 
-Stormpath Rails supports social login as well. Currently only Facebook is supported,  Providers for: Google, Github and Linkedin are currently in development. 
+Stormpath Rails supports social login as well. Currently only Facebook is supported, while providers for Google, Github and Linkedin are currently in development.
 
-In order to enable Facebook login you first you need to create a Facebook application and create a Facebook directory in your stormpath account. More info can be found [here](https://docs.stormpath.com/rest/product-guide/#integrating-with-facebook). After that you need to enable id from storm paths configuration file and provide facebook app_id and app_secret which is provided to you after Facebook app creation.
+In order to enable Facebook login you first you need to create a Facebook application and create a Facebook directory in your stormpath account. More info can be found [here](https://docs.stormpath.com/rest/product-guide/#integrating-with-facebook). After that you need to enable it through the Stormpath Rails config file by filling in the facebook app_id and app_secret which is provided to you after you've create the Facebook app.
 
 ```ruby
 Stormpath::Rails.configure do |config|
@@ -175,19 +183,19 @@ Stormpath::Rails.configure do |config|
 end
 ```
 
-When user navigates to `/login` he will see a facebook login button. If he is authenticated succesfully he will be redirected back to rails root_path.
+When user navigates to `/login` he will see a Facebook login button. If he is authenticated successfully, he will be redirected back to the `root_path`.
 
 ## Overriding Stormpath
 
 ### Routes
-You can optionally run `rails generate stormpath:routes` to dump a copy of the default routes into your application for modification
+You can optionally dump a copy of the default routes into your application for modification:
 
 ```sh
 rails generate stormpath:routes
 ```
 
 ### Controllers
-To override a Stormpath controller, subclass it and update the routes to point to your new controller (see the "Routes" section).
+To override a Stormpath controller, subclass it and update the routes to point to your new controller (see the "Routes" section):
 ```ruby
 class PasswordsController < Stormpath::Rails::PasswordsController
 class SessionsController < Stormpath::Rails::SessionsController
@@ -195,7 +203,7 @@ class UsersController < Stormpath::Rails::UsersController
 ```
 
 ### Views
-You can use the stormpath views generator to copy the default views to your application for modification.
+You can use the Stormpath views generator to copy the default views to your application for modification:
 ```sh
 rails generate stormpath:views
 ```
@@ -228,6 +236,6 @@ app/views/users/verification_resend.html.erb
 * Ruby 2.1
 * Ruby 2.2
 
-### Suported Rails Versions
+### Supported Rails Versions
 
 above Rails 3.2
