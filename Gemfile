@@ -8,6 +8,7 @@ gem 'sqlite3', '~> 1.3'
 group :development do
   gem 'pry'
   gem 'pry-byebug'
+  gem 'sass-rails'
 end
 
 group :test do
