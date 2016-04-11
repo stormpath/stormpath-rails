@@ -17,7 +17,7 @@ class Stormpath::Rails::PasswordsController < Stormpath::Rails::BaseController
   end
 
   def forgot_change
-    result = verify_email_token params[:sptoken]
+    result = verify_password_token params[:sptoken]
 
     if result.success?
       @account_url = result.account_url
