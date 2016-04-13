@@ -51,10 +51,14 @@ describe Stormpath::Rails::SessionsController, type: :controller do
   end
 
   describe "GET #redirect" do
-    let(:user) { create(:user) }
+    let(:account) do
+      user = create(:user)
+      allow(user).to receive(:href).and_return('/tets_account_href')
+      user
+    end
 
     it "redirects to id_site next_uri" do
-      allow(controller).to receive(:handle_id_site_callback).and_return(user)
+      allow(controller).to receive(:handle_id_site_callback).and_return(account)
       get :redirect
 
       expect(response).to redirect_to(root_path)
@@ -66,7 +70,7 @@ describe Stormpath::Rails::SessionsController, type: :controller do
       end
 
       it "redirects to next_uri" do
-        allow(controller).to receive(:handle_id_site_callback).and_return(user)
+        allow(controller).to receive(:handle_id_site_callback).and_return(account)
         get :redirect
 
         expect(response).to redirect_to('/custom')
@@ -75,11 +79,24 @@ describe Stormpath::Rails::SessionsController, type: :controller do
   end
 
   describe "DELTE #destroy" do
+    context "application/json request" do
+      it "signs out the user" do
+        sign_in
+        delete :destroy, format: :json
+
+        expect(response).to be_success 
+        expect(response.body).to be_empty
+        expect(session[:user_id]).to be_nil      
+        expect(session[:href]).to be_nil      
+      end
+    end
+
     it "signs out the user" do
       sign_in
       delete :destroy
 
       expect(session[:user_id]).to be_nil
+      expect(session[:href]).to be_nil
       expect(flash[:notice]).to eq('You have been logged out successfully.')
       expect(response).to redirect_to(root_path)
     end
@@ -105,6 +122,28 @@ describe Stormpath::Rails::SessionsController, type: :controller do
 
     after do
       delete_test_account
+    end
+
+    context "application/json request" do
+      context "valid parameters" do
+        it "signs in user" do
+          post :create, format: :json, session: { email: test_user.email, password: test_user.password }
+
+          response_body = JSON.parse(response.body)
+          expect(response_body["user"]["email"]).to eq(test_user.email)
+          expect(response_body["user"]["given_name"]).to eq(test_user.given_name)
+          expect(response_body["user"]["surname"]).to eq(test_user.surname)
+        end
+      end
+ 
+      context "invalid parameters" do
+        it "reuterns list of errors" do
+          post :create, format: :json, session: { email: "test@testable.com", password: test_user.password } 
+
+          response_body = JSON.parse(response.body)
+          expect(response_body["error"]).to eq("Invalid username or password.")
+        end
+      end 
     end
 
     context "valid parameters" do

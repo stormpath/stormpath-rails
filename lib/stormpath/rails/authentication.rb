@@ -23,6 +23,10 @@ module Stormpath
         Client.create_omniauth_user(provider, access_token)
       end
 
+      def get_account(href)
+        Client.get_account(href)
+      end
+
       def find_or_create_user_from_account(account)
         user = find_user_by_email(account.email)
         return user if user

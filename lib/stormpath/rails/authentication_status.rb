@@ -10,6 +10,10 @@ module Stormpath
         @response.instance_of? Stormpath::Authentication::AuthenticationResult
       end
 
+      def account
+        @response.account
+      end
+
       def error_message
         if @response.instance_of? String
           return @response

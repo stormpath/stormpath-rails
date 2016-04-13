@@ -4,7 +4,7 @@ module Stormpath
       def sign_in
         create_test_account
         @controller.send(:authenticate, test_user)
-        @controller.send(:initialize_session, test_user)
+        @controller.send(:initialize_session, test_user, @test_account_result.href)
         test_user
       end
 

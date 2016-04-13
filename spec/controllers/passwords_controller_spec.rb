@@ -42,6 +42,32 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
       delete_test_account
     end
 
+
+    context "application/json request" do
+      context "valid data" do
+        it "returnes success" do
+          allow(controller).to receive(:reset_password).and_return(account_success)
+          post :forgot_send, format: :json, password: { email: test_user.email }
+
+          expect(response).to be_success
+          expect(response.body).to be_empty
+        end
+      end
+
+      context "invalid data" do
+        it "returne errors" do
+          post :forgot_send, format: :json, password: { email: "test@testable.com" }
+          response_body = JSON.parse(response.body)
+          expect(response_body["error"]).to eq("The email property value 'test@testable.com' does not match a known resource.")
+        end
+
+        it "returnes 400" do
+          post :forgot_send, format: :json, password: { email: "test@testable.com" }
+          expect(response.status).to eq(400)
+        end
+      end
+    end
+
     context "valid data" do
       it "renders email sent view" do
         allow(controller).to receive(:reset_password).and_return(account_success)

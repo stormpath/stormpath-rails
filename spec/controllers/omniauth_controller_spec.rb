@@ -8,7 +8,8 @@ describe Stormpath::Rails::OmniauthController, type: :controller do
     let(:account) { double(:account, 
       email: "example@test.com", 
       given_name: "name", 
-      surname: "surname"
+      surname: "surname",
+      href: "/testhref"
     ) }
     let(:account_response) { double(:stormpath_account, account: account)}
 
