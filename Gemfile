@@ -4,6 +4,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'sqlite3', '~> 1.3'
+gem 'sass-rails'
 
 group :development do
   gem 'pry'
