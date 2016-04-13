@@ -1,4 +1,5 @@
 class Stormpath::Rails::BaseController < ApplicationController
+  skip_before_action :verify_authenticity_token, if: :api_request?
 
   layout 'stormpath'
 
