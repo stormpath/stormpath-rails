@@ -15,6 +15,7 @@ module Stormpath
     autoload :AuthenticationStatus, 'stormpath/rails/authentication_status'
     autoload :AccountStatus, 'stormpath/rails/account_status'
     autoload :Social, 'stormpath/rails/social'
+    autoload :ContentTypeNegotiator, 'stormpath/rails/content_type_negotiator'
 
     module UserConfig
       autoload :ApiKey, 'stormpath/rails/user_config/api_key'
@@ -27,6 +28,7 @@ module Stormpath
       autoload :Login, 'stormpath/rails/user_config/login'
       autoload :Logout, 'stormpath/rails/user_config/logout'
       autoload :Register, 'stormpath/rails/user_config/register'
+      autoload :Produces, 'stormpath/rails/user_config/produces'
     end
   end
 end

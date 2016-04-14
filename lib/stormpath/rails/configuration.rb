@@ -11,8 +11,31 @@ module Stormpath
         @user_model ||= ::User
       end
 
-      [:login, :logout, :register, :id_site, :api_key, :application, :verify_email, 
-        :forgot_password, :facebook, :google].each do |action|
+      # :base_path
+      # :oauth2
+      # :access_token_cookie
+      # :refresh_token_cookie
+      # :produces
+      # :change_password
+      # :github
+      # :linkedin
+      # :me
+
+      CONFIGURATION_ACCESSORS = [
+        :login,
+        :logout,
+        :register,
+        :id_site,
+        :api_key,
+        :application,
+        :verify_email,
+        :forgot_password,
+        :facebook,
+        :google,
+        :produces
+      ]
+
+      CONFIGURATION_ACCESSORS.each do |action|
         define_method("#{action}=") do |options|
           klass = user_config_class(action)
           instance_variable_set("@#{action}", klass.new(options))
@@ -24,7 +47,7 @@ module Stormpath
           if action_value.nil?
             klass = user_config_class(action)
             instance_variable_set("@#{action}", klass.new())
-          end 
+          end
 
           if block
             block.call(instance_variable_get("@#{action}"))
