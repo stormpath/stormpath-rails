@@ -1,17 +1,19 @@
 require 'spec_helper'
 
 describe Stormpath::Rails::ContentTypeNegotiator do
+  HTTP_ACCEPT_JSON = Stormpath::Rails::ContentTypeNegotiator::HTTP_ACCEPT_JSON
+  HTTP_ACCEPT_HTML = Stormpath::Rails::ContentTypeNegotiator::HTTP_ACCEPT_HTML
+  HTTP_ACCEPT_WILDCARD = Stormpath::Rails::ContentTypeNegotiator::HTTP_ACCEPT_WILDCARD
 
-  HTTP_ACCEPT_JSON = 'application/json'
-  HTTP_ACCEPT_HTML = 'text/html'
   HTTP_UNSUPPORTED_ACCEPT_HEADER = 'audio/basic'
   HTTP_UNSUPPORTED_ACCEPT_HEADER_LIST = 'audio/basic, audio/mp3'
+
   PRODUCES_JSON_FIRST = [HTTP_ACCEPT_JSON, HTTP_ACCEPT_HTML]
   PRODUCES_HTML_FIRST = [HTTP_ACCEPT_HTML, HTTP_ACCEPT_JSON]
 
   TRANSITIONS = [
     { produces: PRODUCES_JSON_FIRST, http_accept: nil, result: HTTP_ACCEPT_JSON },
-    { produces: PRODUCES_JSON_FIRST, http_accept: '*/*', result: HTTP_ACCEPT_JSON },
+    { produces: PRODUCES_JSON_FIRST, http_accept: HTTP_ACCEPT_WILDCARD, result: HTTP_ACCEPT_JSON },
     { produces: PRODUCES_JSON_FIRST, http_accept: HTTP_ACCEPT_JSON, result: HTTP_ACCEPT_JSON },
     { produces: PRODUCES_JSON_FIRST, http_accept: 'application/json, application/javascript, text/javascript', result: HTTP_ACCEPT_JSON },
     { produces: PRODUCES_JSON_FIRST, http_accept: HTTP_ACCEPT_HTML, result: HTTP_ACCEPT_HTML },
@@ -19,7 +21,7 @@ describe Stormpath::Rails::ContentTypeNegotiator do
     { produces: PRODUCES_JSON_FIRST, http_accept: HTTP_UNSUPPORTED_ACCEPT_HEADER_LIST, result: nil },
 
     { produces: PRODUCES_HTML_FIRST, http_accept: nil, result: HTTP_ACCEPT_HTML },
-    { produces: PRODUCES_HTML_FIRST, http_accept: '*/*', result: HTTP_ACCEPT_HTML },
+    { produces: PRODUCES_HTML_FIRST, http_accept: HTTP_ACCEPT_WILDCARD, result: HTTP_ACCEPT_HTML },
     { produces: PRODUCES_HTML_FIRST, http_accept: HTTP_ACCEPT_JSON, result: HTTP_ACCEPT_JSON },
     { produces: PRODUCES_HTML_FIRST, http_accept: 'application/json, application/javascript, text/javascript', result: HTTP_ACCEPT_JSON },
     { produces: PRODUCES_HTML_FIRST, http_accept: HTTP_ACCEPT_HTML, result: HTTP_ACCEPT_HTML },
@@ -27,7 +29,7 @@ describe Stormpath::Rails::ContentTypeNegotiator do
     { produces: PRODUCES_HTML_FIRST, http_accept: HTTP_UNSUPPORTED_ACCEPT_HEADER_LIST, result: nil },
 
     { produces: [HTTP_ACCEPT_JSON], http_accept: nil, result: HTTP_ACCEPT_JSON },
-    { produces: [HTTP_ACCEPT_JSON], http_accept: '*/*', result: HTTP_ACCEPT_JSON },
+    { produces: [HTTP_ACCEPT_JSON], http_accept: HTTP_ACCEPT_WILDCARD, result: HTTP_ACCEPT_JSON },
     { produces: [HTTP_ACCEPT_JSON], http_accept: HTTP_ACCEPT_JSON, result: HTTP_ACCEPT_JSON },
     { produces: [HTTP_ACCEPT_JSON], http_accept: 'application/json, application/javascript, text/javascript', result: HTTP_ACCEPT_JSON },
     { produces: [HTTP_ACCEPT_JSON], http_accept: HTTP_ACCEPT_HTML, result: nil },
@@ -35,7 +37,7 @@ describe Stormpath::Rails::ContentTypeNegotiator do
     { produces: [HTTP_ACCEPT_JSON], http_accept: HTTP_UNSUPPORTED_ACCEPT_HEADER_LIST, result: nil },
 
     { produces: [HTTP_ACCEPT_HTML], http_accept: nil, result: HTTP_ACCEPT_HTML },
-    { produces: [HTTP_ACCEPT_HTML], http_accept: '*/*', result: HTTP_ACCEPT_HTML },
+    { produces: [HTTP_ACCEPT_HTML], http_accept: HTTP_ACCEPT_WILDCARD, result: HTTP_ACCEPT_HTML },
     { produces: [HTTP_ACCEPT_HTML], http_accept: HTTP_ACCEPT_JSON, result: nil },
     { produces: [HTTP_ACCEPT_HTML], http_accept: 'application/json, application/javascript, text/javascript', result: nil },
     { produces: [HTTP_ACCEPT_HTML], http_accept: HTTP_ACCEPT_HTML, result: HTTP_ACCEPT_HTML },
@@ -53,5 +55,4 @@ describe Stormpath::Rails::ContentTypeNegotiator do
       expect(Stormpath::Rails::ContentTypeNegotiator.new(http_accept).call).to eq(result)
     end
   end
-
 end

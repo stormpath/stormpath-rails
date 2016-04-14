@@ -3,17 +3,17 @@ module Stormpath
     class ContentTypeNegotiator
       attr_accessor :accept_header
 
-      ACCEPT_WILDCARD = '*/*'
+      HTTP_ACCEPT_WILDCARD = '*/*'
       HTTP_ACCEPT_JSON = 'application/json'
       HTTP_ACCEPT_HTML = 'text/html'
 
       def initialize(accept_header)
-        accept_header = accept_header.presence || ACCEPT_WILDCARD
+        accept_header = accept_header.presence || HTTP_ACCEPT_WILDCARD
         @accept_header = normalize(accept_header)
       end
 
       def call
-        if accept_header == ACCEPT_WILDCARD
+        if accept_header == HTTP_ACCEPT_WILDCARD
           Stormpath::Rails.config.produces.accepts.first
         elsif accept_header.in?(Stormpath::Rails.config.produces.accepts)
           accept_header
