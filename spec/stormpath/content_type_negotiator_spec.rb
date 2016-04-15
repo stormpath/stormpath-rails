@@ -52,7 +52,7 @@ describe Stormpath::Rails::ContentTypeNegotiator do
 
     it "when gets #{http_accept || 'nil'} in the accept header and has #{produces} in produces should transition to #{result}" do
       allow(Stormpath::Rails.config.produces).to receive(:accepts) { produces }
-      expect(Stormpath::Rails::ContentTypeNegotiator.new(http_accept).call).to eq(result)
+      expect(Stormpath::Rails::ContentTypeNegotiator.new(http_accept).convert).to eq(result)
     end
   end
 end

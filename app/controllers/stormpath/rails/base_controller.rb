@@ -18,7 +18,7 @@ module Stormpath
 
       def setup_accept_header
         request.headers['HTTP_ACCEPT'] =
-          ContentTypeNegotiator.new(request.headers['HTTP_ACCEPT']).call
+          ContentTypeNegotiator.new(request.headers['HTTP_ACCEPT']).convert
       end
     end
   end

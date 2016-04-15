@@ -12,14 +12,16 @@ module Stormpath
         @accept_header = normalize(accept_header)
       end
 
-      def call
+      def convert
         if accept_header == HTTP_ACCEPT_WILDCARD
           Stormpath::Rails.config.produces.accepts.first
         elsif accept_header.in?(Stormpath::Rails.config.produces.accepts)
           accept_header
-        else
-          nil
         end
+      end
+
+      def handle_by_stormpath?
+        accept_header.in?([HTTP_ACCEPT_WILDCARD] + Stormpath::Rails.config.produces.accepts)
       end
 
       private
