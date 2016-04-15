@@ -17,8 +17,12 @@ module Stormpath
           Stormpath::Rails.config.produces.accepts.first
         elsif accept_header.in?(Stormpath::Rails.config.produces.accepts)
           accept_header
+        else
+          nil
         end
       end
+
+      private
 
       def normalize(accept_header)
         return accept_header unless accept_header.include?(',')
@@ -27,6 +31,8 @@ module Stormpath
           HTTP_ACCEPT_JSON
         elsif accept_header.include?(HTTP_ACCEPT_HTML)
           HTTP_ACCEPT_HTML
+        else
+          nil
         end
       end
     end

@@ -5,7 +5,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
     result = authenticate user_from_params
 
     if result.success?
-      @user = find_or_create_user_from_account result.account 
+      @user = find_or_create_user_from_account result.account
       initialize_session(@user, result.account.href)
 
       respond_to do |format|
@@ -37,7 +37,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
 
   def new
     if !configuration.login.enabled?
-      redirect_to configuration.login.next_uri 
+      redirect_to configuration.login.next_uri
     elsif configuration.id_site.enabled?
       redirect_to id_site_login_url
     else
@@ -65,8 +65,8 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
     end
 
     ::User.new.tap do |user|
-      user.email = username 
-      user.password = password 
+      user.email = username
+      user.password = password
     end
   end
 

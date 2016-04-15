@@ -16,6 +16,7 @@ module Stormpath
     autoload :AccountStatus, 'stormpath/rails/account_status'
     autoload :Social, 'stormpath/rails/social'
     autoload :ContentTypeNegotiator, 'stormpath/rails/content_type_negotiator'
+    autoload :RoutingConstraint, 'stormpath/rails/routing_constraint'
 
     module UserConfig
       autoload :ApiKey, 'stormpath/rails/user_config/api_key'
