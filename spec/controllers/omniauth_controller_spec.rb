@@ -5,9 +5,9 @@ describe Stormpath::Rails::OmniauthController, type: :controller do
 
   describe "GET #create" do
     let(:access_token) { "iw3k1m3n4jal20sd" }
-    let(:account) { double(:account, 
-      email: "example@test.com", 
-      given_name: "name", 
+    let(:account) { double(:account,
+      email: "example@test.com",
+      given_name: "name",
       surname: "surname",
       href: "/testhref"
     ) }
@@ -18,7 +18,7 @@ describe Stormpath::Rails::OmniauthController, type: :controller do
         .with('facebook', access_token)
         .and_return(account_response)
 
-      get :create, access_token: access_token 
+      get :create, access_token: access_token
     end
 
     it "redirects to root_path" do

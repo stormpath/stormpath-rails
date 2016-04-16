@@ -4,7 +4,7 @@ class HelperMethodsController < ActionController::Base
   include Stormpath::Rails::Controller
 end
 
-describe HelperMethodsController, type: :controller do
+describe HelperMethodsController, :vcr, type: :controller do
 
   controller do
     def index
