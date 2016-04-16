@@ -15,7 +15,7 @@ Rails.application.routes.draw do
     get    '/forgot/change' => 'stormpath/rails/passwords#forgot_change', as: 'forgot_change'
     post   '/forgot/change/:account_url' => 'stormpath/rails/passwords#forgot_update', as: 'forgot_update'
 
-    post   '/login' => 'stormpath/rails/sessions#create', as: 'login_user'
+    post   '/login' => 'stormpath/rails/sessions#create', as: 'login_user' if Stormpath::Rails.config.login.enabled
     get    '/logout' => 'stormpath/rails/sessions#destroy', as: 'logout_user'
     post   '/register' => 'stormpath/rails/users#create', as: 'register_user'
     get    '/me' => 'stormpath/rails/users#profile', as: 'user_profile'
