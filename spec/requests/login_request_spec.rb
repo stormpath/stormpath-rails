@@ -20,6 +20,7 @@ describe 'Login', type: :request, vcr: true do
       describe 'html is enabled' do
         it 'successfull login' do
           post '/login', user_attrs.slice(:email, :password)
+          expect(response).to redirect_to('/')
           expect(response.status).to eq(302)
         end
 
@@ -81,6 +82,17 @@ describe 'Login', type: :request, vcr: true do
       it 'returns 404' do
         post '/login', user_attrs.slice(:email, :password)
         expect(response.status).to eq(404)
+      end
+    end
+
+    describe 'login next_uri changed' do
+      before { Stormpath::Rails.config.login.next_uri = '/abc' }
+      after  { Stormpath::Rails.config.login.reset_attributes }
+
+      it 'should redirect to next_uri' do
+        post '/login', user_attrs.slice(:email, :password)
+        expect(response).to redirect_to('/abc')
+        expect(response.status).to eq(302)
       end
     end
   end
