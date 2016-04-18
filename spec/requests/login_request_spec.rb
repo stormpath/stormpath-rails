@@ -9,7 +9,11 @@ describe 'Login', type: :request, vcr: true do
     end
 
     before { user }
-    after { Rails.application.reload_routes! }
+
+    before do
+      Rails.application.reload_routes!
+    end
+
     after  { user.delete }
 
     describe 'HTTP_ACCEPT=text/html' do

@@ -41,6 +41,8 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
         Stormpath::Rails.config.login = { enabled: false, next_uri: "/" }
       end
 
+      after { Stormpath::Rails.config.login.reset_attributes }
+
       it "redirects to next_uri" do
         sign_in
         get :new
@@ -68,6 +70,8 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
       before do
         Stormpath::Rails.config.id_site.next_uri = '/custom'
       end
+
+      after { Stormpath::Rails.config.login.reset_attributes }
 
       it "redirects to next_uri" do
         allow(controller).to receive(:handle_id_site_callback).and_return(account)
