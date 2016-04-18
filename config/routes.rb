@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   constraints Stormpath::Rails::RoutingConstraint do
-    resource :session, controller: 'stormpath/rails/sessions', only: [:create]
+    # resource :session, controller: 'stormpath/rails/sessions', only: [:create]
     resource :users, controller: 'stormpath/rails/users', only: :create
     get    Stormpath::Rails.config.register.uri => 'stormpath/rails/users#new', as: 'sign_up'
     get    Stormpath::Rails.config.verify_email.uri => 'stormpath/rails/users#verify', as: 'verify'
