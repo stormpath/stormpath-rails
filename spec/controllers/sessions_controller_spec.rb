@@ -134,9 +134,9 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
           post :create, format: :json, session: { email: test_user.email, password: test_user.password }
 
           response_body = JSON.parse(response.body)
-          expect(response_body["user"]["email"]).to eq(test_user.email)
-          expect(response_body["user"]["given_name"]).to eq(test_user.given_name)
-          expect(response_body["user"]["surname"]).to eq(test_user.surname)
+          expect(response_body["account"]["email"]).to eq(test_user.email)
+          expect(response_body["account"]["givenName"]).to eq(test_user.given_name)
+          expect(response_body["account"]["surname"]).to eq(test_user.surname)
         end
       end
 
@@ -145,7 +145,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
           post :create, format: :json, session: { email: "test@testable.com", password: test_user.password }
 
           response_body = JSON.parse(response.body)
-          expect(response_body["error"]).to eq("Invalid username or password.")
+          expect(response_body["message"]).to eq("Invalid username or password.")
         end
       end
     end
