@@ -20,4 +20,5 @@ group :test do
   gem 'ammeter', git: "https://github.com/alexrothenberg/ammeter"
   gem 'simplecov', :require => false
   gem 'coveralls', require: false
+  gem 'json_matchers'
 end

@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "required": ["account"],
+  "properties": {
+    "account": {
+      "type": "object",
+      "required": ["href", "username", "modifiedAt", "status", "createdAt", "email", "middleName", "surname", "givenName", "fullName"],
+      "properties": {
+        "href": { "type": "string" },
+        "username": { "type": "string" },
+        "modifiedAt": { "type": ["string", "null"] },
+        "status": { "type": "string" },
+        "createdAt": { "type": ["string", "null"] },
+        "email": { "type": "string" },
+        "middleName": { "type": ["string", "null"] },
+        "surname": { "type": "string" },
+        "givenName": { "type": "string" },
+        "fullName": { "type": "string" }
+      }
+    }
+  }
+}

@@ -50,10 +50,16 @@ describe 'Login', type: :request, vcr: true do
       end
 
       describe 'json is enabled' do
-        it 'successfull login' do
+        it 'successfull login should result in 200' do
           json_login_post(user_attrs.slice(:email, :password))
           expect(response.status).to eq(200)
         end
+
+        it 'successfull login should match schema' do
+          json_login_post(user_attrs.slice(:email, :password))
+          expect(response).to match_response_schema(:login_response, strict: true)
+        end
+
         it 'failed login, wrong password' do
           json_login_post(user_attrs.slice(:email).merge(password: 'WR00N6'))
           expect(response.status).to eq(400)

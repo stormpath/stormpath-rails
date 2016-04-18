@@ -20,6 +20,7 @@ require 'factories'
 
 require "support/generator_spec_helpers"
 require "support/config_spec_helpers"
+require "json_matchers/rspec"
 
 WebMock.allow_net_connect!
 

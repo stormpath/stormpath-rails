@@ -9,7 +9,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
       initialize_session(@user, result.account.href)
 
       respond_to do |format|
-        format.json { render json: { user: @user } }
+        format.json { render json: login_serializer(result.account) }
         format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
       end
     else
@@ -88,5 +88,22 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
     else
       "/#{params[:next]}"
     end
+  end
+
+  def login_serializer(account)
+    {
+      account: {
+        href: account.href,
+        username: account.username,
+        modifiedAt: nil, #account.modified_at,
+        status: account.status,
+        createdAt: nil, #account.created_at,
+        email: account.email,
+        middleName: account.middle_name,
+        surname: account.surname,
+        givenName: account.given_name,
+        fullName: account.full_name
+      }
+    }
   end
 end
