@@ -10,7 +10,7 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
 
       respond_to do |format|
         format.json { render json: { user: @user } }
-        format.html { redirect_to configuration.login.next_uri, notice: 'Successfully signed in' }
+        format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
       end
     else
       respond_to do |format|
@@ -72,5 +72,21 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
 
   def redirect_signed_in_users
     redirect_to root_path if signed_in?
+  end
+
+  def login_redirect_route
+    if params[:next]
+      login_redirect_route_from_params
+    else
+      configuration.login.next_uri
+    end
+  end
+
+  def login_redirect_route_from_params
+    if params[:next].start_with?('/')
+      params[:next]
+    else
+      "/#{params[:next]}"
+    end
   end
 end
