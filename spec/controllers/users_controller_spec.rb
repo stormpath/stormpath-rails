@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Stormpath::Rails::UsersController, type: :controller do
+describe Stormpath::Rails::UsersController, :vcr, type: :controller do
   it { should be_a Stormpath::Rails::BaseController }
 
   before do
@@ -110,6 +110,8 @@ describe Stormpath::Rails::UsersController, type: :controller do
           enable_verify_email
         end
 
+        after { delete_account(user_attributes[:email]) }
+
         it "creates a user" do
           expect { post :create, format: :json, user: user_attributes }.to change(User, :count).by(1)
         end
@@ -161,6 +163,8 @@ describe Stormpath::Rails::UsersController, type: :controller do
         enable_verify_email
       end
 
+      after { delete_account(user_attributes[:email]) }
+
       it "creates a user" do
         expect { post :create, user: user_attributes }.to change(User, :count).by(1)
       end
@@ -177,6 +181,8 @@ describe Stormpath::Rails::UsersController, type: :controller do
       before do
         disable_verify_email
       end
+
+      after { delete_account(user_attributes[:email]) }
 
       it "creates a user" do
         expect { post :create, user: user_attributes }.to change(User, :count).by(1)
@@ -198,6 +204,8 @@ describe Stormpath::Rails::UsersController, type: :controller do
         disable_verify_email
         Stormpath::Rails.config.register.next_uri = '/custom'
       end
+
+      after { delete_account(user_attributes[:email]) }
 
       it "redirects to next_uri" do
         post :create, user: user_attributes

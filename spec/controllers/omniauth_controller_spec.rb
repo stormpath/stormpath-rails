@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Stormpath::Rails::OmniauthController, type: :controller do
+describe Stormpath::Rails::OmniauthController, :vcr, type: :controller do
   it { should be_a Stormpath::Rails::BaseController }
 
   describe "GET #create" do

@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Stormpath::Rails::SessionsController, type: :controller do
+describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
   it { should be_a Stormpath::Rails::BaseController }
 
   describe "GET #new" do
@@ -84,10 +84,10 @@ describe Stormpath::Rails::SessionsController, type: :controller do
         sign_in
         delete :destroy, format: :json
 
-        expect(response).to be_success 
+        expect(response).to be_success
         expect(response.body).to be_empty
-        expect(session[:user_id]).to be_nil      
-        expect(session[:href]).to be_nil      
+        expect(session[:user_id]).to be_nil
+        expect(session[:href]).to be_nil
       end
     end
 
@@ -135,15 +135,15 @@ describe Stormpath::Rails::SessionsController, type: :controller do
           expect(response_body["user"]["surname"]).to eq(test_user.surname)
         end
       end
- 
+
       context "invalid parameters" do
         it "reuterns list of errors" do
-          post :create, format: :json, session: { email: "test@testable.com", password: test_user.password } 
+          post :create, format: :json, session: { email: "test@testable.com", password: test_user.password }
 
           response_body = JSON.parse(response.body)
           expect(response_body["error"]).to eq("Invalid username or password.")
         end
-      end 
+      end
     end
 
     context "valid parameters" do
@@ -171,7 +171,7 @@ describe Stormpath::Rails::SessionsController, type: :controller do
       end
 
       it "redirects to next_uri" do
-        post :create, session: { email: test_user.email, password: test_user.password } 
+        post :create, session: { email: test_user.email, password: test_user.password }
         expect(response).to redirect_to('/custom')
       end
     end

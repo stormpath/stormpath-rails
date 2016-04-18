@@ -47,11 +47,11 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
   end
 
   def profile
-    if signed_in? 
-      account = get_account current_user_href 
-      render json: account.properties 
+    if signed_in?
+      account = get_account current_user_href
+      render json: account.properties
     else
-      render nothing: true, status: 401 
+      render nothing: true, status: 401
     end
   end
 
@@ -71,22 +71,22 @@ class Stormpath::Rails::UsersController < Stormpath::Rails::BaseController
   def user_from_params
     @user_from_params ||= ::User.new.tap do |user|
       user.email = user_params[:email]
-      user.password = user_params[:password] 
+      user.password = user_params[:password]
       user.given_name = user_params[:given_name]
-      user.surname = user_params[:surname] 
+      user.surname = user_params[:surname]
     end
   end
 
   def user_params
     normalize_params
-    @user_params ||= params[:user] || params 
+    @user_params ||= params[:user] || params
   end
 
-  def normalize_params 
+  def normalize_params
     @normalized_params ||= params.keys.each do |key|
       if key != key.underscore
         params[key.underscore] = params[key]
-        params.delete(key) 
+        params.delete(key)
       end
     end
   end

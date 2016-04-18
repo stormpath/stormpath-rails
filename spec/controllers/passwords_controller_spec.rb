@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Stormpath::Rails::PasswordsController, type: :controller do
+describe Stormpath::Rails::PasswordsController, :vcr, type: :controller do
   it { should be_a Stormpath::Rails::BaseController }
 
   describe "GET #forgot" do
@@ -31,7 +31,7 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
   end
 
   describe "POST #forgot_send" do
-    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }  
+    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }
 
     before do
       create_test_account
@@ -41,7 +41,6 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
     after do
       delete_test_account
     end
-
 
     context "application/json request" do
       context "valid data" do
@@ -127,7 +126,7 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
     let(:different_passwords) { { password: { original: 'Somepass123', repeated: 'Somepass' } } }
     let(:invalid_passwords)   { { password: { original: 'invalid', repeated: 'invalid' } } }
     let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }
-    
+
     after do
       delete_test_account
     end

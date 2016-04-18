@@ -27,6 +27,9 @@ VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.hook_into :webmock
   c.configure_rspec_metadata!
+  c.ignore_request do |request|
+    request.uri == Stormpath::Rails.config.application.href
+  end
 end
 
 RSpec.configure do |config|
