@@ -3,9 +3,9 @@ module Stormpath
     module UserConfig
       class Logout
         include Virtus.model
-        
+
         attribute :enabled, Boolean, default: true
-        attribute :uri, String, default: '/login'
+        attribute :uri, String, default: '/logout'
         attribute :next_uri, String, default: '/'
       end
     end

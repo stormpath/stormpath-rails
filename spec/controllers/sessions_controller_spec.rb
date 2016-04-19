@@ -86,7 +86,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
     context "application/json request" do
       it "signs out the user" do
         sign_in
-        delete :destroy, format: :json
+        post :destroy, format: :json
 
         expect(response).to be_success
         expect(response.body).to be_empty
@@ -97,7 +97,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
 
     it "signs out the user" do
       sign_in
-      delete :destroy
+      post :destroy
 
       expect(session[:user_id]).to be_nil
       expect(session[:href]).to be_nil
@@ -114,7 +114,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
 
       it "redirects to next_uri" do
         sign_in
-        delete :destroy
+        post :destroy
 
         expect(response).to redirect_to('/custom')
       end
