@@ -55,6 +55,11 @@ describe 'Login', type: :request, vcr: true do
           expect(response.status).to eq(200)
         end
 
+        it 'successfull login should have content-type application/json' do
+          json_login_post(user_attrs.slice(:email, :password))
+          expect(response.content_type.to_s).to eq('application/json')
+        end
+
         it 'successfull login should match schema' do
           json_login_post(user_attrs.slice(:email, :password))
           expect(response).to match_response_schema(:login_response, strict: true)
