@@ -1,5 +1,6 @@
 class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
-  before_filter :redirect_signed_in_users, only: :new
+  before_action :redirect_signed_in_users, only: :new
+  before_action :inspect_for_missing_fields, only: :create
 
   def create
     result = authenticate user_from_params
@@ -103,5 +104,18 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
         fullName: account.full_name
       }
     }
+  end
+
+  def inspect_for_missing_fields
+    if params[:login].blank? && params[:password].blank?
+      flash[:error] = "Login and password fields can't be blank"
+      render template: "sessions/new"
+    elsif params[:login].blank?
+      flash[:error] = "Login field can't be blank"
+      render template: "sessions/new"
+    elsif params[:password].blank?
+      flash[:error] = "Password field can't be blank"
+      render template: "sessions/new"
+    end
   end
 end
