@@ -110,6 +110,8 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
         Stormpath::Rails.config.logout.next_uri = '/custom'
       end
 
+      after { Stormpath::Rails.config.login.reset_attributes }
+
       it "redirects to next_uri" do
         sign_in
         delete :destroy
@@ -173,6 +175,8 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
       before do
         Stormpath::Rails.config.login.next_uri = '/custom'
       end
+
+      after { Stormpath::Rails.config.login.reset_attributes }
 
       it "redirects to next_uri" do
         post :create, session: { email: test_user.email, password: test_user.password }
