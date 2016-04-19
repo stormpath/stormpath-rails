@@ -14,7 +14,10 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
       end
     else
       respond_to do |format|
-        format.json { render json: { status: 400, message: result.error_message }, status: 400 }
+        format.json do
+          status = result.status.presence || 400
+          render json: { status: status, message: result.error_message }, status: status
+        end
         format.html do
           set_flash_message :error, result.error_message
           render template: "sessions/new"

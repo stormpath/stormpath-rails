@@ -15,10 +15,16 @@ module Stormpath
       end
 
       def error_message
-        if @response.instance_of? String
-          return @response
+        if @response.instance_of? Stormpath::Error
+          @response.message
         else
           ''
+        end
+      end
+
+      def status
+        if @response.instance_of? Stormpath::Error
+          @response.status
         end
       end
     end

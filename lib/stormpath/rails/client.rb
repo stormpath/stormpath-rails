@@ -19,7 +19,7 @@ module Stormpath
         begin
           result = application.authenticate_account build_username_password_request(user)
         rescue Stormpath::Error => error
-          result = error.message
+          result = error
         end
 
         AuthenticationStatus.new(result)
@@ -73,11 +73,11 @@ module Stormpath
 
         AccountStatus.new(result)
       end
-      
+
       def self.create_omniauth_user(provider, access_token)
         request = Stormpath::Provider::AccountRequest.new(provider, :access_token, access_token)
         application.get_provider_account(request)
-      end 
+      end
 
       def self.application
         self.client.applications.get Stormpath::Rails.config.application.href
@@ -95,7 +95,7 @@ module Stormpath
         if Stormpath::Rails.config.api_key.file_location_provided?
           Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key.file }
         else
-          Hash.new.tap do |options| 
+          Hash.new.tap do |options|
             options[:api_key] = {}
             options[:api_key][:id] = Stormpath::Rails.config.api_key.id
             options[:api_key][:secret] = Stormpath::Rails.config.api_key.secret
