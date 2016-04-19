@@ -5,7 +5,7 @@ describe 'Login', type: :request, vcr: true do
     let(:user) { Stormpath::Rails::Client.application.accounts.create(user_attrs) }
 
     let(:user_attrs) do
-      { email: 'example@test.com', given_name: 'Example', surname: 'Test', password: 'Pa$$W0RD' }
+      { email: 'example@test.com', given_name: 'Example', surname: 'Test', password: 'Pa$$W0RD', username: 'SirExample' }
     end
 
     before { user }
@@ -52,6 +52,11 @@ describe 'Login', type: :request, vcr: true do
       describe 'json is enabled' do
         it 'successfull login should result with 200' do
           json_login_post(login: user_attrs[:email], password: user_attrs[:password])
+          expect(response.status).to eq(200)
+        end
+
+        it 'successfull login with username should result with 200' do
+          json_login_post(login: user_attrs[:username], password: user_attrs[:password])
           expect(response.status).to eq(200)
         end
 
