@@ -127,9 +127,9 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
         it "returnes user data as response" do
           post :create, camelized_user_attributes
           response_body = JSON.parse(response.body)
-          expect(response_body["email"]).to eq(user_attributes[:email])
-          expect(response_body["given_name"]).to eq(user_attributes[:given_name])
-          expect(response_body["surname"]).to eq(user_attributes[:surname])
+          expect(response_body["account"]["email"]).to eq(user_attributes[:email])
+          expect(response_body["account"]["givenName"]).to eq(user_attributes[:given_name])
+          expect(response_body["account"]["surname"]).to eq(user_attributes[:surname])
         end
       end
     end
