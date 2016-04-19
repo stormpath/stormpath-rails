@@ -133,7 +133,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
     context "application/json request" do
       context "valid parameters" do
         it "signs in user" do
-          post :create, format: :json, session: { email: test_user.email, password: test_user.password }
+          post :create, format: :json, login: test_user.email, password: test_user.password
 
           response_body = JSON.parse(response.body)
           expect(response_body["account"]["email"]).to eq(test_user.email)
@@ -144,7 +144,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
 
       context "invalid parameters" do
         it "reuterns list of errors" do
-          post :create, format: :json, session: { email: "test@testable.com", password: test_user.password }
+          post :create, format: :json, login: "test@testable.com", password: test_user.password
 
           response_body = JSON.parse(response.body)
           expect(response_body["message"]).to eq("Invalid username or password.")
@@ -154,7 +154,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
 
     context "valid parameters" do
       it "signs in user" do
-        post :create, session: { email: test_user.email, password: test_user.password }
+        post :create, login: test_user.email, password: test_user.password
 
         expect(response).to redirect_to(root_path)
         expect(flash[:notice]).to eq("Successfully signed in")
@@ -163,7 +163,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
 
     context "invalid parameters" do
       it "renders new template with errors" do
-        post :create, session: { email: "test@testable.com", password: test_user.password }
+        post :create, login: "test@testable.com", password: test_user.password
 
         expect(response).to be_success
         expect(response).to render_template(:new)
@@ -179,7 +179,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
       after { Stormpath::Rails.config.login.reset_attributes }
 
       it "redirects to next_uri" do
-        post :create, session: { email: test_user.email, password: test_user.password }
+        post :create, login: test_user.email, password: test_user.password
         expect(response).to redirect_to('/custom')
       end
     end

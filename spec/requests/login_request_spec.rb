@@ -19,13 +19,13 @@ describe 'Login', type: :request, vcr: true do
     describe 'HTTP_ACCEPT=text/html' do
       describe 'html is enabled' do
         it 'successfull login' do
-          post '/login', user_attrs.slice(:email, :password)
+          post '/login', login: user_attrs[:email], password: user_attrs[:password]
           expect(response).to redirect_to('/')
           expect(response.status).to eq(302)
         end
 
         it 'failed login, wrong password' do
-          post '/login', user_attrs.slice(:email).merge(password: 'WR00N6')
+          post '/login', login: user_attrs[:email], password: 'WR00N6'
           expect(response.status).to eq(200)
           expect(response.body).to include('Invalid username or password')
         end
@@ -38,7 +38,7 @@ describe 'Login', type: :request, vcr: true do
         end
 
         it 'returns 404' do
-          post '/login', user_attrs.slice(:email, :password)
+          post '/login', login: user_attrs[:email], password: user_attrs[:password]
           expect(response.status).to eq(404)
         end
       end
@@ -51,27 +51,27 @@ describe 'Login', type: :request, vcr: true do
 
       describe 'json is enabled' do
         it 'successfull login should result with 200' do
-          json_login_post(user_attrs.slice(:email, :password))
+          json_login_post(login: user_attrs[:email], password: user_attrs[:password])
           expect(response.status).to eq(200)
         end
 
         it 'successfull login should have content-type application/json' do
-          json_login_post(user_attrs.slice(:email, :password))
+          json_login_post(login: user_attrs[:email], password: user_attrs[:password])
           expect(response.content_type.to_s).to eq('application/json')
         end
 
         it 'successfull login should match schema' do
-          json_login_post(user_attrs.slice(:email, :password))
+          json_login_post(login: user_attrs[:email], password: user_attrs[:password])
           expect(response).to match_response_schema(:login_response, strict: true)
         end
 
         it 'failed login, wrong password should result with 400' do
-          json_login_post(user_attrs.slice(:email).merge(password: 'WR00N6'))
+          json_login_post(login: user_attrs[:email], password: 'WR00N6')
           expect(response.status).to eq(400)
         end
 
         it 'failed login, wrong password should result with only a message and a status in the response body' do
-          json_login_post(user_attrs.slice(:email).merge(password: 'WR00N6'))
+          json_login_post(login: user_attrs[:email], password: 'WR00N6')
 
           response_body = JSON.parse(response.body)
           expect(response_body['status']).to eq(400)
@@ -86,7 +86,7 @@ describe 'Login', type: :request, vcr: true do
         end
 
         it 'returns 404' do
-          json_login_post(user_attrs.slice(:email, :password))
+          json_login_post(login: user_attrs[:email], password: user_attrs[:password])
           expect(response.status).to eq(404)
         end
       end
@@ -99,7 +99,7 @@ describe 'Login', type: :request, vcr: true do
       end
 
       it 'returns 404' do
-        post '/login', user_attrs.slice(:email, :password)
+        post '/login', login: user_attrs[:email], password: user_attrs[:password]
         expect(response.status).to eq(404)
       end
     end
@@ -109,7 +109,7 @@ describe 'Login', type: :request, vcr: true do
       after  { Stormpath::Rails.config.login.reset_attributes }
 
       it 'should redirect to next_uri' do
-        post '/login', user_attrs.slice(:email, :password)
+        post '/login', login: user_attrs[:email], password: user_attrs[:password]
         expect(response).to redirect_to('/abc')
         expect(response.status).to eq(302)
       end
@@ -117,7 +117,7 @@ describe 'Login', type: :request, vcr: true do
 
     describe 'login sent with ?next=other_url' do
       it 'should redirect to next_uri' do
-        post '/login?next=other', user_attrs.slice(:email, :password)
+        post '/login?next=other', login: user_attrs[:email], password: user_attrs[:password]
         expect(response).to redirect_to('/other')
         expect(response.status).to eq(302)
       end

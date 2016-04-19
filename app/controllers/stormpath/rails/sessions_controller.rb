@@ -59,13 +59,8 @@ class Stormpath::Rails::SessionsController < Stormpath::Rails::BaseController
   private
 
   def user_from_params
-    if params[:session].nil?
-      username = params[:username] || params[:email]
-      password = params[:password]
-    else
-      username = params[:session][:username] || params[:session][:email]
-      password = params[:session][:password]
-    end
+    username = params[:login]
+    password = params[:password]
 
     ::User.new.tap do |user|
       user.email = username
