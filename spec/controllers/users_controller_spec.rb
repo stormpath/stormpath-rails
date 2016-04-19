@@ -95,10 +95,18 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
   describe "POST #create" do
     let(:user_attributes) { attributes_for(:user) }
 
+    let(:camelized_user_attributes) do
+      user_attributes.transform_keys { |key| key.to_s.camelize(:lower).to_sym }
+    end
+
     context "application/json request" do
+      before do
+        request.accept = "application/json"
+      end
+
       context "invalid data" do
         it "without email render email error" do
-          post :create, format: :json, user: attributes_for(:user, email: "")
+          post :create, camelized_user_attributes.merge(email: '')
           response_body = JSON.parse(response.body)
 
           expect(response_body["error"]).to eq('Account email address cannot be null, empty, or blank.')
@@ -113,11 +121,11 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
         after { delete_account(user_attributes[:email]) }
 
         it "creates a user" do
-          expect { post :create, format: :json, user: user_attributes }.to change(User, :count).by(1)
+          expect { post :create, camelized_user_attributes }.to change(User, :count).by(1)
         end
 
         it "returnes user data as response" do
-          post :create, format: :json, user: user_attributes
+          post :create, camelized_user_attributes
           response_body = JSON.parse(response.body)
           expect(response_body["email"]).to eq(user_attributes[:email])
           expect(response_body["given_name"]).to eq(user_attributes[:given_name])
@@ -128,32 +136,32 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
 
     context "invalid data" do
       it "without email render email error" do
-        post :create, user: attributes_for(:user, email: "")
+        post :create, camelized_user_attributes.merge(email: "")
         expect(flash[:error]).to eq('Account email address cannot be null, empty, or blank.')
       end
 
       it "with invalid email render email error" do
-        post :create, user: attributes_for(:user, email: "test")
+        post :create, camelized_user_attributes.merge(email: "test")
         expect(flash[:error]).to eq('Account email address is in an invalid format.')
       end
 
       it "without password render password error" do
-        post :create, user: attributes_for(:user, password: "")
+        post :create, camelized_user_attributes.merge(password: "")
         expect(flash[:error]).to eq('Account data cannot be null, empty, or blank.')
       end
 
       it "with short password render password error" do
-        post :create, user: attributes_for(:user, password: "pass")
+        post :create, camelized_user_attributes.merge(password: "pass")
         expect(flash[:error]).to eq('Account password minimum length not satisfied.')
       end
 
       it "without numeric character in password render numeric error" do
-        post :create, user: attributes_for(:user, password: "somerandompass")
+        post :create, camelized_user_attributes.merge(password: "somerandompass")
         expect(flash[:error]).to eq('Password requires at least 1 numeric character.')
       end
 
       it "without upercase character in password render upercase error" do
-        post :create, user: attributes_for(:user, password: "somerandompass123")
+        post :create, camelized_user_attributes.merge(password: "somerandompass123")
         expect(flash[:error]).to eq('Password requires at least 1 uppercase character.')
       end
     end
@@ -166,11 +174,11 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
       after { delete_account(user_attributes[:email]) }
 
       it "creates a user" do
-        expect { post :create, user: user_attributes }.to change(User, :count).by(1)
+        expect { post :create, camelized_user_attributes }.to change(User, :count).by(1)
       end
 
       it "renders verified template" do
-        post :create, user: user_attributes
+        post :create, camelized_user_attributes
 
         expect(response).to be_success
         expect(response).to render_template(:verification_email_sent)
@@ -185,16 +193,16 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
       after { delete_account(user_attributes[:email]) }
 
       it "creates a user" do
-        expect { post :create, user: user_attributes }.to change(User, :count).by(1)
+        expect { post :create,camelized_user_attributes }.to change(User, :count).by(1)
       end
 
       it "redirects to root_path on successfull login" do
-        post :create, user: user_attributes
+        post :create, camelized_user_attributes
         expect(response).to redirect_to(root_path)
       end
 
       it "stores user_id in session" do
-        post :create, user: user_attributes
+        post :create, camelized_user_attributes
         expect(session[:user_id]).to_not be_nil
       end
     end
@@ -208,7 +216,7 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
       after { delete_account(user_attributes[:email]) }
 
       it "redirects to next_uri" do
-        post :create, user: user_attributes
+        post :create, camelized_user_attributes
         expect(response).to redirect_to('/custom')
       end
     end
