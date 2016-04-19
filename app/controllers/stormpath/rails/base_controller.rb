@@ -3,6 +3,7 @@ module Stormpath
     class BaseController < ApplicationController
       before_action :setup_accept_header
       skip_before_action :verify_authenticity_token, if: :api_request?
+      skip_before_action :verify_authenticity_token, if: :in_development?
 
       layout 'stormpath'
 
@@ -10,6 +11,11 @@ module Stormpath
 
       def api_request?
         request.content_type == "application/json"
+      end
+
+      # Enable to test with the TCK.
+      def in_development?
+        ::Rails.env.development?
       end
 
       def set_flash_message(key, message)
