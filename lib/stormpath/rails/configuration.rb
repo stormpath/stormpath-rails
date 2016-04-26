@@ -13,8 +13,6 @@ module Stormpath
 
       # :base_path
       # :oauth2
-      # :access_token_cookie
-      # :refresh_token_cookie
       # :produces
       # :change_password
       # :github
@@ -25,6 +23,8 @@ module Stormpath
         :login,
         :logout,
         :register,
+        :access_token_cookie,
+        :refresh_token_cookie,
         :id_site,
         :api_key,
         :application,

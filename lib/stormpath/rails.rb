@@ -19,6 +19,7 @@ module Stormpath
     autoload :RoutingConstraint, 'stormpath/rails/routing_constraint'
 
     module UserConfig
+      autoload :AccessTokenCookie, 'stormpath/rails/user_config/access_token_cookie'
       autoload :ApiKey, 'stormpath/rails/user_config/api_key'
       autoload :Application, 'stormpath/rails/user_config/application'
       autoload :ForgotPassword, 'stormpath/rails/user_config/forgot_password'
@@ -28,6 +29,7 @@ module Stormpath
       autoload :Google, 'stormpath/rails/user_config/google'
       autoload :Login, 'stormpath/rails/user_config/login'
       autoload :Logout, 'stormpath/rails/user_config/logout'
+      autoload :RefreshTokenCookie, 'stormpath/rails/user_config/refresh_token_cookie'
       autoload :Register, 'stormpath/rails/user_config/register'
       autoload :Produces, 'stormpath/rails/user_config/produces'
     end

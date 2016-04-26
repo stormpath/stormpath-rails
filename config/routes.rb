@@ -7,7 +7,9 @@ Rails.application.routes.draw do
     end
 
     # LOGOUT
-    post   Stormpath::Rails.config.logout.uri => 'stormpath/rails/sessions#destroy', as: 'sign_out'
+    if Stormpath::Rails.config.logout.enabled
+      post   Stormpath::Rails.config.logout.uri => 'stormpath/rails/sessions#destroy', as: 'sign_out'
+    end
 
     resource :users, controller: 'stormpath/rails/users', only: :create
     get    Stormpath::Rails.config.register.uri => 'stormpath/rails/users#new', as: 'sign_up'

@@ -30,6 +30,9 @@ module Stormpath
       end
 
       def destroy
+        cookies.delete(configuration.access_token_cookie.name)
+        cookies.delete(configuration.refresh_token_cookie.name)
+
         logout
 
         respond_to do |format|
