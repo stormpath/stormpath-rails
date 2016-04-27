@@ -31,7 +31,7 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
   end
 
   describe "POST #forgot_send" do
-    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }  
+    let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }
 
     before do
       create_test_account
@@ -76,7 +76,7 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
 
     context "valid token" do
       it "renders form for password change" do
-        allow(controller).to receive(:verify_email_token).and_return(account_success)
+        allow(controller).to receive(:verify_password_token).and_return(account_success)
         get :forgot_change
 
         expect(response).to be_success
@@ -86,7 +86,7 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
 
     context "invalid token" do
       it "renders form for password change" do
-        allow(controller).to receive(:verify_email_token).and_return(account_failed)
+        allow(controller).to receive(:verify_password_token).and_return(account_failed)
         get :forgot_change
 
         expect(response).to be_success
@@ -101,7 +101,7 @@ describe Stormpath::Rails::PasswordsController, type: :controller do
     let(:different_passwords) { { password: { original: 'Somepass123', repeated: 'Somepass' } } }
     let(:invalid_passwords)   { { password: { original: 'invalid', repeated: 'invalid' } } }
     let(:account_success) { double(Stormpath::Rails::AccountStatus, success?: true, account_url: 'xyz') }
-    
+
     after do
       delete_test_account
     end

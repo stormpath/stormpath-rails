@@ -45,6 +45,16 @@ module Stormpath
         AccountStatus.new(result)
       end
 
+      def self.verify_password_token(token)
+        begin
+          result = application.password_reset_tokens.get(token).account
+        rescue Stormpath::Error => error
+          result = error.message
+        end
+
+        AccountStatus.new(result)
+      end
+
       def self.handle_id_site_callback(url)
         response = application.handle_id_site_callback(url)
         client.accounts.get response.account_href
@@ -73,11 +83,11 @@ module Stormpath
 
         AccountStatus.new(result)
       end
-      
+
       def self.create_omniauth_user(provider, access_token)
         request = Stormpath::Provider::AccountRequest.new(provider, :access_token, access_token)
         application.get_provider_account(request)
-      end 
+      end
 
       def self.application
         self.client.applications.get Stormpath::Rails.config.application.href
@@ -91,7 +101,7 @@ module Stormpath
         if Stormpath::Rails.config.api_key.file_location_provided?
           Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key.file }
         else
-          Hash.new.tap do |options| 
+          Hash.new.tap do |options|
             options[:api_key] = {}
             options[:api_key][:id] = Stormpath::Rails.config.api_key.id
             options[:api_key][:secret] = Stormpath::Rails.config.api_key.secret
