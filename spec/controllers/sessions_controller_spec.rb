@@ -110,7 +110,7 @@ describe Stormpath::Rails::SessionsController, :vcr, type: :controller do
         Stormpath::Rails.config.logout.next_uri = '/custom'
       end
 
-      after { Stormpath::Rails.config.login.reset_attributes }
+      after { Stormpath::Rails.config.logout.reset_attributes }
 
       it "redirects to next_uri" do
         sign_in
