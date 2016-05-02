@@ -25,6 +25,10 @@ module Stormpath
         AuthenticationStatus.new(result)
       end
 
+      def self.authenticate_oauth(password_grant_request)
+        application.authenticate_oauth(password_grant_request)
+      end
+
       def self.reset_password(email)
         begin
           result = application.send_password_reset_email email

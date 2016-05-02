@@ -9,6 +9,10 @@ module Stormpath
 
         if result.success?
           @user = find_or_create_user_from_account result.account
+
+          set_access_token_cookie
+          set_refresh_token_cookie
+
           initialize_session(@user, result.account.href)
 
           respond_to do |format|
@@ -49,6 +53,34 @@ module Stormpath
 
       private
 
+      def set_access_token_cookie
+        cookies[configuration.access_token_cookie.name] = access_token_cookie_config
+      end
+
+      def access_token_cookie_config
+        {
+          value: access_token.access_token,
+          expires: access_token.expires_in.seconds.from_now,
+          httponly: configuration.access_token_cookie.http_only,
+          path: configuration.access_token_cookie.domain,
+          secure: configuration.access_token_cookie.secure
+        }
+      end
+
+      def set_refresh_token_cookie
+        cookies[configuration.refresh_token_cookie.name] = refresh_token_cookie_config
+      end
+
+      def refresh_token_cookie_config
+        {
+          value: access_token.refresh_token,
+          expires: access_token.expires_in.seconds.from_now,
+          httponly: configuration.refresh_token_cookie.http_only,
+          path: configuration.refresh_token_cookie.domain,
+          secure: configuration.refresh_token_cookie.secure
+        }
+      end
+
       def user_from_params
         username = params[:login]
         password = params[:password]
@@ -57,6 +89,14 @@ module Stormpath
           user.email = username
           user.password = password
         end
+      end
+
+      def access_token
+        @access_token ||= authenticate_oauth(password_grant_request)
+      end
+
+      def password_grant_request
+        Stormpath::Oauth::PasswordGrantRequest.new(params[:login], params[:password])
       end
 
       def redirect_signed_in_users

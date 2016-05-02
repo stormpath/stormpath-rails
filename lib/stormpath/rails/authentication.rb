@@ -11,6 +11,10 @@ module Stormpath
         Client.authenticate(user)
       end
 
+      def authenticate_oauth(password_grant_request)
+        Client.authenticate_oauth(password_grant_request)
+      end
+
       def reset_password(email)
         Client.reset_password(email)
       end
