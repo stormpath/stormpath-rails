@@ -118,6 +118,8 @@ describe Stormpath::Rails::LoginController, :vcr, type: :controller do
         post :create, login: test_user.email, password: test_user.password
 
         expect(response).to redirect_to(root_path)
+        expect(response.cookies['access_token']).to be
+        expect(response.cookies['refresh_token']).to be
         expect(flash[:notice]).to eq("Successfully signed in")
       end
     end
