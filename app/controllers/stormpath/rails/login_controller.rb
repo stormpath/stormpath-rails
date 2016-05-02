@@ -1,6 +1,6 @@
 module Stormpath
   module Rails
-    class SessionsController < BaseController
+    class LoginController < BaseController
       before_action :redirect_signed_in_users, only: :new
       before_action :inspect_for_missing_fields, only: :create
 
@@ -25,21 +25,6 @@ module Stormpath
               set_flash_message :error, result.error_message
               render template: "sessions/new"
             end
-          end
-        end
-      end
-
-      def destroy
-        cookies.delete(configuration.access_token_cookie.name)
-        cookies.delete(configuration.refresh_token_cookie.name)
-
-        logout
-
-        respond_to do |format|
-          format.json { render nothing: true, status: 200 }
-          format.html do
-            set_flash_message :notice, 'You have been logged out successfully.'
-            redirect_to configuration.logout.next_uri
           end
         end
       end
