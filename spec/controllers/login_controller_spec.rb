@@ -4,6 +4,8 @@ describe Stormpath::Rails::LoginController, :vcr, type: :controller do
   it { should be_a Stormpath::Rails::BaseController }
 
   describe "GET #new" do
+    before { request.headers['HTTP_ACCEPT'] = 'text/html' }
+
     context "user not signed in" do
       it "renders new template" do
         get :new
@@ -92,9 +94,11 @@ describe Stormpath::Rails::LoginController, :vcr, type: :controller do
     end
 
     context "application/json request" do
+      before { request.headers['HTTP_ACCEPT'] = 'application/json' }
+
       context "valid parameters" do
         it "signs in user" do
-          post :create, format: :json, login: test_user.email, password: test_user.password
+          post :create, login: test_user.email, password: test_user.password
 
           response_body = JSON.parse(response.body)
           expect(response_body["account"]["email"]).to eq(test_user.email)
@@ -105,7 +109,7 @@ describe Stormpath::Rails::LoginController, :vcr, type: :controller do
 
       context "invalid parameters" do
         it "reuterns list of errors" do
-          post :create, format: :json, login: "test@testable.com", password: test_user.password
+          post :create, login: "test@testable.com", password: test_user.password
 
           response_body = JSON.parse(response.body)
           expect(response_body["message"]).to eq("Invalid username or password.")
@@ -114,6 +118,8 @@ describe Stormpath::Rails::LoginController, :vcr, type: :controller do
     end
 
     context "valid parameters" do
+      before { request.headers['HTTP_ACCEPT'] = 'text/html' }
+
       it "signs in user" do
         post :create, login: test_user.email, password: test_user.password
 
@@ -125,6 +131,8 @@ describe Stormpath::Rails::LoginController, :vcr, type: :controller do
     end
 
     context "invalid parameters" do
+      before { request.headers['HTTP_ACCEPT'] = 'text/html' }
+
       it "renders new template with errors" do
         post :create, login: "test@testable.com", password: test_user.password
 
@@ -139,6 +147,7 @@ describe Stormpath::Rails::LoginController, :vcr, type: :controller do
         Stormpath::Rails.config.login.next_uri = '/custom'
       end
 
+      before { request.headers['HTTP_ACCEPT'] = 'text/html' }
       after { Stormpath::Rails.config.login.reset_attributes }
 
       it "redirects to next_uri" do

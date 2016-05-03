@@ -43,6 +43,8 @@ describe Stormpath::Rails::PasswordsController, :vcr, type: :controller do
     end
 
     context "application/json request" do
+      before { request.headers['HTTP_ACCEPT'] = 'application/json' }
+
       context "valid data" do
         it "returnes success" do
           allow(controller).to receive(:reset_password).and_return(account_success)

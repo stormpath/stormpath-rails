@@ -7,6 +7,11 @@ module Stormpath
       HTTP_ACCEPT_JSON = 'application/json'
       HTTP_ACCEPT_HTML = 'text/html'
 
+      FULL_NAME_TO_SYMBOL = {
+        HTTP_ACCEPT_JSON => :json,
+        HTTP_ACCEPT_HTML => :html
+      }
+
       def initialize(accept_header)
         accept_header = accept_header.presence || HTTP_ACCEPT_WILDCARD
         @accept_header = normalize(accept_header)
@@ -18,6 +23,10 @@ module Stormpath
         elsif accept_header.in?(Stormpath::Rails.config.produces.accepts)
           accept_header
         end
+      end
+
+      def convert_to_symbol
+        FULL_NAME_TO_SYMBOL[convert]
       end
 
       def handle_by_stormpath?

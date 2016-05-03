@@ -23,8 +23,8 @@ module Stormpath
       end
 
       def setup_accept_header
-        request.headers['HTTP_ACCEPT'] =
-          ContentTypeNegotiator.new(request.headers['HTTP_ACCEPT']).convert
+        request.format =
+          ContentTypeNegotiator.new(request.headers['HTTP_ACCEPT']).convert_to_symbol
       end
     end
   end

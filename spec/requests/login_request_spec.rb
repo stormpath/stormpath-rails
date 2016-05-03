@@ -97,6 +97,29 @@ describe 'Login', type: :request, vcr: true do
       end
     end
 
+    describe 'HTTP_ACCEPT=nil' do
+      def login_post_with_nil_http_accept(attrs)
+        post '/login', attrs, { 'HTTP_ACCEPT' => nil }
+      end
+
+      describe 'json is enabled' do
+        it 'successfull login should result with 200' do
+          login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
+          expect(response.status).to eq(200)
+        end
+
+        it 'successfull login should have content-type application/json' do
+          login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
+          expect(response.content_type.to_s).to eq('application/json')
+        end
+
+        it 'successfull login should match schema' do
+          login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
+          expect(response).to match_response_schema(:login_response, strict: true)
+        end
+      end
+    end
+
     describe 'login disabled' do
       before do
         allow(Stormpath::Rails.config.login).to receive(:enabled) { false }

@@ -41,4 +41,8 @@ RSpec.configure do |config|
   config.after(:each, type: :controller) do
     delete_test_account
   end
+
+  config.before(:each, type: :controller) do
+    request.headers['HTTP_ACCEPT'] = 'text/html'
+  end
 end

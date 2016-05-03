@@ -5,9 +5,11 @@ describe Stormpath::Rails::LogoutController, :vcr, type: :controller do
 
   describe "POST #create" do
     context "application/json request" do
+      before { request.headers['HTTP_ACCEPT'] = 'application/json' }
+
       it "signs out the user" do
         sign_in
-        post :create, format: :json
+        post :create
 
         expect(response).to be_success
         expect(response.body).to be_empty
