@@ -26,7 +26,13 @@ module Stormpath
       end
 
       def self.authenticate_oauth(password_grant_request)
-        application.authenticate_oauth(password_grant_request)
+        begin
+          result = application.authenticate_oauth(password_grant_request)
+        rescue Stormpath::Error => error
+          result = error
+        end
+
+        OauthAuthenticationStatus.new(result)
       end
 
       def self.reset_password(email)

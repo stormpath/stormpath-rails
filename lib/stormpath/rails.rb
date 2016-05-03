@@ -13,6 +13,7 @@ module Stormpath
     autoload :Version, 'stormpath/rails/version'
     autoload :User, 'stormpath/rails/user'
     autoload :AuthenticationStatus, 'stormpath/rails/authentication_status'
+    autoload :OauthAuthenticationStatus, 'stormpath/rails/oauth_authentication_status'
     autoload :AccountStatus, 'stormpath/rails/account_status'
     autoload :Social, 'stormpath/rails/social'
     autoload :ContentTypeNegotiator, 'stormpath/rails/content_type_negotiator'

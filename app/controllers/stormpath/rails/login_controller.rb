@@ -5,15 +5,14 @@ module Stormpath
       before_action :inspect_for_missing_fields, only: :create
 
       def create
-        result = authenticate user_from_params
+        result = authenticate_oauth(password_grant_request)
 
         if result.success?
+          @access_token = result.access_token
           @user = find_or_create_user_from_account result.account
 
           set_access_token_cookie
           set_refresh_token_cookie
-
-          initialize_session(@user, result.account.href)
 
           respond_to do |format|
             format.json { render json: AccountSerializer.to_h(result.account) }
@@ -92,7 +91,7 @@ module Stormpath
       end
 
       def access_token
-        @access_token ||= authenticate_oauth(password_grant_request)
+        @access_token
       end
 
       def password_grant_request
