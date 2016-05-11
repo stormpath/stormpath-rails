@@ -108,6 +108,11 @@ describe 'Login', type: :request, vcr: true do
           expect(response.status).to eq(200)
         end
 
+        it 'successfull login with username should result with 200' do
+          login_post_with_nil_http_accept(login: user_attrs[:username], password: user_attrs[:password])
+          expect(response.status).to eq(200)
+        end
+
         it 'successfull login should have content-type application/json' do
           login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
           expect(response.content_type.to_s).to eq('application/json')
@@ -116,6 +121,31 @@ describe 'Login', type: :request, vcr: true do
         it 'successfull login should match schema' do
           login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
           expect(response).to match_response_schema(:login_response, strict: true)
+        end
+
+        it 'failed login, wrong password should result with 400' do
+          login_post_with_nil_http_accept(login: user_attrs[:email], password: 'WR00N6')
+          expect(response.status).to eq(400)
+        end
+
+        it 'failed login, wrong password should result with only a message and a status in the response body' do
+          login_post_with_nil_http_accept(login: user_attrs[:email], password: 'WR00N6')
+
+          response_body = JSON.parse(response.body)
+          expect(response_body['status']).to eq(400)
+          expect(response_body['message']).to eq('Invalid username or password.')
+        end
+      end
+
+      describe 'json is disabled' do
+        before do
+          allow(Stormpath::Rails.config.produces).to receive(:accepts) { ['text/html'] }
+          Rails.application.reload_routes!
+        end
+
+        it 'returns 404' do
+          login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
+          expect(response.status).to eq(302)
         end
       end
     end
