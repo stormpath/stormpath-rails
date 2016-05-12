@@ -1,27 +1,18 @@
 class Stormpath::Rails::PasswordsController < Stormpath::Rails::BaseController
-  before_filter :redirect_password_reset_disabled, only: :forgot
-
   def forgot_send
     result = reset_password(password_params[:email])
 
-    if result.success?
-      respond_to do |format|
-        format.json { render nothing: true, status: 200 }
-        format.html { render template: 'passwords/email_sent' }
-      end
-    else
-      respond_to do |format|
-        format.json { render json: { error: result.error_message }, status: 400 }
-        format.html do
-          set_flash_message :error, "Invalid email address."
-          render template: 'passwords/forgot'
-        end
-      end
+    respond_to do |format|
+      format.json { render nothing: true, status: 200 }
+      format.html { redirect_to configuration.forgot_password.next_uri }
     end
   end
 
   def forgot
-    render template: 'passwords/forgot'
+    respond_to do |format|
+      format.json { render nothing: true, status: 404 }
+      format.html { render template: 'passwords/forgot' }
+    end
   end
 
   def forgot_change
@@ -60,9 +51,5 @@ class Stormpath::Rails::PasswordsController < Stormpath::Rails::BaseController
 
   def passwords_match?
     params[:password][:original] == params[:password][:repeated]
-  end
-
-  def redirect_password_reset_disabled
-    redirect_to root_path unless configuration.forgot_password.enabled
   end
 end

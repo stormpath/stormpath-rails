@@ -7,6 +7,7 @@ describe Stormpath::Rails::PasswordsController, :vcr, type: :controller do
     context "password reset enabled" do
       before do
         enable_forgot_password
+        Rails.application.reload_routes!
       end
 
       it "renders forgot password view" do
@@ -20,12 +21,12 @@ describe Stormpath::Rails::PasswordsController, :vcr, type: :controller do
     context "password reset disabled" do
       before do
         disable_forgot_password
+        Rails.application.reload_routes!
       end
 
-      it "redirects to root_path" do
+      it "renders 404" do
         get :forgot
-
-        expect(response).to redirect_to(root_path)
+        expect(response.status).to eq(404)
       end
     end
   end
@@ -36,6 +37,7 @@ describe Stormpath::Rails::PasswordsController, :vcr, type: :controller do
     before do
       create_test_account
       enable_forgot_password
+      Rails.application.reload_routes!
     end
 
     after do
@@ -46,25 +48,22 @@ describe Stormpath::Rails::PasswordsController, :vcr, type: :controller do
       before { request.headers['HTTP_ACCEPT'] = 'application/json' }
 
       context "valid data" do
-        it "returnes success" do
+        it "redirects further" do
           allow(controller).to receive(:reset_password).and_return(account_success)
           post :forgot_send, format: :json, password: { email: test_user.email }
-
           expect(response).to be_success
-          expect(response.body).to be_empty
         end
       end
 
       context "invalid data" do
-        it "returne errors" do
+        it "return 200 OK" do
           post :forgot_send, format: :json, password: { email: "test@testable.com" }
-          response_body = JSON.parse(response.body)
-          expect(response_body["error"]).to eq("The email property value 'test@testable.com' does not match a known resource.")
+          expect(response).to be_success
         end
 
         it "returnes 400" do
           post :forgot_send, format: :json, password: { email: "test@testable.com" }
-          expect(response.status).to eq(400)
+          expect(response).to be_success
         end
       end
     end
@@ -73,26 +72,19 @@ describe Stormpath::Rails::PasswordsController, :vcr, type: :controller do
       it "renders email sent view" do
         allow(controller).to receive(:reset_password).and_return(account_success)
         post :forgot_send, password: { email: test_user.email }
-
-        expect(response).to be_success
-        expect(response).to render_template(:email_sent)
+        expect(response).to redirect_to('/login?status=forgot')
       end
     end
 
     context "invalid data" do
-      it "renders email sent view" do
+      it "with wrong email redirects" do
         post :forgot_send, password: { email: "test@testable.com" }
-        expect(response).to render_template(:forgot)
+        expect(response).to redirect_to('/login?status=forgot')
       end
 
-      it "shows error message" do
-        post :forgot_send, password: { email: "test@testable.com" }
-        expect(flash[:error]).to eq('Invalid email address.')
-      end
-
-      it "shows error message" do
+      it "with no email redirects" do
         post :forgot_send, password: { email: "" }
-        expect(flash[:error]).to eq('Invalid email address.')
+        expect(response).to redirect_to('/login?status=forgot')
       end
     end
   end
