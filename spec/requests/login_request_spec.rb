@@ -183,6 +183,5 @@ describe 'Login', type: :request, vcr: true do
   end
 
   describe 'GET /login' do
-
   end
 end
