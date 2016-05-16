@@ -10,7 +10,7 @@ describe Stormpath::Rails::ChangePasswordsController, :vcr, type: :controller do
     context "valid token" do
       it "renders form for password change" do
         allow(controller).to receive(:verify_email_token).and_return(account_success)
-        get :new
+        get :new, sptoken: 'something'
 
         expect(response).to be_success
         expect(response).to render_template(:forgot_change)
@@ -20,10 +20,9 @@ describe Stormpath::Rails::ChangePasswordsController, :vcr, type: :controller do
     context "invalid token" do
       it "renders form for password change" do
         allow(controller).to receive(:verify_email_token).and_return(account_failed)
-        get :new
+        get :new, sptoken: 'something'
 
-        expect(response).to be_success
-        expect(response).to render_template(:forgot_change_failed)
+        expect(response).to redirect_to('/forgot?status=invalid_sptoken')
       end
     end
   end

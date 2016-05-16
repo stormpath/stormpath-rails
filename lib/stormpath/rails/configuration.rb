@@ -14,7 +14,6 @@ module Stormpath
       # :base_path
       # :oauth2
       # :produces
-      # :change_password
       # :github
       # :linkedin
       # :me
@@ -30,6 +29,7 @@ module Stormpath
         :application,
         :verify_email,
         :forgot_password,
+        :change_password,
         :facebook,
         :google,
         :produces

@@ -23,6 +23,7 @@ module Stormpath
       autoload :AccessTokenCookie, 'stormpath/rails/user_config/access_token_cookie'
       autoload :ApiKey, 'stormpath/rails/user_config/api_key'
       autoload :Application, 'stormpath/rails/user_config/application'
+      autoload :ChangePassword, 'stormpath/rails/user_config/change_password'
       autoload :ForgotPassword, 'stormpath/rails/user_config/forgot_password'
       autoload :IdSite, 'stormpath/rails/user_config/id_site'
       autoload :VerifyEmail, 'stormpath/rails/user_config/verify_email'

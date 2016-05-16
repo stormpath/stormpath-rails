@@ -17,15 +17,18 @@ Rails.application.routes.draw do
       post Stormpath::Rails.config.forgot_password.uri => 'stormpath/rails/forgot_passwords#create', as: 'forgot_send'
     end
 
+    # CHANGE PASSWORD
+    if Stormpath::Rails.config.change_password.enabled
+      get  Stormpath::Rails.config.change_password.uri => 'stormpath/rails/change_passwords#new', as: 'forgot_change'
+      post Stormpath::Rails.config.change_password.uri => 'stormpath/rails/change_passwords#create', as: 'forgot_update'
+    end
+
     resource :users, controller: 'stormpath/rails/users', only: :create
     get    Stormpath::Rails.config.register.uri => 'stormpath/rails/users#new', as: 'sign_up'
     get    Stormpath::Rails.config.verify_email.uri => 'stormpath/rails/users#verify', as: 'verify'
 
     get    Stormpath::Rails.config.id_site.uri => 'stormpath/rails/login#redirect', as: 'redirect'
     get    '/omniauth_login' => 'stormpath/rails/omniauth#create', as: 'omniauth_login'
-
-    get    '/forgot/change' => 'stormpath/rails/change_passwords#new', as: 'forgot_change'
-    post   '/forgot/change/:account_url' => 'stormpath/rails/change_passwords#create', as: 'forgot_update'
 
     post   '/register' => 'stormpath/rails/users#create', as: 'register_user'
     get    '/me' => 'stormpath/rails/users#profile', as: 'user_profile'

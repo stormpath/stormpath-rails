@@ -4,7 +4,7 @@ module Stormpath
       class ForgotPassword
         include Virtus.model
 
-        attribute :enabled, Boolean, default: nil
+        attribute :enabled, Boolean, default: true
         # -> { Stormpath::Rails::Client.application.default_account_store_mapping.account_store. }
         attribute :uri, String, default: '/forgot'
         attribute :next_uri, String, default: '/login?status=forgot'
