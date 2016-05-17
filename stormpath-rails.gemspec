@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'stormpath-sdk', '>= 1.0.0.beta.8'
   spec.add_dependency 'virtus'
   spec.add_dependency 'rails', '>= 3.1'
+  spec.add_dependency 'recursive-open-struct'
 
   spec.add_development_dependency "rake", "~> 10.0"
 end
