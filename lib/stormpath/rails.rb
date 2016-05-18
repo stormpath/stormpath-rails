@@ -2,7 +2,6 @@ require 'stormpath-sdk'
 require 'stormpath/rails/engine'
 require 'stormpath/rails/config_file'
 require 'stormpath/rails/configuration'
-require 'stormpath/rails/yaml_configuration'
 require 'virtus'
 
 module Stormpath
