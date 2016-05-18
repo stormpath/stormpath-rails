@@ -53,11 +53,11 @@ module Stormpath
       end
 
       def id_site_login_url
-        Client.id_site_url callback_uri: (request.base_url + configuration.id_site.uri)
+        Client.id_site_url callback_uri: (request.base_url + configuration.web.id_site.uri)
       end
 
       def id_site_register_url
-        Client.id_site_url callback_uri: (request.base_url + configuration.id_site.uri), path: '/#register'
+        Client.id_site_url callback_uri: (request.base_url + configuration.web.id_site.uri), path: '/#register'
       end
 
       def handle_id_site_callback(url)

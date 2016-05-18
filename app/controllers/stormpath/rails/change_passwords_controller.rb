@@ -11,13 +11,13 @@ module Stormpath
             render template: "passwords/forgot_change"
           else
             respond_to do |format|
-              format.html { redirect_to configuration.change_password.error_uri }
+              format.html { redirect_to configuration.web.change_password.error_uri }
               format.json { render json: { status: 400, message: 'sptoken parameter not provided.' }, status: 400 }
             end
           end
         else
           respond_to do |format|
-            format.html { redirect_to configuration.forgot_password.uri }
+            format.html { redirect_to configuration.web.forgot_password.uri }
             format.json { render json: { status: 400, message: 'sptoken parameter not provided.' }, status: 400 }
           end
         end

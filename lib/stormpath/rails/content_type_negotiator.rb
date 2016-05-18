@@ -19,8 +19,8 @@ module Stormpath
 
       def convert
         if accept_header == HTTP_ACCEPT_WILDCARD
-          Stormpath::Rails.config.produces.accepts.first
-        elsif accept_header.in?(Stormpath::Rails.config.produces.accepts)
+          Stormpath::Rails.config.web.produces.first
+        elsif accept_header.in?(Stormpath::Rails.config.web.produces)
           accept_header
         end
       end
@@ -30,7 +30,7 @@ module Stormpath
       end
 
       def handle_by_stormpath?
-        accept_header.in?([HTTP_ACCEPT_WILDCARD] + Stormpath::Rails.config.produces.accepts)
+        accept_header.in?([HTTP_ACCEPT_WILDCARD] + Stormpath::Rails.config.web.produces)
       end
 
       private

@@ -18,7 +18,15 @@ module Stormpath
       end
 
       def camelized_hash
-        YAML.load_file(config_path)
+        YAML.load(evaluated_file)
+      end
+
+      def evaluated_file
+        ERB.new(file).result(binding)
+      end
+
+      def file
+        File.read(config_path)
       end
 
       def config_path

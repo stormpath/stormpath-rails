@@ -67,13 +67,13 @@ module Stormpath
     # Return a single instance of Configuration class
     # @return [Stormpath::Configuration] single instance
     def self.config
-      @configuration ||= Configuration.new
+      @configuration ||= YamlConfiguration.new
     end
 
     # Configure the settings for this module
     # @param [lambda] which will be passed isntance of configuration class
-    def self.configure
-      yield(config)
-    end
+    # def self.configure
+    #   yield(config)
+    # end
   end
 end

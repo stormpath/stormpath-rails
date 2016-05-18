@@ -30,10 +30,8 @@ describe Stormpath::Rails::LogoutController, :vcr, type: :controller do
 
     context "custom next_uri" do
       before do
-        Stormpath::Rails.config.logout.next_uri = '/custom'
+        allow(Stormpath::Rails.config.web.logout).to receive(:next_uri).and_return('/custom')
       end
-
-      after { Stormpath::Rails.config.logout.reset_attributes }
 
       it "redirects to next_uri" do
         sign_in

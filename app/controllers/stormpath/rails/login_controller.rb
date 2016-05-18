@@ -33,9 +33,9 @@ module Stormpath
       end
 
       def new
-        if !configuration.login.enabled?
-          redirect_to configuration.login.next_uri
-        elsif configuration.id_site.enabled?
+        if !configuration.web.login.enabled
+          redirect_to configuration.web.login.next_uri
+        elsif configuration.web.id_site.enabled
           redirect_to id_site_login_url
         else
           render template: "sessions/new"
@@ -47,36 +47,36 @@ module Stormpath
         @user = find_user_by_email user_data.email
         initialize_session(@user, user_data.href)
 
-        redirect_to configuration.id_site.next_uri, notice: 'Successfully signed in'
+        redirect_to configuration.web.id_site.next_uri, notice: 'Successfully signed in'
       end
 
       private
 
       def set_access_token_cookie
-        cookies[configuration.access_token_cookie.name] = access_token_cookie_config
+        cookies[configuration.web.access_token_cookie.name] = access_token_cookie_config
       end
 
       def access_token_cookie_config
         {
           value: access_token.access_token,
           expires: access_token.expires_in.seconds.from_now,
-          httponly: configuration.access_token_cookie.http_only,
-          path: configuration.access_token_cookie.domain,
-          secure: configuration.access_token_cookie.secure
+          httponly: configuration.web.access_token_cookie.http_only,
+          path: configuration.web.access_token_cookie.domain,
+          secure: configuration.web.access_token_cookie.secure
         }
       end
 
       def set_refresh_token_cookie
-        cookies[configuration.refresh_token_cookie.name] = refresh_token_cookie_config
+        cookies[configuration.web.refresh_token_cookie.name] = refresh_token_cookie_config
       end
 
       def refresh_token_cookie_config
         {
           value: access_token.refresh_token,
           expires: access_token.expires_in.seconds.from_now,
-          httponly: configuration.refresh_token_cookie.http_only,
-          path: configuration.refresh_token_cookie.domain,
-          secure: configuration.refresh_token_cookie.secure
+          httponly: configuration.web.refresh_token_cookie.http_only,
+          path: configuration.web.refresh_token_cookie.domain,
+          secure: configuration.web.refresh_token_cookie.secure
         }
       end
 
@@ -106,7 +106,7 @@ module Stormpath
         if params[:next]
           login_redirect_route_from_params
         else
-          configuration.login.next_uri
+          configuration.web.login.next_uri
         end
       end
 

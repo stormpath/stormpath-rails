@@ -8,7 +8,7 @@ module Stormpath
         if result.success?
           @user.save
 
-          if configuration.verify_email.enabled?
+          if configuration.web.verify_email.enabled
             respond_to do |format|
               format.json { render json: AccountSerializer.to_h(result.account)  }
               format.html { render template: "users/verification_email_sent" }
@@ -20,7 +20,7 @@ module Stormpath
               format.json { render json: AccountSerializer.to_h(result.account)  }
               format.html do
                 set_flash_message :notice, 'Your account was created successfully'
-                redirect_to configuration.register.next_uri
+                redirect_to configuration.web.register.next_uri
               end
             end
           end
@@ -36,7 +36,7 @@ module Stormpath
       end
 
       def new
-        if configuration.id_site.enabled?
+        if configuration.web.id_site.enabled
           redirect_to id_site_register_url
         else
           if signed_in?

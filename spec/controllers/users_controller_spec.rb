@@ -26,7 +26,7 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
       end
     end
 
-    context "id site enabled" do
+    xcontext "id site enabled" do
       before do
         enable_id_site
       end
@@ -210,7 +210,7 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
     context "custom next_uri" do
       before do
         disable_verify_email
-        Stormpath::Rails.config.register.next_uri = '/custom'
+        Stormpath::Rails.config.web.register.next_uri = '/custom'
       end
 
       after { delete_account(user_attributes[:email]) }

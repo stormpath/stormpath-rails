@@ -13,7 +13,7 @@ module Stormpath
 
         respond_to do |format|
           format.json { render nothing: true, status: 200 }
-          format.html { redirect_to configuration.forgot_password.next_uri }
+          format.html { redirect_to configuration.web.forgot_password.next_uri }
         end
       end
 

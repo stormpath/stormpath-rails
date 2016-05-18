@@ -33,7 +33,7 @@ Migrate your database
 rake db:migrate
 ```
 
-Create a stormpath account if you havent already, and be sure to set up environment variables 
+Create a stormpath account if you havent already, and be sure to set up environment variables
 
 'STORMPATH_API_KEY_FILE_LOCATION' should be the location of your apiKey.properties file which you downloaded form stormpaths site
 'STORMPATH_APPLICATION_HREF' should contain the href to your application, can also be found on stormpahs site
@@ -51,6 +51,26 @@ also make sure that you have a root_path defined in your rails router.rb
 
 ## Configuration
 Override any of these defaults in config/initializers/stormpath.rb
+
+The following instance variables need to be set:
+
+```ruby
+ENV['STORMPATH_API_KEY_ID']
+ENV['STORMPATH_API_KEY_SECRET']
+```
+
+If you have facebook directories, set the following env variables:
+
+```ruby
+ENV['STORMPATH_FACEBOOK_APP_ID']
+ENV['STORMPATH_FACEBOOK_APP_SECRET']
+```
+
+If you're using google, you need to set:
+
+```ruby
+ENV['STORMPATH_GOOGLE_CLIENT_ID']
+```
 
 ```ruby
 Stormpath::Rails.configure do |config|
@@ -74,7 +94,7 @@ Use `current_user`, `signed_in?`, `signed_out?` in controllers, views, and helpe
 <% end %>
 ```
 
-### Login 
+### Login
 
 Stormpath Rails automaticly provides route to `/login`. If the attempt is successsfull, the user will be send to the next_uri whcih is by default `/` and create the propper session cookies.
 
@@ -123,7 +143,7 @@ end
 
 If verify email set to enable after user registers he will first receive an email with the link and token with which he can verify his account. uri is the link which is used to verify the account and next_uri is location where user will be redirected after his account has been verified.
 
-The email that is sent to the account is configurable through the Stormpath Admin Console. 
+The email that is sent to the account is configurable through the Stormpath Admin Console.
 
 ### Forgot Password
 
@@ -162,7 +182,7 @@ When ID Site is enabled any request for `/login` or `/register` will cause a red
 
 ### Social Login
 
-Stormpath Rails supports social login as well. Currently only Facebook is supported,  Providers for: Google, Github and Linkedin are currently in development. 
+Stormpath Rails supports social login as well. Currently only Facebook is supported,  Providers for: Google, Github and Linkedin are currently in development.
 
 In order to enable Facebook login you first you need to create a Facebook application and create a Facebook directory in your stormpath account. More info can be found [here](https://docs.stormpath.com/rest/product-guide/#integrating-with-facebook). After that you need to enable id from storm paths configuration file and provide facebook app_id and app_secret which is provided to you after Facebook app creation.
 

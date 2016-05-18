@@ -39,7 +39,7 @@ module Stormpath
 
       def jwt_response
         begin
-          JWT.decode(access_token.access_token, Stormpath::Rails.config.api_key.secret).first
+          JWT.decode(access_token.access_token, ENV['STORMPATH_API_KEY_SECRET']).first
         rescue JWT::ExpiredSignature => error
           raise Stormpath::IdSite::Error.new(:jwt_expired)
         end

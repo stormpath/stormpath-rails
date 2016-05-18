@@ -94,23 +94,16 @@ module Stormpath
       end
 
       def self.client
-        self.connection ||= Stormpath::Client.new(client_options)
+        self.connection ||= Stormpath::Client.new(
+          api_key: {
+            id: ENV['STORMPATH_API_KEY_ID'],
+            secret: ENV['STORMPATH_API_KEY_SECRET']
+          }
+        )
       end
 
       def self.get_account(href)
         application.accounts.get href
-      end
-
-      def self.client_options
-        if Stormpath::Rails.config.api_key.file_location_provided?
-          Hash.new.tap { |options| options[:api_key_file_location] = Stormpath::Rails.config.api_key.file }
-        else
-          Hash.new.tap do |options|
-            options[:api_key] = {}
-            options[:api_key][:id] = Stormpath::Rails.config.api_key.id
-            options[:api_key][:secret] = Stormpath::Rails.config.api_key.secret
-          end
-        end
       end
 
       private

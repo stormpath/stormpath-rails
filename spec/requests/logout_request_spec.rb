@@ -17,7 +17,7 @@ describe 'Logout', type: :request, vcr: true do
 
       describe 'html is disabled' do
         before do
-          allow(Stormpath::Rails.config.produces).to receive(:accepts) { ['application/json'] }
+          allow(Stormpath::Rails.config.web).to receive(:produces) { ['application/json'] }
           Rails.application.reload_routes!
         end
 
@@ -43,7 +43,7 @@ describe 'Logout', type: :request, vcr: true do
 
       describe 'json is disabled' do
         before do
-          allow(Stormpath::Rails.config.produces).to receive(:accepts) { ['text/html'] }
+          allow(Stormpath::Rails.config.web).to receive(:produces) { ['text/html'] }
           Rails.application.reload_routes!
         end
 
@@ -56,7 +56,7 @@ describe 'Logout', type: :request, vcr: true do
 
     describe 'logout disabled' do
       before do
-        allow(Stormpath::Rails.config.logout).to receive(:enabled) { false }
+        allow(Stormpath::Rails.config.web.logout).to receive(:enabled) { false }
         Rails.application.reload_routes!
       end
 
@@ -67,8 +67,7 @@ describe 'Logout', type: :request, vcr: true do
     end
 
     describe 'logout next_uri changed' do
-      before { Stormpath::Rails.config.logout.next_uri = '/abc' }
-      after  { Stormpath::Rails.config.logout.reset_attributes }
+      before { allow(Stormpath::Rails.config.web.logout).to receive(:next_uri).and_return('/abc') }
 
       it 'should redirect to next_uri' do
         post '/logout'
