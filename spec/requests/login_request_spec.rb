@@ -247,6 +247,9 @@ describe 'Login', type: :request, vcr: true do
           JSON
         end
 
+        xit 'login should show account stores' do
+        end
+
         xit 'if id site enabled should redirect' do
           json_login_get
           expect(response.status).to eq(400)
