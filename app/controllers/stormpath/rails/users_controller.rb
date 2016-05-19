@@ -44,7 +44,10 @@ module Stormpath
             redirect_to root_path
           else
             database_user
-            render template: "users/new"
+            respond_to do |format|
+              format.json { render json: RegistrationFormSerializer.to_h  }
+              format.html { render template: "users/new" }
+            end
           end
         end
       end
