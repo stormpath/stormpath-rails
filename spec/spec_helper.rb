@@ -21,6 +21,7 @@ require 'factories'
 require "support/generator_spec_helpers"
 require "support/config_spec_helpers"
 require "json_matchers/rspec"
+require "match_json"
 
 WebMock.allow_net_connect!
 
@@ -38,6 +39,9 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Stormpath::Testing::Helpers, type: :controller
   config.include Stormpath::Testing::Helpers, type: :request
+  config.include MatchJson::Matchers
+
+  RSpec::Matchers.alias_matcher :match_json, :include_json
 
   config.after(:each, type: :controller) do
     delete_test_account
@@ -47,3 +51,5 @@ RSpec.configure do |config|
     request.headers['HTTP_ACCEPT'] = 'text/html'
   end
 end
+
+MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/

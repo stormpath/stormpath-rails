@@ -21,4 +21,5 @@ group :test do
   gem 'simplecov', :require => false
   gem 'coveralls', require: false
   gem 'json_matchers'
+  gem 'match_json'
 end

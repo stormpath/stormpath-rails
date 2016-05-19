@@ -70,6 +70,26 @@ describe 'Login', type: :request, vcr: true do
           expect(response).to match_response_schema(:login_response, strict: true)
         end
 
+        it 'successful login should match json' do
+          json_login_post(login: user_attrs[:email], password: user_attrs[:password])
+          expect(response).to match_json <<-JSON
+          {
+             "account":{
+                "href":"{string}",
+                "username":"SirExample",
+                "modifiedAt":"{date_time_iso8601}",
+                "status":"ENABLED",
+                "createdAt":"{date_time_iso8601}",
+                "email":"example@test.com",
+                "middleName":null,
+                "surname":"Test",
+                "givenName":"Example",
+                "fullName":"Example Test"
+             }
+          }
+          JSON
+        end
+
         it 'failed login, wrong password should result with 400' do
           json_login_post(login: user_attrs[:email], password: 'WR00N6')
           expect(response.status).to eq(400)

@@ -16,9 +16,9 @@ module Stormpath
           account: {
             href: account.href,
             username: account.username,
-            modifiedAt: nil, #account.modified_at,
+            modifiedAt: account.modified_at,
             status: account.status,
-            createdAt: nil, #account.created_at,
+            createdAt: account.created_at,
             email: account.email,
             middleName: account.middle_name,
             surname: account.surname,
