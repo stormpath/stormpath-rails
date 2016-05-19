@@ -223,6 +223,30 @@ describe 'Login', type: :request, vcr: true do
           expect(response).to match_response_schema(:login_response, strict: true)
         end
 
+        it 'should match json' do
+          json_login_get
+          expect(response).to match_json <<-JSON
+          {
+          	"form": {
+          		"fields": [{
+          			"label": "Username or Email",
+          			"name": "login",
+          			"placeholder": "Username or Email",
+          			"required": true,
+          			"type": "text"
+          		}, {
+          			"label": "Password",
+          			"name": "password",
+          			"placeholder": "Password",
+          			"required": true,
+          			"type": "password"
+          		}]
+          	},
+          	"accountStores": []
+          }
+          JSON
+        end
+
         xit 'if id site enabled should redirect' do
           json_login_get
           expect(response.status).to eq(400)
