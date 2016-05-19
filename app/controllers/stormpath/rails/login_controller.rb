@@ -33,12 +33,13 @@ module Stormpath
       end
 
       def new
-        if !configuration.web.login.enabled
-          redirect_to configuration.web.login.next_uri
-        elsif configuration.web.id_site.enabled
+        if configuration.web.id_site.enabled
           redirect_to id_site_login_url
         else
-          render template: "sessions/new"
+          respond_to do |format|
+            format.json { render json: LoginNewSerializer.to_h }
+            format.html { render template: "sessions/new" }
+          end
         end
       end
 
