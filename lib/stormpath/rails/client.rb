@@ -5,9 +5,9 @@ module Stormpath
         attr_accessor :connection
       end
 
-      def self.create_stormpath_account(user)
+      def self.create_stormpath_account(registration_params)
         begin
-          result = application.accounts.create build_account(user)
+          result = application.accounts.create build_account(registration_params)
         rescue Stormpath::Error => error
           result = error.message
         end
@@ -64,14 +64,6 @@ module Stormpath
         application.create_id_site_url callback_uri: options[:callback_uri], path: options[:path]
       end
 
-      def self.account_params(user)
-        account_params = user.attributes.select do |k, v|
-          %W[given_name surname email username password].include?(k) && !v.nil?
-        end
-
-        account_params.merge!("password" => user.password) unless user.password.blank?
-      end
-
       def self.update_password(account, password)
         begin
           account = client.accounts.get account
@@ -112,8 +104,8 @@ module Stormpath
         Stormpath::Authentication::UsernamePasswordRequest.new user.email, user.password
       end
 
-      def self.build_account(user)
-        Stormpath::Resource::Account.new account_params(user)
+      def self.build_account(registration_params)
+        Stormpath::Resource::Account.new(registration_params)
       end
     end
   end

@@ -2,11 +2,12 @@ module Stormpath
   module Rails
     class UsersController < BaseController
       def create
-        @user = user_from_params
-        result = create_stormpath_account @user
+        result = create_stormpath_account(registration_params)
+
+        database_user
 
         if result.success?
-          @user.save
+          database_user.save
 
           if configuration.web.verify_email.enabled
             respond_to do |format|
@@ -14,7 +15,7 @@ module Stormpath
               format.html { render template: "users/verification_email_sent" }
             end
           else
-            initialize_session(@user, result.account.href)
+            initialize_session(database_user, result.account.href)
 
             respond_to do |format|
               format.json { render json: AccountSerializer.to_h(result.account)  }
@@ -42,7 +43,7 @@ module Stormpath
           if signed_in?
             redirect_to root_path
           else
-            @user = user_from_params
+            database_user
             render template: "users/new"
           end
         end
@@ -70,13 +71,19 @@ module Stormpath
 
       private
 
-      def user_from_params
-        @user_from_params ||= ::User.new.tap do |user|
-          user.email = params[:email]
-          user.password = params[:password]
-          user.given_name = params[:givenName]
-          user.surname = params[:surname]
-        end
+      def database_user
+        @user ||= ::User.new(registration_params.slice(:email, :given_name, :surname))
+      end
+
+      def registration_params
+        {
+          email: params[:email],
+          password: params[:password],
+          given_name: params[:givenName],
+          surname: params[:surname],
+          middle_name: params[:middleName],
+          username: params[:username]
+        }
       end
     end
   end
