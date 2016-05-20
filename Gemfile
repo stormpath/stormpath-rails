@@ -16,7 +16,7 @@ group :test do
   gem 'factory_girl_rails', '~> 4.5.0'
   gem 'shoulda'
   gem 'webmock'
-  gem 'vcr'
+  gem 'vcr', '3.0.1'
   gem 'ammeter', git: "https://github.com/alexrothenberg/ammeter"
   gem 'simplecov', :require => false
   gem 'coveralls', require: false
