@@ -10,7 +10,7 @@ module Stormpath
 
       def create_test_account
         @test_account_result ||= begin
-          result = Stormpath::Rails::Client.create_stormpath_account(test_user)
+          result = Stormpath::Rails::Client.create_stormpath_account(test_user.attributes.merge!("password" => test_user.password))
           raise result.error_message unless result.success?
           result
         end
@@ -29,8 +29,6 @@ module Stormpath
       def test_user
         factory = Stormpath::Rails.config.user_model.to_s.underscore.to_sym
         @test_user ||= FactoryGirl.create(factory)
-        @test_user.attributes = @test_user.attributes.merge!("password" => @test_user.password)
-        @test_user
       end
     end
   end
