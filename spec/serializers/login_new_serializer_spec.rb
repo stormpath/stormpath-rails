@@ -61,5 +61,21 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
             :name => :login}]}
       )
     end
+
+    it 'should show only login field if password is disabled' do
+      Stormpath::Rails.config.web.login.form.fields.password.enabled = false
+
+      expect(serialized_json[:form]).to eq(
+        {:fields =>
+          [{:visible => true,
+            :label => "Username or Email",
+            :placeholder => "Username or Email",
+            :required => true,
+            :type => "text",
+            :name => :login}]}
+      )
+
+      Stormpath::Rails.config.web.login.form.fields.password.enabled = true
+    end
   end
 end
