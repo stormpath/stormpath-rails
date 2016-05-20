@@ -147,7 +147,7 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
 
       it "without password render password error" do
         post :create, camelized_user_attributes.merge(password: "")
-        expect(flash[:error]).to eq('Account data cannot be null, empty, or blank.')
+        expect(flash[:error]).to eq('Account password minimum length not satisfied.')
       end
 
       it "with short password render password error" do
