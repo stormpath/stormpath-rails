@@ -11,7 +11,7 @@ module Stormpath
       def create_test_account
         @test_account_result ||= begin
           result = Stormpath::Rails::Client.create_stormpath_account(test_user)
-          raise "Can't create test account" unless result.success?
+          raise result.error_message unless result.success?
           result
         end
       end
