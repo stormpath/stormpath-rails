@@ -68,6 +68,14 @@ describe "the signin process", type: :feature, vcr: true do
         click_button 'Log in'
         expect(page).to have_content 'Invalid username or password.'
       end
+
+      it "preserves login field info" do
+        visit 'login'
+        fill_in 'Username or Email', with: 'blah@example.com'
+        fill_in 'Password', with: 'password'
+        click_button 'Log in'
+        expect(find_field('login').value).to have_content 'blah@example.com'
+      end
     end
 
     describe 'proper email and password' do
