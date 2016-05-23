@@ -73,9 +73,19 @@ describe "the signin process", type: :feature, vcr: true do
       end
 
       xit "when root page has authentication over it self"
-    end
 
-    it 'next uri'
+      it 'with changed next uri' do
+        allow(login_config).to receive(:next_uri).and_return('/about')
+
+        visit 'login'
+        fill_in 'Username or Email', with: user.email
+        fill_in 'Password', with: 'Password1337'
+        click_button 'Log in'
+        expect(page).to have_content 'About us'
+      end
+
+      it 'referered from another page'
+    end
   end
 
   describe 'social login' do
