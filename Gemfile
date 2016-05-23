@@ -22,4 +22,5 @@ group :test do
   gem 'coveralls', require: false
   gem 'json_matchers'
   gem 'match_json'
+  gem 'capybara'
 end

@@ -22,6 +22,8 @@ require "support/generator_spec_helpers"
 require "support/config_spec_helpers"
 require "json_matchers/rspec"
 require "match_json"
+require 'capybara/rails'
+require 'capybara/rspec'
 
 WebMock.allow_net_connect!
 
@@ -40,6 +42,7 @@ RSpec.configure do |config|
   config.include Stormpath::Testing::Helpers, type: :controller
   config.include Stormpath::Testing::Helpers, type: :request
   config.include MatchJson::Matchers
+  config.include Capybara::DSL, type: :feature
 
   RSpec::Matchers.alias_matcher :match_json, :include_json
 
@@ -53,3 +56,7 @@ RSpec.configure do |config|
 end
 
 MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/
+
+Capybara.register_driver :rack_test do |app|
+  Capybara::RackTest::Driver.new(app, headers: { 'HTTP_ACCEPT' => 'text/html' })
+end
