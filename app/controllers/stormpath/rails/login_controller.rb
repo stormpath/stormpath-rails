@@ -2,9 +2,22 @@ module Stormpath
   module Rails
     class LoginController < BaseController
       before_action :redirect_signed_in_users, only: :new
-      before_action :inspect_for_missing_fields, only: :create
 
       def create
+        form = LoginForm.new(login: params[:login], password: params[:password])
+
+        if form.invalid?
+          return respond_to do |format|
+            format.json do
+              render json: { status: 400, message: form.errors.first }, status: 400
+            end
+            format.html do
+              set_flash_message :error, form.errors.first
+              render template: "sessions/new"
+            end
+          end
+        end
+
         result = authenticate_oauth(password_grant_request)
 
         if result.success?
@@ -116,19 +129,6 @@ module Stormpath
           params[:next]
         else
           "/#{params[:next]}"
-        end
-      end
-
-      def inspect_for_missing_fields
-        if params[:login].blank? && params[:password].blank?
-          flash[:error] = "Login and password fields can't be blank"
-          render template: "sessions/new"
-        elsif params[:login].blank?
-          flash[:error] = "Login field can't be blank"
-          render template: "sessions/new"
-        elsif params[:password].blank?
-          flash[:error] = "Password field can't be blank"
-          render template: "sessions/new"
         end
       end
     end
