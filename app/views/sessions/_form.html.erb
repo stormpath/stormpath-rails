@@ -38,14 +38,14 @@
     <div class="form-group group-email">
       <%= form.label :login, Stormpath::Rails.config.web.login.form.fields.login.label, class: label_class %>
       <div class="<%= input_class %>">
-        <%= form.text_field :login, type: 'text', placeholder: Stormpath::Rails.config.web.login.form.fields.login.placeholder, class: "form-control", id: 'session_login' %>
+        <%= form.text_field :login, type: 'text', name: 'login', placeholder: Stormpath::Rails.config.web.login.form.fields.login.placeholder, class: "form-control", id: 'session_login' %>
       </div>
     </div>
 
     <div class="form-group group-password">
       <%= form.label :password, Stormpath::Rails.config.web.login.form.fields.password.label, class: label_class %>
       <div class="<%= input_class %>">
-        <%= form.password_field :password, type: 'password', placeholder: Stormpath::Rails.config.web.login.form.fields.password.placeholder, class: "form-control", id: 'session_password' %>
+        <%= form.password_field :password, type: 'password', name: 'password', placeholder: Stormpath::Rails.config.web.login.form.fields.password.placeholder, class: "form-control", id: 'session_password' %>
       </div>
     </div>
 

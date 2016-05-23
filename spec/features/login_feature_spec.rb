@@ -1,21 +1,9 @@
 require 'spec_helper'
 
 describe "the signin process", type: :feature, vcr: true do
-  # before :each do
-  #   User.make(:email => 'user@example.com', :password => 'password')
-  # end
-
   let(:login_config) { Stormpath::Rails.config.web.login }
 
-  describe 'unauthenticated' do
-    it "prompts error" do
-      visit 'login'
-      fill_in 'session_login', with: 'blah@example.com'
-      fill_in 'session_password', with: 'password'
-      click_button 'Log in'
-      expect(page).to have_content 'Invalid username or password.'
-    end
-
+  describe 'GET /login' do
     it 'has proper labels' do
       visit 'login'
       expect(page).to have_css("label", text: "Username or Email")
@@ -31,12 +19,11 @@ describe "the signin process", type: :feature, vcr: true do
       expect(page).to have_css("label", text: "Passworten")
     end
 
+    let(:login_placeholder) { find_field('login')['placeholder'] }
+    let(:password_placeholder) { find_field('password')['placeholder'] }
+
     it 'has proper placeholders' do
       visit 'login'
-
-      login_placeholder = find('#session_login')['placeholder']
-      password_placeholder = find('#session_password')['placeholder']
-
       expect(login_placeholder).to eq('Username or Email')
       expect(password_placeholder).to eq('Password')
     end
@@ -46,12 +33,57 @@ describe "the signin process", type: :feature, vcr: true do
       allow(login_config.form.fields.password).to receive(:placeholder).and_return('Passworten')
 
       visit 'login'
-
-      login_placeholder = find('#session_login')['placeholder']
-      password_placeholder = find('#session_password')['placeholder']
-
-      expect(login_placeholder).to eq('e-mail')
       expect(password_placeholder).to eq('Passworten')
+      expect(login_placeholder).to eq('e-mail')
     end
+
+    xit 'shows social logins when needed' do
+    end
+
+    xit 'SAML' do
+    end
+
+    xit 'default view' do
+      # NEED more info on this
+    end
+  end
+
+  describe 'POST /login' do
+    describe 'wrong email or password' do
+      it "prompts error" do
+        visit 'login'
+        fill_in 'Username or Email', with: 'blah@example.com'
+        fill_in 'Password', with: 'password'
+        click_button 'Log in'
+        expect(page).to have_content 'Invalid username or password.'
+      end
+    end
+
+    describe 'proper email and password' do
+      let(:user) { create_test_account.response }
+
+      after { delete_test_account }
+
+      it "redirects to root page" do
+        visit 'login'
+        fill_in 'Username or Email', with: user.email
+        fill_in 'Password', with: 'Password1337'
+        click_button 'Log in'
+        expect(page).to have_content 'Root page'
+      end
+
+      xit "when root page has authentication over it self"
+    end
+  end
+
+  describe 'social login' do
+    it 'facebook'
+    it 'google'
+    it 'github'
+    it 'linkedin'
+  end
+
+  describe 'saml' do
+    it 'saml'
   end
 end

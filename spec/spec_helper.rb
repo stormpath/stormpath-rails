@@ -41,6 +41,7 @@ RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Stormpath::Testing::Helpers, type: :controller
   config.include Stormpath::Testing::Helpers, type: :request
+  config.include Stormpath::Testing::Helpers, type: :feature
   config.include MatchJson::Matchers
   config.include Capybara::DSL, type: :feature
 
