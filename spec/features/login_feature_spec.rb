@@ -46,6 +46,17 @@ describe "the signin process", type: :feature, vcr: true do
     xit 'default view' do
       # NEED more info on this
     end
+
+    it 'shows forgot password link when enabled' do
+      visit 'login'
+      expect(page).to have_selector(:link_or_button, 'Forgot Password?')
+    end
+
+    it 'shows forgot password link when disabled' do
+      allow(Stormpath::Rails.config.web.forgot_password).to receive(:enabled).and_return(false)
+      visit 'login'
+      expect(page).not_to have_selector(:link_or_button, 'Forgot Password?')
+    end
   end
 
   describe 'POST /login' do
