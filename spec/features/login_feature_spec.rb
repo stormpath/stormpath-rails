@@ -74,6 +74,8 @@ describe "the signin process", type: :feature, vcr: true do
 
       xit "when root page has authentication over it self"
     end
+
+    it 'next uri'
   end
 
   describe 'social login' do
