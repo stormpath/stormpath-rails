@@ -9,14 +9,12 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
     it 'should serialize the default properly' do
       expect(serialized_json[:form]).to eq(
         {:fields =>
-          [{:visible => true,
-            :label => "Username or Email",
+          [{:label => "Username or Email",
             :placeholder => "Username or Email",
             :required => true,
             :type => "text",
             :name => :login},
-           {:visible => true,
-            :label => "Password",
+           {:label => "Password",
             :placeholder => "Password",
             :required => true,
             :type => "password",
@@ -28,14 +26,12 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
       allow(Stormpath::Rails.config.web.login.form).to receive(:field_order).and_return(['password', 'login'])
       expect(serialized_json[:form]).to eq(
         {:fields =>
-          [{:visible => true,
-            :label => "Password",
+          [{:label => "Password",
             :placeholder => "Password",
             :required => true,
             :type => "password",
             :name => :password},
-           {:visible => true,
-            :label => "Username or Email",
+           {:label => "Username or Email",
             :placeholder => "Username or Email",
             :required => true,
             :type => "text",
@@ -47,14 +43,12 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
       allow(Stormpath::Rails.config.web.login.form).to receive(:field_order).and_return(['password'])
       expect(serialized_json[:form]).to eq(
         {:fields =>
-          [{:visible => true,
-            :label => "Password",
+          [{:label => "Password",
             :placeholder => "Password",
             :required => true,
             :type => "password",
             :name => :password},
-           {:visible => true,
-            :label => "Username or Email",
+           {:label => "Username or Email",
             :placeholder => "Username or Email",
             :required => true,
             :type => "text",
@@ -67,8 +61,7 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
 
       expect(serialized_json[:form]).to eq(
         {:fields =>
-          [{:visible => true,
-            :label => "Username or Email",
+          [{:label => "Username or Email",
             :placeholder => "Username or Email",
             :required => true,
             :type => "text",
@@ -76,6 +69,21 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
       )
 
       Stormpath::Rails.config.web.login.form.fields.password.enabled = true
+    end
+
+    it 'should show only login field if password is not visible' do
+      Stormpath::Rails.config.web.login.form.fields.password.visible = false
+
+      expect(serialized_json[:form]).to eq(
+        {:fields =>
+          [{:label => "Username or Email",
+            :placeholder => "Username or Email",
+            :required => true,
+            :type => "text",
+            :name => :login}]}
+      )
+
+      Stormpath::Rails.config.web.login.form.fields.password.visible = true
     end
   end
 end

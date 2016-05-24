@@ -29,8 +29,9 @@ module Stormpath
           .form
           .fields
           .to_h
-          .select  { |_field, properties| properties[:enabled] }
+          .select  { |_field, properties| properties[:enabled] && properties[:visible] }
           .each    { |_field, properties| properties.delete(:enabled) }
+          .each    { |_field, properties| properties.delete(:visible) }
           .deep_transform_keys { |key| key.to_s.camelize(:lower).to_sym }
           .sort_by { |field, _properties| config.form.field_order.index(field.to_s) || HIGH_NUMBER }
           .map     { |field, properties| properties.merge(name: field) }
