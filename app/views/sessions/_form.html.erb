@@ -41,7 +41,7 @@
    :name => :password}]} -->
 
   <%= form_for '', url: login_user_path, html: {class: "login-form form-horizontal"} do |form| %>
-    <% if Stormpath::Rails.config.web.login.form.fields.login.visible %>
+    <% if Stormpath::Rails.config.web.login.form.fields.login.enabled && Stormpath::Rails.config.web.login.form.fields.login.visible %>
       <div class="form-group group-email">
         <%= form.label :login, Stormpath::Rails.config.web.login.form.fields.login.label, class: label_class %>
         <div class="<%= input_class %>">
@@ -58,7 +58,7 @@
       </div>
     <% end %>
 
-    <% if Stormpath::Rails.config.web.login.form.fields.password.visible %>
+    <% if Stormpath::Rails.config.web.login.form.fields.password.enabled && Stormpath::Rails.config.web.login.form.fields.password.visible %>
       <div class="form-group group-password">
         <%= form.label :password, Stormpath::Rails.config.web.login.form.fields.password.label, class: label_class %>
         <div class="<%= input_class %>">

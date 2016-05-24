@@ -37,6 +37,22 @@ describe "the signin process", type: :feature, vcr: true do
       expect(login_placeholder).to eq('e-mail')
     end
 
+    it 'hides login field if enabled set to false' do
+      allow(login_config.form.fields.login).to receive(:enabled).and_return(false)
+
+      visit 'login'
+
+      expect { find_field('login') }.to raise_error(Capybara::ElementNotFound)
+    end
+
+    it 'hides login field if visible set to false' do
+      allow(login_config.form.fields.login).to receive(:visible).and_return(false)
+
+      visit 'login'
+
+      expect { find_field('login') }.to raise_error(Capybara::ElementNotFound)
+    end
+
     xit 'shows social logins when needed' do
     end
 
