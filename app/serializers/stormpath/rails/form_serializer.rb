@@ -1,10 +1,6 @@
 module Stormpath
   module Rails
     class FormSerializer
-      # High number used when a field is missing from the field order array,
-      # to position all the missing ones at the back of the array
-      HIGH_NUMBER = 99
-
       def self.to_h
         new.to_h
       end
@@ -33,7 +29,7 @@ module Stormpath
           .each    { |_field, properties| properties.delete(:enabled) }
           .each    { |_field, properties| properties.delete(:visible) }
           .deep_transform_keys { |key| key.to_s.camelize(:lower).to_sym }
-          .sort_by { |field, _properties| config.form.field_order.index(field.to_s) || HIGH_NUMBER }
+          .sort_by { |field, _properties| config.form.field_order.index(field.to_s) || Float::INFINITY }
           .map     { |field, properties| properties.merge(name: field) }
       end
     end
