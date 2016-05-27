@@ -3,8 +3,11 @@ module Stormpath
     class LogoutController < BaseController
 
       def create
-        cookies.delete(configuration.web.access_token_cookie.name)
-        cookies.delete(configuration.web.refresh_token_cookie.name)
+        DeleteAccessToken.call(cookies[access_token_cookie_name])
+        DeleteRefreshToken.call(cookies[refresh_token_cookie_name])
+
+        cookies.delete(access_token_cookie_name)
+        cookies.delete(refresh_token_cookie_name)
 
         logout
 
@@ -17,6 +20,15 @@ module Stormpath
         end
       end
 
+      private
+
+      def access_token_cookie_name
+        configuration.web.access_token_cookie.name
+      end
+
+      def refresh_token_cookie_name
+        configuration.web.refresh_token_cookie.name
+      end
     end
   end
 end

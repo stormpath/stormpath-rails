@@ -32,6 +32,7 @@ module Stormpath
             format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
           end
         else
+          binding.pry
           respond_to do |format|
             format.json do
               status = result.status.presence || 400

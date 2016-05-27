@@ -6,7 +6,7 @@ module Stormpath
       end
 
       def success?
-        @response.instance_of? Stormpath::Resource::AccessToken
+        @response.instance_of? Stormpath::Oauth::AccessTokenAuthenticationResult
       end
 
       def access_token

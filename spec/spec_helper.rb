@@ -42,6 +42,7 @@ RSpec.configure do |config|
   config.include Stormpath::Testing::Helpers, type: :controller
   config.include Stormpath::Testing::Helpers, type: :request
   config.include Stormpath::Testing::Helpers, type: :feature
+  config.include Stormpath::Testing::Helpers, type: :service
   config.include MatchJson::Matchers
   config.include Capybara::DSL, type: :feature
 
