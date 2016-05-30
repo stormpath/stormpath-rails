@@ -7,6 +7,14 @@ module ConfigSpecHelpers
     Stormpath::Rails.config.web.forgot_password.enabled = false
   end
 
+  def enable_change_password
+    Stormpath::Rails.config.web.change_password.enabled = true
+  end
+
+  def disable_change_password
+    Stormpath::Rails.config.web.change_password.enabled = false
+  end
+
   def disable_facebook_login
     Stormpath::Rails.config.web.facebook.app_id = ''
     Stormpath::Rails.config.web.facebook.app_secret = ''
