@@ -49,6 +49,10 @@ module ConfigSpecHelpers
   def disable_verify_email
     Stormpath::Rails.config.web.verify_email.enabled= false
   end
+
+  def web_config
+    Stormpath::Rails.config.web
+  end
 end
 
 RSpec.configure do |config|
