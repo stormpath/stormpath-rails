@@ -34,6 +34,9 @@ VCR.configure do |c|
   c.ignore_request do |request|
     request.uri == Stormpath::Rails.config.application.href
   end
+  c.ignore_request do |request|
+    URI(request.uri).path.ends_with?('/loginAttempts') && request.method == :post
+  end
 end
 
 RSpec.configure do |config|
