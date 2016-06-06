@@ -80,25 +80,35 @@ describe 'Registration', type: :request, vcr: true do
 
         describe 'when email not required and submitted without email' do
           before do
-            allow(web_config.register.form.fields.email).to receive(:required).and_return(false)
+            web_config.register.form.fields.email.required = false
+            reload_form_class
+          end
+
+          after do
+            web_config.register.form.fields.email.required = true
           end
 
           it 'respond with status 400' do
             json_register_post(givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD')
             expect(response.status).to eq(400)
-            expect(error_message).to eq('Email can\'t be blank')
+            expect(error_message).to eq('Account email address cannot be null, empty, or blank.')
           end
         end
 
         describe 'when password not required and submitted without password' do
           before do
-            allow(web_config.register.form.fields.password).to receive(:required).and_return(false)
+            web_config.register.form.fields.password.required = false
+            reload_form_class
+          end
+
+          after do
+            web_config.register.form.fields.password.required = true
           end
 
           it 'respond with status 400' do
             json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test')
             expect(response.status).to eq(400)
-            expect(error_message).to eq('Password can\'t be blank')
+            expect(error_message).to eq('Account password cannot be null, empty, or blank.')
           end
         end
 
