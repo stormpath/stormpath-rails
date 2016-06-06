@@ -29,22 +29,19 @@ module Stormpath
               end
             end
           else
-            error_message = form.errors.full_messages.first
-            respond_to do |format|
-              format.json { render json: { status: 400, message: error_message }, status: 400 }
-              format.html do
-                set_flash_message :error, error_message
-                render template: "users/new"
-              end
-            end
+            reply_with_error(form.errors.full_messages.first)
           end
         rescue RegistrationForm::ArbitraryDataSubmitted => error
-          respond_to do |format|
-            format.json { render json: { status: 400, message: error.message }, status: 400 }
-            format.html do
-              set_flash_message :error, error.message
-              render template: "users/new"
-            end
+          reply_with_error(error.message)
+        end
+      end
+
+      private def reply_with_error(error_message)
+        respond_to do |format|
+          format.json { render json: { status: 400, message: error_message }, status: 400 }
+          format.html do
+            set_flash_message :error, error_message
+            render template: "users/new"
           end
         end
       end

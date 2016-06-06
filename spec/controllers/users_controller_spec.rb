@@ -109,7 +109,7 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
           post :create, camelized_user_attributes.merge(email: '')
           response_body = JSON.parse(response.body)
 
-          expect(response_body["error"]).to eq('Account email address cannot be null, empty, or blank.')
+          expect(response_body["message"]).to eq("Email can't be blank")
         end
       end
 
@@ -137,7 +137,7 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
     context "invalid data" do
       it "without email render email error" do
         post :create, camelized_user_attributes.merge(email: "")
-        expect(flash[:error]).to eq('Account email address cannot be null, empty, or blank.')
+        expect(flash[:error]).to eq('Email can\'t be blank')
       end
 
       it "with invalid email render email error" do
@@ -147,7 +147,7 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
 
       it "without password render password error" do
         post :create, camelized_user_attributes.merge(password: "")
-        expect(flash[:error]).to eq('Account password minimum length not satisfied.')
+        expect(flash[:error]).to eq('Password can\'t be blank')
       end
 
       it "with short password render password error" do
