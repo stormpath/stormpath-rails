@@ -43,5 +43,9 @@ module Stormpath
     def self.config
       @configuration ||= Configuration.new
     end
+
+    def self.reload_config!
+      @configuration = Configuration.new
+    end
   end
 end

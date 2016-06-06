@@ -20,6 +20,10 @@ module Stormpath
           enabled_fields.keys
         end
 
+        def predefined_enabled_field_names
+          enabled_field_names & PREDEFINED_FIELD_NAMES
+        end
+
         def custom_enabled_field_names
           enabled_field_names - PREDEFINED_FIELD_NAMES
         end
@@ -34,8 +38,32 @@ module Stormpath
             .select  { |_field, properties| properties[:enabled] }
         end
 
+        def confirm_password_enabled?
+          form_fields_config.confirm_password.enabled
+        end
+
         def register_form_fields
-          Stormpath::Rails.config.web.register.form.fields.to_h
+          form_fields_config.to_h
+        end
+
+        def given_name_disabled?
+          !form_fields_config.given_name.enabled
+        end
+
+        def given_name_not_required?
+          !form_fields_config.given_name.required
+        end
+
+        def surname_disabled?
+          !form_fields_config.surname.enabled
+        end
+
+        def surname_not_required?
+          !form_fields_config.surname.required
+        end
+
+        def form_fields_config
+          Stormpath::Rails.config.web.register.form.fields
         end
       end
     end

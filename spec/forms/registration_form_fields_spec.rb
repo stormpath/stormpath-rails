@@ -64,4 +64,21 @@ describe Stormpath::Rails::RegistrationFormFields, vcr: true do
       it { is_expected.to match_array([:age]) }
     end
   end
+
+  describe 'predefined enabled field names' do
+    subject { form_fields.predefined_enabled_field_names }
+    it { is_expected.to match_array([:email, :password, :given_name, :surname]) }
+
+    describe 'when custom data age is enabled' do
+      before do
+        register_config.form.fields.age = OpenStruct.new(enabled: true, visible: true, label: "Age", placeholder: "Age", required: true, type: "number")
+      end
+
+      after do
+        register_config.form.fields.delete_field(:age)
+      end
+
+      it { is_expected.to match_array([:email, :password, :given_name, :surname]) }
+    end
+  end
 end

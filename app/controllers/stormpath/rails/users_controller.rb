@@ -2,34 +2,47 @@ module Stormpath
   module Rails
     class UsersController < BaseController
       def create
-        result = create_stormpath_account(registration_params)
+        begin
+          form = RegistrationForm.new(
+            params.except(:controller, :action, :format)
+          )
 
-        database_user
+          database_user
 
-        if result.success?
-          database_user.save
+          if form.save
+            database_user.save
 
-          if configuration.web.verify_email.enabled
-            respond_to do |format|
-              format.json { render json: AccountSerializer.to_h(result.account)  }
-              format.html { render template: "users/verification_email_sent" }
+            if configuration.web.verify_email.enabled
+              respond_to do |format|
+                format.json { render json: AccountSerializer.to_h(form.account)  }
+                format.html { render template: "users/verification_email_sent" }
+              end
+            else
+              initialize_session(database_user, form.account.href)
+
+              respond_to do |format|
+                format.json { render json: AccountSerializer.to_h(form.account)  }
+                format.html do
+                  set_flash_message :notice, 'Your account was created successfully'
+                  redirect_to configuration.web.register.next_uri
+                end
+              end
             end
           else
-            initialize_session(database_user, result.account.href)
-
+            error_message = form.errors.full_messages.first
             respond_to do |format|
-              format.json { render json: AccountSerializer.to_h(result.account)  }
+              format.json { render json: { status: 400, message: error_message }, status: 400 }
               format.html do
-                set_flash_message :notice, 'Your account was created successfully'
-                redirect_to configuration.web.register.next_uri
+                set_flash_message :error, error_message
+                render template: "users/new"
               end
             end
           end
-        else
+        rescue RegistrationForm::ArbitraryDataSubmitted => error
           respond_to do |format|
-            format.json { render json: { error: result.error_message }, status: 400 }
+            format.json { render json: { status: 400, message: error.message }, status: 400 }
             format.html do
-              set_flash_message :error, result.error_message
+              set_flash_message :error, error.message
               render template: "users/new"
             end
           end
