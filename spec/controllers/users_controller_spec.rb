@@ -180,8 +180,7 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
       it "renders verified template" do
         post :create, camelized_user_attributes
 
-        expect(response).to be_success
-        expect(response).to render_template(:verification_email_sent)
+        expect(response).to redirect_to('/login?status=unverified')
       end
     end
 
@@ -196,28 +195,26 @@ describe Stormpath::Rails::UsersController, :vcr, type: :controller do
         expect { post :create,camelized_user_attributes }.to change(User, :count).by(1)
       end
 
-      it "redirects to root_path on successfull login" do
+      it "redirects to login if autologin is off" do
         post :create, camelized_user_attributes
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to('/login?status=created')
       end
 
-      it "stores user_id in session" do
-        post :create, camelized_user_attributes
-        expect(session[:user_id]).to_not be_nil
-      end
-    end
+      describe 'autologin is true' do
+        before do
+          allow(configuration.web.register).to receive(:next_uri).and_return('/custom')
+          allow(configuration.web.register).to receive(:auto_login).and_return(true)
+        end
 
-    context "custom next_uri" do
-      before do
-        disable_verify_email
-        Stormpath::Rails.config.web.register.next_uri = '/custom'
-      end
+        it "redirects to next_uri" do
+          post :create, camelized_user_attributes
+          expect(response).to redirect_to('/custom')
+        end
 
-      after { delete_account(user_attributes[:email]) }
-
-      it "redirects to next_uri" do
-        post :create, camelized_user_attributes
-        expect(response).to redirect_to('/custom')
+        it "stores user_id in session" do
+          post :create, camelized_user_attributes
+          expect(session[:user_id]).to_not be_nil
+        end
       end
     end
   end

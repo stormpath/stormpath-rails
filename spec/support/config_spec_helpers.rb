@@ -35,6 +35,10 @@ module ConfigSpecHelpers
     Stormpath::Rails.config.web.id_site.enabled = false
   end
 
+  def configuration
+    Stormpath::Rails.config
+  end
+
   def config_not_specified
     disable_forgot_password
     disable_facebook_login

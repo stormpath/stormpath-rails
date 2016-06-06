@@ -4,7 +4,7 @@ module Stormpath
       def create
         begin
           form = RegistrationForm.new(
-            params.except(:controller, :action, :format)
+            params.except(:controller, :action, :format, :user)
           )
 
           database_user
@@ -12,19 +12,18 @@ module Stormpath
           if form.save
             database_user.save
 
-            if configuration.web.verify_email.enabled
-              respond_to do |format|
-                format.json { render json: AccountSerializer.to_h(form.account)  }
-                format.html { render template: "users/verification_email_sent" }
-              end
+            if api_request?
+              render json: AccountSerializer.to_h(form.account)
             else
-              initialize_session(database_user, form.account.href)
-
-              respond_to do |format|
-                format.json { render json: AccountSerializer.to_h(form.account)  }
-                format.html do
-                  set_flash_message :notice, 'Your account was created successfully'
+              if configuration.web.verify_email.enabled
+                redirect_to "#{configuration.web.login.uri}?status=unverified"
+              else
+                if configuration.web.register.auto_login
+                  initialize_session(database_user, form.account.href)
+                  #login the user
                   redirect_to configuration.web.register.next_uri
+                else
+                  redirect_to "#{configuration.web.login.uri}?status=created"
                 end
               end
             end

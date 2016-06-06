@@ -10,7 +10,7 @@ module Stormpath
       private
 
       def api_request?
-        request.content_type == "application/json"
+        request.format == :json
       end
 
       # Enable to test with the TCK.
