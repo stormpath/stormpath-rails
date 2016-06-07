@@ -9,34 +9,10 @@
     </div>
   <% end %>
 
-  <%= form_for @user, html: { class: "registration-form form-horizontal sp-form" } do |form| %>
-    <div form-group="true" class="form-group group-first-name">
-      <%= form.label :given_name, "First Name", class: "col-sm-4" %>
-      <div class="col-sm-8">
-        <%= form.text_field :given_name, placeholder: "First Name", class: "form-control" %>
-      </div>
-    </div>
-
-    <div form-group="true" class="form-group group-first-name">
-      <%= form.label :surname, "Last Name", class: "col-sm-4" %>
-      <div class="col-sm-8">
-        <%= form.text_field :surname, placeholder: "Last Name", class: "form-control" %>
-      </div>
-    </div>
-
-    <div form-group="true" class="form-group group-first-name">
-      <%= form.label :email, "Email", class: "col-sm-4" %>
-      <div class="col-sm-8">
-        <%= form.text_field :email, placeholder: "Email", class: "form-control" %>
-      </div>
-    </div>
-
-    <div form-group="true" class="form-group group-first-name">
-      <%= form.label :password, "Password", class: "col-sm-4" %>
-      <div class="col-sm-8">
-        <%= form.password_field :password, placeholder: "Password", class: "form-control" %>
-      </div>
-    </div>
+  <%= form_for '', url: sign_up_path, html: { class: "registration-form form-horizontal sp-form" } do |form| %>
+    <% Stormpath::Rails::RegistrationFormFields.enabled_field_names.each do |field| %>
+      <%= render 'sessions/input', form: form, input_config: Stormpath::Rails.config.web.register.form.fields.send(field), input_name: field.to_s.camelize(:lower), value: params[field.to_s.camelize(:lower)] %>
+    <% end %>
 
     <%= button_tag "Create Account", :class => "btn btn-register btn-sp-green", :type => "submit" %>
   <% end %>

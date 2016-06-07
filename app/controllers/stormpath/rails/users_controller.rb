@@ -4,7 +4,7 @@ module Stormpath
       def create
         begin
           form = RegistrationForm.new(
-            params.except(:controller, :action, :format, :user)
+            params.except(:controller, :action, :format, :user, :utf8, :button)
           )
 
           database_user
