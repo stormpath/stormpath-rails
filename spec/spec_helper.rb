@@ -14,12 +14,12 @@ require "rails/all"
 require 'stormpath/rails'
 require "dummy/config/environment"
 require "rspec/rails"
-require 'stormpath/testing/helpers'
 
 require 'factories'
 
 require "support/generator_spec_helpers"
 require "support/config_spec_helpers"
+require 'support/stormpath_testing_helpers'
 require "json_matchers/rspec"
 require "match_json"
 require 'capybara/rails'
