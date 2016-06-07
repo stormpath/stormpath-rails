@@ -11,11 +11,11 @@ module Stormpath
       private
 
       def facebook_login_enabled?
-        facebook_app_id.present?
+        false #facebook_app_id.present?
       end
 
       def google_login_enabled?
-        google_client_id.present?
+        false #google_client_id.present?
       end
 
       def facebook_app_id

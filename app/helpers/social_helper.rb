@@ -1,6 +1,6 @@
 module SocialHelper
   def box_class
-    facebook_login_enabled? ? 'small col-sm-8' : 'large col-sm-12' 
+    facebook_login_enabled? ? 'small col-sm-8' : 'large col-sm-12'
   end
 
   def label_class
