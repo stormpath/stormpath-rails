@@ -26,9 +26,9 @@ module ConfigSpecHelpers
   end
 
   def enable_id_site
-   Stormpath::Rails.config.web.id_site.enabled = true
-   Stormpath::Rails.config.web.id_site.uri = "/redirect"
-   Stormpath::Rails.config.web.id_site.next_uri = "/"
+    Stormpath::Rails.config.web.id_site.enabled = true
+    Stormpath::Rails.config.web.id_site.uri = "/redirect"
+    Stormpath::Rails.config.web.id_site.next_uri = "/"
   end
 
   def disable_id_site
@@ -57,8 +57,9 @@ module ConfigSpecHelpers
   def web_config
     Stormpath::Rails.config.web
   end
-end
 
-RSpec.configure do |config|
-  config.include ConfigSpecHelpers
+  def reload_form_class
+    Stormpath::Rails.send(:remove_const, 'RegistrationForm') if defined?(Stormpath::Rails::RegistrationForm)
+    load('stormpath/rails/registration_form.rb')
+  end
 end

@@ -3,11 +3,6 @@ require 'spec_helper'
 describe "the signup process", type: :feature, vcr: true do
   let(:register_config) { Stormpath::Rails.config.web.register }
 
-  def reload_form_class
-    Stormpath::Rails.send(:remove_const, 'RegistrationForm') if defined?(Stormpath::Rails::RegistrationForm)
-    load('stormpath/rails/registration_form.rb')
-  end
-
   before do
     register_config.form.fields.middle_name.enabled = true
     register_config.form.fields.middle_name.required = false

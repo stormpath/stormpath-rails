@@ -48,6 +48,7 @@ RSpec.configure do |config|
   config.include Stormpath::Testing::Helpers, type: :service
   config.include MatchJson::Matchers
   config.include Capybara::DSL, type: :feature
+  config.include ConfigSpecHelpers
 
   RSpec::Matchers.alias_matcher :match_json, :include_json
 

@@ -15,11 +15,6 @@ describe 'Registration', type: :request, vcr: true do
         response_body['message']
       end
 
-      def reload_form_class
-        Stormpath::Rails.send(:remove_const, 'RegistrationForm') if defined?(Stormpath::Rails::RegistrationForm)
-        load('stormpath/rails/registration_form.rb')
-      end
-
       def delete_account
         return unless response.status == 200
         Stormpath::Rails::Client.application.accounts.get(response_body['account']['href']).delete
