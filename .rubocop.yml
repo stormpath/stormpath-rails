@@ -1,4 +1,16 @@
+LineLength:
+  Max: 100
+
+Documentation:
+  Enabled: False
+
+WordArray:
+  Enabled: False
+
 AllCops:
   Exclude:
     - 'spec/dummy/db/schema.rb'
     - 'spec/dummy/db/migrate/*'
+
+Rails:
+  Enabled: true
