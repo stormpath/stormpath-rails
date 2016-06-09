@@ -82,7 +82,7 @@ module Stormpath
       end
 
       def self.application
-        self.client.applications.get Stormpath::Rails.config.application.href
+        client.applications.get Stormpath::Rails.config.application.href
       end
 
       def self.client

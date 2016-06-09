@@ -1,8 +1,8 @@
-require "spec_helper"
-require "generators/stormpath/routes/routes_generator"
+require 'spec_helper'
+require 'generators/stormpath/routes/routes_generator'
 
 describe Stormpath::Generators::RoutesGenerator, :generator do
-  it "adds stormpath routes to existing rails routes" do
+  it 'adds stormpath routes to existing rails routes' do
     provide_existing_routes_file
 
     routes = file('config/routes.rb')

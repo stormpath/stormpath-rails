@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe "the signup process", type: :feature, vcr: true do
+describe 'the signup process', type: :feature, vcr: true do
   let(:register_config) { Stormpath::Rails.config.web.register }
 
   before do
@@ -10,10 +10,10 @@ describe "the signup process", type: :feature, vcr: true do
     register_config.form.fields.phone_number = OpenStruct.new(
       enabled: true,
       visible: true,
-      label: "Phone Number",
-      placeholder: "Phone Number",
+      label: 'Phone Number',
+      placeholder: 'Phone Number',
       required: true,
-      type: "text"
+      type: 'text'
     )
     reload_form_class
   end
@@ -28,30 +28,30 @@ describe "the signup process", type: :feature, vcr: true do
   describe 'GET /register' do
     it 'has proper labels' do
       visit 'register'
-      expect(page).to have_css("label", text: "First Name")
-      expect(page).to have_css("label", text: "Last Name")
-      expect(page).to have_css("label", text: "Middle Name")
-      expect(page).to have_css("label", text: "Email")
-      expect(page).to have_css("label", text: "Phone Number")
-      expect(page).to have_css("label", text: "Password")
-      expect(page).to have_css("label", text: "Confirm Password")
+      expect(page).to have_css('label', text: 'First Name')
+      expect(page).to have_css('label', text: 'Last Name')
+      expect(page).to have_css('label', text: 'Middle Name')
+      expect(page).to have_css('label', text: 'Email')
+      expect(page).to have_css('label', text: 'Phone Number')
+      expect(page).to have_css('label', text: 'Password')
+      expect(page).to have_css('label', text: 'Confirm Password')
     end
 
     it 'has proper placeholders' do
       visit 'register'
-      expect(find_field('givenName')['placeholder']).to eq("First Name")
-      expect(find_field('surname')['placeholder']).to eq("Last Name")
-      expect(find_field('middleName')['placeholder']).to eq("Middle Name")
-      expect(find_field('email')['placeholder']).to eq("Email")
-      expect(find_field('phoneNumber')['placeholder']).to eq("Phone Number")
-      expect(find_field('password')['placeholder']).to eq("Password")
-      expect(find_field('confirmPassword')['placeholder']).to eq("Confirm Password")
+      expect(find_field('givenName')['placeholder']).to eq('First Name')
+      expect(find_field('surname')['placeholder']).to eq('Last Name')
+      expect(find_field('middleName')['placeholder']).to eq('Middle Name')
+      expect(find_field('email')['placeholder']).to eq('Email')
+      expect(find_field('phoneNumber')['placeholder']).to eq('Phone Number')
+      expect(find_field('password')['placeholder']).to eq('Password')
+      expect(find_field('confirmPassword')['placeholder']).to eq('Confirm Password')
     end
   end
 
   describe 'POST /register' do
     describe 'incorrect submission' do
-      it "prompts error" do
+      it 'prompts error' do
         visit 'register'
 
         fill_in 'givenName', with: 'Damir'

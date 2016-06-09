@@ -13,7 +13,7 @@ module Stormpath
             end
             format.html do
               set_flash_message :error, form.errors.first
-              render template: "sessions/new"
+              render template: 'sessions/new'
             end
           end
         end
@@ -37,7 +37,7 @@ module Stormpath
             end
             format.html do
               set_flash_message :error, result.error_message
-              render template: "sessions/new"
+              render template: 'sessions/new'
             end
           end
         end
@@ -49,7 +49,7 @@ module Stormpath
         else
           respond_to do |format|
             format.json { render json: LoginNewSerializer.to_h }
-            format.html { render template: "sessions/new" }
+            format.html { render template: 'sessions/new' }
           end
         end
       end

@@ -1,8 +1,8 @@
-require "spec_helper"
-require "generators/stormpath/views/views_generator"
+require 'spec_helper'
+require 'generators/stormpath/views/views_generator'
 
 describe Stormpath::Generators::ViewsGenerator, :generator do
-  it "copies stormpath views to host application" do
+  it 'copies stormpath views to host application' do
     run_generator
 
     views = %w(

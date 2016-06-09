@@ -1,7 +1,6 @@
 module Stormpath
   module Rails
     class LogoutController < BaseController
-
       def create
         DeleteAccessToken.call(cookies[access_token_cookie_name])
         DeleteRefreshToken.call(cookies[refresh_token_cookie_name])

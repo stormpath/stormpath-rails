@@ -1,7 +1,6 @@
 module Stormpath
   module Rails
     class AuthenticationStatus
-
       def initialize(response)
         @response = response
       end
@@ -23,9 +22,7 @@ module Stormpath
       end
 
       def status
-        if @response.instance_of? Stormpath::Error
-          @response.status
-        end
+        @response.status if @response.instance_of? Stormpath::Error
       end
     end
   end

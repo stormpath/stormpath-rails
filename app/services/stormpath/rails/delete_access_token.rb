@@ -1,7 +1,6 @@
 module Stormpath
   module Rails
     class DeleteAccessToken
-
       def self.call(token)
         new(token).call
       end
@@ -17,10 +16,8 @@ module Stormpath
       private
 
       def delete_token
-        begin
-          token_resource.delete
-        rescue JWT::ExpiredSignature
-        end
+        token_resource.delete
+      rescue JWT::ExpiredSignature
       end
 
       def token_resource

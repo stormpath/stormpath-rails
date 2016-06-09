@@ -26,9 +26,7 @@ module Stormpath
       end
 
       def status
-        if @response.instance_of? Stormpath::Error
-          @response.status
-        end
+        @response.status if @response.instance_of? Stormpath::Error
       end
 
       private
@@ -38,11 +36,9 @@ module Stormpath
       end
 
       def jwt_response
-        begin
-          JWT.decode(authentication_result.access_token, ENV['STORMPATH_API_KEY_SECRET']).first
-        rescue JWT::ExpiredSignature => error
-          raise Stormpath::Oauth::Error.new(:jwt_expired)
-        end
+        JWT.decode(authentication_result.access_token, ENV['STORMPATH_API_KEY_SECRET']).first
+      rescue JWT::ExpiredSignature => error
+        raise Stormpath::Oauth::Error.new(:jwt_expired)
       end
     end
   end

@@ -18,11 +18,9 @@ module Stormpath
       end
 
       def jwt_response
-        begin
-          JWT.decode(access_token, ENV['STORMPATH_API_KEY_SECRET']).first
-        rescue JWT::ExpiredSignature
-          raise Stormpath::Oauth::Error.new(:jwt_expired)
-        end
+        JWT.decode(access_token, ENV['STORMPATH_API_KEY_SECRET']).first
+      rescue JWT::ExpiredSignature
+        raise Stormpath::Oauth::Error.new(:jwt_expired)
       end
     end
   end

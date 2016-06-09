@@ -1,16 +1,17 @@
+# frozen_string_literal: true
 module Stormpath
   module Rails
     class ContentTypeNegotiator
       attr_accessor :accept_header
 
-      HTTP_ACCEPT_WILDCARD = '*/*'
-      HTTP_ACCEPT_JSON = 'application/json'
-      HTTP_ACCEPT_HTML = 'text/html'
+      HTTP_ACCEPT_WILDCARD = '*/*'.freeze
+      HTTP_ACCEPT_JSON = 'application/json'.freeze
+      HTTP_ACCEPT_HTML = 'text/html'.freeze
 
       FULL_NAME_TO_SYMBOL = {
         HTTP_ACCEPT_JSON => :json,
         HTTP_ACCEPT_HTML => :html
-      }
+      }.freeze
 
       def initialize(accept_header)
         accept_header = accept_header.presence || HTTP_ACCEPT_WILDCARD
@@ -42,9 +43,7 @@ module Stormpath
           HTTP_ACCEPT_JSON
         elsif accept_header.include?(HTTP_ACCEPT_HTML)
           HTTP_ACCEPT_HTML
-        else
-          nil
-        end
+                end
       end
     end
   end

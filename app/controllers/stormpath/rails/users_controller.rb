@@ -2,37 +2,35 @@ module Stormpath
   module Rails
     class UsersController < BaseController
       def create
-        begin
-          form = RegistrationForm.new(
-            params.except(:controller, :action, :format, :user, :utf8, :button)
-          )
+        form = RegistrationForm.new(
+          params.except(:controller, :action, :format, :user, :utf8, :button)
+        )
 
-          database_user
+        database_user
 
-          if form.save
-            database_user.save
+        if form.save
+          database_user.save
 
-            if api_request?
-              render json: AccountSerializer.to_h(form.account)
+          if api_request?
+            render json: AccountSerializer.to_h(form.account)
+          else
+            if configuration.web.verify_email.enabled
+              redirect_to "#{configuration.web.login.uri}?status=unverified"
             else
-              if configuration.web.verify_email.enabled
-                redirect_to "#{configuration.web.login.uri}?status=unverified"
+              if configuration.web.register.auto_login
+                initialize_session(database_user, form.account.href)
+                # login the user
+                redirect_to configuration.web.register.next_uri
               else
-                if configuration.web.register.auto_login
-                  initialize_session(database_user, form.account.href)
-                  #login the user
-                  redirect_to configuration.web.register.next_uri
-                else
-                  redirect_to "#{configuration.web.login.uri}?status=created"
-                end
+                redirect_to "#{configuration.web.login.uri}?status=created"
               end
             end
-          else
-            reply_with_error(form.errors.full_messages.first)
           end
-        rescue RegistrationForm::ArbitraryDataSubmitted => error
-          reply_with_error(error.message)
+        else
+          reply_with_error(form.errors.full_messages.first)
         end
+      rescue RegistrationForm::ArbitraryDataSubmitted => error
+        reply_with_error(error.message)
       end
 
       private def reply_with_error(error_message)
@@ -40,7 +38,7 @@ module Stormpath
           format.json { render json: { status: 400, message: error_message }, status: 400 }
           format.html do
             set_flash_message :error, error_message
-            render template: "users/new"
+            render template: 'users/new'
           end
         end
       end
@@ -54,8 +52,8 @@ module Stormpath
           else
             database_user
             respond_to do |format|
-              format.json { render json: RegistrationFormSerializer.to_h  }
-              format.html { render template: "users/new" }
+              format.json { render json: RegistrationFormSerializer.to_h }
+              format.html { render template: 'users/new' }
             end
           end
         end
@@ -75,9 +73,9 @@ module Stormpath
 
         if result.success?
           @account_url = result.account_url
-          render template: "users/verification_complete"
+          render template: 'users/verification_complete'
         else
-          render template: "users/verification_failed"
+          render template: 'users/verification_failed'
         end
       end
 

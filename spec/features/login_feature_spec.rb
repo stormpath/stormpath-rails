@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe "the signin process", type: :feature, vcr: true do
+describe 'the signin process', type: :feature, vcr: true do
   let(:login_config) { Stormpath::Rails.config.web.login }
 
   describe 'GET /login' do
     it 'has proper labels' do
       visit 'login'
-      expect(page).to have_css("label", text: "Username or Email")
-      expect(page).to have_css("label", text: "Password")
+      expect(page).to have_css('label', text: 'Username or Email')
+      expect(page).to have_css('label', text: 'Password')
     end
 
     it 'has proper labels when labels are changed' do
@@ -15,8 +15,8 @@ describe "the signin process", type: :feature, vcr: true do
       allow(login_config.form.fields.password).to receive(:label).and_return('Passworten')
 
       visit 'login'
-      expect(page).to have_css("label", text: "e-mail")
-      expect(page).to have_css("label", text: "Passworten")
+      expect(page).to have_css('label', text: 'e-mail')
+      expect(page).to have_css('label', text: 'Passworten')
     end
 
     let(:login_placeholder) { find_field('login')['placeholder'] }
@@ -77,7 +77,7 @@ describe "the signin process", type: :feature, vcr: true do
 
   describe 'POST /login' do
     describe 'wrong email or password' do
-      it "prompts error" do
+      it 'prompts error' do
         visit 'login'
         fill_in 'Username or Email', with: 'blah@example.com'
         fill_in 'Password', with: 'password'
@@ -85,7 +85,7 @@ describe "the signin process", type: :feature, vcr: true do
         expect(page).to have_content 'Invalid username or password.'
       end
 
-      it "preserves login field info" do
+      it 'preserves login field info' do
         visit 'login'
         fill_in 'Username or Email', with: 'blah@example.com'
         fill_in 'Password', with: 'password'
@@ -95,20 +95,20 @@ describe "the signin process", type: :feature, vcr: true do
     end
 
     describe 'missing fields' do
-      it "missing both fields" do
+      it 'missing both fields' do
         visit 'login'
         click_button 'Log in'
         expect(page).to have_content "Login and password fields can't be blank"
       end
 
-      it "missing login field" do
+      it 'missing login field' do
         visit 'login'
         fill_in 'Password', with: 'password'
         click_button 'Log in'
         expect(page).to have_content "Login field can't be blank"
       end
 
-      it "missing password field" do
+      it 'missing password field' do
         visit 'login'
         fill_in 'Username or Email', with: 'blah@example.com'
         click_button 'Log in'
@@ -121,7 +121,7 @@ describe "the signin process", type: :feature, vcr: true do
 
       after { delete_test_account }
 
-      it "redirects to root page" do
+      it 'redirects to root page' do
         visit 'login'
         fill_in 'Username or Email', with: user.email
         fill_in 'Password', with: 'Password1337'
@@ -129,7 +129,7 @@ describe "the signin process", type: :feature, vcr: true do
         expect(page).to have_content 'Root page'
       end
 
-      xit "when root page has authentication over it self"
+      xit 'when root page has authentication over it self'
 
       it 'with changed next uri' do
         allow(login_config).to receive(:next_uri).and_return('/about')

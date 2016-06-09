@@ -27,8 +27,8 @@ module ConfigSpecHelpers
 
   def enable_id_site
     Stormpath::Rails.config.web.id_site.enabled = true
-    Stormpath::Rails.config.web.id_site.uri = "/redirect"
-    Stormpath::Rails.config.web.id_site.next_uri = "/"
+    Stormpath::Rails.config.web.id_site.uri = '/redirect'
+    Stormpath::Rails.config.web.id_site.next_uri = '/'
   end
 
   def disable_id_site
@@ -51,7 +51,7 @@ module ConfigSpecHelpers
   end
 
   def disable_verify_email
-    Stormpath::Rails.config.web.verify_email.enabled= false
+    Stormpath::Rails.config.web.verify_email.enabled = false
   end
 
   def web_config

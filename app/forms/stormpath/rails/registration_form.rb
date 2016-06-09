@@ -19,7 +19,7 @@ module Stormpath
         arbitrary_param_names = params.keys - RegistrationFormFields.enabled_field_names
 
         if arbitrary_param_names.any?
-          raise ArbitraryDataSubmitted, "Can't submit arbitrary data: #{arbitrary_param_names.join(', ')}"
+          fail ArbitraryDataSubmitted, "Can't submit arbitrary data: #{arbitrary_param_names.join(', ')}"
         end
 
         super(params)
@@ -39,7 +39,7 @@ module Stormpath
 
       def validate_presence_of_required_attributes
         RegistrationFormFields.required_fields.each do |required_field, properties|
-          if self.send(required_field).blank?
+          if send(required_field).blank?
             errors.add(:base, "#{properties[:label]} can't be blank")
           end
         end
@@ -56,9 +56,9 @@ module Stormpath
       end
 
       def predefined_registration_params
-        Hash.new.tap do |hash|
+        {}.tap do |hash|
           RegistrationFormFields.predefined_enabled_field_names.each do |field_name|
-            hash[field_name] = self.send(field_name)
+            hash[field_name] = send(field_name)
           end
           fill_in_given_name(hash)
           fill_in_surname(hash)
@@ -66,9 +66,9 @@ module Stormpath
       end
 
       def custom_registration_params
-        Hash.new.tap do |hash|
+        {}.tap do |hash|
           RegistrationFormFields.custom_enabled_field_names.each do |field_name|
-            hash[field_name] = self.send(field_name)
+            hash[field_name] = send(field_name)
           end
         end
       end

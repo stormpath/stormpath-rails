@@ -19,7 +19,7 @@ module Stormpath
         end
       end
 
-      def href 
+      def href
         return '' unless success?
         @response.href
       end

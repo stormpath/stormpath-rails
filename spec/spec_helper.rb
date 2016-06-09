@@ -1,5 +1,5 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-ENV["RAILS_ENV"] ||= "test"
+ENV['RAILS_ENV'] ||= 'test'
 require 'simplecov'
 SimpleCov.start
 
@@ -10,18 +10,18 @@ require 'webmock/rspec'
 require 'vcr'
 require 'pry'
 
-require "rails/all"
+require 'rails/all'
 require 'stormpath/rails'
-require "dummy/config/environment"
-require "rspec/rails"
+require 'dummy/config/environment'
+require 'rspec/rails'
 
 require 'factories'
 
-require "support/generator_spec_helpers"
-require "support/config_spec_helpers"
+require 'support/generator_spec_helpers'
+require 'support/config_spec_helpers'
 require 'support/stormpath_testing_helpers'
-require "json_matchers/rspec"
-require "match_json"
+require 'json_matchers/rspec'
+require 'match_json'
 require 'capybara/rails'
 require 'capybara/rspec'
 

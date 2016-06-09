@@ -1,7 +1,6 @@
 module Stormpath
   module Rails
     class DeleteRefreshToken < DeleteAccessToken
-
       private
 
       def tokens_collection

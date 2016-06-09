@@ -17,7 +17,7 @@ module Stormpath
         end
 
         def normalize_email(email)
-          email.to_s.downcase.gsub(/\s+/, "")
+          email.to_s.downcase.gsub(/\s+/, '')
         end
       end
     end

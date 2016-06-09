@@ -5,17 +5,17 @@ module Stormpath
 
       included do
         helper_method :facebook_login_enabled?, :facebook_app_id,
-          :google_login_enabled?, :google_client_id, :social_auth?
+                      :google_login_enabled?, :google_client_id, :social_auth?
       end
 
       private
 
       def facebook_login_enabled?
-        false #facebook_app_id.present?
+        false # facebook_app_id.present?
       end
 
       def google_login_enabled?
-        false #google_client_id.present?
+        false # google_client_id.present?
       end
 
       def facebook_app_id

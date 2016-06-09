@@ -25,7 +25,7 @@ describe Stormpath::Rails::RegistrationFormFields, vcr: true do
 
     describe 'when custom data age is enabled & required' do
       before do
-        register_config.form.fields.age = OpenStruct.new(enabled: true, visible: true, label: "Age", placeholder: "Age", required: true, type: "number")
+        register_config.form.fields.age = OpenStruct.new(enabled: true, visible: true, label: 'Age', placeholder: 'Age', required: true, type: 'number')
       end
 
       after do
@@ -54,7 +54,7 @@ describe Stormpath::Rails::RegistrationFormFields, vcr: true do
 
     describe 'when custom data age is enabled' do
       before do
-        register_config.form.fields.age = OpenStruct.new(enabled: true, visible: true, label: "Age", placeholder: "Age", required: true, type: "number")
+        register_config.form.fields.age = OpenStruct.new(enabled: true, visible: true, label: 'Age', placeholder: 'Age', required: true, type: 'number')
       end
 
       after do
@@ -71,7 +71,7 @@ describe Stormpath::Rails::RegistrationFormFields, vcr: true do
 
     describe 'when custom data age is enabled' do
       before do
-        register_config.form.fields.age = OpenStruct.new(enabled: true, visible: true, label: "Age", placeholder: "Age", required: true, type: "number")
+        register_config.form.fields.age = OpenStruct.new(enabled: true, visible: true, label: 'Age', placeholder: 'Age', required: true, type: 'number')
       end
 
       after do

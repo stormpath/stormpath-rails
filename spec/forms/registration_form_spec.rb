@@ -12,7 +12,7 @@ describe Stormpath::Rails::RegistrationForm, vcr: true do
       givenName: 'Damir',
       email: 'damir.svrtan@gmail.com',
       surname: 'Svrtan',
-      password: 'Pa$$W0Rten',
+      password: 'Pa$$W0Rten'
     }
   end
 
@@ -29,7 +29,7 @@ describe Stormpath::Rails::RegistrationForm, vcr: true do
 
   describe 'with custom data' do
     before(:each) do
-      register_config.form.fields.age = OpenStruct.new(enabled: true, visible: true, label: "Age", placeholder: "Age", required: true, type: "number")
+      register_config.form.fields.age = OpenStruct.new(enabled: true, visible: true, label: 'Age', placeholder: 'Age', required: true, type: 'number')
       Stormpath::Rails.send(:remove_const, 'RegistrationForm')
       load('stormpath/rails/registration_form.rb')
     end

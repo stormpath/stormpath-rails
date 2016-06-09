@@ -10,8 +10,8 @@ module Stormpath
 
       def create_test_account
         @test_account_result ||= begin
-          result = Stormpath::Rails::Client.create_stormpath_account(test_user.attributes.merge!("password" => test_user.password))
-          raise result.error_message unless result.success?
+          result = Stormpath::Rails::Client.create_stormpath_account(test_user.attributes.merge!('password' => test_user.password))
+          fail result.error_message unless result.success?
           result
         end
       end

@@ -17,8 +17,8 @@ group :test do
   gem 'shoulda'
   gem 'webmock'
   gem 'vcr', '3.0.1'
-  gem 'ammeter', git: "https://github.com/alexrothenberg/ammeter"
-  gem 'simplecov', :require => false
+  gem 'ammeter', git: 'https://github.com/alexrothenberg/ammeter'
+  gem 'simplecov', require: false
   gem 'coveralls', require: false
   gem 'json_matchers'
   gem 'match_json'

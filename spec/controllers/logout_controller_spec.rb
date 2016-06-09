@@ -1,13 +1,13 @@
-require "spec_helper"
+require 'spec_helper'
 
 describe Stormpath::Rails::LogoutController, :vcr, type: :controller do
   it { should be_a Stormpath::Rails::BaseController }
 
-  describe "POST #create" do
-    context "application/json request" do
+  describe 'POST #create' do
+    context 'application/json request' do
       before { request.headers['HTTP_ACCEPT'] = 'application/json' }
 
-      it "signs out the user" do
+      it 'signs out the user' do
         sign_in
         post :create
 
@@ -18,7 +18,7 @@ describe Stormpath::Rails::LogoutController, :vcr, type: :controller do
       end
     end
 
-    it "signs out the user" do
+    it 'signs out the user' do
       sign_in
       post :create
 
@@ -28,12 +28,12 @@ describe Stormpath::Rails::LogoutController, :vcr, type: :controller do
       expect(response).to redirect_to(root_path)
     end
 
-    context "custom next_uri" do
+    context 'custom next_uri' do
       before do
         allow(Stormpath::Rails.config.web.logout).to receive(:next_uri).and_return('/custom')
       end
 
-      it "redirects to next_uri" do
+      it 'redirects to next_uri' do
         sign_in
         post :create
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require 'spec_helper'
 
 describe Stormpath::Rails::ContentTypeNegotiator do
@@ -5,11 +6,11 @@ describe Stormpath::Rails::ContentTypeNegotiator do
   HTTP_ACCEPT_HTML = Stormpath::Rails::ContentTypeNegotiator::HTTP_ACCEPT_HTML
   HTTP_ACCEPT_WILDCARD = Stormpath::Rails::ContentTypeNegotiator::HTTP_ACCEPT_WILDCARD
 
-  HTTP_UNSUPPORTED_ACCEPT_HEADER = 'audio/basic'
-  HTTP_UNSUPPORTED_ACCEPT_HEADER_LIST = 'audio/basic, audio/mp3'
+  HTTP_UNSUPPORTED_ACCEPT_HEADER = 'audio/basic'.freeze
+  HTTP_UNSUPPORTED_ACCEPT_HEADER_LIST = 'audio/basic, audio/mp3'.freeze
 
-  PRODUCES_JSON_FIRST = [HTTP_ACCEPT_JSON, HTTP_ACCEPT_HTML]
-  PRODUCES_HTML_FIRST = [HTTP_ACCEPT_HTML, HTTP_ACCEPT_JSON]
+  PRODUCES_JSON_FIRST = [HTTP_ACCEPT_JSON, HTTP_ACCEPT_HTML].freeze
+  PRODUCES_HTML_FIRST = [HTTP_ACCEPT_HTML, HTTP_ACCEPT_JSON].freeze
 
   TRANSITIONS = [
     { produces: PRODUCES_JSON_FIRST, http_accept: nil, result: HTTP_ACCEPT_JSON },
@@ -43,7 +44,7 @@ describe Stormpath::Rails::ContentTypeNegotiator do
     { produces: [HTTP_ACCEPT_HTML], http_accept: HTTP_ACCEPT_HTML, result: HTTP_ACCEPT_HTML },
     { produces: [HTTP_ACCEPT_HTML], http_accept: HTTP_UNSUPPORTED_ACCEPT_HEADER, result: nil },
     { produces: [HTTP_ACCEPT_HTML], http_accept: HTTP_UNSUPPORTED_ACCEPT_HEADER_LIST, result: nil }
-  ]
+  ].freeze
 
   TRANSITIONS.each do |transition|
     http_accept = transition[:http_accept]

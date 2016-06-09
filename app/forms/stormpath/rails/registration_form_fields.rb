@@ -9,7 +9,7 @@ module Stormpath
         :email,
         :password,
         :confirm_password
-      ]
+      ].freeze
 
       class << self
         def required_field_names
