@@ -18,16 +18,6 @@ module Stormpath
         end
       end
 
-      private def reply_with_error(error_message)
-        respond_to do |format|
-          format.json { render json: { status: 400, message: error_message }, status: 400 }
-          format.html do
-            set_flash_message :error, error_message
-            render template: 'sessions/new'
-          end
-        end
-      end
-
       def new
         if configuration.web.id_site.enabled
           redirect_to id_site_login_url
@@ -49,18 +39,14 @@ module Stormpath
 
       private
 
-      def user_from_params
-        username = params[:login]
-        password = params[:password]
-
-        ::User.new.tap do |user|
-          user.email = username
-          user.password = password
+      def reply_with_error(error_message)
+        respond_to do |format|
+          format.json { render json: { status: 400, message: error_message }, status: 400 }
+          format.html do
+            set_flash_message :error, error_message
+            render template: 'sessions/new'
+          end
         end
-      end
-
-      def password_grant_request
-        Stormpath::Oauth::PasswordGrantRequest.new(params[:login], params[:password])
       end
 
       def redirect_signed_in_users
