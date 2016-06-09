@@ -17,7 +17,7 @@ xdescribe 'ChangePassword POST', type: :request, vcr: true do
 
   context 'application/json' do
     def json_change_post(attrs)
-      post '/change', attrs, { 'HTTP_ACCEPT' => 'application/json' }
+      post '/change', attrs, 'HTTP_ACCEPT' => 'application/json'
     end
 
     context "valid data" do

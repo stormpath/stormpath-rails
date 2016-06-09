@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'Registration POST', type: :request, vcr: true do
   describe 'HTTP_ACCEPT=application/json' do
     def json_register_post(attrs = {})
-      post '/register', attrs, { 'HTTP_ACCEPT' => 'application/json' }
+      post '/register', attrs, 'HTTP_ACCEPT' => 'application/json'
     end
 
     def response_body

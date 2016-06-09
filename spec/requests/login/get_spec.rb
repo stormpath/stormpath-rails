@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'Login GET', type: :request, vcr: true do
   describe 'HTTP_ACCEPT=application/json' do
     def json_login_get
-      get '/login', {}, { 'HTTP_ACCEPT' => 'application/json' }
+      get '/login', {}, 'HTTP_ACCEPT' => 'application/json'
     end
 
     describe 'json is enabled' do

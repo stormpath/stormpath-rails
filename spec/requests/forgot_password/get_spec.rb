@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'ForgotPassword GET', type: :request, vcr: true do
   context 'application/json' do
     def json_forgot_get
-      get '/forgot', {}, { 'HTTP_ACCEPT' => 'application/json' }
+      get '/forgot', {}, 'HTTP_ACCEPT' => 'application/json'
     end
 
     context "password reset enabled" do

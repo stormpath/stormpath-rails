@@ -17,7 +17,7 @@ describe 'ForgotPassword POST', type: :request, vcr: true do
 
   context 'application/json' do
     def json_forgot_post(attrs)
-      post '/forgot', attrs, { 'HTTP_ACCEPT' => 'application/json' }
+      post '/forgot', attrs, 'HTTP_ACCEPT' => 'application/json'
     end
 
     context "valid data" do

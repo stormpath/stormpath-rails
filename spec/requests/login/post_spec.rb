@@ -13,7 +13,7 @@ describe 'Login POST', type: :request, vcr: true do
     Rails.application.reload_routes!
   end
 
-  after  { user.delete }
+  after { user.delete }
 
   describe 'HTTP_ACCEPT=text/html' do
     describe 'html is enabled' do
@@ -45,7 +45,7 @@ describe 'Login POST', type: :request, vcr: true do
 
   describe 'HTTP_ACCEPT=application/json' do
     def json_login_post(attrs)
-      post '/login', attrs, { 'HTTP_ACCEPT' => 'application/json' }
+      post '/login', attrs, 'HTTP_ACCEPT' => 'application/json'
     end
 
     describe 'json is enabled' do
@@ -118,7 +118,7 @@ describe 'Login POST', type: :request, vcr: true do
 
   describe 'HTTP_ACCEPT=nil' do
     def login_post_with_nil_http_accept(attrs)
-      post '/login', attrs, { 'HTTP_ACCEPT' => nil }
+      post '/login', attrs, 'HTTP_ACCEPT' => nil
     end
 
     describe 'json is enabled' do

@@ -3,7 +3,7 @@ require 'spec_helper'
 xdescribe 'ChangePassword GET', type: :request, vcr: true do
   context 'application/json' do
     def json_change_get
-      get '/change', {}, { 'HTTP_ACCEPT' => 'application/json' }
+      get '/change', {}, 'HTTP_ACCEPT' => 'application/json'
     end
 
     context "password reset enabled" do

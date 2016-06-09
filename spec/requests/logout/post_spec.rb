@@ -29,7 +29,7 @@ describe 'Logout POST', type: :request, vcr: true do
 
   describe 'HTTP_ACCEPT=application/json' do
     def json_logout_post
-      post '/logout', nil, { 'HTTP_ACCEPT' => 'application/json' }
+      post '/logout', nil, 'HTTP_ACCEPT' => 'application/json'
     end
 
     describe 'json is enabled' do

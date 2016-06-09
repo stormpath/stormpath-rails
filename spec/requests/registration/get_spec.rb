@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'Registration GET', type: :request, vcr: true do
   describe 'HTTP_ACCEPT=application/json' do
     def json_registration_get
-      get '/register', {}, { 'HTTP_ACCEPT' => 'application/json' }
+      get '/register', {}, 'HTTP_ACCEPT' => 'application/json'
     end
 
     describe 'json is enabled' do
