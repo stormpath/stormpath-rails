@@ -6,39 +6,24 @@ module Stormpath
       def create
         form = LoginForm.new(login: params[:login], password: params[:password])
 
-        if form.invalid?
-          return respond_to do |format|
-            format.json do
-              render json: { status: 400, message: form.errors.first }, status: 400
-            end
-            format.html do
-              set_flash_message :error, form.errors.first
-              render template: 'sessions/new'
-            end
-          end
-        end
-
-        result = authenticate_oauth(password_grant_request)
-
-        if result.success?
-          @user = find_or_create_user_from_account result.account
-
-          TokenCookieSetter.call(cookies, result.authentication_result)
+        if form.save
+          TokenCookieSetter.call(cookies, form.authentication_result)
 
           respond_to do |format|
-            format.json { render json: AccountSerializer.to_h(result.account) }
+            format.json { render json: AccountSerializer.to_h(form.authentication_result.account) }
             format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
           end
         else
-          respond_to do |format|
-            format.json do
-              status = result.status.presence || 400
-              render json: { status: status, message: result.error_message }, status: status
-            end
-            format.html do
-              set_flash_message :error, result.error_message
-              render template: 'sessions/new'
-            end
+          reply_with_error(form.errors.full_messages.first)
+        end
+      end
+
+      private def reply_with_error(error_message)
+        respond_to do |format|
+          format.json { render json: { status: 400, message: error_message }, status: 400 }
+          format.html do
+            set_flash_message :error, error_message
+            render template: 'sessions/new'
           end
         end
       end

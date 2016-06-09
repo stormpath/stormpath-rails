@@ -98,21 +98,21 @@ describe 'the signin process', type: :feature, vcr: true do
       it 'missing both fields' do
         visit 'login'
         click_button 'Log in'
-        expect(page).to have_content "Login and password fields can't be blank"
+        expect(page).to have_content "Username or Email can't be blank"
       end
 
       it 'missing login field' do
         visit 'login'
         fill_in 'Password', with: 'password'
         click_button 'Log in'
-        expect(page).to have_content "Login field can't be blank"
+        expect(page).to have_content "Username or Email can't be blank"
       end
 
       it 'missing password field' do
         visit 'login'
         fill_in 'Username or Email', with: 'blah@example.com'
         click_button 'Log in'
-        expect(page).to have_content "Password field can't be blank"
+        expect(page).to have_content "Password can't be blank"
       end
     end
 
