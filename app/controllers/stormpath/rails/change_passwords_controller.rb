@@ -3,11 +3,14 @@ module Stormpath
     class ChangePasswordsController < Stormpath::Rails::BaseController
       def new
         if params[:sptoken].present?
-          result = verify_email_token params[:sptoken]
+          result = verify_password_token params[:sptoken]
 
           if result.success?
-            @account_url = result.account_url
-            render template: 'passwords/forgot_change'
+            @sptoken = params[:sptoken]
+            respond_to do |format|
+              format.html { render template: 'passwords/forgot_change' }
+              format.json { render nothing: true, status: 200 }
+            end
           else
             respond_to do |format|
               format.html { redirect_to configuration.web.change_password.error_uri }

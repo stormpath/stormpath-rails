@@ -1,9 +1,15 @@
 require 'spec_helper'
+require 'net/http'
+require 'uri'
 
-xdescribe 'ChangePassword GET', type: :request, vcr: true do
+describe 'ChangePassword GET', type: :request, vcr: true do
   context 'application/json' do
-    def json_change_get
-      get '/change', {}, 'HTTP_ACCEPT' => 'application/json'
+    def json_change_get(sptoken: nil)
+      get '/change', { sptoken: sptoken }, 'HTTP_ACCEPT' => 'application/json'
+    end
+
+    def response_body
+      JSON.parse(response.body)
     end
 
     context 'password reset enabled' do
@@ -12,9 +18,47 @@ xdescribe 'ChangePassword GET', type: :request, vcr: true do
         Rails.application.reload_routes!
       end
 
-      it 'return 404' do
-        json_change_get
-        expect(response.status).to eq(404)
+      describe 'without sptoken' do
+        it 'return 400' do
+          json_change_get
+          expect(response.status).to eq(400)
+          expect(response_body['message']).to eq('sptoken parameter not provided.')
+        end
+      end
+
+      describe 'with incorrect sptoken' do
+        it 'return 400' do
+          json_change_get(sptoken: 'zzz')
+          expect(response.status).to eq(400)
+          expect(response_body['message']).to eq('sptoken parameter not provided.')
+        end
+      end
+
+      describe 'with correct sptoken' do
+        let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
+
+        let(:account_attrs) do
+          {
+            email: 'example@test.com',
+            given_name: 'Example',
+            surname: 'Test',
+            password: 'Pa$$W0RD',
+            username: 'SirExample'
+          }
+        end
+
+        let(:password_reset_token) do
+          Stormpath::Rails::Client.application.password_reset_tokens.create(
+            email: account.email
+          ).token
+        end
+
+        after { account.delete }
+
+        it 'returns 200' do
+          json_change_get(sptoken: password_reset_token)
+          expect(response.status).to eq(200)
+        end
       end
     end
 
@@ -38,10 +82,11 @@ xdescribe 'ChangePassword GET', type: :request, vcr: true do
         Rails.application.reload_routes!
       end
 
-      it 'renders forgot password view' do
-        get '/change'
-        expect(response).to be_success
-        expect(response).to render_template(:forgot)
+      describe 'without sptoken' do
+        it 'redirects to forgot password uri' do
+          get '/change'
+          expect(response).to redirect_to('/forgot')
+        end
       end
     end
 
