@@ -112,10 +112,10 @@ describe 'Registration POST', type: :request, vcr: true do
             web_config.register.form.fields.age = OpenStruct.new(
               enabled: true,
               visible: true,
-              label: "Age",
-              placeholder: "Age",
+              label: 'Age',
+              placeholder: 'Age',
               required: true,
-              type: "number"
+              type: 'number'
             )
             reload_form_class
           end
@@ -160,10 +160,10 @@ describe 'Registration POST', type: :request, vcr: true do
             web_config.register.form.fields.age = OpenStruct.new(
               enabled: true,
               visible: true,
-              label: "Age",
-              placeholder: "Age",
+              label: 'Age',
+              placeholder: 'Age',
               required: false,
-              type: "number"
+              type: 'number'
             )
             reload_form_class
           end

@@ -20,37 +20,37 @@ describe 'ForgotPassword POST', type: :request, vcr: true do
       post '/forgot', attrs, 'HTTP_ACCEPT' => 'application/json'
     end
 
-    context "valid data" do
-      it "return 200 OK" do
+    context 'valid data' do
+      it 'return 200 OK' do
         json_forgot_post(email: user.email)
         expect(response).to be_success
       end
     end
 
-    context "invalid data" do
-      it "return 200 OK" do
-        json_forgot_post(password: { email: "test@testable.com" })
+    context 'invalid data' do
+      it 'return 200 OK' do
+        json_forgot_post(password: { email: 'test@testable.com' })
         expect(response).to be_success
       end
     end
   end
 
   context 'text/html' do
-    context "valid data" do
-      it "redirects to login" do
+    context 'valid data' do
+      it 'redirects to login' do
         post '/forgot', password: { email: test_user.email }
         expect(response).to redirect_to('/login?status=forgot')
       end
     end
 
-    context "invalid data" do
+    context 'invalid data' do
       it 'with wrong email redirects to login' do
-        post '/forgot', password: { email: "test@testable.com" }
+        post '/forgot', password: { email: 'test@testable.com' }
         expect(response).to redirect_to('/login?status=forgot')
       end
 
-      it "with no email redirects to login" do
-        post '/forgot', password: { email: "" }
+      it 'with no email redirects to login' do
+        post '/forgot', password: { email: '' }
         expect(response).to redirect_to('/login?status=forgot')
       end
     end
