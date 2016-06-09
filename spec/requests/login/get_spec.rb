@@ -26,22 +26,22 @@ describe 'Login GET', type: :request, vcr: true do
         json_login_get
         expect(response).to match_json <<-JSON
         {
-        	"form": {
-        		"fields": [{
-        			"label": "Username or Email",
-        			"name": "login",
-        			"placeholder": "Username or Email",
-        			"required": true,
-        			"type": "text"
-        		}, {
-        			"label": "Password",
-        			"name": "password",
-        			"placeholder": "Password",
-        			"required": true,
-        			"type": "password"
-        		}]
-        	},
-        	"accountStores": []
+          "form": {
+            "fields": [{
+              "label": "Username or Email",
+              "name": "login",
+              "placeholder": "Username or Email",
+              "required": true,
+              "type": "text"
+            }, {
+              "label": "Password",
+              "name": "password",
+              "placeholder": "Password",
+              "required": true,
+              "type": "password"
+            }]
+          },
+          "accountStores": []
         }
         JSON
       end

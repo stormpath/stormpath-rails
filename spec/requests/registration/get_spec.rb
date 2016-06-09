@@ -26,8 +26,8 @@ describe 'Registration GET', type: :request, vcr: true do
         json_registration_get
         expect(response).to match_json <<-JSON
         {
-        	"form": {
-        		"fields": [{
+          "form": {
+            "fields": [{
               "label": "First Name",
               "name": "givenName",
               "placeholder": "First Name",
@@ -55,8 +55,8 @@ describe 'Registration GET', type: :request, vcr: true do
               "required": true,
               "type": "password"
             }]
-        	},
-        	"accountStores": []
+          },
+          "accountStores": []
         }
         JSON
       end
