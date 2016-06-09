@@ -21,11 +21,9 @@ module Stormpath
         result = authenticate_oauth(password_grant_request)
 
         if result.success?
-          @access_token = result.access_token
           @user = find_or_create_user_from_account result.account
 
-          set_access_token_cookie
-          set_refresh_token_cookie
+          TokenCookieSetter.call(cookies, result.authentication_result)
 
           respond_to do |format|
             format.json { render json: AccountSerializer.to_h(result.account) }
@@ -66,34 +64,6 @@ module Stormpath
 
       private
 
-      def set_access_token_cookie
-        cookies[configuration.web.access_token_cookie.name] = access_token_cookie_config
-      end
-
-      def access_token_cookie_config
-        {
-          value: access_token.access_token,
-          expires: access_token.expires_in.seconds.from_now,
-          httponly: configuration.web.access_token_cookie.http_only,
-          path: configuration.web.access_token_cookie.domain,
-          secure: configuration.web.access_token_cookie.secure
-        }
-      end
-
-      def set_refresh_token_cookie
-        cookies[configuration.web.refresh_token_cookie.name] = refresh_token_cookie_config
-      end
-
-      def refresh_token_cookie_config
-        {
-          value: access_token.refresh_token,
-          expires: access_token.expires_in.seconds.from_now,
-          httponly: configuration.web.refresh_token_cookie.http_only,
-          path: configuration.web.refresh_token_cookie.domain,
-          secure: configuration.web.refresh_token_cookie.secure
-        }
-      end
-
       def user_from_params
         username = params[:login]
         password = params[:password]
@@ -102,10 +72,6 @@ module Stormpath
           user.email = username
           user.password = password
         end
-      end
-
-      def access_token
-        @access_token
       end
 
       def password_grant_request

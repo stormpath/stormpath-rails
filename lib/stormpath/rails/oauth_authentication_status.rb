@@ -9,7 +9,7 @@ module Stormpath
         @response.instance_of? Stormpath::Oauth::AccessTokenAuthenticationResult
       end
 
-      def access_token
+      def authentication_result
         @response
       end
 
@@ -39,7 +39,7 @@ module Stormpath
 
       def jwt_response
         begin
-          JWT.decode(access_token.access_token, ENV['STORMPATH_API_KEY_SECRET']).first
+          JWT.decode(authentication_result.access_token, ENV['STORMPATH_API_KEY_SECRET']).first
         rescue JWT::ExpiredSignature => error
           raise Stormpath::Oauth::Error.new(:jwt_expired)
         end
