@@ -4,7 +4,13 @@ describe 'ForgotPassword POST', type: :request, vcr: true do
   let(:user) { Stormpath::Rails::Client.application.accounts.create(user_attrs) }
 
   let(:user_attrs) do
-    { email: 'example@test.com', given_name: 'Example', surname: 'Test', password: 'Pa$$W0RD', username: 'SirExample' }
+    {
+      email: 'example@test.com',
+      given_name: 'Example',
+      surname: 'Test',
+      password: 'Pa$$W0RD',
+      username: 'SirExample'
+    }
   end
 
   before do
