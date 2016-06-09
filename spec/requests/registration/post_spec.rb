@@ -20,21 +20,36 @@ describe 'Registration POST', type: :request, vcr: true do
     end
 
     let(:user_attrs) do
-      { email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', username: 'SirExample' }
+      {
+        email: 'example@test.com',
+        givenName: 'Example',
+        surname: 'Test',
+        password: 'Pa$$W0RD',
+        username: 'SirExample'
+      }
     end
 
     describe 'json is enabled' do
       describe 'submit valid form' do
         after { delete_account }
         it 'respond with status 200' do
-          json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD')
+          json_register_post(
+            email: 'example@test.com',
+            givenName: 'Example',
+            surname: 'Test',
+            password: 'Pa$$W0RD'
+          )
           expect(response.status).to eq(200)
         end
       end
 
       describe 'submit blank givenName' do
         it 'respond with status 400' do
-          json_register_post(email: 'example@test.com', surname: 'Test', password: 'Pa$$W0RD')
+          json_register_post(
+            email: 'example@test.com',
+            surname: 'Test',
+            password: 'Pa$$W0RD'
+          )
           expect(response.status).to eq(400)
           expect(error_message).to eq('First Name can\'t be blank')
         end
@@ -55,20 +70,39 @@ describe 'Registration POST', type: :request, vcr: true do
         after { delete_account }
 
         it 'respond with status 200' do
-          json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD')
+          json_register_post(
+            email: 'example@test.com',
+            givenName: 'Example',
+            surname: 'Test',
+            password: 'Pa$$W0RD'
+          )
           expect(response.status).to eq(200)
         end
       end
 
       describe 'submit already existing email' do
-        let!(:account) { Stormpath::Rails::Client.application.accounts.create(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD') }
+        let!(:account) do
+          Stormpath::Rails::Client.application.accounts.create(
+            email: 'example@test.com',
+            givenName: 'Example',
+            surname: 'Test',
+            password: 'Pa$$W0RD'
+          )
+        end
 
         after { account.delete }
 
         it 'respond with status 400' do
-          json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD')
+          json_register_post(
+            email: 'example@test.com',
+            givenName: 'Example',
+            surname: 'Test',
+            password: 'Pa$$W0RD'
+          )
           expect(response.status).to eq(400)
-          expect(error_message).to eq('Account with that email already exists.  Please choose another email.')
+          expect(error_message).to eq(
+            'Account with that email already exists.  Please choose another email.'
+          )
         end
       end
 
@@ -127,9 +161,17 @@ describe 'Registration POST', type: :request, vcr: true do
               after { delete_account }
 
               it 'respond with status 200' do
-                json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', age: 25)
+                json_register_post(
+                  email: 'example@test.com',
+                  givenName: 'Example',
+                  surname: 'Test',
+                  password: 'Pa$$W0RD',
+                  age: 25
+                )
                 expect(response.status).to eq(200)
-                account = Stormpath::Rails::Client.application.accounts.get(response_body['account']['href'])
+                account = Stormpath::Rails::Client.application.accounts.get(
+                  response_body['account']['href']
+                )
                 expect(account.custom_data[:age]).to eq('25')
               end
             end
@@ -138,9 +180,17 @@ describe 'Registration POST', type: :request, vcr: true do
               after { delete_account }
 
               it 'respond with status 200' do
-                json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', customData: { age: 25 })
+                json_register_post(
+                  email: 'example@test.com',
+                  givenName: 'Example',
+                  surname: 'Test',
+                  password: 'Pa$$W0RD',
+                  customData: { age: 25 }
+                )
                 expect(response.status).to eq(200)
-                account = Stormpath::Rails::Client.application.accounts.get(response_body['account']['href'])
+                account = Stormpath::Rails::Client.application.accounts.get(
+                  response_body['account']['href']
+                )
                 expect(account.custom_data[:age]).to eq('25')
               end
             end
@@ -148,7 +198,12 @@ describe 'Registration POST', type: :request, vcr: true do
 
           describe 'and not submitted' do
             it 'respond with status 400' do
-              json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD')
+              json_register_post(
+                email: 'example@test.com',
+                givenName: 'Example',
+                surname: 'Test',
+                password: 'Pa$$W0RD'
+              )
               expect(error_message).to eq('Age can\'t be blank')
               expect(response.status).to eq(400)
             end
@@ -174,7 +229,13 @@ describe 'Registration POST', type: :request, vcr: true do
             after { delete_account }
 
             it 'respond with status 200' do
-              json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', age: 25)
+              json_register_post(
+                email: 'example@test.com',
+                givenName: 'Example',
+                surname: 'Test',
+                password: 'Pa$$W0RD',
+                age: 25
+              )
               expect(response.status).to eq(200)
             end
           end
@@ -183,7 +244,13 @@ describe 'Registration POST', type: :request, vcr: true do
             after { delete_account }
 
             it 'respond with status 200' do
-              json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', customData: { age: 25 })
+              json_register_post(
+                email: 'example@test.com',
+                givenName: 'Example',
+                surname: 'Test',
+                password: 'Pa$$W0RD',
+                customData: { age: 25 }
+              )
               expect(response.status).to eq(200)
             end
           end
@@ -204,13 +271,25 @@ describe 'Registration POST', type: :request, vcr: true do
           after { delete_account }
 
           it 'responds with status 200 if matches' do
-            json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', confirmPassword: 'Pa$$W0RD')
+            json_register_post(
+              email: 'example@test.com',
+              givenName: 'Example',
+              surname: 'Test',
+              password: 'Pa$$W0RD',
+              confirmPassword: 'Pa$$W0RD'
+            )
             expect(response.status).to eq(200)
           end
         end
 
         it 'responds with status 400 if does not match' do
-          json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', confirmPassword: 'Pa$$')
+          json_register_post(
+            email: 'example@test.com',
+            givenName: 'Example',
+            surname: 'Test',
+            password: 'Pa$$W0RD',
+            confirmPassword: 'Pa$$'
+          )
           expect(response.status).to eq(400)
           expect(error_message).to eq('Passwords do not match')
         end
@@ -295,7 +374,13 @@ describe 'Registration POST', type: :request, vcr: true do
       describe 'unknown field submission' do
         describe 'nested inside the root' do
           it 'respond with status 400' do
-            json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', age: 25)
+            json_register_post(
+              email: 'example@test.com',
+              givenName: 'Example',
+              surname: 'Test',
+              password: 'Pa$$W0RD',
+              age: 25
+            )
             expect(response.status).to eq(400)
             expect(error_message).to eq("Can't submit arbitrary data: age")
           end
@@ -303,7 +388,13 @@ describe 'Registration POST', type: :request, vcr: true do
 
         describe 'nested inside the customData hash' do
           it 'respond with status 400' do
-            json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', customData: { age: 25 })
+            json_register_post(
+              email: 'example@test.com',
+              givenName: 'Example',
+              surname: 'Test',
+              password: 'Pa$$W0RD',
+              customData: { age: 25 }
+            )
             expect(response.status).to eq(400)
             expect(error_message).to eq("Can't submit arbitrary data: age")
           end
@@ -321,7 +412,13 @@ describe 'Registration POST', type: :request, vcr: true do
         end
 
         it 'respond with status 400' do
-          json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD', middleName: 'Hako')
+          json_register_post(
+            email: 'example@test.com',
+            givenName: 'Example',
+            surname: 'Test',
+            password: 'Pa$$W0RD',
+            middleName: 'Hako'
+          )
           expect(response.status).to eq(400)
           expect(error_message).to eq("Can't submit arbitrary data: middle_name")
         end

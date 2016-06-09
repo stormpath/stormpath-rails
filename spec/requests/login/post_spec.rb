@@ -4,7 +4,13 @@ describe 'Login POST', type: :request, vcr: true do
   let(:user) { Stormpath::Rails::Client.application.accounts.create(user_attrs) }
 
   let(:user_attrs) do
-    { email: 'example@test.com', given_name: 'Example', surname: 'Test', password: 'Pa$$W0RD', username: 'SirExample' }
+    {
+      email: 'example@test.com',
+      given_name: 'Example',
+      surname: 'Test',
+      password: 'Pa$$W0RD',
+      username: 'SirExample'
+    }
   end
 
   before { user }
@@ -94,7 +100,7 @@ describe 'Login POST', type: :request, vcr: true do
         expect(response.status).to eq(400)
       end
 
-      it 'failed login, wrong password should result with only a message and a status in the response body' do
+      it 'failed login, wrong password should result with a message in the response body' do
         json_login_post(login: user_attrs[:email], password: 'WR00N6')
 
         response_body = JSON.parse(response.body)
@@ -128,7 +134,10 @@ describe 'Login POST', type: :request, vcr: true do
       end
 
       it 'successfull login with username should result with 200' do
-        login_post_with_nil_http_accept(login: user_attrs[:username], password: user_attrs[:password])
+        login_post_with_nil_http_accept(
+          login: user_attrs[:username],
+          password: user_attrs[:password]
+        )
         expect(response.status).to eq(200)
       end
 
@@ -147,7 +156,7 @@ describe 'Login POST', type: :request, vcr: true do
         expect(response.status).to eq(400)
       end
 
-      it 'failed login, wrong password should result with only a message and a status in the response body' do
+      it 'failed login, wrong password should result with a message in the response body' do
         login_post_with_nil_http_accept(login: user_attrs[:email], password: 'WR00N6')
 
         response_body = JSON.parse(response.body)
