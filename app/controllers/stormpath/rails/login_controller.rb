@@ -1,7 +1,7 @@
 module Stormpath
   module Rails
     class LoginController < BaseController
-      before_action :redirect_signed_in_users, only: :new
+      before_action :require_no_authentication, only: [:new, :create]
 
       def create
         form = LoginForm.new(login: params[:login], password: params[:password])
@@ -49,23 +49,11 @@ module Stormpath
         end
       end
 
-      def redirect_signed_in_users
-        redirect_to root_path if signed_in?
-      end
-
       def login_redirect_route
         if params[:next]
-          login_redirect_route_from_params
+          params[:next].start_with?('/') ? params[:next] : "/#{params[:next]}"
         else
           configuration.web.login.next_uri
-        end
-      end
-
-      def login_redirect_route_from_params
-        if params[:next].start_with?('/')
-          params[:next]
-        else
-          "/#{params[:next]}"
         end
       end
     end
