@@ -2,54 +2,52 @@ module Stormpath
   module Rails
     class ChangePasswordsController < Stormpath::Rails::BaseController
       def new
-        if params[:sptoken].present?
-          result = verify_password_token params[:sptoken]
+        SptokenVerification.new(params[:sptoken]).call
 
-          if result.success?
-            @sptoken = params[:sptoken]
-            respond_to do |format|
-              format.html { render template: 'passwords/forgot_change' }
-              format.json { render nothing: true, status: 200 }
-            end
-          else
-            respond_to do |format|
-              format.html { redirect_to configuration.web.change_password.error_uri }
-              format.json { render json: { status: 400, message: 'sptoken parameter not provided.' }, status: 400 }
-            end
-          end
-        else
-          respond_to do |format|
-            format.html { redirect_to configuration.web.forgot_password.uri }
-            format.json { render json: { status: 400, message: 'sptoken parameter not provided.' }, status: 400 }
-          end
+        respond_to do |format|
+          format.html { render template: 'passwords/forgot_change' }
+          format.json { render nothing: true, status: 200 }
+        end
+      rescue Stormpath::Error => error
+        status = error.status.presence || 400
+        respond_to do |format|
+          format.html { redirect_to configuration.web.change_password.error_uri }
+          format.json { render json: { status: status, message: error.message }, status: status }
+        end
+      rescue NoSptokenError => error
+        respond_to do |format|
+          format.html { redirect_to configuration.web.forgot_password.uri }
+          format.json { render json: { status: 400, message: error.message }, status: 400 }
         end
       end
 
       def create
-        @account_url = params[:account_url]
-        if passwords_match?
-          result = update_password(params[:account_url], params[:password][:original])
-          if result.success?
-            render template: 'passwords/forgot_complete'
-          else
-            set_flash_message :error, result.error_message
-            render template: 'passwords/forgot_change'
+        password_change = PasswordChange.new(params[:sptoken], params[:password])
+        password_change.call
+
+        if configuration.web.change_password.auto_login
+          # login the user.
+          respond_to do |format|
+            format.html { redirect_to configuration.web.login.next_uri }
+            format.json { render json: AccountSerializer.to_h(password_change.account) }
           end
-
         else
-          set_flash_message :error, 'Passwords do not match.'
-          render template: 'passwords/forgot_change'
+          respond_to do |format|
+            format.html { redirect_to configuration.web.change_password.next_uri }
+            format.json { render nothing: true, status: 200 }
+          end
         end
-      end
-
-      private
-
-      def password_params
-        @password_params ||= params[:password] || params
-      end
-
-      def passwords_match?
-        params[:password][:original] == params[:password][:repeated]
+      rescue Stormpath::Error => error
+        status = error.status.presence || 400
+        respond_to do |format|
+          format.html { redirect_to configuration.web.change_password.error_uri }
+          format.json { render json: { status: status, message: error.message }, status: status }
+        end
+      rescue NoSptokenError => error
+        respond_to do |format|
+          format.html { redirect_to configuration.web.forgot_password.uri }
+          format.json { render json: { status: 400, message: error.message }, status: 400 }
+        end
       end
     end
   end

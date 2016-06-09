@@ -27,10 +27,12 @@ describe 'ChangePassword GET', type: :request, vcr: true do
       end
 
       describe 'with incorrect sptoken' do
-        it 'return 400' do
+        it 'return 404' do
           json_change_get(sptoken: 'zzz')
-          expect(response.status).to eq(400)
-          expect(response_body['message']).to eq('sptoken parameter not provided.')
+          expect(response.status).to eq(404)
+          expect(response_body['message']).to eq(
+            'This password reset request does not exist. Please request a new password reset.'
+          )
         end
       end
 

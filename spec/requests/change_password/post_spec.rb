@@ -1,57 +1,140 @@
 require 'spec_helper'
 
-xdescribe 'ChangePassword POST', type: :request, vcr: true do
-  let(:user) { Stormpath::Rails::Client.application.accounts.create(user_attrs) }
-
-  let(:user_attrs) do
-    { email: 'example@test.com', given_name: 'Example', surname: 'Test', password: 'Pa$$W0RD', username: 'SirExample' }
+describe 'ChangePassword POST', type: :request, vcr: true do
+  def response_body
+    JSON.parse(response.body)
   end
 
-  before do
-    user
-    enable_change_password
-    Rails.application.reload_routes!
+  let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
+
+  let(:account_attrs) do
+    {
+      email: 'example@test.com',
+      given_name: 'Example',
+      surname: 'Test',
+      password: 'Pa$$W0RD',
+      username: 'SirExample'
+    }
   end
 
-  after { user.delete }
+  let(:password_reset_token) do
+    Stormpath::Rails::Client.application.password_reset_tokens.create(
+      email: account.email
+    ).token
+  end
+
+  let(:new_password) { 'neWpa$$W0Rd' }
+
+  after { account.delete }
 
   context 'application/json' do
-    def json_change_post(attrs)
+    def json_change_post(attrs = {})
       post '/change', attrs, 'HTTP_ACCEPT' => 'application/json'
     end
 
-    context 'valid data' do
-      it 'return 200 OK' do
-        json_change_post(email: user.email)
-        expect(response).to be_success
+    context 'password reset enabled' do
+      before do
+        enable_change_password
+        Rails.application.reload_routes!
+      end
+
+      context 'without sptoken' do
+        it 'return 400' do
+          json_change_post(password: new_password)
+          expect(response.status).to eq(400)
+          expect(response_body['message']).to eq('sptoken parameter not provided.')
+        end
+      end
+
+      context 'invalid sptoken' do
+        it 'return 404' do
+          json_change_post(password: new_password, sptoken: 'INVALIDSPTOKEN')
+          expect(response.status).to eq(404)
+          expect(response_body['message']).to eq(
+            'This password reset request does not exist. Please request a new password reset.'
+          )
+        end
+      end
+
+      context 'valid sptoken' do
+        context 'auto login enabled' do
+          before do
+            allow(configuration.web.change_password).to receive(:auto_login).and_return(true)
+          end
+
+          context 'valid password' do
+            it 'return 200' do
+              json_change_post(
+                sptoken: password_reset_token,
+                password: new_password
+              )
+              expect(response.status).to eq(200)
+            end
+
+            it 'matches schema' do
+              json_change_post(
+                sptoken: password_reset_token,
+                password: new_password
+              )
+              expect(response).to match_response_schema(:login_response, strict: true)
+            end
+
+            it 'sets login cookies' do
+              json_change_post(
+                sptoken: password_reset_token,
+                password: new_password
+              )
+              expect(response.cookies['access_token']).to be
+              expect(response.cookies['refresh_token']).to be
+            end
+          end
+        end
+
+        context 'auto login disabled' do
+          context 'valid password' do
+            it 'return 200' do
+              json_change_post(
+                sptoken: password_reset_token,
+                password: new_password
+              )
+              expect(response.status).to eq(200)
+              expect(response.body).to be_empty
+            end
+          end
+        end
+
+        context 'invalid password' do
+          it 'return 400' do
+            json_change_post(
+              sptoken: password_reset_token,
+              password: 'short'
+            )
+            expect(response.status).to eq(400)
+            expect(response_body['message']).to eq('Account password minimum length not satisfied.')
+          end
+        end
+
+        context 'no password' do
+          it 'return 400' do
+            json_change_post(
+              sptoken: password_reset_token
+            )
+            expect(response.status).to eq(400)
+            expect(response_body['message']).to eq('account password cannot be null, empty, or blank.')
+          end
+        end
       end
     end
 
-    context 'invalid data' do
-      it 'return 200 OK' do
-        json_change_post(password: { email: 'test@testable.com' })
-        expect(response).to be_success
-      end
-    end
-  end
-
-  context 'text/html' do
-    context 'valid data' do
-      it 'redirects to login' do
-        post '/change', password: { email: test_user.email }
-        expect(response).to redirect_to('/login?status=forgot')
-      end
-    end
-
-    context 'invalid data' do
-      it 'with wrong email redirects to login' do
-        post '/change', password: { email: 'test@testable.com' }
-        expect(response).to redirect_to('/login?status=forgot')
+    context 'password reset disabled' do
+      before do
+        disable_change_password
+        Rails.application.reload_routes!
       end
 
-      it 'with no email redirects to login' do
-        post '/change', password: { email: '' }
-        expect(response).to redirect_to('/login?status=forgot')
+      it 'return 404' do
+        json_change_post
+        expect(response.status).to eq(404)
       end
     end
   end
