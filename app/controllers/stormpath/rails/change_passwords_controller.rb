@@ -40,7 +40,14 @@ module Stormpath
       rescue Stormpath::Error => error
         status = error.status.presence || 400
         respond_to do |format|
-          format.html { redirect_to configuration.web.change_password.error_uri }
+          format.html do
+            if error.code == 404
+              redirect_to configuration.web.change_password.error_uri
+            else
+              set_flash_message(:error, error.message)
+              render template: 'passwords/forgot_change'
+            end
+          end
           format.json { render json: { status: status, message: error.message }, status: status }
         end
       rescue NoSptokenError => error
