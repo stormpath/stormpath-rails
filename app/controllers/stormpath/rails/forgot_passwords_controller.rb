@@ -9,16 +9,12 @@ module Stormpath
       end
 
       def create
-        result = reset_password(password_params[:email])
+        reset_password(params[:email])
 
         respond_to do |format|
           format.json { render nothing: true, status: 200 }
           format.html { redirect_to configuration.web.forgot_password.next_uri }
         end
-      end
-
-      def password_params
-        @password_params ||= params[:password] || params
       end
     end
   end
