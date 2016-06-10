@@ -26,7 +26,7 @@ module Stormpath
         password_change.call
 
         if configuration.web.change_password.auto_login
-          # login the user.
+          AccountLogin.call(cookies, password_change.account.email, params[:password])
           respond_to do |format|
             format.html { redirect_to configuration.web.login.next_uri }
             format.json { render json: AccountSerializer.to_h(password_change.account) }
