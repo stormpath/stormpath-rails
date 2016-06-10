@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'the signin process', type: :feature, vcr: true do
+describe 'the login feature', type: :feature, vcr: true do
   let(:login_config) { Stormpath::Rails.config.web.login }
 
   describe 'GET /login' do

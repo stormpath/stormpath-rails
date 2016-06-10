@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'the signup process', type: :feature, vcr: true do
+describe 'the register feature', type: :feature, vcr: true do
   let(:register_config) { Stormpath::Rails.config.web.register }
 
   before do
