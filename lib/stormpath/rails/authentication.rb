@@ -48,10 +48,6 @@ module Stormpath
         user
       end
 
-      def update_password(password, account)
-        Client.update_password(password, account)
-      end
-
       def id_site_login_url
         Client.id_site_url callback_uri: (request.base_url + configuration.web.id_site.uri)
       end

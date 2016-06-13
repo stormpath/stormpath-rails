@@ -64,18 +64,6 @@ module Stormpath
         application.create_id_site_url callback_uri: options[:callback_uri], path: options[:path]
       end
 
-      def self.update_password(account, password)
-        begin
-          account = client.accounts.get account
-          account.password = password
-          result = account.save
-        rescue Stormpath::Error => error
-          result = error.message
-        end
-
-        AccountStatus.new(result)
-      end
-
       def self.create_omniauth_user(provider, access_token)
         request = Stormpath::Provider::AccountRequest.new(provider, :access_token, access_token)
         application.get_provider_account(request)
