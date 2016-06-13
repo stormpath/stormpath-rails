@@ -44,6 +44,12 @@ describe 'Me GET', type: :request, vcr: true do
         expect(response).to match_response_schema(:login_response, strict: true)
       end
 
+      it 'sets proper headers' do
+        json_me_get
+        expect(response.headers['Cache-Control']).to eq('no-cache, no-store')
+        expect(response.headers['Pragma']).to eq('no-cache')
+      end
+
       describe 'totally expanded' do
         let(:expansion) do
           OpenStruct.new(
