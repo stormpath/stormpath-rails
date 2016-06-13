@@ -7,7 +7,7 @@ module Stormpath
         )
         form.save!
 
-        if configuration.web.verify_email.enabled
+        if form.account.status == 'UNVERIFIED'
           respond_to do |format|
             format.html { redirect_to "#{configuration.web.login.uri}?status=unverified" }
             format.json { render json: AccountSerializer.to_h(form.account) }

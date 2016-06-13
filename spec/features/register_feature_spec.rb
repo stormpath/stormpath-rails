@@ -95,6 +95,35 @@ describe 'the register feature', type: :feature, vcr: true do
         expect(page).to have_content 'Your Account Has Been Created. You may now login'
         expect(current_path).to eq('/login')
       end
+
+      describe 'when account is UNVERIFIED' do
+        before do
+          allow_any_instance_of(Stormpath::Rails::RegistrationForm).to receive(:account).and_return(
+            Stormpath::Resource::Account.new(
+              status: 'UNVERIFIED',
+              email: 'damir.svrtan@infinum-test.co',
+              password: 'pa$$W0Rd',
+              surname: 'Svrtan',
+              given_name: 'Damir')
+          )
+        end
+
+        it 'creates an account and redirects to login with status UNVERIFIED' do
+          visit 'register'
+
+          fill_in 'givenName', with: 'Damir'
+          fill_in 'surname', with: 'Svrtan'
+          fill_in 'email', with: 'damir.svrtan@infinum-test.co'
+          fill_in 'phoneNumber', with: '0931323232223'
+          fill_in 'password', with: 'pa$$W0Rd'
+          fill_in 'confirmPassword', with: 'pa$$W0Rd'
+
+          click_button 'Create Account'
+
+          expect(page).to have_content "Your account verification email has been sent! Before you can log into your account, you need to activate your account by clicking the link we sent to your inbox. Didn't get the email?"
+          expect(page).to have_current_path('/login?status=unverified')
+        end
+      end
     end
   end
 end
