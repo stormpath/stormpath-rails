@@ -32,6 +32,7 @@ describe 'Registration POST', type: :request, vcr: true do
     describe 'json is enabled' do
       describe 'submit valid form' do
         after { delete_account }
+
         it 'respond with status 200' do
           json_register_post(
             email: 'example@test.com',
@@ -40,6 +41,24 @@ describe 'Registration POST', type: :request, vcr: true do
             password: 'Pa$$W0RD'
           )
           expect(response.status).to eq(200)
+        end
+
+        describe 'with autologin enabled' do
+          before do
+            allow(web_config.register).to receive(:auto_login).and_return(true)
+          end
+
+          it 'respond with status 200 and sets cookies' do
+            json_register_post(
+              email: 'example@test.com',
+              givenName: 'Example',
+              surname: 'Test',
+              password: 'Pa$$W0RD'
+            )
+            expect(response.status).to eq(200)
+            expect(response.cookies['access_token']).to be
+            expect(response.cookies['refresh_token']).to be
+          end
         end
       end
 

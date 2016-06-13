@@ -7,19 +7,21 @@ module Stormpath
         )
 
         if form.save
-          if api_request?
-            render json: AccountSerializer.to_h(form.account)
+          if configuration.web.verify_email.enabled
+            respond_to do |format|
+              format.html { redirect_to "#{configuration.web.login.uri}?status=unverified" }
+              format.json { render json: AccountSerializer.to_h(form.account) }
+            end
+          elsif configuration.web.register.auto_login
+            AccountLogin.call(cookies, form.email, form.password)
+            respond_to do |format|
+              format.html { redirect_to configuration.web.register.next_uri }
+              format.json { render json: AccountSerializer.to_h(form.account) }
+            end
           else
-            if configuration.web.verify_email.enabled
-              redirect_to "#{configuration.web.login.uri}?status=unverified"
-            else
-              if configuration.web.register.auto_login
-                # initialize_session(database_user, form.account.href)
-                # login the user
-                redirect_to configuration.web.register.next_uri
-              else
-                redirect_to "#{configuration.web.login.uri}?status=created"
-              end
+            respond_to do |format|
+              format.html { redirect_to "#{configuration.web.login.uri}?status=created" }
+              format.json { render json: AccountSerializer.to_h(form.account) }
             end
           end
         else
