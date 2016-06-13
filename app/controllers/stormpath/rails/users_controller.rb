@@ -5,29 +5,26 @@ module Stormpath
         form = RegistrationForm.new(
           params.except(:controller, :action, :format, :user, :utf8, :button)
         )
+        form.save!
 
-        if form.save
-          if configuration.web.verify_email.enabled
-            respond_to do |format|
-              format.html { redirect_to "#{configuration.web.login.uri}?status=unverified" }
-              format.json { render json: AccountSerializer.to_h(form.account) }
-            end
-          elsif configuration.web.register.auto_login
-            AccountLogin.call(cookies, form.email, form.password)
-            respond_to do |format|
-              format.html { redirect_to configuration.web.register.next_uri }
-              format.json { render json: AccountSerializer.to_h(form.account) }
-            end
-          else
-            respond_to do |format|
-              format.html { redirect_to "#{configuration.web.login.uri}?status=created" }
-              format.json { render json: AccountSerializer.to_h(form.account) }
-            end
+        if configuration.web.verify_email.enabled
+          respond_to do |format|
+            format.html { redirect_to "#{configuration.web.login.uri}?status=unverified" }
+            format.json { render json: AccountSerializer.to_h(form.account) }
+          end
+        elsif configuration.web.register.auto_login
+          AccountLogin.call(cookies, form.email, form.password)
+          respond_to do |format|
+            format.html { redirect_to configuration.web.register.next_uri }
+            format.json { render json: AccountSerializer.to_h(form.account) }
           end
         else
-          reply_with_error(form.errors.full_messages.first)
+          respond_to do |format|
+            format.html { redirect_to "#{configuration.web.login.uri}?status=created" }
+            format.json { render json: AccountSerializer.to_h(form.account) }
+          end
         end
-      rescue RegistrationForm::ArbitraryDataSubmitted => error
+      rescue RegistrationForm::FormError => error
         reply_with_error(error.message)
       end
 

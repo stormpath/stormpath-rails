@@ -8,7 +8,10 @@ module Stormpath
       validate :validate_presence_of_required_attributes
       validate :validate_password_repeated_twice_matches?
 
-      class ArbitraryDataSubmitted < StandardError
+      class FormError < ArgumentError
+      end
+
+      class ArbitraryDataSubmitted < FormError
       end
 
       def initialize(params = {})
@@ -32,6 +35,14 @@ module Stormpath
           self.account = result.account
         else
           errors.add(:base, result.error_message) && false
+        end
+      end
+
+      def save!
+        if save
+          true
+        else
+          fail FormError, errors.full_messages.first
         end
       end
 
