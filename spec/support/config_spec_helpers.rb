@@ -1,38 +1,38 @@
 module ConfigSpecHelpers
   def enable_forgot_password
-    Stormpath::Rails.config.web.forgot_password.enabled = true
+    web_config.forgot_password.enabled = true
   end
 
   def disable_forgot_password
-    Stormpath::Rails.config.web.forgot_password.enabled = false
+    web_config.forgot_password.enabled = false
   end
 
   def enable_change_password
-    Stormpath::Rails.config.web.change_password.enabled = true
+    web_config.change_password.enabled = true
   end
 
   def disable_change_password
-    Stormpath::Rails.config.web.change_password.enabled = false
+    web_config.change_password.enabled = false
   end
 
   def disable_facebook_login
-    Stormpath::Rails.config.web.facebook.app_id = ''
-    Stormpath::Rails.config.web.facebook.app_secret = ''
+    web_config.facebook.app_id = ''
+    web_config.facebook.app_secret = ''
   end
 
   def enable_facebook_login
-    Stormpath::Rails.config.web.facebook.app_id = 'test_app_id'
-    Stormpath::Rails.config.web.facebook.app_secret = 'dk2k152msj'
+    web_config.facebook.app_id = 'test_app_id'
+    web_config.facebook.app_secret = 'dk2k152msj'
   end
 
   def enable_id_site
-    Stormpath::Rails.config.web.id_site.enabled = true
-    Stormpath::Rails.config.web.id_site.uri = '/redirect'
-    Stormpath::Rails.config.web.id_site.next_uri = '/'
+    web_config.id_site.enabled = true
+    web_config.id_site.uri = '/redirect'
+    web_config.id_site.next_uri = '/'
   end
 
   def disable_id_site
-    Stormpath::Rails.config.web.id_site.enabled = false
+    web_config.id_site.enabled = false
   end
 
   def configuration
@@ -47,11 +47,11 @@ module ConfigSpecHelpers
   end
 
   def enable_verify_email
-    Stormpath::Rails.config.web.verify_email.enabled = true
+    web_config.verify_email.enabled = true
   end
 
   def disable_verify_email
-    Stormpath::Rails.config.web.verify_email.enabled = false
+    web_config.verify_email.enabled = false
   end
 
   def web_config
