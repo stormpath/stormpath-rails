@@ -55,16 +55,6 @@ module Stormpath
         AccountStatus.new(result)
       end
 
-      def self.verify_password_token(token)
-        begin
-          result = application.password_reset_tokens.get(token).account
-        rescue Stormpath::Error => error
-          result = error.message
-        end
-
-        AccountStatus.new(result)
-      end
-
       def self.handle_id_site_callback(url)
         response = application.handle_id_site_callback(url)
         client.accounts.get response.account_href

@@ -23,10 +23,6 @@ module Stormpath
         Client.verify_email_token(token)
       end
 
-      def verify_password_token(token)
-        Client.verify_password_token(token)
-      end
-
       def create_omniauth_user(provider, access_token)
         Client.create_omniauth_user(provider, access_token)
       end
