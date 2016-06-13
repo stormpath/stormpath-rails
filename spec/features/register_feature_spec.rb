@@ -96,6 +96,26 @@ describe 'the register feature', type: :feature, vcr: true do
         expect(current_path).to eq('/login')
       end
 
+      describe 'when autologin is enabled' do
+        before do
+          allow(web_config.register).to receive(:auto_login).and_return(true)
+        end
+
+        it 'creates an account and redirect to root page' do
+          visit 'register'
+
+          fill_in 'givenName', with: 'Damir'
+          fill_in 'surname', with: 'Svrtan'
+          fill_in 'email', with: 'damir.svrtan@infinum-test.co'
+          fill_in 'phoneNumber', with: '0931323232223'
+          fill_in 'password', with: 'pa$$W0Rd'
+          fill_in 'confirmPassword', with: 'pa$$W0Rd'
+
+          click_button 'Create Account'
+          expect(page).to have_current_path('/')
+        end
+      end
+
       describe 'when account is UNVERIFIED' do
         before do
           allow_any_instance_of(Stormpath::Rails::RegistrationForm).to receive(:account).and_return(
