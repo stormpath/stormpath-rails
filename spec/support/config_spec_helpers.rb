@@ -1,4 +1,12 @@
 module ConfigSpecHelpers
+  def enable_profile
+    web_config.me.enabled = true
+  end
+
+  def disable_profile
+    web_config.me.enabled = false
+  end
+
   def enable_forgot_password
     web_config.forgot_password.enabled = true
   end

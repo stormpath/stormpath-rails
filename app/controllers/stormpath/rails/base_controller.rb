@@ -27,6 +27,11 @@ module Stormpath
           ContentTypeNegotiator.new(request.headers['HTTP_ACCEPT']).convert_to_symbol
       end
 
+      def current_account
+        @current_account ||=
+          AccountFromAccessToken.new(cookies[configuration.web.access_token_cookie.name]).account
+      end
+
       def require_no_authentication
         redirect_to root_path if signed_in?
       end

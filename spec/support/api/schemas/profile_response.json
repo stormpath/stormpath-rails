@@ -1,0 +1,112 @@
+{
+  "type": "object",
+  "required": ["account"],
+  "properties": {
+    "account": {
+      "type": "object",
+      "required": ["href", "username", "modifiedAt", "status", "createdAt", "email", "middleName", "surname", "givenName", "fullName", "applications", "customData", "directory", "groupMemberships", "groups", "providerData", "tenant"],
+      "properties": {
+        "href": { "type": "string" },
+        "username": { "type": "string" },
+        "modifiedAt": { "type": ["string", "null"] },
+        "status": { "type": "string" },
+        "createdAt": { "type": ["string", "null"] },
+        "email": { "type": "string" },
+        "middleName": { "type": ["string", "null"] },
+        "surname": { "type": "string" },
+        "givenName": { "type": "string" },
+        "fullName": { "type": "string" },
+        "applications": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "object",
+                "required": ["href", "createdAt", "modifiedAt", "name", "description", "status"],
+                "properties": {
+                  "href": { "type": "string" },
+                  "createdAt": { "type": ["string", "null"] },
+                  "modifiedAt": { "type": ["string", "null"] },
+                  "name": { "type": "string" },
+                  "description": { "type": "string" },
+                  "status": { "type": "string" }
+                }
+              }
+            ]
+          }
+        },
+        "customData": {
+          "type": "object",
+          "required": ["href", "createdAt", "modifiedAt"],
+          "properties": {
+            "href": { "type": "string" },
+            "createdAt": { "type": ["string", "null"] },
+            "modifiedAt": { "type": ["string", "null"] }
+          }
+        },
+        "directory": {
+          "type": "object",
+          "required": ["href", "createdAt", "modifiedAt"],
+          "properties": {
+            "href": { "type": "string" },
+            "createdAt": { "type": ["string", "null"] },
+            "modifiedAt": { "type": ["string", "null"] },
+            "name": { "type": "string" },
+            "description": { "type": "string" },
+            "status": { "type": "string" }
+          }
+        },
+        "groupMemberships": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "object",
+                "required": ["href", "createdAt", "modifiedAt"],
+                "properties": {
+                  "href": { "type": "string" },
+                  "createdAt": { "type": ["string", "null"] },
+                  "modifiedAt": { "type": ["string", "null"] }
+                }
+              }
+            ]
+          }
+        },
+        "groups": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              { "type": "object",
+                "required": ["href", "createdAt", "modifiedAt"],
+                "properties": {
+                  "href": { "type": "string" },
+                  "createdAt": { "type": ["string", "null"] },
+                  "modifiedAt": { "type": ["string", "null"] }
+                }
+              }
+            ]
+          }
+        },
+        "providerData": {
+          "type": "object",
+          "required": ["href", "createdAt", "modifiedAt"],
+          "properties": {
+            "href": { "type": "string" },
+            "createdAt": { "type": ["string", "null"] },
+            "modifiedAt": { "type": ["string", "null"] },
+            "providerId": { "type": "string" }
+          }
+        },
+        "tenant": {
+          "type": "object",
+          "required": ["href", "createdAt", "modifiedAt"],
+          "properties": {
+            "href": { "type": "string" },
+            "createdAt": { "type": ["string", "null"] },
+            "modifiedAt": { "type": ["string", "null"] },
+            "name": { "type": "string" },
+            "key": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

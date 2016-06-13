@@ -30,6 +30,10 @@ Rails.application.routes.draw do
         post Stormpath::Rails.config.web.change_password.uri => 'change_passwords#create', as: :change_password
       end
 
+      # ME
+      if Stormpath::Rails.config.web.me.enabled
+        get Stormpath::Rails.config.web.me.uri => 'profile#show'
+      end
       # if Stormpath::Rails.config.web.id_site.enabled
       #   get Stormpath::Rails.config.web.id_site.uri => 'stormpath/rails/login#redirect'
       # end
