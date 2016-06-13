@@ -1,6 +1,6 @@
 <div class="email-password-area col-xs-12 <%= box_class %>">
   <div class="header">
-    <span>Log in or <%= link_to "Create Account", sign_up_path %></span>
+    <span>Log in or <%= link_to "Create Account", new_register_path %></span>
   </div>
 
   <% if flash[:error] %>
@@ -34,7 +34,7 @@
     <% end %>
   <% end %>
 
-  <%= form_for '', url: login_user_path, html: {class: "login-form form-horizontal"} do |form| %>
+  <%= form_for '', url: login_path, html: {class: "login-form form-horizontal"} do |form| %>
     <%= render 'sessions/input', form: form, input_config: Stormpath::Rails.config.web.login.form.fields.login, input_name: :login, value: params[:login] %>
     <%= render 'sessions/input', form: form, input_config: Stormpath::Rails.config.web.login.form.fields.password, input_name: :password, value: nil %>
 

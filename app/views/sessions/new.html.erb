@@ -14,7 +14,7 @@
         <% end %>
       </div>
       <% if Stormpath::Rails.config.web.forgot_password.enabled %>
-        <%= link_to "Forgot Password?", forgot_path, class: "forgot" %>
+        <%= link_to "Forgot Password?", new_forgot_password_path, class: "forgot" %>
       <% end %>
     </div>
   </div>

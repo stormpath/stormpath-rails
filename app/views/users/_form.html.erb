@@ -9,7 +9,7 @@
     </div>
   <% end %>
 
-  <%= form_for '', url: sign_up_path, html: { class: "registration-form form-horizontal sp-form" } do |form| %>
+  <%= form_for '', url: register_path, html: { class: "registration-form form-horizontal sp-form" } do |form| %>
     <% Stormpath::Rails::RegistrationFormFields.enabled_field_names.each do |field| %>
       <%= render 'sessions/input', form: form, input_config: Stormpath::Rails.config.web.register.form.fields.send(field), input_name: field.to_s.camelize(:lower), value: params[field.to_s.camelize(:lower)] %>
     <% end %>
