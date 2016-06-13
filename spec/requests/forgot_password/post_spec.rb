@@ -44,7 +44,7 @@ describe 'ForgotPassword POST', type: :request, vcr: true do
   context 'text/html' do
     context 'valid data' do
       it 'redirects to login' do
-        post '/forgot', email: test_user.email
+        post '/forgot', email: user.email
         expect(response).to redirect_to('/login?status=forgot')
       end
     end

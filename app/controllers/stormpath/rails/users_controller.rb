@@ -6,11 +6,7 @@ module Stormpath
           params.except(:controller, :action, :format, :user, :utf8, :button)
         )
 
-        database_user
-
         if form.save
-          database_user.save
-
           if api_request?
             render json: AccountSerializer.to_h(form.account)
           else
@@ -18,7 +14,7 @@ module Stormpath
               redirect_to "#{configuration.web.login.uri}?status=unverified"
             else
               if configuration.web.register.auto_login
-                initialize_session(database_user, form.account.href)
+                # initialize_session(database_user, form.account.href)
                 # login the user
                 redirect_to configuration.web.register.next_uri
               else
@@ -50,7 +46,6 @@ module Stormpath
           if signed_in?
             redirect_to root_path
           else
-            database_user
             respond_to do |format|
               format.json { render json: RegistrationFormSerializer.to_h }
               format.html { render template: 'users/new' }
@@ -77,23 +72,6 @@ module Stormpath
         else
           render template: 'users/verification_failed'
         end
-      end
-
-      private
-
-      def database_user
-        @user ||= ::User.new(registration_params.slice(:email, :given_name, :surname))
-      end
-
-      def registration_params
-        {
-          email: params[:email],
-          password: params[:password],
-          given_name: params[:givenName],
-          surname: params[:surname],
-          middle_name: params[:middleName],
-          username: params[:username]
-        }
       end
     end
   end

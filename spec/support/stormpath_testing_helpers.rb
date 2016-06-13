@@ -1,16 +1,16 @@
 module Stormpath
   module Testing
     module Helpers
-      def sign_in
-        create_test_account
-        @controller.send(:authenticate, test_user)
-        @controller.send(:initialize_session, test_user, @test_account_result.href)
-        test_user
-      end
+      # def sign_in
+      #   create_test_account
+      #   @controller.send(:authenticate, test_user)
+      #   @controller.send(:initialize_session, test_user, @test_account_result.href)
+      #   test_user
+      # end
 
       def create_test_account
         @test_account_result ||= begin
-          result = Stormpath::Rails::Client.create_stormpath_account(test_user.attributes.merge!('password' => test_user.password))
+          result = Stormpath::Rails::Client.create_stormpath_account(FactoryGirl.attributes_for(:user))
           fail result.error_message unless result.success?
           result
         end
@@ -24,11 +24,6 @@ module Stormpath
 
       def delete_account(email)
         Stormpath::Rails::Client.application.accounts.search(email: email).first.delete
-      end
-
-      def test_user
-        factory = Stormpath::Rails.config.user_model.to_s.underscore.to_sym
-        @test_user ||= FactoryGirl.create(factory)
       end
     end
   end

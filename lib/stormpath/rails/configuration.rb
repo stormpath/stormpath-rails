@@ -1,14 +1,6 @@
 module Stormpath
   module Rails
     class Configuration
-      def initialize
-        @expand_custom_data = true
-      end
-
-      def user_model
-        @user_model ||= ::User
-      end
-
       def application
         config_object.stormpath.application
       end

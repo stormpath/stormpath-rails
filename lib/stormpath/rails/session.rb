@@ -32,7 +32,7 @@ module Stormpath
       end
 
       def current_user
-        @current_user ||= configuration.user_model.find(session[:user_id]) if session[:user_id]
+        # @current_user ||= configuration.user_model.find(session[:user_id]) if session[:user_id]
       end
 
       def current_user_href
