@@ -3,7 +3,7 @@ module Stormpath
     class RegisterController < BaseController
       def create
         form = RegistrationForm.new(
-          params.except(:controller, :action, :format, :user, :utf8, :button)
+          params.except(:controller, :action, :format, :register, :utf8, :button)
         )
         form.save!
 
