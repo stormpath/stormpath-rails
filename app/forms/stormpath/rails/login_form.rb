@@ -8,6 +8,12 @@ module Stormpath
       validate :validate_login_presence
       validate :validate_password_presence
 
+      class FormError < ArgumentError
+        def status
+          400
+        end
+      end
+
       def save
         return false if invalid?
         result = Client.authenticate_oauth(password_grant_request)
@@ -17,6 +23,11 @@ module Stormpath
         else
           errors.add(:base, result.error_message) && false
         end
+      end
+
+      def save!
+        fail(FormError, errors.full_messages.first) if invalid?
+        self.authentication_result = Client.application.authenticate_oauth(password_grant_request)
       end
 
       private

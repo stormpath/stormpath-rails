@@ -34,6 +34,12 @@ Rails.application.routes.draw do
       if Stormpath::Rails.config.web.me.enabled
         get Stormpath::Rails.config.web.me.uri => 'profile#show'
       end
+
+      # OAUTH2
+      if Stormpath::Rails.config.web.oauth2.enabled
+        get Stormpath::Rails.config.web.oauth2.uri => 'oauth2#new'
+        post Stormpath::Rails.config.web.oauth2.uri => 'oauth2#create'
+      end
       # if Stormpath::Rails.config.web.id_site.enabled
       #   get Stormpath::Rails.config.web.id_site.uri => 'stormpath/rails/login#redirect'
       # end
