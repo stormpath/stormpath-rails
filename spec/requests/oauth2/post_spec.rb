@@ -21,34 +21,6 @@ describe 'Oauth2 POST', type: :request, vcr: true do
 
   after { user.delete }
 
-  xdescribe 'HTTP_ACCEPT=text/html' do
-    describe 'html is enabled' do
-      it 'successfull login' do
-        post '/login', login: user_attrs[:email], password: user_attrs[:password]
-        expect(response).to redirect_to('/')
-        expect(response.status).to eq(302)
-      end
-
-      it 'failed login, wrong password' do
-        post '/login', login: user_attrs[:email], password: 'WR00N6'
-        expect(response.status).to eq(200)
-        expect(response.body).to include('Invalid username or password')
-      end
-    end
-
-    describe 'html is disabled' do
-      before do
-        allow(Stormpath::Rails.config.web).to receive(:produces) { ['application/json'] }
-        Rails.application.reload_routes!
-      end
-
-      it 'returns 404' do
-        post '/login', login: user_attrs[:email], password: user_attrs[:password]
-        expect(response.status).to eq(404)
-      end
-    end
-  end
-
   describe 'HTTP_ACCEPT=application/json' do
     def json_oauth2_post(attrs = {})
       post '/oauth/token', attrs, 'HTTP_ACCEPT' => 'application/json'
@@ -141,6 +113,26 @@ describe 'Oauth2 POST', type: :request, vcr: true do
         }
         JSON
       end
+
+      describe 'when password grant flow is disabled' do
+        before do
+          allow(web_config.oauth2.password).to receive(:enabled).and_return(false)
+        end
+
+        it 'should return 400 and error with unsupported_grant_type' do
+          json_oauth2_post(
+            grant_type: :password,
+            username: user.email,
+            password: 'WRONG PASSWORD'
+          )
+
+          expect(response).to match_json <<-JSON
+          {
+            "error": "unsupported_grant_type"
+          }
+          JSON
+        end
+      end
     end
 
     describe 'Refresh Grant Flow' do
@@ -214,6 +206,26 @@ describe 'Oauth2 POST', type: :request, vcr: true do
         expect(response).to match_json <<-JSON
         {
           "error": "invalid_request"
+        }
+        JSON
+      end
+    end
+
+    describe 'when password grant flow is disabled' do
+      before do
+        allow(web_config.oauth2.password).to receive(:enabled).and_return(false)
+      end
+
+      it 'should return 400 and error with unsupported_grant_type' do
+        json_oauth2_post(
+          grant_type: :password,
+          username: user.email,
+          password: 'WRONG PASSWORD'
+        )
+
+        expect(response).to match_json <<-JSON
+        {
+          "error": "unsupported_grant_type"
         }
         JSON
       end
