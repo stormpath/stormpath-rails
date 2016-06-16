@@ -19,11 +19,8 @@ module Stormpath
         when 'refresh_token'
           handle_refresh_token_grant
         else
-          if grant_type.blank?
-            render json: { error: :invalid_request }, status: 400
-          else
-            fail UnsupportedGrantType
-          end
+          raise UnsupportedGrantType unless grant_type.blank?
+          render json: { error: :invalid_request }, status: 400
         end
       rescue UnsupportedGrantType
         render json: { error: :unsupported_grant_type }, status: 400
@@ -36,11 +33,11 @@ module Stormpath
       end
 
       def handle_client_credentials_grant
-        fail UnsupportedGrantType unless configuration.web.oauth2.client_credentials.enabled
+        raise UnsupportedGrantType unless configuration.web.oauth2.client_credentials.enabled
       end
 
       def handle_password_grant
-        fail UnsupportedGrantType unless configuration.web.oauth2.password.enabled
+        raise UnsupportedGrantType unless configuration.web.oauth2.password.enabled
         begin
           form = LoginForm.new(login: params[:username], password: params[:password])
           auth_result = form.save!
@@ -54,12 +51,12 @@ module Stormpath
       end
 
       def handle_refresh_token_grant
-        fail UnsupportedGrantType unless configuration.web.oauth2.password.enabled
+        raise UnsupportedGrantType unless configuration.web.oauth2.password.enabled
         begin
           form = RefreshTokenAuthentication.new(refresh_token: params[:refresh_token])
           auth_result = form.save!
           render json: auth_result_json(auth_result)
-        rescue LoginForm::FormError, Stormpath::Error => error
+        rescue RefreshTokenAuthentication::FormError, Stormpath::Error => error
           render json: {
             error: :invalid_grant,
             message: error.message

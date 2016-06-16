@@ -173,6 +173,19 @@ describe 'Oauth2 POST', type: :request, vcr: true do
         }
         JSON
       end
+
+      it 'should return 400 on missing refresh token' do
+        json_oauth2_post(
+          grant_type: :refresh_token
+        )
+
+        expect(response).to match_json <<-JSON
+        {
+          "error": "invalid_grant",
+          "message": "Refresh token can't be blank"
+        }
+        JSON
+      end
     end
 
     describe 'Unsupported value for grant type' do
