@@ -7,6 +7,9 @@ Documentation:
 WordArray:
   Enabled: False
 
+Style/RedundantBegin:
+  Enabled: False
+
 AllCops:
   Exclude:
     - 'spec/dummy/db/schema.rb'
