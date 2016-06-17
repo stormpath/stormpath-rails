@@ -1,4 +1,8 @@
 module ConfigSpecHelpers
+  def enable_email_verification
+    allow(web_config.verify_email).to receive(:enabled).and_return(true)
+  end
+
   def enable_profile
     web_config.me.enabled = true
   end

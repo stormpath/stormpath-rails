@@ -40,6 +40,12 @@ Rails.application.routes.draw do
         get Stormpath::Rails.config.web.oauth2.uri => 'oauth2#new'
         post Stormpath::Rails.config.web.oauth2.uri => 'oauth2#create'
       end
+
+      # VERIFY EMAIL
+      if Stormpath::Rails.config.web.verify_email.enabled
+        get Stormpath::Rails.config.web.verify_email.uri => 'email_verification#show'
+        post Stormpath::Rails.config.web.verify_email.uri => 'email_verification#create', as: :email_verification
+      end
       # if Stormpath::Rails.config.web.id_site.enabled
       #   get Stormpath::Rails.config.web.id_site.uri => 'stormpath/rails/login#redirect'
       # end
