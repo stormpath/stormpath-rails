@@ -8,15 +8,12 @@ module Stormpath
           format.html { redirect_to configuration.web.verify_email.next_uri }
           format.json { render nothing: true, status: 200 }
         end
-      rescue Stormpath::Error => error
-        status = error.status.presence || 400
-        respond_to do |format|
-          format.html { redirect_to configuration.web.change_password.error_uri }
-          format.json { render json: { status: status, message: error.message }, status: status }
-        end
       rescue VerifyEmailToken::InvalidSptokenError => error
         respond_to do |format|
-          format.html { render template: 'email_verification/new' }
+          format.html do
+            flash.now[:error] = 'This verification link is no longer valid. Please request a new link from the form below.'
+            render template: 'email_verification/new'
+          end
           format.json { render json: { status: 404, message: error.message }, status: 404 }
         end
       rescue VerifyEmailToken::NoSptokenError => error
@@ -42,7 +39,7 @@ module Stormpath
           respond_to do |format|
             format.json { render json: { status: 400, message: error.message }, status: 400 }
             format.html do
-              set_flash_message :error, error.message
+              flash.now[:error] = error.message
               render template: 'email_verification/new'
             end
           end

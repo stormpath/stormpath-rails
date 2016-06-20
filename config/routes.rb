@@ -43,7 +43,7 @@ Rails.application.routes.draw do
 
       # VERIFY EMAIL
       if Stormpath::Rails.config.web.verify_email.enabled
-        get Stormpath::Rails.config.web.verify_email.uri => 'email_verification#show'
+        get Stormpath::Rails.config.web.verify_email.uri => 'email_verification#show', as: :new_email_verification
         post Stormpath::Rails.config.web.verify_email.uri => 'email_verification#create', as: :email_verification
       end
       # if Stormpath::Rails.config.web.id_site.enabled
