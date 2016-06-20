@@ -52,26 +52,6 @@ module Stormpath
           end
         end
       end
-
-      # def profile
-      #   if signed_in?
-      #     account = get_account current_user_href
-      #     render json: account.properties
-      #   else
-      #     render nothing: true, status: 401
-      #   end
-      # end
-      #
-      # def verify
-      #   result = verify_email_token params[:sptoken]
-      #
-      #   if result.success?
-      #     @account_url = result.account_url
-      #     render template: 'users/verification_complete'
-      #   else
-      #     render template: 'users/verification_failed'
-      #   end
-      # end
     end
   end
 end

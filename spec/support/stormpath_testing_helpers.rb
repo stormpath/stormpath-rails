@@ -1,17 +1,10 @@
 module Stormpath
   module Testing
     module Helpers
-      # def sign_in
-      #   create_test_account
-      #   @controller.send(:authenticate, test_user)
-      #   @controller.send(:initialize_session, test_user, @test_account_result.href)
-      #   test_user
-      # end
-
       def create_test_account
         @test_account_result ||= begin
           result = Stormpath::Rails::Client.create_stormpath_account(FactoryGirl.attributes_for(:user))
-          fail result.error_message unless result.success?
+          raise(result.error_message) unless result.success?
           result
         end
       end

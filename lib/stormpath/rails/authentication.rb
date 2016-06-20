@@ -7,10 +7,6 @@ module Stormpath
         Client.create_stormpath_account(user)
       end
 
-      def authenticate(user)
-        Client.authenticate(user)
-      end
-
       def authenticate_oauth(password_grant_request)
         Client.authenticate_oauth(password_grant_request)
       end
@@ -19,16 +15,8 @@ module Stormpath
         Client.reset_password(email)
       end
 
-      def verify_email_token(token)
-        Client.verify_email_token(token)
-      end
-
       def create_omniauth_user(provider, access_token)
         Client.create_omniauth_user(provider, access_token)
-      end
-
-      def get_account(href)
-        Client.get_account(href)
       end
 
       def id_site_login_url

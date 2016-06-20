@@ -15,16 +15,6 @@ module Stormpath
         AccountStatus.new(result)
       end
 
-      def self.authenticate(user)
-        begin
-          result = application.authenticate_account build_username_password_request(user)
-        rescue Stormpath::Error => error
-          result = error
-        end
-
-        AuthenticationStatus.new(result)
-      end
-
       def self.authenticate_oauth(password_grant_request)
         begin
           result = application.authenticate_oauth(password_grant_request)
@@ -38,16 +28,6 @@ module Stormpath
       def self.reset_password(email)
         begin
           result = application.send_password_reset_email email
-        rescue Stormpath::Error => error
-          result = error.message
-        end
-
-        AccountStatus.new(result)
-      end
-
-      def self.verify_email_token(token)
-        begin
-          result = client.accounts.verify_email_token token
         rescue Stormpath::Error => error
           result = error.message
         end
@@ -82,15 +62,7 @@ module Stormpath
         )
       end
 
-      def self.get_account(href)
-        application.accounts.get href
-      end
-
       private
-
-      def self.build_username_password_request(user)
-        Stormpath::Authentication::UsernamePasswordRequest.new user.email, user.password
-      end
 
       def self.build_account(registration_params)
         Stormpath::Resource::Account.new(registration_params)
