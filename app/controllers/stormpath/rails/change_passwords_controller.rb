@@ -2,7 +2,7 @@ module Stormpath
   module Rails
     class ChangePasswordsController < Stormpath::Rails::BaseController
       def new
-        SptokenVerification.new(params[:sptoken]).call
+        ForgotPasswordTokenVerification.new(params[:sptoken]).call
 
         respond_to do |format|
           format.html { render template: 'passwords/forgot_change' }

@@ -1,6 +1,6 @@
 module Stormpath
   module Rails
-    class SptokenVerification
+    class ForgotPasswordTokenVerification
       attr_reader :sptoken
 
       def initialize(sptoken)

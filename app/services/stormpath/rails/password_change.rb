@@ -4,7 +4,7 @@ module Stormpath
       attr_reader :account, :password
 
       def initialize(sptoken, password)
-        @account = SptokenVerification.new(sptoken).call
+        @account = ForgotPasswordTokenVerification.new(sptoken).call
         @password = password
       end
 
