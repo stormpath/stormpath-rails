@@ -23,4 +23,5 @@ group :test do
   gem 'json_matchers'
   gem 'match_json'
   gem 'capybara'
+  gem 'fivemat'
 end
