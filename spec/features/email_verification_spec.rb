@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'the change password feature', type: :feature, vcr: true do
-  let(:verify_email_config) { Stormpath::Rails.config.web.verify_email }
+  let(:verify_email_config) { configuration.web.verify_email }
 
   let(:dir_with_verification) do
     Stormpath::Rails::Client.client.directories.get(

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Stormpath::Rails::RegistrationForm, vcr: true do
-  let(:register_config) { Stormpath::Rails.config.web.register }
+  let(:register_config) { configuration.web.register }
 
   let(:form) do
     Stormpath::Rails::RegistrationForm.new(params)

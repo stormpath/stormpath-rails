@@ -38,7 +38,7 @@ describe 'Login POST', type: :request, vcr: true do
 
     describe 'html is disabled' do
       before do
-        allow(Stormpath::Rails.config.web).to receive(:produces) { ['application/json'] }
+        allow(configuration.web).to receive(:produces) { ['application/json'] }
         Rails.application.reload_routes!
       end
 
@@ -111,7 +111,7 @@ describe 'Login POST', type: :request, vcr: true do
 
     describe 'json is disabled' do
       before do
-        allow(Stormpath::Rails.config.web).to receive(:produces) { ['application/html'] }
+        allow(configuration.web).to receive(:produces) { ['application/html'] }
         Rails.application.reload_routes!
       end
 
@@ -167,7 +167,7 @@ describe 'Login POST', type: :request, vcr: true do
 
     describe 'json is disabled' do
       before do
-        allow(Stormpath::Rails.config.web).to receive(:produces) { ['text/html'] }
+        allow(configuration.web).to receive(:produces) { ['text/html'] }
         Rails.application.reload_routes!
       end
 
@@ -180,7 +180,7 @@ describe 'Login POST', type: :request, vcr: true do
 
   describe 'login disabled' do
     before do
-      allow(Stormpath::Rails.config.web.login).to receive(:enabled) { false }
+      allow(configuration.web.login).to receive(:enabled) { false }
       Rails.application.reload_routes!
     end
 
@@ -191,7 +191,7 @@ describe 'Login POST', type: :request, vcr: true do
   end
 
   describe 'login next_uri changed' do
-    before { allow(Stormpath::Rails.config.web.login).to receive(:next_uri).and_return('/abc') }
+    before { allow(configuration.web.login).to receive(:next_uri).and_return('/abc') }
 
     it 'should redirect to next_uri' do
       post '/login', login: user_attrs[:email], password: user_attrs[:password]

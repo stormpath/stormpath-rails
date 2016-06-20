@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Stormpath::Rails::RegistrationFormFields, vcr: true do
   let(:form_fields) { Stormpath::Rails::RegistrationFormFields }
 
-  let(:register_config) { Stormpath::Rails.config.web.register }
+  let(:register_config) { configuration.web.register }
 
   describe 'required field names' do
     subject { form_fields.required_field_names }

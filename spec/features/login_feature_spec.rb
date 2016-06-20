@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'the login feature', type: :feature, vcr: true do
-  let(:login_config) { Stormpath::Rails.config.web.login }
+  let(:login_config) { configuration.web.login }
 
   describe 'GET /login' do
     it 'has proper labels' do
@@ -69,7 +69,7 @@ describe 'the login feature', type: :feature, vcr: true do
     end
 
     it 'shows forgot password link when disabled' do
-      allow(Stormpath::Rails.config.web.forgot_password).to receive(:enabled).and_return(false)
+      allow(configuration.web.forgot_password).to receive(:enabled).and_return(false)
       visit 'login'
       expect(page).not_to have_selector(:link_or_button, 'Forgot Password?')
     end

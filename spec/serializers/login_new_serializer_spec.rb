@@ -22,7 +22,7 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
     end
 
     it 'should order differently if field order changed' do
-      allow(Stormpath::Rails.config.web.login.form).to receive(:field_order).and_return(%w(password login))
+      allow(configuration.web.login.form).to receive(:field_order).and_return(%w(password login))
       expect(serialized_json[:form]).to eq(
         fields:           [{ label: 'Password',
                              placeholder: 'Password',
@@ -38,7 +38,7 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
     end
 
     it 'should show all even if missing from field order' do
-      allow(Stormpath::Rails.config.web.login.form).to receive(:field_order).and_return(['password'])
+      allow(configuration.web.login.form).to receive(:field_order).and_return(['password'])
       expect(serialized_json[:form]).to eq(
         fields:           [{ label: 'Password',
                              placeholder: 'Password',
@@ -54,7 +54,7 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
     end
 
     it 'should show only login field if password is disabled' do
-      Stormpath::Rails.config.web.login.form.fields.password.enabled = false
+      configuration.web.login.form.fields.password.enabled = false
 
       expect(serialized_json[:form]).to eq(
         fields:           [{ label: 'Username or Email',
@@ -64,11 +64,11 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
                              name: :login }]
       )
 
-      Stormpath::Rails.config.web.login.form.fields.password.enabled = true
+      configuration.web.login.form.fields.password.enabled = true
     end
 
     it 'should show only login field if password is not visible' do
-      Stormpath::Rails.config.web.login.form.fields.password.visible = false
+      configuration.web.login.form.fields.password.visible = false
 
       expect(serialized_json[:form]).to eq(
         fields:           [{ label: 'Username or Email',
@@ -78,7 +78,7 @@ describe Stormpath::Rails::LoginNewSerializer, vcr: true do
                              name: :login }]
       )
 
-      Stormpath::Rails.config.web.login.form.fields.password.visible = true
+      configuration.web.login.form.fields.password.visible = true
     end
   end
 end

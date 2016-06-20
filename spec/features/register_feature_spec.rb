@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'the register feature', type: :feature, vcr: true do
-  let(:register_config) { Stormpath::Rails.config.web.register }
+  let(:register_config) { configuration.web.register }
 
   before do
     register_config.form.fields.middle_name.enabled = true

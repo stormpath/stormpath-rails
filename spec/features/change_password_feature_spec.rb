@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'the change password feature', type: :feature, vcr: true do
-  let(:change_password_config) { Stormpath::Rails.config.web.change_password }
+  let(:change_password_config) { configuration.web.change_password }
 
   let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 

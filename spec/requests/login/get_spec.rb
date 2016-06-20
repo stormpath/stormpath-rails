@@ -57,7 +57,7 @@ describe 'Login GET', type: :request, vcr: true do
 
     describe 'json is disabled' do
       before do
-        allow(Stormpath::Rails.config.web).to receive(:produces) { ['application/html'] }
+        allow(configuration.web).to receive(:produces) { ['application/html'] }
         Rails.application.reload_routes!
       end
 
