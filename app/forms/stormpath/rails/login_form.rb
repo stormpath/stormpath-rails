@@ -26,7 +26,7 @@ module Stormpath
       end
 
       def save!
-        fail(FormError, errors.full_messages.first) if invalid?
+        raise(FormError, errors.full_messages.first) if invalid?
         self.authentication_result = Client.application.authenticate_oauth(password_grant_request)
       end
 

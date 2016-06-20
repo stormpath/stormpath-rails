@@ -15,7 +15,7 @@ module Stormpath
 
       def call
         form.save
-        fail(Stormpath::Error, form.errors.full_messages.first) if form.invalid?
+        raise(Stormpath::Error, form.errors.full_messages.first) if form.invalid?
         TokenCookieSetter.call(cookie_jar, form.authentication_result)
       end
 

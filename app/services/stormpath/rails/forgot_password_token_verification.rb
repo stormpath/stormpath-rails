@@ -4,7 +4,7 @@ module Stormpath
       attr_reader :sptoken
 
       def initialize(sptoken)
-        fail(NoSptokenError, 'sptoken parameter not provided.') if sptoken.nil?
+        raise(NoSptokenError, 'sptoken parameter not provided.') if sptoken.nil?
         @sptoken = sptoken
       end
 

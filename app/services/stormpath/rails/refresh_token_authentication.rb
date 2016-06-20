@@ -13,7 +13,7 @@ module Stormpath
       end
 
       def save!
-        fail(FormError, errors.full_messages.first) if invalid?
+        raise(FormError, errors.full_messages.first) if invalid?
         Client.application.authenticate_oauth(refresh_grant_request)
       end
 

@@ -2,7 +2,7 @@ module Stormpath
   module Rails
     class RegistrationForm
       include ActiveModel::Model
-      attr_accessor *RegistrationFormFields.enabled_field_names
+      attr_accessor(*RegistrationFormFields.enabled_field_names)
       attr_accessor :account
 
       validate :validate_presence_of_required_attributes
@@ -22,7 +22,7 @@ module Stormpath
         arbitrary_param_names = params.keys - RegistrationFormFields.enabled_field_names
 
         if arbitrary_param_names.any?
-          fail ArbitraryDataSubmitted, "Can't submit arbitrary data: #{arbitrary_param_names.join(', ')}"
+          raise ArbitraryDataSubmitted, "Can't submit arbitrary data: #{arbitrary_param_names.join(', ')}"
         end
 
         super(params)
@@ -39,11 +39,8 @@ module Stormpath
       end
 
       def save!
-        if save
-          true
-        else
-          fail FormError, errors.full_messages.first
-        end
+        return true if save
+        raise(FormError, errors.full_messages.first)
       end
 
       private

@@ -17,7 +17,7 @@ module Stormpath
       private
 
       def config
-        fail NotImplementedError
+        raise NotImplementedError
       end
 
       def form_fields

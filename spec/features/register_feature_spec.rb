@@ -124,7 +124,8 @@ describe 'the register feature', type: :feature, vcr: true do
               email: 'damir.svrtan@infinum-test.co',
               password: 'pa$$W0Rd',
               surname: 'Svrtan',
-              given_name: 'Damir')
+              given_name: 'Damir'
+            )
           )
         end
 
