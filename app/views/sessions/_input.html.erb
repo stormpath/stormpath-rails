@@ -3,7 +3,7 @@
     <%= form.label input_name, input_config.label, class: label_class %>
     <div class="<%= input_class %>">
       <%= form.text_field input_name,
-          value: value,
+          value: (input_config.type == 'password' ? '' : value),
           name: input_name,
           placeholder: input_config.placeholder,
           required: input_config.required,

@@ -64,12 +64,12 @@ describe 'the register feature', type: :feature, vcr: true do
         click_button 'Create Account'
         expect(page).to have_content 'Passwords do not match'
 
-        expect(find_field('givenName').value).to have_content 'Damir'
-        expect(find_field('surname').value).to have_content 'Svrtan'
-        expect(find_field('middleName').value).to have_content ''
-        expect(find_field('phoneNumber').value).to have_content '0931323232223'
-        expect(find_field('password').value).to have_content ''
-        expect(find_field('confirmPassword').value).to have_content ''
+        expect(find_field('givenName').value).to eq('Damir')
+        expect(find_field('surname').value).to eq('Svrtan')
+        expect(find_field('middleName').value).to eq('')
+        expect(find_field('phoneNumber').value).to eq('0931323232223')
+        expect(find_field('password').value).to eq('')
+        expect(find_field('confirmPassword').value).to eq('')
       end
     end
 
