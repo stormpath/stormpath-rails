@@ -129,6 +129,15 @@ describe 'the login feature', type: :feature, vcr: true do
         expect(page).to have_content 'Root page'
       end
 
+      it 'sets cookies' do
+        visit 'login'
+        fill_in 'Username or Email', with: user.email
+        fill_in 'Password', with: 'Password1337'
+        click_button 'Log in'
+        expect(page.driver.request.cookies['access_token']).to be
+        expect(page.driver.request.cookies['refresh_token']).to be
+      end
+
       xit 'when root page has authentication over it self'
 
       it 'with changed next uri' do
