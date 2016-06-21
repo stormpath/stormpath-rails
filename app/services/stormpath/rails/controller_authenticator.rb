@@ -62,7 +62,11 @@ module Stormpath
       end
 
       def authenticate_from_bearer
-        AccountFromAccessToken.new(bearer_authorization_header).account
+        begin
+          Stormpath::Rails::AccountFromAccessToken.new(bearer_access_token).account
+        rescue Stormpath::Oauth::Error, JWT::DecodeError
+          raise UnauthenticatedRequest
+        end
       end
 
       def authenticate_from_basic
@@ -106,10 +110,10 @@ module Stormpath
       end
 
       def authorization_header
-        request.env['Authorization']
+        request.headers['Authorization']
       end
 
-      def bearer_authorization_header
+      def bearer_access_token
         authorization_header.gsub(BEARER_PATTERN, '')
       end
 

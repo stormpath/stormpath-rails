@@ -122,4 +122,53 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       end
     end
   end
+
+  describe 'bearer authentication' do
+    describe 'with valid token' do
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Bearer #{access_token}")
+      end
+
+      it 'retrieves the account from access token' do
+        current_account = controller_authenticator.authenticate!
+        expect(current_account).to eq(account)
+      end
+    end
+
+    describe 'with expired token' do
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Bearer #{expired_token}")
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+      end
+    end
+
+    describe 'with malformed token' do
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Bearer INVALID-TOKEN")
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+      end
+    end
+
+    describe 'with empty token' do
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Bearer  ")
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+      end
+    end
+  end
 end
