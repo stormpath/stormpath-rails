@@ -121,6 +121,27 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
         expect(controller.send(:cookies)['refresh_token']).to be
       end
     end
+
+    xdescribe 'with refresh token at the access token place' do
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_COOKIE' => "access_token=#{refresh_token}")
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+      end
+
+      it 'deletes cookies' do
+        begin
+          controller_authenticator.authenticate!
+        rescue Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest
+        end
+        expect(controller.send(:cookies)['access_token']).not_to be
+        expect(controller.send(:cookies)['refresh_token']).not_to be
+      end
+    end
   end
 
   describe 'bearer authentication' do
