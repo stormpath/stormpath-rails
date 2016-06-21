@@ -56,6 +56,8 @@ module Stormpath
           raise UnauthenticatedRequest
         end
 
+        # need to pass in the cookie jar to TokenCookieSetter
+
         self.access_token_cookie = result.access_token
         self.refresh_token_cookie = result.refresh_token
         Stormpath::Rails::AccountFromAccessToken.new(result.access_token).account

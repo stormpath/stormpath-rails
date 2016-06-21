@@ -24,7 +24,7 @@ module Stormpath
       def access_token_cookie_data
         {
           value: access_token,
-          expires: expiration_datetime,
+          expires: access_token_expiration_datetime,
           httponly: access_token_cookie_config.http_only,
           path: access_token_cookie_config.domain,
           secure: access_token_cookie_config.secure
@@ -34,15 +34,19 @@ module Stormpath
       def refresh_token_cookie_data
         {
           value: refresh_token,
-          expires: expiration_datetime,
+          expires: refresh_token_expiration_datetime,
           httponly: refresh_token_cookie_config.http_only,
           path: refresh_token_cookie_config.domain,
           secure: refresh_token_cookie_config.secure
         }
       end
 
-      def expiration_datetime
-        token_duration.seconds.from_now
+      def access_token_expiration_datetime
+        Time.zone.at(JWT.decode(access_token, ENV['STORMPATH_API_KEY_SECRET']).first['exp'])
+      end
+
+      def refresh_token_expiration_datetime
+        Time.zone.at(JWT.decode(refresh_token, ENV['STORMPATH_API_KEY_SECRET']).first['exp'])
       end
 
       def access_token_cookie_config
