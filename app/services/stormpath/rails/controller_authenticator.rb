@@ -38,10 +38,10 @@ module Stormpath
         rescue Stormpath::Rails::AccountFromAccessToken::NoAccessToken, Stormpath::Oauth::Error
           delete_access_token_cookie
           fetch_account_from_refresh_token
-          # use refresh token cookie to get a new account
-          # set new access token cookie
-          # set new refresh token cookie
-          # set current account
+        rescue Stormpath::Rails::AccountFromAccessToken::AuthenticationWithRefreshTokenAttemptError
+          delete_access_token_cookie
+          delete_refresh_token_cookie
+          raise UnauthenticatedRequest
         end
       end
 

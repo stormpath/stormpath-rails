@@ -145,7 +145,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       end
     end
 
-    xdescribe 'with refresh token at the access token place' do
+    describe 'with refresh token at the access token place' do
       let(:request) do
         ActionDispatch::Request.new('HTTP_COOKIE' => "access_token=#{refresh_token}")
       end
