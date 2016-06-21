@@ -3,7 +3,10 @@ module Stormpath
     class AccountFromAccessToken
       attr_reader :access_token
 
+      NoAccessToken = Class.new(ArgumentError)
+
       def initialize(access_token)
+        raise(NoAccessToken) if access_token.nil?
         @access_token = access_token
       end
 

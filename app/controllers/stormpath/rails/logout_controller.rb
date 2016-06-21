@@ -8,8 +8,6 @@ module Stormpath
         cookies.delete(access_token_cookie_name)
         cookies.delete(refresh_token_cookie_name)
 
-        logout
-
         respond_to do |format|
           format.json { render nothing: true, status: 200 }
           format.html do

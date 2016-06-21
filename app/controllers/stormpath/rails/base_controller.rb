@@ -5,6 +5,8 @@ module Stormpath
       skip_before_action :verify_authenticity_token, if: :api_request?
       skip_before_action :verify_authenticity_token, if: :in_development?
 
+      helper_method :current_account, :signed_in?
+
       layout 'stormpath'
 
       private
@@ -28,9 +30,45 @@ module Stormpath
       end
 
       def current_account
-        @current_account ||=
-          AccountFromAccessToken.new(cookies[configuration.web.access_token_cookie.name]).account
+        @current_account ||= begin
+          ControllerAuthenticator.new(self).authenticate!
+        rescue ControllerAuthenticator::UnauthenticatedRequest
+          nil
+        end
       end
+
+      def signed_in?
+        !!current_account
+      end
+
+      # def signed_in?
+      #   false
+      # end
+      #
+      # def current_account
+      #   @current_account ||=
+      #     AccountFromAccessToken.new(cookies[configuration.web.access_token_cookie.name]).account
+      # end
+
+      def authenticate_account!
+        return if current_account.present?
+        respond_to do |format|
+          format.html { redirect_to configuration.web.login.uri }
+          format.json { render nothing: true, status: 401 }
+        end
+      end
+
+      # def current_account
+      #   @current_account ||= begin
+      #     if stormpath_access_token_cookie || stormpath_refresh_token_cookie
+      #       AccountFromAccessToken.new(cookies[configuration.web.access_token_cookie.name]).account
+      #     elsif request.env["Authorization"] =~ /^Bearer /
+      #
+      #     elsif request.env["Authorization"] =~ /^Basic /
+      #
+      #     end
+      #   end
+      # end
 
       def require_no_authentication
         redirect_to root_path if signed_in?
