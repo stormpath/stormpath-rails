@@ -75,6 +75,12 @@ describe 'Login POST', type: :request, vcr: true do
         expect(response).to match_response_schema(:login_response, strict: true)
       end
 
+      it 'successfull login should set cookies' do
+        json_login_post(login: user_attrs[:email], password: user_attrs[:password])
+        expect(response.cookies['access_token']).to be
+        expect(response.cookies['refresh_token']).to be
+      end
+
       it 'successful login should match json' do
         json_login_post(login: user_attrs[:email], password: user_attrs[:password])
         expect(response).to match_json <<-JSON
