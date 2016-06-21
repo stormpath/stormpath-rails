@@ -46,6 +46,7 @@ module Stormpath
       end
 
       def fetch_account_from_refresh_token
+        raise(UnauthenticatedRequest) if refresh_token_cookie.blank?
         begin
           result = Stormpath::Rails::RefreshTokenAuthentication.new(
             refresh_token: refresh_token_cookie
@@ -56,10 +57,7 @@ module Stormpath
           raise UnauthenticatedRequest
         end
 
-        # need to pass in the cookie jar to TokenCookieSetter
-
-        self.access_token_cookie = result.access_token
-        self.refresh_token_cookie = result.refresh_token
+        Stormpath::Rails::TokenCookieSetter.new(cookies, result).call
         Stormpath::Rails::AccountFromAccessToken.new(result.access_token).account
       end
 
