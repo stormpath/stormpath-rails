@@ -243,11 +243,11 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
     let(:api_key) { account.api_keys.create({}) }
 
     let(:request) do
-      ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{encoded_api_key_and_secret}")
+      ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{credentials}")
     end
 
     describe 'with valid api key id and secret' do
-      let(:encoded_api_key_and_secret) { Base64.encode64("#{api_key.id}:#{api_key.secret}") }
+      let(:credentials) { Base64.encode64("#{api_key.id}:#{api_key.secret}") }
 
       it 'retrieves the account' do
         current_account = controller_authenticator.authenticate!
@@ -256,11 +256,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
     end
 
     describe 'with only api key and no secret' do
-      let(:encoded_api_key_without_secret) { Base64.encode64(api_key.id) }
-
-      let(:request) do
-        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{encoded_api_key_without_secret}")
-      end
+      let(:credentials) { Base64.encode64(api_key.id) }
 
       it 'raises an UnauthenticatedRequest error' do
         expect do
@@ -270,11 +266,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
     end
 
     describe 'with non-existing api key and secret' do
-      let(:encoded_wrong_api_key_and_secret) { Base64.encode64("dahgf3q4234fsd:bvcbfgt54332") }
-
-      let(:request) do
-        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{encoded_wrong_api_key_and_secret}")
-      end
+      let(:credentials) { Base64.encode64("dahgf3q4234fsd:bvcbfgt54332") }
 
       it 'raises an UnauthenticatedRequest error' do
         expect do
@@ -284,11 +276,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
     end
 
     describe 'with api key and wrong secret' do
-      let(:encoded_api_key_with_wrong_secret) { Base64.encode64("#{api_key.id}:2aAbsa3TDFDF") }
-
-      let(:request) do
-        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{encoded_api_key_with_wrong_secret}")
-      end
+      let(:credentials) { Base64.encode64("#{api_key.id}:2aAbsa3TDFDF") }
 
       it 'raises an UnauthenticatedRequest error' do
         expect do
@@ -298,9 +286,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
     end
 
     describe 'with un encoded api key and secret' do
-      let(:request) do
-        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{api_key.id}:#{api_key.secret}")
-      end
+      let(:credentials) { "#{api_key.id}:#{api_key.secret}" }
 
       it 'raises an UnauthenticatedRequest error' do
         expect do
@@ -310,9 +296,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
     end
 
     describe 'with empty token' do
-      let(:request) do
-        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic  ")
-      end
+      let(:credentials) { '' }
 
       it 'raises an UnauthenticatedRequest error' do
         expect do
