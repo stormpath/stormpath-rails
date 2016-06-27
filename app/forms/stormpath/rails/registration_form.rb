@@ -9,6 +9,9 @@ module Stormpath
       validate :validate_password_repeated_twice_matches?
 
       class FormError < ArgumentError
+        def status
+          400
+        end
       end
 
       class ArbitraryDataSubmitted < FormError

@@ -3,40 +3,66 @@ module Stormpath
     module Register
       class CreateController < BaseController
         def call
-          form = RegistrationForm.new(
-            params.except(:controller, :action, :format, :create, :utf8, :button)
-          )
           form.save!
-
-          if form.account.status == 'UNVERIFIED'
-            respond_to do |format|
-              format.html { redirect_to "#{configuration.web.login.uri}?status=unverified" }
-              format.json { render json: AccountSerializer.to_h(form.account) }
-            end
-          elsif configuration.web.register.auto_login
-            AccountLogin.call(cookies, form.email, form.password)
-            respond_to do |format|
-              format.html { redirect_to configuration.web.register.next_uri }
-              format.json { render json: AccountSerializer.to_h(form.account) }
-            end
-          else
-            respond_to do |format|
-              format.html { redirect_to "#{configuration.web.login.uri}?status=created" }
-              format.json { render json: AccountSerializer.to_h(form.account) }
-            end
-          end
+          login_the_account if auto_login_enabled?
+          respond_with_success
         rescue RegistrationForm::FormError => error
-          reply_with_error(error.message)
+          respond_with_error(error)
         end
 
-        private def reply_with_error(error_message)
+        private
+
+        def respond_with_success
           respond_to do |format|
-            format.json { render json: { status: 400, message: error_message }, status: 400 }
+            format.html { redirect_to success_redirect_route }
+            format.json { render json: serialized_account }
+          end
+        end
+
+        def success_redirect_route
+          if email_verification_enabled?
+            "#{configuration.web.login.uri}?status=unverified"
+          elsif auto_login_enabled?
+            configuration.web.register.next_uri
+          else
+            "#{configuration.web.login.uri}?status=created"
+          end
+        end
+
+        def respond_with_error(error)
+          respond_to do |format|
+            format.json do
+              render json: { status: error.status, message: error.message }, status: error.status
+            end
             format.html do
-              set_flash_message :error, error_message
+              set_flash_message :error, error.message
               render template: 'users/new'
             end
           end
+        end
+
+        def auto_login_enabled?
+          configuration.web.register.auto_login
+        end
+
+        def email_verification_enabled?
+          form.account.status == 'UNVERIFIED'
+        end
+
+        def serialized_account
+          AccountSerializer.to_h(form.account)
+        end
+
+        def login_the_account
+          AccountLogin.call(cookies, form.email, form.password)
+        end
+
+        def form
+          @form ||= RegistrationForm.new(params.except(*excluded_root_params))
+        end
+
+        def excluded_root_params
+          [:controller, :action, :format, :create, :utf8, :button]
         end
       end
     end
