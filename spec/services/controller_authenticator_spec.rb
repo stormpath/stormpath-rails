@@ -238,4 +238,87 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       end
     end
   end
+
+  describe 'basic authentication' do
+    let(:api_key) { account.api_keys.create({}) }
+
+    let(:request) do
+      ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{encoded_api_key_and_secret}")
+    end
+
+    describe 'with valid api key id and secret' do
+      let(:encoded_api_key_and_secret) { Base64.encode64("#{api_key.id}:#{api_key.secret}") }
+
+      it 'retrieves the account' do
+        current_account = controller_authenticator.authenticate!
+        expect(current_account).to eq(account)
+      end
+    end
+
+    describe 'with only api key and no secret' do
+      let(:encoded_api_key_without_secret) { Base64.encode64(api_key.id) }
+
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{encoded_api_key_without_secret}")
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+      end
+    end
+
+    describe 'with non-existing api key and secret' do
+      let(:encoded_wrong_api_key_and_secret) { Base64.encode64("dahgf3q4234fsd:bvcbfgt54332") }
+
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{encoded_wrong_api_key_and_secret}")
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+      end
+    end
+
+    describe 'with api key and wrong secret' do
+      let(:encoded_api_key_with_wrong_secret) { Base64.encode64("#{api_key.id}:2aAbsa3TDFDF") }
+
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{encoded_api_key_with_wrong_secret}")
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+      end
+    end
+
+    describe 'with un encoded api key and secret' do
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic #{api_key.id}:#{api_key.secret}")
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+      end
+    end
+
+    describe 'with empty token' do
+      let(:request) do
+        ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Basic  ")
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+      end
+    end
+  end
 end
