@@ -18,18 +18,6 @@ module Stormpath
         end
       end
 
-      # def current_account
-      #   @current_account ||= begin
-      #     if any_auth_cookie_present?
-      #       AccountFromAccessToken.new(cookies[configuration.web.access_token_cookie.name]).account
-      #     elsif
-      #
-      #     elsif
-      #
-      #     end
-      #   end
-      # end
-
       private
 
       def authenticate_from_cookies
