@@ -17,6 +17,10 @@ module Stormpath
       end
     end
 
-    class NoSptokenError < ArgumentError; end
+    class NoSptokenError < ArgumentError
+      def status
+        400
+      end
+    end
   end
 end
