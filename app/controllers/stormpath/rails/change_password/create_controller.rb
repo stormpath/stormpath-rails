@@ -26,7 +26,7 @@ module Stormpath
                 redirect_to configuration.web.change_password.error_uri
               else
                 set_flash_message(:error, error.message)
-                render template: 'passwords/forgot_change'
+                render template: 'change_password/new'
               end
             end
             format.json { render json: { status: status, message: error.message }, status: status }

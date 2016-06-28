@@ -6,7 +6,7 @@ module Stormpath
           ForgotPasswordTokenVerification.new(params[:sptoken]).call
 
           respond_to do |format|
-            format.html { render template: 'passwords/forgot_change' }
+            format.html { render template: 'change_password/new' }
             format.json { render nothing: true, status: 200 }
           end
         rescue Stormpath::Error => error

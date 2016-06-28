@@ -38,10 +38,9 @@ describe 'ForgotPassword GET', type: :request, vcr: true do
         Rails.application.reload_routes!
       end
 
-      it 'renders forgot password view' do
+      it 'return 200' do
         get '/forgot'
-        expect(response).to be_success
-        expect(response).to render_template(:forgot)
+        expect(response.status).to eq(200)
       end
     end
 
