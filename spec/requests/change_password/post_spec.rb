@@ -120,7 +120,7 @@ describe 'ChangePassword POST', type: :request, vcr: true do
               sptoken: password_reset_token
             )
             expect(response.status).to eq(400)
-            expect(response_body['message']).to eq('account password cannot be null, empty, or blank.')
+            expect(response_body['message']).to eq('account password is required; it cannot be null, empty, or blank.')
           end
         end
       end

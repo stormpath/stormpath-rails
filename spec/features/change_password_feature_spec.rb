@@ -112,7 +112,7 @@ describe 'the change password feature', type: :feature, vcr: true do
           visit "change?sptoken=#{password_reset_token}"
           click_button 'Submit'
           expect(current_path).to eq('/change')
-          expect(page).to have_content 'account password cannot be null, empty, or blank.'
+          expect(page).to have_content 'account password is required; it cannot be null, empty, or blank.'
         end
       end
     end

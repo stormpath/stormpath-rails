@@ -138,7 +138,7 @@ describe 'Registration POST', type: :request, vcr: true do
         it 'respond with status 400' do
           json_register_post(givenName: 'Example', surname: 'Test', password: 'Pa$$W0RD')
           expect(response.status).to eq(400)
-          expect(error_message).to eq('Account email address cannot be null, empty, or blank.')
+          expect(error_message).to eq('Account email address is required; it cannot be null, empty, or blank.')
         end
       end
 
@@ -155,7 +155,7 @@ describe 'Registration POST', type: :request, vcr: true do
         it 'respond with status 400' do
           json_register_post(email: 'example@test.com', givenName: 'Example', surname: 'Test')
           expect(response.status).to eq(400)
-          expect(error_message).to eq('Account password cannot be null, empty, or blank.')
+          expect(error_message).to eq('Account password is required; it cannot be null, empty, or blank.')
         end
       end
 
