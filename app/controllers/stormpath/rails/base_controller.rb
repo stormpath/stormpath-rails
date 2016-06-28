@@ -31,8 +31,8 @@ module Stormpath
 
       def current_account
         @current_account ||= begin
-          ControllerAuthenticator.new(cookies, request.headers['Authorization']).authenticate!
-        rescue ControllerAuthenticator::UnauthenticatedRequest
+          ControllerAuthentication.new(cookies, request.headers['Authorization']).authenticate!
+        rescue ControllerAuthentication::UnauthenticatedRequest
           nil
         end
       end
@@ -41,34 +41,13 @@ module Stormpath
         current_account.present?
       end
 
-      # def signed_in?
-      #   false
-      # end
-      #
-      # def current_account
-      #   @current_account ||=
-      #     AccountFromAccessToken.new(cookies[configuration.web.access_token_cookie.name]).account
-      # end
-
       def authenticate_account!
-        return if current_account.present?
+        return if signed_in?
         respond_to do |format|
           format.html { redirect_to configuration.web.login.uri }
           format.json { render nothing: true, status: 401 }
         end
       end
-
-      # def current_account
-      #   @current_account ||= begin
-      #     if stormpath_access_token_cookie || stormpath_refresh_token_cookie
-      #       AccountFromAccessToken.new(cookies[configuration.web.access_token_cookie.name]).account
-      #     elsif request.env["Authorization"] =~ /^Bearer /
-      #
-      #     elsif request.env["Authorization"] =~ /^Basic /
-      #
-      #     end
-      #   end
-      # end
 
       def require_no_authentication
         redirect_to root_path if signed_in?

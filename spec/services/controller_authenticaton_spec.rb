@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
+describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service do
   let(:account) { create_test_account.account }
 
   let(:password_grant_request) do
@@ -34,7 +34,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
   end
 
   let(:controller_authenticator) do
-    Stormpath::Rails::ControllerAuthenticator.new(
+    Stormpath::Rails::ControllerAuthentication.new(
       controller.send(:cookies),
       controller.request.headers['Authorization']
     )
@@ -63,7 +63,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
     end
 
@@ -97,13 +97,13 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
 
       it 'deletes cookies' do
         begin
           controller_authenticator.authenticate!
-        rescue Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest
+        rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
         end
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
@@ -120,13 +120,13 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
 
       it 'deletes cookies' do
         begin
           controller_authenticator.authenticate!
-        rescue Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest
+        rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
         end
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
@@ -143,13 +143,13 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
 
       it 'deletes cookies' do
         begin
           controller_authenticator.authenticate!
-        rescue Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest
+        rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
         end
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
@@ -181,13 +181,13 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
 
       it 'deletes cookies' do
         begin
           controller_authenticator.authenticate!
-        rescue Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest
+        rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
         end
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
@@ -215,7 +215,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
     end
 
@@ -227,7 +227,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
     end
 
@@ -239,7 +239,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
     end
   end
@@ -266,7 +266,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
     end
 
@@ -276,7 +276,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
     end
 
@@ -286,7 +286,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
     end
 
@@ -296,7 +296,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
     end
 
@@ -306,7 +306,7 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthenticator::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
     end
   end
