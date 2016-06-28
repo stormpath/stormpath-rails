@@ -21,7 +21,6 @@ module Stormpath
           rescue VerifyEmailToken::InvalidSptokenError => error
             respond_to do |format|
               format.html do
-                flash.now[:error] = 'This verification link is no longer valid. Please request a new link from the form below.'
                 render template: 'email_verification/new'
               end
               format.json { render json: { status: 404, message: error.message }, status: 404 }

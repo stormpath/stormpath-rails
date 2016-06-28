@@ -1,6 +1,15 @@
 <div class="container custom-container">
   <div class="va-wrapper">
     <div class="view login-view container">
+      <% if params[:sptoken] %>
+        <div class="row">
+          <div class="alert alert-warning">
+            <p>
+              This verification link is no longer valid. Please request a new link from the form below
+            </p>
+          </div>
+        </div>
+      <% end %>
       <div class="box row">
         <div class="email-password-area col-xs-12 large col-sm-12">
           <div class="header">
