@@ -44,6 +44,20 @@ describe 'Email Verification GET', type: :request, vcr: true do
         expect(response.status).to eq(200)
         expect(response.body).to eq('')
       end
+
+      context 'with auto login enabled' do
+        before do
+          allow(configuration.web.register).to receive(:auto_login).and_return(true)
+        end
+
+        it 'return 200 OK and sets cookies' do
+          json_verify_get(sptoken: sptoken)
+          expect(response.status).to eq(200)
+          expect(response.body).to eq('')
+          expect(response.cookies['access_token']).to be
+          expect(response.cookies['refresh_token']).to be
+        end
+      end
     end
 
     context 'invalid data' do

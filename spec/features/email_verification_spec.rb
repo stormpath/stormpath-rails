@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'the change password feature', type: :feature, vcr: true do
+describe 'the email verification feature', type: :feature, vcr: true do
   let(:verify_email_config) { configuration.web.verify_email }
 
   let(:dir_with_verification) do
@@ -31,7 +31,7 @@ describe 'the change password feature', type: :feature, vcr: true do
 
   after { account.delete }
 
-  describe 'GET /change' do
+  describe 'GET /verify' do
     describe 'with no sptoken' do
       it 'has proper labels' do
         visit 'verify'
@@ -69,40 +69,36 @@ describe 'the change password feature', type: :feature, vcr: true do
         visit "verify?sptoken=#{sptoken}"
         expect(page).to have_current_path('/login?status=verified')
       end
+
+      context 'auto login enabled' do
+        before do
+          allow(configuration.web.register).to receive(:auto_login).and_return(true)
+        end
+
+        it 'redirects to root and sets cookies' do
+          visit "verify?sptoken=#{sptoken}"
+
+          expect(current_path).to eq('/')
+          expect(page).to have_content 'Root page'
+          expect(page.driver.request.cookies['access_token']).to be
+          expect(page.driver.request.cookies['refresh_token']).to be
+        end
+      end
     end
   end
 
-  describe 'POST /login' do
-    context 'valid sptoken' do
-      xcontext 'auto login enabled' do
-        before do
-          allow(verify_email_config).to receive(:auto_login).and_return(true)
-        end
-
-        context 'valid password' do
-          it 'redirects to root and sets cookies' do
-            visit "verify?sptoken=#{sptoken}"
-            fill_in 'Password', with: new_password
-            click_button 'Submit'
-
-            expect(current_path).to eq('/')
-            expect(page).to have_content 'Root page'
-          end
-        end
-      end
-
-      context 'auto login disabled' do
-        it 'redirects to login page with status unverified' do
-          visit 'verify'
-          fill_in 'email', with: account.email
-          click_button 'Submit'
-          expect(page).to have_current_path('/login?status=unverified')
-          expect(page).to have_content(
-            'Your account verification email has been sent! Before you can log into your account, '\
-            'you need to activate your account by clicking the link we sent to your inbox. '\
-            'Didn\'t get the email?'
-          )
-        end
+  describe 'POST /verify' do
+    context 'auto login disabled' do
+      it 'redirects to login page with status unverified' do
+        visit 'verify'
+        fill_in 'email', with: account.email
+        click_button 'Submit'
+        expect(page).to have_current_path('/login?status=unverified')
+        expect(page).to have_content(
+          'Your account verification email has been sent! Before you can log into your account, '\
+          'you need to activate your account by clicking the link we sent to your inbox. '\
+          'Didn\'t get the email?'
+        )
       end
     end
   end
