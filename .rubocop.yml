@@ -17,3 +17,6 @@ AllCops:
 
 Rails:
   Enabled: true
+
+Metrics/AbcSize:
+  Max: 20
