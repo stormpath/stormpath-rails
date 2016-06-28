@@ -33,7 +33,12 @@ describe Stormpath::Rails::ControllerAuthenticator, vcr: true, type: :service do
     )
   end
 
-  let(:controller_authenticator) { Stormpath::Rails::ControllerAuthenticator.new(controller) }
+  let(:controller_authenticator) do
+    Stormpath::Rails::ControllerAuthenticator.new(
+      controller.send(:cookies),
+      controller.request.headers['Authorization']
+    )
+  end
 
   before do
     account

@@ -31,14 +31,14 @@ module Stormpath
 
       def current_account
         @current_account ||= begin
-          ControllerAuthenticator.new(self).authenticate!
+          ControllerAuthenticator.new(cookies, request.headers['Authorization']).authenticate!
         rescue ControllerAuthenticator::UnauthenticatedRequest
           nil
         end
       end
 
       def signed_in?
-        !!current_account
+        current_account.present?
       end
 
       # def signed_in?

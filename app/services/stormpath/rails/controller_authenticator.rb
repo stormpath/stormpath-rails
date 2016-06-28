@@ -1,10 +1,17 @@
 module Stormpath
   module Rails
-    class ControllerAuthenticator < SimpleDelegator
+    class ControllerAuthenticator
       UnauthenticatedRequest = Class.new(StandardError)
       BEARER_PATTERN = /^Bearer /
       BASIC_PATTERN = /^Basic /
       OAUTH_ERROR_CODE_RANGE = (10_000...10_100)
+
+      attr_reader :cookies, :authorization_header
+
+      def initialize(cookies, authorization_header)
+        @cookies = cookies
+        @authorization_header = authorization_header
+      end
 
       def authenticate!
         if any_auth_cookie_present?
@@ -22,11 +29,11 @@ module Stormpath
 
       def authenticate_from_cookies
         begin
-          Stormpath::Rails::AccountFromAccessToken.new(access_token_cookie).account
-        rescue Stormpath::Rails::AccountFromAccessToken::NoAccessToken, Stormpath::Oauth::Error
+          AccountFromAccessToken.new(access_token_cookie).account
+        rescue AccountFromAccessToken::NoAccessToken, Stormpath::Oauth::Error
           delete_access_token_cookie
           fetch_account_from_refresh_token
-        rescue Stormpath::Rails::AccountFromAccessToken::AuthenticationWithRefreshTokenAttemptError
+        rescue AccountFromAccessToken::AuthenticationWithRefreshTokenAttemptError
           delete_access_token_cookie
           delete_refresh_token_cookie
           raise UnauthenticatedRequest
@@ -36,7 +43,7 @@ module Stormpath
       def fetch_account_from_refresh_token
         raise(UnauthenticatedRequest) if refresh_token_cookie.blank?
         begin
-          result = Stormpath::Rails::RefreshTokenAuthentication.new(
+          result = RefreshTokenAuthentication.new(
             refresh_token: refresh_token_cookie
           ).save!
         rescue Stormpath::Error => error
@@ -45,20 +52,20 @@ module Stormpath
           raise UnauthenticatedRequest
         end
 
-        Stormpath::Rails::TokenCookieSetter.new(cookies, result).call
-        Stormpath::Rails::AccountFromAccessToken.new(result.access_token).account
+        TokenCookieSetter.new(cookies, result).call
+        AccountFromAccessToken.new(result.access_token).account
       end
 
       def authenticate_from_bearer
         begin
-          Stormpath::Rails::AccountFromAccessToken.new(bearer_access_token).account
+          AccountFromAccessToken.new(bearer_access_token).account
         rescue Stormpath::Oauth::Error, JWT::DecodeError
           raise UnauthenticatedRequest
         end
       end
 
       def authenticate_from_basic
-        fetched_api_key = Stormpath::Rails::Client.application.api_keys.search(id: api_key_id).first
+        fetched_api_key = Client.application.api_keys.search(id: api_key_id).first
         raise UnauthenticatedRequest if fetched_api_key.nil?
         raise UnauthenticatedRequest if fetched_api_key.secret != api_key_secret
         fetched_api_key.account
@@ -116,10 +123,6 @@ module Stormpath
         access_token_cookie || refresh_token_cookie
       end
 
-      def authorization_header
-        request.headers['Authorization']
-      end
-
       def bearer_access_token
         authorization_header.gsub(BEARER_PATTERN, '')
       end
@@ -128,12 +131,8 @@ module Stormpath
         authorization_header.gsub(BASIC_PATTERN, '')
       end
 
-      def cookies
-        __getobj__.send(:cookies)
-      end
-
       def configuration
-        __getobj__.send(:configuration)
+        Stormpath::Rails.config
       end
     end
   end
