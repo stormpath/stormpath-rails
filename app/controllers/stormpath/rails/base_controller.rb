@@ -37,7 +37,7 @@ module Stormpath
         current_account.present?
       end
 
-      def authenticate_account!
+      def require_authentication!
         return if signed_in?
         respond_to do |format|
           format.html { redirect_to configuration.web.login.uri }

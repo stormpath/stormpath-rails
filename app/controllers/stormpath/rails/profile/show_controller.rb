@@ -2,7 +2,7 @@ module Stormpath
   module Rails
     module Profile
       class ShowController < BaseController
-        before_action :authenticate_account!
+        before_action :require_authentication!
 
         def call
           response.headers['Cache-Control'] = 'no-cache, no-store'
