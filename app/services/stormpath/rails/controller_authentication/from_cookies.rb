@@ -31,14 +31,14 @@ module Stormpath
             result = RefreshTokenAuthentication.new(
               refresh_token: refresh_token_cookie
             ).save!
+
+            TokenCookieSetter.new(cookies, result).call
+            AccountFromAccessToken.new(result.access_token).account
           rescue Stormpath::Error => error
             raise unless OAUTH_ERROR_CODE_RANGE.include?(error.code)
             delete_refresh_token_cookie
             raise UnauthenticatedRequest
           end
-
-          TokenCookieSetter.new(cookies, result).call
-          AccountFromAccessToken.new(result.access_token).account
         end
 
         def access_token_cookie
