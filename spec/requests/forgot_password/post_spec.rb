@@ -22,7 +22,7 @@ describe 'ForgotPassword POST', type: :request, vcr: true do
   after { user.delete }
 
   context 'application/json' do
-    def json_forgot_post(attrs)
+    def json_forgot_post(attrs = {})
       post '/forgot', attrs, 'HTTP_ACCEPT' => 'application/json'
     end
 
@@ -38,26 +38,12 @@ describe 'ForgotPassword POST', type: :request, vcr: true do
         json_forgot_post(email: 'test@testable.com')
         expect(response).to be_success
       end
-    end
-  end
 
-  context 'text/html' do
-    context 'valid data' do
-      it 'redirects to login' do
-        post '/forgot', email: user.email
-        expect(response).to redirect_to('/login?status=forgot')
-      end
-    end
-
-    context 'invalid data' do
-      it 'with wrong email redirects to login' do
-        post '/forgot', email: 'test@testable.com'
-        expect(response).to redirect_to('/login?status=forgot')
-      end
-
-      it 'with no email redirects to login' do
-        post '/forgot', email: ''
-        expect(response).to redirect_to('/login?status=forgot')
+      context 'no email' do
+        it 'return 404' do
+          json_forgot_post
+          expect(response.status).to eq(400)
+        end
       end
     end
   end
