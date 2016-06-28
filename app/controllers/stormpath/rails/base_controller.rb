@@ -20,10 +20,6 @@ module Stormpath
         ::Rails.env.development?
       end
 
-      def set_flash_message(key, message)
-        flash[key] = message if message.present?
-      end
-
       def setup_accept_header
         request.format =
           ContentTypeNegotiator.new(request.headers['HTTP_ACCEPT']).convert_to_symbol

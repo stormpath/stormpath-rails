@@ -27,7 +27,7 @@ module Stormpath
           respond_to do |format|
             format.json { render json: { status: 400, message: error_message }, status: 400 }
             format.html do
-              set_flash_message :error, error_message
+              flash.now[:error] = error_message
               render template: 'sessions/new'
             end
           end

@@ -12,7 +12,7 @@ module Stormpath
           respond_to do |format|
             format.json { render nothing: true, status: 200 }
             format.html do
-              set_flash_message :notice, 'You have been logged out successfully.'
+              flash[:notice] = 'You have been logged out successfully.'
               redirect_to configuration.web.logout.next_uri
             end
           end

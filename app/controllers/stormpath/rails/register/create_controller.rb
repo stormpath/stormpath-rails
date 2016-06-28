@@ -35,7 +35,7 @@ module Stormpath
               render json: { status: error.status, message: error.message }, status: error.status
             end
             format.html do
-              set_flash_message :error, error.message
+              flash.now[:error] = error.message
               render template: 'users/new'
             end
           end

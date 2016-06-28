@@ -25,7 +25,7 @@ module Stormpath
               if error.code == 404
                 redirect_to configuration.web.change_password.error_uri
               else
-                set_flash_message(:error, error.message)
+                flash.now[:error] = error.message
                 render template: 'change_password/new'
               end
             end
