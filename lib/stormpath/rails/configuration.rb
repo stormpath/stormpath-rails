@@ -34,8 +34,6 @@ module Stormpath
       end
     end
 
-    # Return a single instance of Configuration class
-    # @return [Stormpath::Configuration] single instance
     def self.config
       @configuration ||= Configuration.new(
         ReadConfigFile.new(
