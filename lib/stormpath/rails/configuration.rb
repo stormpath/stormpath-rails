@@ -1,6 +1,12 @@
 module Stormpath
   module Rails
     class Configuration
+      attr_reader :user_defined_config_hash
+
+      def initialize(user_defined_config_hash)
+        @user_defined_config_hash = user_defined_config_hash
+      end
+
       def application
         config_object.stormpath.application
       end
@@ -18,26 +24,24 @@ module Stormpath
       end
 
       def merged_config_hashes
-        default_config_hash.merge(user_defined_config_hash)
+        default_config_hash.deep_merge(user_defined_config_hash)
       end
 
       def default_config_hash
-        ConfigFile.new(:default).hash
-      end
-
-      def user_defined_config_hash
-        ConfigFile.new(:user_defined).hash
+        ReadConfigFile.new(
+          File.expand_path('../../../../config/default_config.yml', __FILE__)
+        ).hash
       end
     end
 
     # Return a single instance of Configuration class
     # @return [Stormpath::Configuration] single instance
     def self.config
-      @configuration ||= Configuration.new
-    end
-
-    def self.reload_config!
-      @configuration = Configuration.new
+      @configuration ||= Configuration.new(
+        ReadConfigFile.new(
+          ::Rails.application.root.join('config/stormpath.yml')
+        ).hash
+      )
     end
   end
 end

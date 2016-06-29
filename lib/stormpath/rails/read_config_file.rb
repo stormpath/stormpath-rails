@@ -1,10 +1,10 @@
 module Stormpath
   module Rails
-    class ConfigFile
-      attr_reader :type
+    class ReadConfigFile
+      attr_reader :file_path
 
-      def initialize(type = :default)
-        @type = type
+      def initialize(file_path)
+        @file_path = file_path
       end
 
       def hash
@@ -26,14 +26,7 @@ module Stormpath
       end
 
       def file
-        File.read(config_path)
-      end
-
-      def config_path
-        {
-          default: File.expand_path('../../../../config/default_config.yml', __FILE__),
-          user_defined: ::Rails.application.root.join('config/stormpath.yml')
-        }[type]
+        File.read(file_path)
       end
     end
   end
