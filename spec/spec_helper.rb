@@ -12,7 +12,11 @@ require 'pry'
 
 require 'rails/all'
 require 'stormpath/rails'
+
+WebMock.allow_net_connect! # let the configuration load
 require 'dummy/config/environment'
+WebMock.disable_net_connect!
+
 require 'rspec/rails'
 
 require 'factories'
@@ -61,7 +65,8 @@ RSpec.configure do |config|
   end
 end
 
-MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/
+MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] =
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z/
 
 Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app, headers: { 'HTTP_ACCEPT' => 'text/html' })
