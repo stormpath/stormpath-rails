@@ -13,7 +13,7 @@ module Stormpath
         def authenticate!
           begin
             AccountFromAccessToken.new(access_token_cookie).account
-          rescue AccountFromAccessToken::NoAccessToken, Stormpath::Oauth::Error
+          rescue AccountFromAccessToken::NoAccessToken, Stormpath::Oauth::Error, JWT::DecodeError
             delete_access_token_cookie
             fetch_account_from_refresh_token
           rescue AccountFromAccessToken::AuthenticationWithRefreshTokenAttemptError

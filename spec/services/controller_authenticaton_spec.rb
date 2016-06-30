@@ -67,7 +67,7 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
       end
     end
 
-    describe 'with invalid access token' do
+    describe 'with expired access token' do
       let(:request) do
         ActionDispatch::Request.new(
           'HTTP_COOKIE' => "access_token=#{expired_token};refresh_token=#{refresh_token}"
@@ -87,7 +87,7 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
       end
     end
 
-    describe 'with invalid access token & refresh token' do
+    describe 'with expired access token & expired refresh token' do
       let(:request) do
         ActionDispatch::Request.new(
           'HTTP_COOKIE' => "access_token=#{expired_token};refresh_token=#{expired_token}"
@@ -110,10 +110,33 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
       end
     end
 
-    describe 'with invalid access token only' do
+    describe 'with expired access token only' do
       let(:request) do
         ActionDispatch::Request.new(
           'HTTP_COOKIE' => "access_token=#{expired_token}"
+        )
+      end
+
+      it 'raises an UnauthenticatedRequest error' do
+        expect do
+          controller_authenticator.authenticate!
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+      end
+
+      it 'deletes cookies' do
+        begin
+          controller_authenticator.authenticate!
+        rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
+        end
+        expect(controller.send(:cookies)['access_token']).not_to be
+        expect(controller.send(:cookies)['refresh_token']).not_to be
+      end
+    end
+
+    describe 'with invalid access and invalid refresh token' do
+      let(:request) do
+        ActionDispatch::Request.new(
+          'HTTP_COOKIE' => 'access_token=INVALID_TOKEN;refresh_token=INVALID_TOKEN'
         )
       end
 
