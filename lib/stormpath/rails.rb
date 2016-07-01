@@ -2,6 +2,8 @@ require 'stormpath-sdk'
 require 'stormpath/rails/engine'
 require 'stormpath/rails/config/read_file'
 require 'stormpath/rails/config/application_resolution'
+require 'stormpath/rails/config/account_store_verification'
+require 'stormpath/rails/config/dynamic_configuration'
 require 'stormpath/rails/configuration'
 require 'virtus'
 

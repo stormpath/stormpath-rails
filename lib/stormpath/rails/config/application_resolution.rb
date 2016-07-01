@@ -11,14 +11,13 @@ module Stormpath
         def initialize(href, name)
           @href = href
           @name = name
-          verify
         end
 
-        def app_href
+        def app
           if href.present?
-            href
+            app_from_href
           elsif name.present?
-            Stormpath::Rails::Client.client.applications.search(name: name).first.href
+            app_from_name
           else
             automatic_resolution
           end
@@ -28,7 +27,7 @@ module Stormpath
 
         def automatic_resolution
           if client_has_exactly_two_applications?
-            client_applications.find { |app| app.name != 'Stormpath' }.href
+            client_applications.find { |app| app.name != 'Stormpath' }
           else
             raise(InvalidConfiguration, AUTOMATIC_RESOLUTION_ERROR_MESSAGE)
           end
@@ -42,23 +41,8 @@ module Stormpath
           @client_applications ||= Stormpath::Rails::Client.client.applications
         end
 
-        def verify
+        def app_from_href
           verify_application_href
-          verify_application_existance_by_href
-          verify_application_existance_by_name
-        end
-
-        def verify_application_href
-          if href && href !~ /applications/
-            raise(
-              InvalidConfiguration,
-              "#{href} is not a valid Stormpath Application href."
-            )
-          end
-        end
-
-        def verify_application_existance_by_href
-          return if href.blank?
           begin
             Stormpath::Rails::Client.client.applications.get(href)
           rescue Stormpath::Error => error
@@ -70,11 +54,18 @@ module Stormpath
           end
         end
 
-        def verify_application_existance_by_name
-          return if name.blank?
+        def verify_application_href
+          if href && href !~ /applications/
+            raise(
+              InvalidConfiguration,
+              "#{href} is not a valid Stormpath Application href."
+            )
+          end
+        end
+
+        def app_from_name
           application = Stormpath::Rails::Client.client.applications.search(name: name).first
-          return if application.present?
-          raise(
+          application || raise(
             InvalidConfiguration,
             "The provided application could not be found. The provided application name was: #{name}"
           )
