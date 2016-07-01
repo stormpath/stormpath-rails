@@ -12,19 +12,19 @@ module ConfigSpecHelpers
   end
 
   def enable_forgot_password
-    web_config.forgot_password.enabled = true
+    allow(web_config.forgot_password).to receive(:enabled).and_return(true)
   end
 
   def disable_forgot_password
-    web_config.forgot_password.enabled = false
+    allow(web_config.forgot_password).to receive(:enabled).and_return(false)
   end
 
   def enable_change_password
-    web_config.change_password.enabled = true
+    allow(web_config.change_password).to receive(:enabled).and_return(true)
   end
 
   def disable_change_password
-    web_config.change_password.enabled = false
+    allow(web_config.change_password).to receive(:enabled).and_return(false)
   end
 
   def disable_facebook_login
