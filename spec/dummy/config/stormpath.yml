@@ -12,7 +12,7 @@ stormpath:
       client_credentials:
         enabled: true
         accessToken:
-          ttl: 3600
+          ttl: 3600 # seconds
       password:
         enabled: true
         validationStrategy: "local"
@@ -159,7 +159,7 @@ stormpath:
     # will be automatically enabled if the default account store for the defined
     # Stormpath application has the password reset workflow enabled.
     forgotPassword:
-      enabled: true
+      enabled: null
       uri: "/forgot"
       view: "forgot-password"
       nextUri: "/login?status=forgot"
@@ -168,7 +168,7 @@ stormpath:
     # will be automatically enabled if the default account store for the defined
     # Stormpath application has the password reset workflow enabled.
     changePassword:
-      enabled: true
+      enabled: null
       autoLogin: false
       uri: "/change"
       nextUri: "/login?status=reset"
