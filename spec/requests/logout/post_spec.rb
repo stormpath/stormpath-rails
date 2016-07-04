@@ -1,9 +1,24 @@
 require 'spec_helper'
 
 describe 'Logout POST', type: :request, vcr: true do
+  let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
+
+  let(:account_attrs) do
+    {
+      email: 'example@test.com',
+      given_name: 'Example',
+      surname: 'Test',
+      password: 'Pa$$W0RD',
+      username: 'SirExample'
+    }
+  end
+
   before do
     Rails.application.reload_routes!
+    post '/login', login: account.email, password: account_attrs[:password]
   end
+
+  after { account.delete }
 
   describe 'HTTP_ACCEPT=text/html' do
     describe 'html is enabled' do
@@ -34,9 +49,13 @@ describe 'Logout POST', type: :request, vcr: true do
 
     describe 'json is enabled' do
       it 'successfull logout should result with 200' do
+        expect(account.access_tokens.count).to eq(1)
+        expect(account.refresh_tokens.count).to eq(1)
         json_logout_post
         expect(response.status).to eq(200)
         expect(response.body).to be_blank
+        expect(account.access_tokens.count).to eq(0)
+        expect(account.refresh_tokens.count).to eq(0)
       end
     end
 
