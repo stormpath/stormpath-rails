@@ -19,22 +19,28 @@ module Stormpath
             end
           end
         rescue Stormpath::Error => error
-          status = error.status.presence || 400
           respond_to do |format|
             format.html do
-              if error.code == 404
-                redirect_to configuration.web.change_password.error_uri
-              else
-                flash.now[:error] = error.message
-                render template: 'change_password/new'
-              end
+              flash.now[:error] = error.message
+              render template: 'change_password/new'
             end
-            format.json { render json: { status: status, message: error.message }, status: status }
+            format.json do
+              render json: { status: error.status, message: error.message }, status: error.status
+            end
+          end
+        rescue InvalidSptokenError => error
+          respond_to do |format|
+            format.html { redirect_to configuration.web.change_password.error_uri }
+            format.json do
+              render json: { status: error.status, message: error.message }, status: error.status
+            end
           end
         rescue NoSptokenError => error
           respond_to do |format|
             format.html { redirect_to configuration.web.forgot_password.uri }
-            format.json { render json: { status: 400, message: error.message }, status: 400 }
+            format.json do
+              render json: { status: error.status, message: error.message }, status: error.status
+            end
           end
         end
       end

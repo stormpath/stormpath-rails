@@ -5,7 +5,7 @@ module Stormpath
         def call
           verify_sptoken
           respond_with_success
-        rescue Stormpath::Error => error
+        rescue InvalidSptokenError => error
           respond_with_error(error, configuration.web.change_password.error_uri)
         rescue NoSptokenError => error
           respond_with_error(error, configuration.web.forgot_password.uri)
