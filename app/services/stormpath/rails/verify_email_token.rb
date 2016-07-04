@@ -22,9 +22,6 @@ module Stormpath
       def client
         Stormpath::Rails::Client.client
       end
-
-      NoSptokenError = Class.new(ArgumentError)
-      InvalidSptokenError = Class.new(ArgumentError)
     end
   end
 end

@@ -27,17 +27,5 @@ module Stormpath
           .account
       end
     end
-
-    class NoSptokenError < ArgumentError
-      def status
-        400
-      end
-    end
-
-    class InvalidSptokenError < ArgumentError
-      def status
-        404
-      end
-    end
   end
 end

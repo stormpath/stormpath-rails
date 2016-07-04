@@ -5,31 +5,10 @@ module Stormpath
         def call
           begin
             account = VerifyEmailToken.new(params[:sptoken]).call
-
-            if configuration.web.register.auto_login
-              login_the_account(account)
-              respond_to do |format|
-                format.html { redirect_to configuration.web.register.next_uri }
-                format.json { render nothing: true, status: 200 }
-              end
-            else
-              respond_to do |format|
-                format.html { redirect_to configuration.web.verify_email.next_uri }
-                format.json { render nothing: true, status: 200 }
-              end
-            end
-          rescue VerifyEmailToken::InvalidSptokenError => error
-            respond_to do |format|
-              format.html do
-                render template: 'email_verification/new'
-              end
-              format.json { render json: { status: 404, message: error.message }, status: 404 }
-            end
-          rescue VerifyEmailToken::NoSptokenError => error
-            respond_to do |format|
-              format.html { render template: 'email_verification/new' }
-              format.json { render json: { status: 400, message: error.message }, status: 400 }
-            end
+            login_the_account(account) if configuration.web.register.auto_login
+            respond_with_success
+          rescue InvalidSptokenError, NoSptokenError => error
+            respond_to_error(error)
           end
         end
 
@@ -41,6 +20,30 @@ module Stormpath
             Stormpath::Rails::Client.application,
             Stormpath::Rails::Client.client.data_store.api_key
           ).call
+        end
+
+        def respond_with_success
+          respond_to do |format|
+            format.html { redirect_to success_redirect_route }
+            format.json { render nothing: true, status: 200 }
+          end
+        end
+
+        def success_redirect_route
+          if configuration.web.register.auto_login
+            configuration.web.register.next_uri
+          else
+            configuration.web.verify_email.next_uri
+          end
+        end
+
+        def respond_to_error(error)
+          respond_to do |format|
+            format.html { render template: 'email_verification/new' }
+            format.json do
+              render json: { status: error.status, message: error.message }, status: error.status
+            end
+          end
         end
       end
     end
