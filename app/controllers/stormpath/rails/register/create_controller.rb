@@ -36,7 +36,7 @@ module Stormpath
             end
             format.html do
               flash.now[:error] = error.message
-              render 'users/new'
+              render configuration.web.register.view
             end
           end
         end

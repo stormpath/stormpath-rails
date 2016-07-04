@@ -30,7 +30,7 @@ module Stormpath
           respond_to do |format|
             format.html do
               flash.now[:error] = error_message
-              render 'sessions/new'
+              render configuration.web.login.view
             end
             format.json { render json: { status: 400, message: error_message }, status: 400 }
           end

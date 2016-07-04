@@ -10,7 +10,7 @@ module Stormpath
           else
             respond_to do |format|
               format.json { render json: RegistrationFormSerializer.to_h }
-              format.html { render 'users/new' }
+              format.html { render configuration.web.register.view }
             end
           end
         end

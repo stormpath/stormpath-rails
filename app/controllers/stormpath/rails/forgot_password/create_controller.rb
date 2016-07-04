@@ -27,7 +27,7 @@ module Stormpath
             format.json { render json: { status: 400, message: error.message }, status: 400 }
             format.html do
               flash.now[:error] = error.message
-              render 'forgot_password/new'
+              render configuration.web.forgot_password.view
             end
           end
         end

@@ -113,7 +113,7 @@ stormpath:
           - "email"
           - "password"
           - "confirmPassword"
-      view: "register"
+      view: "users/new"
 
     # Unless verifyEmail.enabled is specifically set to false, the email
     # verification feature must be automatically enabled if the default account
@@ -123,13 +123,13 @@ stormpath:
       enabled: null
       uri: "/verify"
       nextUri: "/login?status=verified"
-      view: "verify"
+      view: "email_verification/new"
 
     login:
       enabled: true
       uri: "/login"
       nextUri: "/"
-      view: "login"
+      view: "sessions/new"
       form:
         fields:
           login:
@@ -161,7 +161,7 @@ stormpath:
     forgotPassword:
       enabled: null
       uri: "/forgot"
-      view: "forgot-password"
+      view: "forgot_password/new"
       nextUri: "/login?status=forgot"
 
     # Unless changePassword.enabled is explicitly set to false, this feature
@@ -172,7 +172,7 @@ stormpath:
       autoLogin: false
       uri: "/change"
       nextUri: "/login?status=reset"
-      view: "change-password"
+      view: "change_password/new"
       errorUri: "/forgot?status=invalid_sptoken"
 
     # If idSite.enabled is true, the user should be redirected to ID site for
