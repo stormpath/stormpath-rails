@@ -1,6 +1,6 @@
 module Stormpath
   module Rails
-    module EmailVerification
+    module VerifyEmail
       class CreateController < BaseController
         def call
           begin
