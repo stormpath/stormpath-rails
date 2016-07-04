@@ -21,18 +21,18 @@ module Stormpath
 
         def respond_with_success
           respond_to do |format|
-            format.json { render json: serialized_account }
             format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
+            format.json { render json: serialized_account }
           end
         end
 
         def respond_with_error(error_message)
           respond_to do |format|
-            format.json { render json: { status: 400, message: error_message }, status: 400 }
             format.html do
               flash.now[:error] = error_message
               render template: 'sessions/new'
             end
+            format.json { render json: { status: 400, message: error_message }, status: 400 }
           end
         end
 
