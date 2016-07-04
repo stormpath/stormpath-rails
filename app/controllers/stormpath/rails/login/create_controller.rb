@@ -7,13 +7,9 @@ module Stormpath
         def call
           if form.save
             set_cookies
-
-            respond_to do |format|
-              format.json { render json: serialized_account }
-              format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
-            end
+            respond_with_success
           else
-            reply_with_error(form.errors.full_messages.first)
+            respond_with_error(form.errors.full_messages.first)
           end
         end
 
@@ -23,7 +19,14 @@ module Stormpath
           @form ||= LoginForm.new(login: params[:login], password: params[:password])
         end
 
-        def reply_with_error(error_message)
+        def respond_with_success
+          respond_to do |format|
+            format.json { render json: serialized_account }
+            format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
+          end
+        end
+
+        def respond_with_error(error_message)
           respond_to do |format|
             format.json { render json: { status: 400, message: error_message }, status: 400 }
             format.html do
