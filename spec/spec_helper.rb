@@ -46,7 +46,6 @@ end
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.include FactoryGirl::Syntax::Methods
-  config.include Stormpath::Testing::Helpers, type: :controller
   config.include Stormpath::Testing::Helpers, type: :request
   config.include Stormpath::Testing::Helpers, type: :feature
   config.include Stormpath::Testing::Helpers, type: :service
@@ -55,14 +54,6 @@ RSpec.configure do |config|
   config.include ConfigSpecHelpers
 
   RSpec::Matchers.alias_matcher :match_json, :include_json
-
-  config.after(:each, type: :controller) do
-    delete_test_account
-  end
-
-  config.before(:each, type: :controller) do
-    request.headers['HTTP_ACCEPT'] = 'text/html'
-  end
 end
 
 MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] =
