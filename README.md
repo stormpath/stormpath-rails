@@ -251,3 +251,24 @@ app/views/users/verification_resend.html.erb
 ### Suported Rails Versions
 
 above Rails 3.2
+
+## Development
+
+### Prerequisites
+
+If you wish to contribute to the gem, please follow the following steps:
+
+1. Create a Stormpath Application.
+2. Export the following env variables:
+  - STORMPATH_API_KEY_ID
+  - STORMPATH_API_KEY_SECRET
+3. Create a Directory and associate it to the app. Make it the default account and group store for the app.
+4. Create a Directory With a Verification Workflow and associate it to the app.
+5. Export the following env variable:
+  - STORMPATH_SDK_TEST_DIRECTORY_WITH_VERIFICATION_URL
+
+### Specs
+
+Clone the repo & install the dependencies with `bundler install`.
+The suite is written with RSpec, so to run the specs you'll need to execute `rspec`
+The suite uses the [VCR gem](https://github.com/vcr/vcr) to record all the HTTP requests. On first roll it records them and after that all of the tests use the recorded HTTP requests and run under 10 seconds.
