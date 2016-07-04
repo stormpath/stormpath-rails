@@ -2,7 +2,7 @@ module Stormpath
   module Rails
     module Login
       class NewController < BaseController
-        before_action :require_no_authentication
+        before_action :require_no_authentication!
 
         def call
           if configuration.web.id_site.enabled

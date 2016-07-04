@@ -45,7 +45,7 @@ module Stormpath
         end
       end
 
-      def require_no_authentication
+      def require_no_authentication!
         redirect_to root_path if signed_in?
       end
     end
