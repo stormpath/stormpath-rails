@@ -39,7 +39,7 @@ module Stormpath
 
         def respond_to_error(error)
           respond_to do |format|
-            format.html { render template: 'email_verification/new' }
+            format.html { render 'email_verification/new' }
             format.json do
               render json: { status: error.status, message: error.message }, status: error.status
             end

@@ -46,7 +46,7 @@ module Stormpath
           respond_to do |format|
             format.html do
               flash.now[:error] = error.message
-              render template: 'change_password/new'
+              render 'change_password/new'
             end
             format.json do
               render json: { status: error.status, message: error.message }, status: error.status

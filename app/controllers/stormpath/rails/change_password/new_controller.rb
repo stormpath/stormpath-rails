@@ -19,7 +19,7 @@ module Stormpath
 
         def respond_with_success
           respond_to do |format|
-            format.html { render template: 'change_password/new' }
+            format.html { render 'change_password/new' }
             format.json { render nothing: true, status: 200 }
           end
         end

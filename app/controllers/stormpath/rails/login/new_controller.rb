@@ -10,7 +10,7 @@ module Stormpath
           else
             respond_to do |format|
               format.json { render json: LoginNewSerializer.to_h }
-              format.html { render template: 'sessions/new' }
+              format.html { render 'sessions/new' }
             end
           end
         end

@@ -36,7 +36,7 @@ module Stormpath
             end
             format.html do
               flash.now[:error] = error.message
-              render template: 'users/new'
+              render 'users/new'
             end
           end
         end

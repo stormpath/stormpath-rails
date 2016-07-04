@@ -10,7 +10,7 @@ module Stormpath
           else
             respond_to do |format|
               format.json { render json: RegistrationFormSerializer.to_h }
-              format.html { render template: 'users/new' }
+              format.html { render 'users/new' }
             end
           end
         end

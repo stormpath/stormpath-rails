@@ -5,7 +5,7 @@ module Stormpath
         def call
           respond_to do |format|
             format.json { render nothing: true, status: 404 }
-            format.html { render template: 'forgot_password/new' }
+            format.html { render 'forgot_password/new' }
           end
         end
       end
