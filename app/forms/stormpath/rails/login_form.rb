@@ -1,12 +1,15 @@
 module Stormpath
   module Rails
     class LoginForm
-      include ActiveModel::Model
       attr_accessor :login, :password
       attr_accessor :authentication_result
 
-      validate :validate_login_presence
-      validate :validate_password_presence
+      def initialize(login, password)
+        @login = login
+        @password = password
+        validate_login_presence
+        validate_password_presence
+      end
 
       class FormError < ArgumentError
         def status
@@ -14,30 +17,31 @@ module Stormpath
         end
       end
 
-      def save
-        return false if invalid?
-        result = Client.authenticate_oauth(password_grant_request)
-
-        if result.success?
-          self.authentication_result = result.authentication_result
-        else
-          errors.add(:base, result.error_message) && false
-        end
-      end
+      # def save
+      #   return false if invalid?
+      #   result = Client.authenticate_oauth(password_grant_request)
+      #
+      #   if result.success?
+      #     self.authentication_result = result.authentication_result
+      #   else
+      #     errors.add(:base, result.error_message) && false
+      #   end
+      # end
 
       def save!
-        raise(FormError, errors.full_messages.first) if invalid?
-        self.authentication_result = Client.application.authenticate_oauth(password_grant_request)
+        self.authentication_result = application.authenticate_oauth(password_grant_request)
       end
 
       private
 
       def validate_login_presence
-        errors.add(:base, "#{form_fields_config.login.label} can't be blank") if login.blank?
+        return if login.present?
+        raise FormError, "#{form_fields_config.login.label} can't be blank"
       end
 
       def validate_password_presence
-        errors.add(:base, "#{form_fields_config.password.label} can't be blank") if password.blank?
+        return if password.present?
+        raise FormError, "#{form_fields_config.password.label} can't be blank"
       end
 
       def form_fields_config
@@ -46,6 +50,10 @@ module Stormpath
 
       def password_grant_request
         Stormpath::Oauth::PasswordGrantRequest.new(login, password)
+      end
+
+      def application
+        Stormpath::Rails::Client.application
       end
     end
   end

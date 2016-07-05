@@ -138,8 +138,8 @@ describe 'Oauth2 POST', type: :request, vcr: true do
     describe 'Refresh Grant Flow' do
       let(:refresh_token) do
         login_form = Stormpath::Rails::LoginForm.new(
-          login: user.email,
-          password: user_attrs[:password]
+          user.email,
+          user_attrs[:password]
         )
         login_form.save!.refresh_token
       end

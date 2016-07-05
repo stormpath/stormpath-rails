@@ -5,18 +5,19 @@ module Stormpath
         before_action :require_no_authentication!
 
         def call
-          if form.save
+          begin
+            form.save!
             set_cookies
             respond_with_success
-          else
-            respond_with_error(form.errors.full_messages.first)
+          rescue Stormpath::Error, LoginForm::FormError => error
+            respond_with_error(error)
           end
         end
 
         private
 
         def form
-          @form ||= LoginForm.new(login: params[:login], password: params[:password])
+          @form ||= LoginForm.new(params[:login], params[:password])
         end
 
         def respond_with_success
@@ -26,13 +27,15 @@ module Stormpath
           end
         end
 
-        def respond_with_error(error_message)
+        def respond_with_error(error)
           respond_to do |format|
             format.html do
-              flash.now[:error] = error_message
+              flash.now[:error] = error.message
               render configuration.web.login.view
             end
-            format.json { render json: { status: 400, message: error_message }, status: 400 }
+            format.json do
+              render json: { status: error.status, message: error.message }, status: error.status
+            end
           end
         end
 

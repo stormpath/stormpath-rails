@@ -14,15 +14,14 @@ module Stormpath
       end
 
       def call
-        form.save
-        raise(Stormpath::Error, form.errors.full_messages.first) if form.invalid?
+        form.save!
         TokenCookieSetter.call(cookie_jar, form.authentication_result)
       end
 
       private
 
       def form
-        @form ||= LoginForm.new(login: login, password: password)
+        @form ||= LoginForm.new(login, password)
       end
     end
   end

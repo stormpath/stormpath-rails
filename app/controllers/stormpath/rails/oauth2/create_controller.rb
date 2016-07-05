@@ -36,7 +36,7 @@ module Stormpath
         def handle_password_grant
           raise UnsupportedGrantType unless configuration.web.oauth2.password.enabled
           begin
-            form = LoginForm.new(login: params[:username], password: params[:password])
+            form = LoginForm.new(params[:username], params[:password])
             auth_result = form.save!
             render json: auth_result_json(auth_result)
           rescue LoginForm::FormError, Stormpath::Error => error
