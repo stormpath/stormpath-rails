@@ -67,6 +67,14 @@ RSpec.configure do |config|
       raise "Missing the following ENV vars to run the specs: #{missing_env_vars.join(', ')}"
     end
   end
+
+  config.before(:example, type: :feature) do
+    allow(JWT::Verify).to receive(:verify_expiration).and_return(nil)
+  end
+
+  config.before(:example, type: :request) do
+    allow(JWT::Verify).to receive(:verify_expiration).and_return(nil)
+  end
 end
 
 MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] =

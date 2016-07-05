@@ -1,6 +1,8 @@
 module Stormpath
   module Rails
     InvalidConfiguration = Class.new(ArgumentError)
+    DEFAULT_CONFIG_RELATIVE_FILE_PATH =
+      '../../../../lib/generators/stormpath/install/templates/default_config.yml'.freeze
 
     class Configuration
       attr_reader :user_defined_config_hash
@@ -33,7 +35,7 @@ module Stormpath
 
       def default_config_hash
         Config::ReadFile.new(
-          File.expand_path('../../../../config/default_config.yml', __FILE__)
+          File.expand_path(DEFAULT_CONFIG_RELATIVE_FILE_PATH, __FILE__)
         ).hash
       end
     end
