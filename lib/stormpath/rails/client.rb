@@ -5,16 +5,6 @@ module Stormpath
         attr_accessor :connection
       end
 
-      def self.create_stormpath_account(registration_params)
-        begin
-          result = application.accounts.create build_account(registration_params)
-        rescue Stormpath::Error => error
-          result = error.message
-        end
-
-        AccountStatus.new(result)
-      end
-
       def self.handle_id_site_callback(url)
         response = application.handle_id_site_callback(url)
         client.accounts.get response.account_href
@@ -40,12 +30,6 @@ module Stormpath
             secret: ENV['STORMPATH_API_KEY_SECRET']
           }
         )
-      end
-
-      private
-
-      def self.build_account(registration_params)
-        Stormpath::Resource::Account.new(registration_params)
       end
     end
   end

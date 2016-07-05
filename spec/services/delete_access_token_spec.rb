@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Stormpath::Rails::DeleteAccessToken, vcr: true, type: :service do
-  let(:account) { create_test_account.account }
+  let(:account) { create_test_account }
 
   let(:password_grant_request) { Stormpath::Oauth::PasswordGrantRequest.new('jlc@example.com', 'Password1337') }
 

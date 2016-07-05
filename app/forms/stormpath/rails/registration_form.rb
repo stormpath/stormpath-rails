@@ -33,11 +33,13 @@ module Stormpath
 
       def save
         return false if invalid?
-        result = Client.create_stormpath_account(stormpath_registration_params)
-        if result.success?
-          self.account = result.account
-        else
-          errors.add(:base, result.error_message) && false
+
+        begin
+          self.account = Stormpath::Rails::Client.application.accounts.create(
+            Stormpath::Resource::Account.new(stormpath_registration_params)
+          )
+        rescue Stormpath::Error => error
+          errors.add(:base, error.message) && false
         end
       end
 

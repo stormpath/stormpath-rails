@@ -117,7 +117,7 @@ describe 'the login feature', type: :feature, vcr: true do
     end
 
     describe 'proper email and password' do
-      let(:user) { create_test_account.response }
+      let(:user) { create_test_account }
 
       after { delete_test_account }
 
