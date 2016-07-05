@@ -15,26 +15,6 @@ module Stormpath
         AccountStatus.new(result)
       end
 
-      def self.authenticate_oauth(password_grant_request)
-        begin
-          result = application.authenticate_oauth(password_grant_request)
-        rescue Stormpath::Error => error
-          result = error
-        end
-
-        OauthAuthenticationStatus.new(result)
-      end
-
-      def self.reset_password(email)
-        begin
-          result = application.send_password_reset_email email
-        rescue Stormpath::Error => error
-          result = error.message
-        end
-
-        AccountStatus.new(result)
-      end
-
       def self.handle_id_site_callback(url)
         response = application.handle_id_site_callback(url)
         client.accounts.get response.account_href

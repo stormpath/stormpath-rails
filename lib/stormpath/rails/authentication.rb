@@ -3,18 +3,6 @@ module Stormpath
     module Authentication
       private
 
-      def create_stormpath_account(user)
-        Client.create_stormpath_account(user)
-      end
-
-      def authenticate_oauth(password_grant_request)
-        Client.authenticate_oauth(password_grant_request)
-      end
-
-      def reset_password(email)
-        Client.reset_password(email)
-      end
-
       def create_omniauth_user(provider, access_token)
         Client.create_omniauth_user(provider, access_token)
       end
