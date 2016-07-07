@@ -3,13 +3,13 @@ require 'spec_helper'
 describe 'the email verification feature', type: :feature, vcr: true do
   let(:verify_email_config) { configuration.web.verify_email }
 
-  let(:dir_with_verification) do
+  let(:test_dir_with_verification) do
     Stormpath::Rails::Client.client.directories.get(
       ENV.fetch('STORMPATH_SDK_TEST_DIRECTORY_WITH_VERIFICATION_URL')
     )
   end
 
-  let(:account) { dir_with_verification.accounts.create(account_attrs) }
+  let(:account) { test_dir_with_verification.accounts.create(account_attrs) }
 
   let(:account_attrs) do
     {

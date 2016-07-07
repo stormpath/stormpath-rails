@@ -3,13 +3,13 @@ require 'spec_helper'
 describe 'Email Verification GET', type: :request, vcr: true do
   let(:response_body) { JSON.parse(response.body) }
 
-  let(:dir_with_verification) do
+  let(:test_dir_with_verification) do
     Stormpath::Rails::Client.client.directories.get(
       ENV.fetch('STORMPATH_SDK_TEST_DIRECTORY_WITH_VERIFICATION_URL')
     )
   end
 
-  let(:account) { dir_with_verification.accounts.create(account_attrs) }
+  let(:account) { test_dir_with_verification.accounts.create(account_attrs) }
 
   let(:account_attrs) do
     {
