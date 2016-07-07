@@ -61,20 +61,20 @@ RSpec.configure do |config|
 
   RSpec::Matchers.alias_matcher :match_json, :include_json
 
-  config.before(:all) do
+  config.before(:suite) do
     missing_env_vars = TEST_ENV_REQUIRED_VARS.reject { |var| ENV[var.to_s] }
     if missing_env_vars.any?
       raise "Missing the following ENV vars to run the specs: #{missing_env_vars.join(', ')}"
     end
   end
 
-  config.before(:example, type: :feature) do
-    allow(JWT::Verify).to receive(:verify_expiration).and_return(nil)
-  end
-
-  config.before(:example, type: :request) do
-    allow(JWT::Verify).to receive(:verify_expiration).and_return(nil)
-  end
+  # config.before(:example, type: :feature) do
+  #   allow(JWT::Verify).to receive(:verify_expiration).and_return(nil)
+  # end
+  #
+  # config.before(:example, type: :request) do
+  #   allow(JWT::Verify).to receive(:verify_expiration).and_return(nil)
+  # end
 end
 
 MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] =
