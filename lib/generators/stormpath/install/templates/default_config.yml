@@ -113,7 +113,7 @@ stormpath:
           - "email"
           - "password"
           - "confirmPassword"
-      view: "users/new"
+      view: "register/new"
 
     # Unless verifyEmail.enabled is specifically set to false, the email
     # verification feature must be automatically enabled if the default account
@@ -129,7 +129,7 @@ stormpath:
       enabled: true
       uri: "/login"
       nextUri: "/"
-      view: "sessions/new"
+      view: "login/new"
       form:
         fields:
           login:

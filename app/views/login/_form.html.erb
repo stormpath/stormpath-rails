@@ -35,8 +35,8 @@
   <% end %>
 
   <%= form_for '', url: login_path, html: {class: "login-form form-horizontal"} do |form| %>
-    <%= render 'sessions/input', form: form, input_config: Stormpath::Rails.config.web.login.form.fields.login, input_name: :login, value: params[:login] %>
-    <%= render 'sessions/input', form: form, input_config: Stormpath::Rails.config.web.login.form.fields.password, input_name: :password, value: nil %>
+    <%= render 'login/input', form: form, input_config: Stormpath::Rails.config.web.login.form.fields.login, input_name: :login, value: params[:login] %>
+    <%= render 'login/input', form: form, input_config: Stormpath::Rails.config.web.login.form.fields.password, input_name: :password, value: nil %>
 
     <div>
       <%= button_tag "Log in", :class => "login btn btn-login btn-sp-green", :type => "submit" %>

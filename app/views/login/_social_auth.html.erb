@@ -1,0 +1,7 @@
+<% if facebook_login_enabled? %>
+  <%= render partial: '/login/facebook_login_form' %>
+<% end %>
+
+<% if google_login_enabled? %>
+  <%= render partial: '/login/google_login_form' %>
+<% end %>
