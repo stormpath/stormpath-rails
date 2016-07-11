@@ -49,14 +49,36 @@ class SingleTokenCookieSetter
   def cookie_data
     {
       value: token,
-      expires: token_expiration_datetime,
-      httponly: token_config.http_only,
-      path: token_config.domain,
-      secure: token_config.secure
-    }
+      expires: expires,
+      httponly: http_only,
+      path: path,
+      domain: domain,
+      secure: secure
+    }.compact
   end
 
-  def token_expiration_datetime
+  def expires
     Time.zone.at(JWT.decode(token, ENV['STORMPATH_API_KEY_SECRET']).first['exp'])
   end
+
+  def http_only
+    if token_config.http_only == false
+      nil
+    else
+      true
+    end
+  end
+
+  def path
+    token_config.path || '/'
+  end
+
+  def domain
+    token_config.domain
+  end
+
+  def secure
+    token_config.secure || false
+  end
 end
+# check for domain and https true
