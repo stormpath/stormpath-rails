@@ -5,7 +5,7 @@ module Stormpath
         UnsupportedGrantType = Class.new(StandardError)
 
         def call
-          response.headers['Cache-Control'] = 'no-cache, no-store'
+          response.headers['Cache-Control'] = 'no-store'
           response.headers['Pragma'] = 'no-cache'
 
           case grant_type
@@ -31,6 +31,20 @@ module Stormpath
 
         def handle_client_credentials_grant
           raise UnsupportedGrantType unless configuration.web.oauth2.client_credentials.enabled
+          begin
+            form = ClientCredentialsAuthentication.new(request.headers['Authorization'])
+            auth_result = form.save!
+            render json: {
+              access_token: auth_result.access_token,
+              expires_in: auth_result.expires_in,
+              token_type: auth_result.token_type
+            }
+          rescue ClientCredentialsAuthentication::FormError, Stormpath::Error => error
+            render json: {
+              error: :invalid_request,
+              message: error.message
+            }, status: error.status
+          end
         end
 
         def handle_password_grant

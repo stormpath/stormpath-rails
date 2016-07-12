@@ -26,58 +26,81 @@ describe 'Oauth2 POST', type: :request, vcr: true do
       post '/oauth/token', attrs, 'HTTP_ACCEPT' => 'application/json'
     end
 
-    xdescribe 'Client Credentials Grant Flow' do
-      it 'successfull login should result with 200' do
-        json_oauth2_post(login: user_attrs[:email], password: user_attrs[:password])
+    describe 'Client Credentials Grant Flow' do
+      let(:api_key) { user.api_keys.create({}) }
+      let(:api_key_id) { api_key.id }
+      let(:api_key_secret) { api_key.secret }
+
+      let(:encoded_auth_header) do
+        Base64.encode64("#{api_key_id}:#{api_key_secret}")
+      end
+
+      def json_oauth2_post(headers = {})
+        post(
+          '/oauth/token',
+          { grant_type: :client_credentials },
+          { 'HTTP_ACCEPT' => 'application/json' }.merge(headers)
+        )
+      end
+
+      it 'should return success on valid request' do
+        json_oauth2_post(
+          'HTTP_AUTHORIZATION' => "Basic #{encoded_auth_header}"
+        )
         expect(response.status).to eq(200)
-      end
-
-      it 'successfull login with username should result with 200' do
-        json_oauth2_post(login: user_attrs[:username], password: user_attrs[:password])
-        expect(response.status).to eq(200)
-      end
-
-      it 'successfull login should have content-type application/json' do
-        json_oauth2_post(login: user_attrs[:email], password: user_attrs[:password])
-        expect(response.content_type.to_s).to eq('application/json')
-      end
-
-      it 'successfull login should match schema' do
-        json_oauth2_post(login: user_attrs[:email], password: user_attrs[:password])
-        expect(response).to match_response_schema(:login_response, strict: true)
-      end
-
-      it 'successful login should match json' do
-        json_oauth2_post(login: user_attrs[:email], password: user_attrs[:password])
         expect(response).to match_json <<-JSON
         {
-           "account":{
-              "href":"{string}",
-              "username":"SirExample",
-              "modifiedAt":"{date_time_iso8601}",
-              "status":"ENABLED",
-              "createdAt":"{date_time_iso8601}",
-              "email":"example@test.com",
-              "middleName":null,
-              "surname":"Test",
-              "givenName":"Example",
-              "fullName":"Example Test"
-           }
+          "access_token":"{string}",
+          "expires_in":3600,
+          "token_type":"Bearer"
         }
         JSON
       end
 
-      it 'failed login, wrong password should result with 400' do
-        json_oauth2_post(login: user_attrs[:email], password: 'WR00N6')
-        expect(response.status).to eq(400)
+      it 'should return valid response headers' do
+        json_oauth2_post(
+          'HTTP_AUTHORIZATION' => "Basic #{encoded_auth_header}"
+        )
+        expect(response.headers['Cache-Control']).to eq('no-store')
+        expect(response.headers['Pragma']).to eq('no-cache')
       end
 
-      it 'failed login, wrong password should result with a message in the response body' do
-        json_oauth2_post(login: user_attrs[:email], password: 'WR00N6')
+      describe 'missing api key secret' do
+        let(:encoded_auth_header) do
+          Base64.encode64("#{api_key_id}:")
+        end
 
-        response_body = JSON.parse(response.body)
-        expect(response_body['status']).to eq(400)
-        expect(response_body['message']).to eq('Invalid username or password.')
+        it 'should return 400' do
+          json_oauth2_post(
+            'HTTP_AUTHORIZATION' => "Basic #{encoded_auth_header}"
+          )
+          expect(response.status).to eq(400)
+          expect(response).to match_json <<-JSON
+          {
+            "error": "invalid_request",
+            "message": "Api key secret can't be blank"
+          }
+          JSON
+        end
+      end
+
+      describe 'wrong api key secret' do
+        let(:encoded_auth_header) do
+          Base64.encode64("#{api_key_id}:NOT_A_VALID_API_SECRET")
+        end
+
+        it 'should return 400' do
+          json_oauth2_post(
+            'HTTP_AUTHORIZATION' => "Basic #{encoded_auth_header}"
+          )
+          expect(response.status).to eq(400)
+          expect(response).to match_json <<-JSON
+          {
+            "error": "invalid_request",
+            "message": "Invalid username or password."
+          }
+          JSON
+        end
       end
     end
 
