@@ -36,9 +36,9 @@ module Stormpath
             render json: auth_result_json(auth_result).except(:refresh_token)
           rescue ClientCredentialsAuthentication::FormError, Stormpath::Error => error
             render json: {
-              error: :invalid_request,
+              error: :invalid_client,
               message: error.message
-            }, status: error.status
+            }, status: 401
           end
         end
 

@@ -70,14 +70,14 @@ describe 'Oauth2 POST', type: :request, vcr: true do
           Base64.encode64("#{api_key_id}:")
         end
 
-        it 'should return 400' do
+        it 'should return 401' do
           json_oauth2_post(
             'HTTP_AUTHORIZATION' => "Basic #{encoded_auth_header}"
           )
-          expect(response.status).to eq(400)
+          expect(response.status).to eq(401)
           expect(response).to match_json <<-JSON
           {
-            "error": "invalid_request",
+            "error": "invalid_client",
             "message": "Api key secret can't be blank"
           }
           JSON
@@ -89,14 +89,14 @@ describe 'Oauth2 POST', type: :request, vcr: true do
           Base64.encode64("#{api_key_id}:NOT_A_VALID_API_SECRET")
         end
 
-        it 'should return 400' do
+        it 'should return 401' do
           json_oauth2_post(
             'HTTP_AUTHORIZATION' => "Basic #{encoded_auth_header}"
           )
-          expect(response.status).to eq(400)
+          expect(response.status).to eq(401)
           expect(response).to match_json <<-JSON
           {
-            "error": "invalid_request",
+            "error": "invalid_client",
             "message": "Invalid username or password."
           }
           JSON

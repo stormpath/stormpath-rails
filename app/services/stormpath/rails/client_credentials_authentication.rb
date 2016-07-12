@@ -7,7 +7,7 @@ module Stormpath
 
       class FormError < ArgumentError
         def status
-          400
+          401
         end
       end
 
