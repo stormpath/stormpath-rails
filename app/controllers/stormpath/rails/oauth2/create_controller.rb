@@ -16,7 +16,7 @@ module Stormpath
           when 'refresh_token'
             handle_refresh_token_grant
           else
-            raise UnsupportedGrantType unless grant_type.blank?
+            raise UnsupportedGrantType if grant_type.present?
             render json: { error: :invalid_request }, status: 400
           end
         rescue UnsupportedGrantType
@@ -32,13 +32,8 @@ module Stormpath
         def handle_client_credentials_grant
           raise UnsupportedGrantType unless configuration.web.oauth2.client_credentials.enabled
           begin
-            form = ClientCredentialsAuthentication.new(request.headers['Authorization'])
-            auth_result = form.save!
-            render json: {
-              access_token: auth_result.access_token,
-              expires_in: auth_result.expires_in,
-              token_type: auth_result.token_type
-            }
+            auth_result = ClientCredentialsAuthentication.new(request.headers['Authorization']).save!
+            render json: auth_result_json(auth_result).except(:refresh_token)
           rescue ClientCredentialsAuthentication::FormError, Stormpath::Error => error
             render json: {
               error: :invalid_request,
@@ -50,8 +45,7 @@ module Stormpath
         def handle_password_grant
           raise UnsupportedGrantType unless configuration.web.oauth2.password.enabled
           begin
-            form = LoginForm.new(params[:username], params[:password])
-            auth_result = form.save!
+            auth_result = LoginForm.new(params[:username], params[:password]).save!
             render json: auth_result_json(auth_result)
           rescue LoginForm::FormError, Stormpath::Error => error
             render json: {
@@ -64,8 +58,7 @@ module Stormpath
         def handle_refresh_token_grant
           raise UnsupportedGrantType unless configuration.web.oauth2.password.enabled
           begin
-            form = RefreshTokenAuthentication.new(refresh_token: params[:refresh_token])
-            auth_result = form.save!
+            auth_result = RefreshTokenAuthentication.new(params[:refresh_token]).save!
             render json: auth_result_json(auth_result)
           rescue RefreshTokenAuthentication::FormError, Stormpath::Error => error
             render json: {

@@ -28,10 +28,7 @@ module Stormpath
         def fetch_account_from_refresh_token
           raise(UnauthenticatedRequest) if refresh_token_cookie.blank?
           begin
-            result = RefreshTokenAuthentication.new(
-              refresh_token: refresh_token_cookie
-            ).save!
-
+            result = RefreshTokenAuthentication.new(refresh_token_cookie).save!
             TokenCookieSetter.new(cookies, result).call
             AccountFromAccessToken.new(result.access_token).account
           rescue Stormpath::Error => error
