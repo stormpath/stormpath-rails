@@ -16,6 +16,10 @@ module Stormpath
           rescue AccountFromAccessToken::NoAccessToken, Stormpath::Oauth::Error, JWT::DecodeError
             delete_access_token_cookie
             fetch_account_from_refresh_token
+          rescue Stormpath::Error => error
+            raise unless OAUTH_ERROR_CODE_RANGE.include?(error.code)
+            delete_access_token_cookie
+            fetch_account_from_refresh_token
           rescue AccountFromAccessToken::AuthenticationWithRefreshTokenAttemptError
             delete_access_token_cookie
             delete_refresh_token_cookie

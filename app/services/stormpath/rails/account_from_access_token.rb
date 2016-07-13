@@ -12,21 +12,20 @@ module Stormpath
       end
 
       def account
-        @account ||= Stormpath::Rails::Client.client.accounts.get(account_href)
+        @account ||= resolution_class.new(access_token).account
       end
 
       private
 
-      def account_href
-        jwt_response['sub']
-      end
-
-      def jwt_response
-        jwt_data = JWT.decode(access_token, ENV['STORMPATH_API_KEY_SECRET'])
-        raise AuthenticationWithRefreshTokenAttemptError if jwt_data.second['stt'] != 'access'
-        jwt_data.first
-      rescue JWT::ExpiredSignature
-        raise Stormpath::Oauth::Error.new(:jwt_expired)
+      def resolution_class
+        case Stormpath::Rails.config.web.oauth2.password.validation_strategy.to_sym
+        when :local
+          LocalAccountResolution
+        when :stormpath
+          StormpathAccountResolution
+        else
+          raise ArgumentError, 'Invalid validation strategy'
+        end
       end
     end
   end

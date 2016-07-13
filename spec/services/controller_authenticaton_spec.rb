@@ -53,6 +53,19 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         current_account = controller_authenticator.authenticate!
         expect(current_account).to eq(account)
       end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'retrieves the account from access token' do
+          current_account = controller_authenticator.authenticate!
+          expect(current_account).to eq(account)
+        end
+      end
     end
 
     describe 'with no cookies' do
@@ -85,6 +98,26 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         expect(controller.send(:cookies)['access_token']).not_to eq(expired_token)
         expect(controller.send(:cookies)['refresh_token']).to be
       end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'retrieves the account from refresh token' do
+          current_account = controller_authenticator.authenticate!
+          expect(current_account).to eq(account)
+        end
+
+        it 'sets new cookies' do
+          controller_authenticator.authenticate!
+          expect(controller.send(:cookies)['access_token']).to be
+          expect(controller.send(:cookies)['access_token']).not_to eq(expired_token)
+          expect(controller.send(:cookies)['refresh_token']).to be
+        end
+      end
     end
 
     describe 'with expired access token & expired refresh token' do
@@ -107,6 +140,29 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         end
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
+      end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'raises an UnauthenticatedRequest error' do
+          expect do
+            controller_authenticator.authenticate!
+          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end
+
+        it 'deletes cookies' do
+          begin
+            controller_authenticator.authenticate!
+          rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
+          end
+          expect(controller.send(:cookies)['access_token']).not_to be
+          expect(controller.send(:cookies)['refresh_token']).not_to be
+        end
       end
     end
 
@@ -131,6 +187,29 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
       end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'raises an UnauthenticatedRequest error' do
+          expect do
+            controller_authenticator.authenticate!
+          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end
+
+        it 'deletes cookies' do
+          begin
+            controller_authenticator.authenticate!
+          rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
+          end
+          expect(controller.send(:cookies)['access_token']).not_to be
+          expect(controller.send(:cookies)['refresh_token']).not_to be
+        end
+      end
     end
 
     describe 'with invalid access and invalid refresh token' do
@@ -153,6 +232,29 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         end
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
+      end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'raises an UnauthenticatedRequest error' do
+          expect do
+            controller_authenticator.authenticate!
+          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end
+
+        it 'deletes cookies' do
+          begin
+            controller_authenticator.authenticate!
+          rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
+          end
+          expect(controller.send(:cookies)['access_token']).not_to be
+          expect(controller.send(:cookies)['refresh_token']).not_to be
+        end
       end
     end
 
@@ -177,6 +279,29 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
       end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'raises an UnauthenticatedRequest error' do
+          expect do
+            controller_authenticator.authenticate!
+          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end
+
+        it 'deletes cookies' do
+          begin
+            controller_authenticator.authenticate!
+          rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
+          end
+          expect(controller.send(:cookies)['access_token']).not_to be
+          expect(controller.send(:cookies)['refresh_token']).not_to be
+        end
+      end
     end
 
     describe 'with refresh token only' do
@@ -193,6 +318,25 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         controller_authenticator.authenticate!
         expect(controller.send(:cookies)['access_token']).to be
         expect(controller.send(:cookies)['refresh_token']).to be
+      end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'retrieves the account from refresh token' do
+          current_account = controller_authenticator.authenticate!
+          expect(current_account).to eq(account)
+        end
+
+        it 'sets new cookies' do
+          controller_authenticator.authenticate!
+          expect(controller.send(:cookies)['access_token']).to be
+          expect(controller.send(:cookies)['refresh_token']).to be
+        end
       end
     end
 
@@ -215,6 +359,29 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
       end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'raises an UnauthenticatedRequest error' do
+          expect do
+            controller_authenticator.authenticate!
+          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end
+
+        it 'deletes cookies' do
+          begin
+            controller_authenticator.authenticate!
+          rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
+          end
+          expect(controller.send(:cookies)['access_token']).not_to be
+          expect(controller.send(:cookies)['refresh_token']).not_to be
+        end
+      end
     end
   end
 
@@ -228,6 +395,19 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         current_account = controller_authenticator.authenticate!
         expect(current_account).to eq(account)
       end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'retrieves the account from access token' do
+          current_account = controller_authenticator.authenticate!
+          expect(current_account).to eq(account)
+        end
+      end
     end
 
     describe 'with expired token' do
@@ -239,6 +419,20 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         expect do
           controller_authenticator.authenticate!
         end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+      end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'raises an UnauthenticatedRequest error' do
+          expect do
+            controller_authenticator.authenticate!
+          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end
       end
     end
 
@@ -252,6 +446,20 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
           controller_authenticator.authenticate!
         end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'raises an UnauthenticatedRequest error' do
+          expect do
+            controller_authenticator.authenticate!
+          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end
+      end
     end
 
     describe 'with empty token' do
@@ -263,6 +471,20 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         expect do
           controller_authenticator.authenticate!
         end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+      end
+
+      describe 'with stormpath validation strategy' do
+        before do
+          allow(
+            configuration.web.oauth2.password
+          ).to receive(:validation_strategy).and_return('stormpath')
+        end
+
+        it 'raises an UnauthenticatedRequest error' do
+          expect do
+            controller_authenticator.authenticate!
+          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end
       end
     end
   end
