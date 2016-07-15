@@ -1,3 +1,4 @@
+# Legacy but will be used when social logins start.
 module SocialHelper
   def box_class
     facebook_login_enabled? ? 'small col-sm-8' : 'large col-sm-12'
