@@ -17,7 +17,7 @@ module Stormpath
 
         def respond_with_success
           respond_to do |format|
-            format.html { redirect_to "#{configuration.web.login.uri}?status=unverified" }
+            format.html { redirect_to "#{stormpath_config.web.login.uri}?status=unverified" }
             format.json { render nothing: true }
           end
         end
@@ -27,7 +27,7 @@ module Stormpath
             format.json { render json: { status: 400, message: error.message }, status: 400 }
             format.html do
               flash.now[:error] = error.message
-              render configuration.web.verify_email.view
+              render stormpath_config.web.verify_email.view
             end
           end
         end

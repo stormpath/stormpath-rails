@@ -17,7 +17,7 @@ module Stormpath
 
         def respond_with_success
           respond_to do |format|
-            format.html { redirect_to configuration.web.forgot_password.next_uri }
+            format.html { redirect_to stormpath_config.web.forgot_password.next_uri }
             format.json { render nothing: true, status: 200 }
           end
         end
@@ -27,7 +27,7 @@ module Stormpath
             format.json { render json: { status: 400, message: error.message }, status: 400 }
             format.html do
               flash.now[:error] = error.message
-              render configuration.web.forgot_password.view
+              render stormpath_config.web.forgot_password.view
             end
           end
         end

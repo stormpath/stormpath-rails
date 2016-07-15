@@ -30,7 +30,7 @@ module Stormpath
         end
 
         def handle_client_credentials_grant
-          raise UnsupportedGrantType unless configuration.web.oauth2.client_credentials.enabled
+          raise UnsupportedGrantType unless stormpath_config.web.oauth2.client_credentials.enabled
           begin
             auth_result = ClientCredentialsAuthentication.new(request.headers['Authorization']).save!
             render json: auth_result_json(auth_result).except(:refresh_token)
@@ -43,7 +43,7 @@ module Stormpath
         end
 
         def handle_password_grant
-          raise UnsupportedGrantType unless configuration.web.oauth2.password.enabled
+          raise UnsupportedGrantType unless stormpath_config.web.oauth2.password.enabled
           begin
             auth_result = LoginForm.new(params[:username], params[:password]).save!
             render json: auth_result_json(auth_result)
@@ -56,7 +56,7 @@ module Stormpath
         end
 
         def handle_refresh_token_grant
-          raise UnsupportedGrantType unless configuration.web.oauth2.password.enabled
+          raise UnsupportedGrantType unless stormpath_config.web.oauth2.password.enabled
           begin
             auth_result = RefreshTokenAuthentication.new(params[:refresh_token]).save!
             render json: auth_result_json(auth_result)

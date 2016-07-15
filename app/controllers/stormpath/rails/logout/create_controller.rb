@@ -39,18 +39,18 @@ module Stormpath
         end
 
         def access_token_cookie_name
-          configuration.web.access_token_cookie.name
+          stormpath_config.web.access_token_cookie.name
         end
 
         def refresh_token_cookie_name
-          configuration.web.refresh_token_cookie.name
+          stormpath_config.web.refresh_token_cookie.name
         end
 
         def respond_with_success
           respond_to do |format|
             format.html do
               flash[:notice] = 'You have been logged out successfully.'
-              redirect_to configuration.web.logout.next_uri
+              redirect_to stormpath_config.web.logout.next_uri
             end
             format.json { render nothing: true, status: 200 }
           end

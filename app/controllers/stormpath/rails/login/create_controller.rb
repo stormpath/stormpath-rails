@@ -31,7 +31,7 @@ module Stormpath
           respond_to do |format|
             format.html do
               flash.now[:error] = error.message
-              render configuration.web.login.view
+              render stormpath_config.web.login.view
             end
             format.json do
               render json: { status: error.status, message: error.message }, status: error.status
@@ -51,7 +51,7 @@ module Stormpath
           if params[:next]
             params[:next].start_with?('/') ? params[:next] : "/#{params[:next]}"
           else
-            configuration.web.login.next_uri
+            stormpath_config.web.login.next_uri
           end
         end
       end

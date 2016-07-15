@@ -5,7 +5,7 @@ module Stormpath
         def call
           begin
             account = VerifyEmailToken.new(params[:sptoken]).call
-            login_the_account(account) if configuration.web.register.auto_login
+            login_the_account(account) if stormpath_config.web.register.auto_login
             respond_with_success
           rescue InvalidSptokenError, NoSptokenError => error
             respond_to_error(error)
@@ -30,16 +30,16 @@ module Stormpath
         end
 
         def success_redirect_route
-          if configuration.web.register.auto_login
-            configuration.web.register.next_uri
+          if stormpath_config.web.register.auto_login
+            stormpath_config.web.register.next_uri
           else
-            configuration.web.verify_email.next_uri
+            stormpath_config.web.verify_email.next_uri
           end
         end
 
         def respond_to_error(error)
           respond_to do |format|
-            format.html { render configuration.web.verify_email.view }
+            format.html { render stormpath_config.web.verify_email.view }
             format.json do
               render json: { status: error.status, message: error.message }, status: error.status
             end

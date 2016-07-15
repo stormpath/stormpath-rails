@@ -21,11 +21,11 @@ module Stormpath
 
         def success_redirect_route
           if email_verification_enabled?
-            "#{configuration.web.login.uri}?status=unverified"
+            "#{stormpath_config.web.login.uri}?status=unverified"
           elsif auto_login_enabled?
-            configuration.web.register.next_uri
+            stormpath_config.web.register.next_uri
           else
-            "#{configuration.web.login.uri}?status=created"
+            "#{stormpath_config.web.login.uri}?status=created"
           end
         end
 
@@ -36,13 +36,13 @@ module Stormpath
             end
             format.html do
               flash.now[:error] = error.message
-              render configuration.web.register.view
+              render stormpath_config.web.register.view
             end
           end
         end
 
         def auto_login_enabled?
-          configuration.web.register.auto_login
+          stormpath_config.web.register.auto_login
         end
 
         def email_verification_enabled?

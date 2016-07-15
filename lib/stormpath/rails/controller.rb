@@ -25,7 +25,7 @@ module Stormpath
       def require_authentication!
         return if signed_in?
         respond_to do |format|
-          format.html { redirect_to configuration.web.login.uri }
+          format.html { redirect_to stormpath_config.web.login.uri }
           format.json { render nothing: true, status: 401 }
         end
       end
@@ -34,7 +34,7 @@ module Stormpath
         redirect_to root_path if signed_in?
       end
 
-      def configuration
+      def stormpath_config
         Stormpath::Rails.config
       end
     end

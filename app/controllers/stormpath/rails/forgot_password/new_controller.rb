@@ -5,7 +5,7 @@ module Stormpath
         def call
           respond_to do |format|
             format.json { render nothing: true, status: 404 }
-            format.html { render configuration.web.forgot_password.view }
+            format.html { render stormpath_config.web.forgot_password.view }
           end
         end
       end
