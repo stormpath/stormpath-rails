@@ -20,7 +20,7 @@ module Stormpath
             raise unless OAUTH_ERROR_CODE_RANGE.include?(error.code)
             delete_access_token_cookie
             fetch_account_from_refresh_token
-          rescue AccountFromAccessToken::AuthenticationWithRefreshTokenAttemptError
+          rescue AccountFromAccessToken::AuthenticationWithRefreshTokenAttemptError, AccountFromAccessToken::DifferentIssuerError
             delete_access_token_cookie
             delete_refresh_token_cookie
             raise UnauthenticatedRequest

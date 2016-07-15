@@ -5,6 +5,7 @@ module Stormpath
 
       NoAccessToken = Class.new(ArgumentError)
       AuthenticationWithRefreshTokenAttemptError = Class.new(ArgumentError)
+      DifferentIssuerError = Class.new(ArgumentError)
 
       def initialize(access_token)
         raise(NoAccessToken) if access_token.nil?
