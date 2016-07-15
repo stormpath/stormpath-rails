@@ -11,7 +11,6 @@ module Stormpath
   module Rails
     autoload :Client, 'stormpath/rails/client'
     autoload :Authentication, 'stormpath/rails/authentication'
-    autoload :Session, 'stormpath/rails/session'
     autoload :Controller, 'stormpath/rails/controller'
     autoload :Version, 'stormpath/rails/version'
     autoload :Social, 'stormpath/rails/social'
