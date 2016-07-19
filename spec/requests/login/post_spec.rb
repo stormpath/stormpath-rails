@@ -208,7 +208,7 @@ describe 'Login POST', type: :request, vcr: true do
 
   describe 'login sent with ?next=other_url' do
     it 'should redirect to next_uri' do
-      post '/login?next=other', login: user_attrs[:email], password: user_attrs[:password]
+      post '/login?next=/other', login: user_attrs[:email], password: user_attrs[:password]
       expect(response).to redirect_to('/other')
       expect(response.status).to eq(302)
     end

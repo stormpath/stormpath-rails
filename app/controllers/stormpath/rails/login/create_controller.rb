@@ -49,7 +49,7 @@ module Stormpath
 
         def login_redirect_route
           if params[:next]
-            params[:next].start_with?('/') ? params[:next] : "/#{params[:next]}"
+            URI(params[:next]).path
           else
             stormpath_config.web.login.next_uri
           end

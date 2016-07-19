@@ -161,6 +161,36 @@ describe 'the login feature', type: :feature, vcr: true do
     it 'linkedin'
   end
 
+  describe 'describe login referer' do
+    let(:account) { create_test_account }
+
+    after { account.delete }
+
+    it 'given the account vistis login page with a next param pointing to /my_profile' do
+      visit 'login?next=/my_profile'
+      fill_in 'Username or Email', with: account.email
+      fill_in 'Password', with: 'Password1337'
+      click_button 'Log in'
+      expect(page).to have_current_path('/my_profile')
+    end
+
+    it 'given the account vistis login page with a next param pointing to /my_profile' do
+      visit 'login?next=https://www.fake-stormpath.com/my_profile'
+      fill_in 'Username or Email', with: account.email
+      fill_in 'Password', with: 'Password1337'
+      click_button 'Log in'
+      expect(page).to have_current_path('/my_profile')
+    end
+
+    it 'given the user is redirected to the login page with a next param pointing to my_profile' do
+      visit 'my_profile'
+      fill_in 'Username or Email', with: account.email
+      fill_in 'Password', with: 'Password1337'
+      click_button 'Log in'
+      expect(page).to have_current_path('/my_profile')
+    end
+  end
+
   describe 'saml' do
     it 'saml'
   end
