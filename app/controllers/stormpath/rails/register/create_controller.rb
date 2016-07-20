@@ -62,7 +62,7 @@ module Stormpath
         end
 
         def excluded_root_params
-          [:controller, :action, :format, :create, :utf8, :button]
+          [:controller, :action, :format, :create, :utf8, :button, :authenticity_token]
         end
       end
     end
