@@ -53,7 +53,7 @@ module Stormpath
       def validate_presence_of_required_attributes
         RegistrationFormFields.required_fields.each do |required_field, properties|
           if send(required_field).blank?
-            errors.add(:base, "#{properties[:label]} can't be blank")
+            errors.add(:base, "#{properties[:label]} is required.")
           end
         end
       end
