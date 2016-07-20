@@ -4,6 +4,13 @@ module Stormpath
       class FromBearerAuth
         attr_reader :authorization_header
 
+        RESCUE_CLASSES = [
+          Stormpath::Oauth::Error,
+          JWT::DecodeError,
+          AccountFromAccessToken::AuthenticationWithRefreshTokenAttemptError,
+          AccountFromAccessToken::DifferentIssuerError
+        ].freeze
+
         def initialize(authorization_header)
           @authorization_header = authorization_header
         end
@@ -11,7 +18,7 @@ module Stormpath
         def authenticate!
           begin
             AccountFromAccessToken.new(bearer_access_token).account
-          rescue Stormpath::Oauth::Error, JWT::DecodeError
+          rescue *RESCUE_CLASSES
             raise UnauthenticatedRequest
           end
         end
