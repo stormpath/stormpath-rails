@@ -26,7 +26,7 @@ describe 'Oauth2 POST', type: :request, vcr: true do
       post '/oauth/token', attrs, 'HTTP_ACCEPT' => 'application/json'
     end
 
-    describe 'Client Credentials Grant Flow' do
+    xdescribe 'Client Credentials Grant Flow' do
       let(:api_key) { user.api_keys.create({}) }
       let(:api_key_id) { api_key.id }
       let(:api_key_secret) { api_key.secret }
