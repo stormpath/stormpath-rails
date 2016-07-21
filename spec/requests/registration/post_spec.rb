@@ -70,7 +70,7 @@ describe 'Registration POST', type: :request, vcr: true do
             password: 'Pa$$W0RD'
           )
           expect(response.status).to eq(400)
-          expect(error_message).to eq('First Name can\'t be blank')
+          expect(error_message).to eq('First Name is required.')
         end
       end
 
@@ -223,7 +223,7 @@ describe 'Registration POST', type: :request, vcr: true do
                 surname: 'Test',
                 password: 'Pa$$W0RD'
               )
-              expect(error_message).to eq('Age can\'t be blank')
+              expect(error_message).to eq('Age is required.')
               expect(response.status).to eq(400)
             end
           end

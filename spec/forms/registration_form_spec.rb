@@ -94,7 +94,7 @@ describe Stormpath::Rails::RegistrationForm, vcr: true do
 
     it 'should be invalid' do
       expect(form.valid?).not_to be
-      expect(form.errors.full_messages.first).to eq('First Name can\'t be blank')
+      expect(form.errors.full_messages.first).to eq('First Name is required.')
     end
   end
 end
