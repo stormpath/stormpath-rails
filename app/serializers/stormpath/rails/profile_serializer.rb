@@ -29,7 +29,7 @@ module Stormpath
       end
 
       def expansion_resource
-        Stormpath::Resource::Expansion.new(expansions)
+        Stormpath::Resource::Expansion.new(*expansions)
       end
 
       def expanded_resources_hash
