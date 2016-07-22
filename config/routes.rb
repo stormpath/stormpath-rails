@@ -46,13 +46,6 @@ Rails.application.routes.draw do
         get Stormpath::Rails.config.web.verify_email.uri => 'verify_email/show#call'
         post Stormpath::Rails.config.web.verify_email.uri => 'verify_email/create#call', as: :verify_email
       end
-      # if Stormpath::Rails.config.web.id_site.enabled
-      #   get Stormpath::Rails.config.web.id_site.uri => 'stormpath/rails/login#redirect'
-      # end
-      # get '/omniauth_login' => 'stormpath/rails/omniauth#create', as: 'omniauth_login'
-      # get   Stormpath::Rails.config.web.verify_email.uri => 'stormpath/rails/register#verify', as: 'verify'
-      # post   '/register' => 'stormpath/rails/register#create', as: 'register_user'
-      # get   '/me' => 'stormpath/rails/register#profile', as: 'user_profile'
     end
   end
 end
