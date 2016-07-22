@@ -11,7 +11,7 @@
 
   <%= form_for '', url: register_path, html: { class: "registration-form form-horizontal sp-form" } do |form| %>
     <% Stormpath::Rails::RegistrationFormFields.enabled_field_names.each do |field| %>
-      <%= render 'stormpath/rails/login/input', form: form, input_config: Stormpath::Rails.config.web.register.form.fields.send(field), input_name: field.to_s.camelize(:lower), value: params[field.to_s.camelize(:lower)] %>
+      <%= render 'stormpath/rails/shared/input', form: form, input_config: Stormpath::Rails.config.web.register.form.fields.send(field), input_name: field.to_s.camelize(:lower), value: params[field.to_s.camelize(:lower)] %>
     <% end %>
 
     <%= button_tag "Create Account", :class => "btn btn-register btn-sp-green", :type => "submit" %>
