@@ -7,7 +7,7 @@ module Stormpath
       skip_before_action :verify_authenticity_token, if: :api_request?
       skip_before_action :verify_authenticity_token, if: :in_development?
 
-      layout 'stormpath'
+      layout 'stormpath/rails/layouts/stormpath'
 
       private
 
