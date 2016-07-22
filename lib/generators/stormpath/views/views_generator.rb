@@ -14,7 +14,7 @@ module Stormpath
       private
 
       def views
-        files_within_root('.', 'app/views/**/*.*')
+        files_within_root('.', 'app/views/stormpath/rails/**/*.*')
       end
 
       def files_within_root(prefix, glob)

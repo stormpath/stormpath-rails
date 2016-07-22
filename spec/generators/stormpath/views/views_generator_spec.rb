@@ -1,19 +1,20 @@
 require 'spec_helper'
 require 'generators/stormpath/views/views_generator'
 
-xdescribe Stormpath::Generators::ViewsGenerator, :generator do
+describe Stormpath::Generators::ViewsGenerator, :generator do
   it 'copies stormpath views to host application' do
     run_generator
 
     views = %w(
-      layouts/stormpath.html.erb
-      passwords/email_sent.html.erb
-      passwords/edit.html.erb
-      passwords/forgot.html.erb
-      sessions/_form.html.erb
-      sessions/new.html.erb
-      users/_form.html.erb
-      users/new.html.erb
+      stormpath/rails/layouts/stormpath.html.erb
+      stormpath/rails/change_password/new.html.erb
+      stormpath/rails/forgot_password/new.html.erb
+      stormpath/rails/login/new.html.erb
+      stormpath/rails/login/_form.html.erb
+      stormpath/rails/register/new.html.erb
+      stormpath/rails/register/_form.html.erb
+      stormpath/rails/shared/_input.html.erb
+      stormpath/rails/verify_email/new.html.erb
     )
 
     view_files = views.map { |view| file("app/views/#{view}") }
