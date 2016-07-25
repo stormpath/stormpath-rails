@@ -21,24 +21,40 @@ module Stormpath
 
         def success_redirect_route
           if email_verification_enabled?
-            "#{stormpath_config.web.login.uri}?status=unverified"
+            success_with_email_verification_redirect_route
           elsif auto_login_enabled?
-            stormpath_config.web.register.next_uri
+            success_with_auto_login_redirect_route
           else
-            "#{stormpath_config.web.login.uri}?status=created"
+            default_success_redirect_route
           end
+        end
+
+        def success_with_email_verification_redirect_route
+          "#{stormpath_config.web.login.uri}?status=unverified"
+        end
+
+        def success_with_auto_login_redirect_route
+          stormpath_config.web.register.next_uri
+        end
+
+        def default_success_redirect_route
+          "#{stormpath_config.web.login.uri}?status=created"
         end
 
         def respond_with_error(error)
           respond_to do |format|
-            format.json do
-              render json: { status: error.status, message: error.message }, status: error.status
-            end
-            format.html do
-              flash.now[:error] = error.message
-              render stormpath_config.web.register.view
-            end
+            format.json { respond_with_json_error(error) }
+            format.html { respond_with_html_error(error) }
           end
+        end
+
+        def respond_with_json_error(error)
+          render json: { status: error.status, message: error.message }, status: error.status
+        end
+
+        def respond_with_html_error(error)
+          flash.now[:error] = error.message
+          render stormpath_config.web.register.view
         end
 
         def auto_login_enabled?
