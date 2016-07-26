@@ -68,13 +68,11 @@ RSpec.configure do |config|
     end
   end
 
-  # config.before(:example, type: :feature) do
-  #   allow(JWT::Verify).to receive(:verify_expiration).and_return(nil)
-  # end
-  #
-  # config.before(:example, type: :request) do
-  #   allow(JWT::Verify).to receive(:verify_expiration).and_return(nil)
-  # end
+  config.before(:each) do
+    Timecop.freeze(
+      VCR.current_cassette && VCR.current_cassette.originally_recorded_at || Time.zone.now
+    )
+  end
 end
 
 MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] =
