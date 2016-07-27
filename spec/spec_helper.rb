@@ -45,7 +45,7 @@ VCR.configure do |c|
     request.uri == Stormpath::Rails.config.application.href
   end
   c.ignore_request do |request|
-    URI(request.uri).path.ends_with?('/loginAttempts') && request.method == :post
+    request.uri == ENV['STORMPATH_SDK_TEST_DIRECTORY_WITH_VERIFICATION_URL']
   end
 end
 
