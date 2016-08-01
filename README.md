@@ -10,7 +10,7 @@ Stormpath makes it incredibly simple to add users and user data to your applicat
 
 ## Installation
 
-Stormpath Rails officially supports Ruby versions over 2.1.0 and Rails over 4.0+.
+Stormpath Rails officially supports Ruby versions over 2.1.0 and Rails over 4.0.
 
 Add the stormpath-rails integration gem to your Gemfile.
 
@@ -201,20 +201,56 @@ When user navigates to `/login` he will see a Facebook login button. If he is au
 
 ## Overriding Stormpath
 
-### Routes
-You can optionally dump a copy of the default routes into your application for modification:
-
-```sh
-rails generate stormpath:routes
-```
-
 ### Controllers
-To override a Stormpath controller, subclass it and update the routes to point to your new controller (see the "Routes" section):
+
+Since Stormpath controllers are highly configurable, they have lots of configuration code and are not written in a traditional way. A LoginController would usually have two actions - new & create, however in StormpathRails they are separated into two single action controllers - `Stormpath::Rails::Login::NewController` and `Stormpath::Rails::Login::CreateController`. They both respond to a `call` method (action).
+
+To override a Stormpath controller, first you need to subclass it:
+
 ```ruby
-class PasswordsController < Stormpath::Rails::PasswordsController
-class SessionsController < Stormpath::Rails::SessionsController
-class UsersController < Stormpath::Rails::UsersController
+class CreateAccountController < Stormpath::Rails::Register::CreateController
+end
 ```
+
+and update the routes to point to your new controller:
+
+```ruby
+Rails.application.routes.draw do
+  stormpath_rails_routes(actions: { 
+    'register#create' => 'create_account#call'
+  })
+end
+```
+
+List of available controllers:
+
+```ruby
+Stormpath::Rails::Login::NewController
+Stormpath::Rails::Login::CreateController
+
+Stormpath::Rails::Logout::CreateController
+
+Stormpath::Rails::Register::NewController
+Stormpath::Rails::Register::CreateController
+
+Stormpath::Rails::ChangePassword::NewController
+Stormpath::Rails::ChangePassword::CreateController
+
+Stormpath::Rails::ForgotPassword::NewController
+Stormpath::Rails::ForgotPassword::CreateController
+
+Stormpath::Rails::VerifyEmail::ShowController
+Stormpath::Rails::VerifyEmail::CreateController
+
+Stormpath::Rails::Profile::ShowController
+
+Stormpath::Rails::Oauth2::NewController
+Stormpath::Rails::Oauth2::CreateController
+```
+
+### Routes
+
+To override routes (while using Stormpath default controllers), please use the configuration file (config/stormpath.yml) and override them there. As usual, to see what the routes are, run `rake routes`.
 
 ### Views
 You can use the Stormpath views generator to copy the default views to your application for modification:
@@ -223,25 +259,21 @@ rails generate stormpath:views
 ```
 
 ```
-app/views/layouts/stormpath.html.erb
+stormpath/rails/layouts/stormpath.html.erb
 
-app/views/passwords/edit.html.erb
-app/views/passwords/email_sent.html.erb
-app/views/passwords/forgot.html.erb
-app/views/passwords/forgot_change.html.erb
-app/views/passwords/forgot_change_failed.html.erb
-app/views/passwords/forgot_complete.html.erb
+stormpath/rails/login/new.html.erb
+stormpath/rails/login/_form.html.erb
 
-app/views/sessions/_facebook_login_form.erb
-app/views/sessions/_form.html.erb
-app/views/sessions/new.html.erb
+stormpath/rails/register/new.html.erb
+stormpath/rails/register/_form.html.erb
 
-app/views/users/_form.html.erb
-app/views/users/new.html.erb
-app/views/users/verification_complete.html.erb
-app/views/users/verification_email_sent.html.erb
-app/views/users/verification_failed.html.erb
-app/views/users/verification_resend.html.erb
+stormpath/rails/change_password/new.html.erb
+
+stormpath/rails/forgot_password/new.html.erb
+
+stormpath/rails/shared/_input.html.erb
+
+stormpath/rails/verify_email/new.html.erb
 ```
 
 ## Development
