@@ -8,7 +8,7 @@ module Stormpath
       source_root File.expand_path('../templates', __FILE__)
 
       def create_stormpath_configuration_file
-        copy_file 'default_config.yml', 'config/initializers/stormpath.yml'
+        copy_file 'default_config.yml', 'config/stormpath.yml'
       end
 
       def inject_stormpath_into_application_controller

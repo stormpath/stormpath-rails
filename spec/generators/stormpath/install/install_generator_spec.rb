@@ -7,7 +7,7 @@ describe Stormpath::Generators::InstallGenerator, type: :generator do
       provide_existing_application_controller
 
       run_generator
-      initializer = file('config/initializers/stormpath.yml')
+      initializer = file('config/stormpath.yml')
 
       expect(initializer).to exist
     end
