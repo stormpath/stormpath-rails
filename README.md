@@ -10,10 +10,7 @@ Stormpath makes it incredibly simple to add users and user data to your applicat
 
 ## Installation
 
-**Ruby support: 2.1.0+**
-
-**Rails support: 4.0+**
-
+Stormpath Rails officially supports Ruby versions over 2.1.0 and Rails over 4.0+.
 
 Add the stormpath-rails integration gem to your Gemfile.
 
