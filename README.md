@@ -84,17 +84,37 @@ stormpath:
 
 ## Usage
 
-### Helper Methods
+### HTML & JSON
 
-Use `current_user`, `signed_in?`, `signed_out?` in controllers, views, and helpers. For example:
-```erb
-<% if signed_in? %>
-  <%= current_user.email %>
-  <%= button_to "Sign out", sign_out_path, method: :delete %>
-<% else %>
-  <%= link_to "Sign in", sign_in_path %>
-<% end %>
+Stormpath Rails responds to two formats: HTML & JSON. You can use it both as an API for building SPA's, mobile applications and as a standalone Rails application that renders HTML.
+
+By default the Stormpath integration will respond to JSON and HTML requests. 
+If a requested type isn't any of the two, the Stormpath integration will pass on the request, and allow the developer or Rails defaults to handle the response.
+
+However if you want use only one of those, modify the configuration file:
+
+```yaml
+stormpath:
+  web:
+    produces:
+      - application/json
+      - text/html
 ```
+If the request does not specify an Accept header, or the preferred content type is `*/*` the Stormpath integration will respond with the first type in the list.
+
+### Controller private & helper methods.
+
+The Application Controller gets the `Stormpath::Rails::Controller` module included by default.
+The module provides 4 private controller methods:
+
+- `current_account` - get the current account
+- `signed_in?` - check if the user is signed in.
+- `require_authentication!` - a before filter to stop unauthenticated access.
+- `require_no_authentication!` - a before filter to stop authenticated access (a logged in user shouldn't be able to see the login form).
+
+By default, the `current_account` and `signed_in?` are marked as helper_methods and you can use them in your views.
+
+If you wish to add these methods to a controller that doesn't inherit from the ApplicationController, just include the `Stormpath::Rails::Controller` module in that controller as well.
 
 ### Login
 
