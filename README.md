@@ -67,6 +67,19 @@ stormpath:
 
 - Make sure that you have the `root_path` defined in your rails `routes.rb`
 
+### Add Routes
+
+Add `stormpath_rails_routes` to your routes.rb file.
+
+```ruby
+Rails.application.routes.draw do
+  stormpath_rails_routes
+  ...
+end
+```
+
+Check below on how to override default routes.
+
 ## Configuration
 
 The gem is highly configurable through it's configuration file (config/stormpath.yml).
