@@ -10,6 +10,8 @@ module Stormpath
         end
       end
 
+      private
+
       def current_account
         @current_account ||= begin
           ControllerAuthentication.new(cookies, request.headers['Authorization']).authenticate!
