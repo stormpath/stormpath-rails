@@ -10,6 +10,11 @@ Stormpath makes it incredibly simple to add users and user data to your applicat
 
 ## Installation
 
+**Ruby support: 2.1.0+**
+
+**Rails support: 4.0+**
+
+
 Add the stormpath-rails integration gem to your Gemfile.
 
 Stormpath is currently in beta so it is necessary to include the gem version:
@@ -242,21 +247,11 @@ app/views/users/verification_failed.html.erb
 app/views/users/verification_resend.html.erb
 ```
 
-### Supported Ruby Versions
-
-* Ruby 2.0.0
-* Ruby 2.1
-* Ruby 2.2
-
-### Supported Rails Versions
-
-above Rails 3.2
-
 ## Development
 
 ### Prerequisites
 
-If you wish to contribute to the gem, please follow the following steps:
+If you wish to contribute to the gem, please follow these steps:
 
 1. Create a Stormpath Application.
 2. Export the following env variables:
@@ -269,6 +264,6 @@ If you wish to contribute to the gem, please follow the following steps:
 
 ### Specs
 
-Clone the repo & install the dependencies with `bundler install`.
+Clone the repo & install the dependencies with `bundle install`.
 The suite is written with RSpec, so to run the specs you'll need to execute `rspec`
 The suite uses the [VCR gem](https://github.com/vcr/vcr) to record all the HTTP requests. On first roll it records them and after that all of the tests use the recorded HTTP requests and run under 10 seconds.
