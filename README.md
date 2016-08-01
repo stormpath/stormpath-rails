@@ -2,7 +2,7 @@
 [![Coverage Status](https://coveralls.io/repos/stormpath/stormpath-rails/badge.svg?branch=master&service=github)](https://coveralls.io/github/stormpath/stormpath-rails?branch=master)
 [![Code Climate](https://codeclimate.com/github/stormpath/stormpath-rails/badges/gpa.svg)](https://codeclimate.com/github/stormpath/stormpath-rails)
 
-# Stormpath-Rails-Gem
+# Stormpath Rails
 
 Stormpath is the first easy, secure user management and authentication service for developers. This is the Rails gem to ease integration of its features with any Rails-based application.
 
@@ -10,10 +10,12 @@ Stormpath makes it incredibly simple to add users and user data to your applicat
 
 ## Installation
 
-Add the following line to your Gemfile. Stormpath is currently in beta so it is necessary to include the gem version
+Add the stormpath-rails integration gem to your Gemfile.
+
+Stormpath is currently in beta so it is necessary to include the gem version:
 
 ```ruby
-gem 'stormpath-rails', '~> 1.1.2.beta'
+gem 'stormpath-rails', '~> 2.0.0.beta1'
 ```
 
 Bundle the Gemfile
@@ -22,38 +24,46 @@ Bundle the Gemfile
 bundle install
 ```
 
-Run the install script which will create a migration file and a config file.
+Run the generator to insert the config yaml file.
 
 ```sh
 rails generate stormpath:install
 ```
 
-Migrate your database
-```ruby
-rake db:migrate
-```
-
-## Prerequisites
+## Setup
 
 Create a Stormpath account if you haven't already, and be sure to set up the following environment variables:
 
-  - `STORMPATH_API_KEY_FILE_LOCATION` should be the location of your apiKey.properties file which you downloaded from the Stormpath site
-  - `STORMPATH_APPLICATION_HREF` should contain the href to your application, can also be found on the Stormpath site
+ - STORMPATH_API_KEY_ID
+ - STORMPATH_API_KEY_SECRET
 
-Environment variables should be set up in you .bashrc file or .zshrc if you use myzsh.
+Environment variables should be set up in you .bashrc file (or .zshrc if you use myzsh).
 
 Example setup:
 
 ```sh
-export STORMPATH_API_KEY_FILE_LOCATION=~/.stormpathKey
-export STORMPATH_APPLICATION_URL=https://api.stormpath.com/v1/applications/12345abc
+export STORMPATH_API_KEY_ID=6U4HZMHGVHN0U765BGW
+export STORMPATH_API_KEY_SECRET=0e0TuVZKYiPiLTDLNnswEwpPpa5nPv
 ```
 
 Alternatively you can use gems such as [Dotenv](https://github.com/bkeepers/dotenv) or [Figaro](https://github.com/laserlemon/figaro) to preload environment variables.
 
-Environment variables can be named differently but the Stormpath config file should be edited accordingly.
+Create a Stormpath Application throught the Stormpath Admin Console.
 
-Make sure that you have a `root_path` defined in your rails `routes.rb`
+Add the app href **OR** name to your configuration file in config/stormpath.yml:
+
+```yaml
+stormpath:
+  application:
+    href: https://api.stormpath.com/v1/applications/12345abc
+    name: null
+```
+
+<aside class="warning">
+Make sure your application has a default account directory.
+</aside>
+
+**Make sure that you have the `root_path` defined in your rails `routes.rb`**
 
 ## Configuration
 Override any of these defaults in config/initializers/stormpath.rb
