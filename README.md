@@ -24,13 +24,15 @@ Bundle the Gemfile
 bundle install
 ```
 
-Run the generator to insert the config yaml file.
+Run the generator to insert the config yaml file and the neccessary controller module.
 
 ```sh
 rails generate stormpath:install
 ```
 
 ## Setup
+
+### Api Key Setup
 
 Create a Stormpath account if you haven't already, and be sure to set up the following environment variables:
 
@@ -48,6 +50,8 @@ export STORMPATH_API_KEY_SECRET=0e0TuVZKYiPiLTDLNnswEwpPpa5nPv
 
 Alternatively you can use gems such as [Dotenv](https://github.com/bkeepers/dotenv) or [Figaro](https://github.com/laserlemon/figaro) to preload environment variables.
 
+### Application Setup
+
 Create a Stormpath Application throught the Stormpath Admin Console.
 
 Add the app href **OR** name to your configuration file in config/stormpath.yml:
@@ -59,44 +63,22 @@ stormpath:
     name: null
 ```
 
-<aside class="warning">
-Make sure your application has a default account directory.
-</aside>
+- Make sure your application has a default account directory.
 
-**Make sure that you have the `root_path` defined in your rails `routes.rb`**
+- Make sure that you have the `root_path` defined in your rails `routes.rb`
 
 ## Configuration
-Override any of these defaults in config/initializers/stormpath.rb
 
-The following instance variables need to be set:
+The gem is highly configurable through it's configuration file (config/stormpath.yml).
+Currently the only configurations not working are for social logins and ID Site (because they are still not implemented in the gem).
 
-```ruby
-ENV['STORMPATH_API_KEY_ID']
-ENV['STORMPATH_API_KEY_SECRET']
+You can use embedded ruby (ERB) in the configuration file:
+
+```yaml
+stormpath:
+  application:
+    href: <%= ENV['STORMPATH_APPLICATION_URL'] %>
 ```
-
-If you have facebook directories, set the following env variables:
-
-```ruby
-ENV['STORMPATH_FACEBOOK_APP_ID']
-ENV['STORMPATH_FACEBOOK_APP_SECRET']
-```
-
-If you're using google, you need to set:
-
-```ruby
-ENV['STORMPATH_GOOGLE_CLIENT_ID']
-```
-
-```ruby
-Stormpath::Rails.configure do |config|
-  config.api_key.file = ENV['STORMPATH_API_KEY_FILE_LOCATION']
-  config.application.href = ENV['STORMPATH_APPLICATION_HREF']
-end
-```
-The `STORMPATH_API_KEY_FILE_LOCATION` is the location of your Stormpath API Key file.  Information about getting this file can be found in the [Ruby Quickstart](http://docs.stormpath.com/ruby/quickstart/).
-
-The `STORMPATH_APPLICATION_HREF` represents the Application in Stormpath that is your Rails application. You can get the href from the Stormpath Admin Console or the API.
 
 ## Usage
 
