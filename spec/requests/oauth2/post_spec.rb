@@ -97,7 +97,7 @@ describe 'Oauth2 POST', type: :request, vcr: true do
           expect(response).to match_json <<-JSON
           {
             "error": "invalid_client",
-            "message": "Invalid username or password."
+            "message": "API Key Authentication failed."
           }
           JSON
         end
