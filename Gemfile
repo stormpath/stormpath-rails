@@ -21,7 +21,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'coveralls', require: false
   gem 'json_matchers'
-  gem 'match_json'
+  gem 'match_json', '0.0.5'
   gem 'capybara'
   gem 'fivemat'
   gem 'timecop'
