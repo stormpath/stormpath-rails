@@ -17,7 +17,7 @@ Add the stormpath-rails integration gem to your Gemfile.
 Stormpath is currently in beta so it is necessary to include the gem version:
 
 ```ruby
-gem 'stormpath-rails', '~> 2.0.0.beta1'
+gem 'stormpath-rails', '~> 2.0.0'
 ```
 
 Bundle the Gemfile
