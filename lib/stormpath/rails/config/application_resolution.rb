@@ -38,7 +38,7 @@ module Stormpath
         end
 
         def client_applications
-          @client_applications ||= Stormpath::Rails::Client.client.applications
+          Stormpath::Rails::Client.client.applications
         end
 
         def app_from_href
