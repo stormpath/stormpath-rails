@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 module Stormpath
   module Rails
-    VERSION = '1.1.2.beta'.freeze
+    VERSION = '2.0.0'.freeze
   end
 end
