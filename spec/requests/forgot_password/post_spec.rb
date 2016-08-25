@@ -1,25 +1,17 @@
 require 'spec_helper'
 
 describe 'ForgotPassword POST', type: :request, vcr: true do
-  let(:user) { Stormpath::Rails::Client.application.accounts.create(user_attrs) }
+  let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 
-  let(:user_attrs) do
-    {
-      email: 'example@test.com',
-      given_name: 'Example',
-      surname: 'Test',
-      password: 'Pa$$W0RD',
-      username: 'SirExample'
-    }
-  end
+  let(:account_attrs) { FactoryGirl.attributes_for(:account) }
 
   before do
-    user
+    account
     enable_forgot_password
     Rails.application.reload_routes!
   end
 
-  after { user.delete }
+  after { account.delete }
 
   context 'application/json' do
     def json_forgot_post(attrs = {})
@@ -28,7 +20,7 @@ describe 'ForgotPassword POST', type: :request, vcr: true do
 
     context 'valid data' do
       it 'return 200 OK' do
-        json_forgot_post(email: user.email)
+        json_forgot_post(email: account.email)
         expect(response).to be_success
       end
     end

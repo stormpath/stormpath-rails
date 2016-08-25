@@ -3,15 +3,7 @@ require 'spec_helper'
 describe 'Logout POST', type: :request, vcr: true do
   let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 
-  let(:account_attrs) do
-    {
-      email: 'example@test.com',
-      given_name: 'Example',
-      surname: 'Test',
-      password: 'Pa$$W0RD',
-      username: 'SirExample'
-    }
-  end
+  let(:account_attrs) { FactoryGirl.attributes_for(:account) }
 
   before do
     Rails.application.reload_routes!

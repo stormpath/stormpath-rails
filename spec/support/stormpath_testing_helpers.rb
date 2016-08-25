@@ -5,7 +5,7 @@ module Stormpath
         @test_account_result ||= begin
           Stormpath::Rails::Client.application.accounts.create(
             Stormpath::Resource::Account.new(
-              FactoryGirl.attributes_for(:user)
+              FactoryGirl.attributes_for(:account)
             )
           )
         end
