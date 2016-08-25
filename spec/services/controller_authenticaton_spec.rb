@@ -4,7 +4,7 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
   let(:account) { create_test_account }
 
   let(:password_grant_request) do
-    Stormpath::Oauth::PasswordGrantRequest.new('jlc@example.com', 'Password1337')
+    Stormpath::Oauth::PasswordGrantRequest.new(account.email, 'Password1337')
   end
 
   let(:application) { Stormpath::Rails::Client.application }

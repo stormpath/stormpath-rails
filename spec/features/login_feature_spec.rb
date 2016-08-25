@@ -141,13 +141,13 @@ describe 'the login feature', type: :feature, vcr: true do
     end
 
     describe 'proper email and password' do
-      let(:user) { create_test_account }
+      let(:account) { create_test_account }
 
       after { delete_test_account }
 
       it 'redirects to root page' do
         visit 'login'
-        fill_in 'Username or Email', with: user.email
+        fill_in 'Username or Email', with: account.email
         fill_in 'Password', with: 'Password1337'
         click_button 'Log in'
         expect(page).to have_content 'Root page'
@@ -155,7 +155,7 @@ describe 'the login feature', type: :feature, vcr: true do
 
       it 'sets cookies' do
         visit 'login'
-        fill_in 'Username or Email', with: user.email
+        fill_in 'Username or Email', with: account.email
         fill_in 'Password', with: 'Password1337'
         click_button 'Log in'
         expect(page.driver.request.cookies['access_token']).to be
@@ -168,7 +168,7 @@ describe 'the login feature', type: :feature, vcr: true do
         allow(login_config).to receive(:next_uri).and_return('/about')
 
         visit 'login'
-        fill_in 'Username or Email', with: user.email
+        fill_in 'Username or Email', with: account.email
         fill_in 'Password', with: 'Password1337'
         click_button 'Log in'
         expect(page).to have_content 'About us'

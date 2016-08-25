@@ -25,4 +25,5 @@ group :test do
   gem 'capybara'
   gem 'fivemat'
   gem 'timecop'
+  gem 'faker'
 end
