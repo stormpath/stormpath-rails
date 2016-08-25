@@ -39,15 +39,7 @@ describe 'ChangePassword GET', type: :request, vcr: true do
       describe 'with correct sptoken' do
         let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 
-        let(:account_attrs) do
-          {
-            email: 'example@test.com',
-            given_name: 'Example',
-            surname: 'Test',
-            password: 'Pa$$W0RD',
-            username: 'SirExample'
-          }
-        end
+        let(:account_attrs) { FactoryGirl.attributes_for(:user) }
 
         let(:password_reset_token) do
           Stormpath::Rails::Client.application.password_reset_tokens.create(

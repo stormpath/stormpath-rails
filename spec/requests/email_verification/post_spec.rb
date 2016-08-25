@@ -9,15 +9,7 @@ describe 'Email Verification POST', type: :request, vcr: true do
 
   let(:account) { test_dir_with_verification.accounts.create(account_attrs) }
 
-  let(:account_attrs) do
-    {
-      email: 'example@test.com',
-      given_name: 'Example',
-      surname: 'Test',
-      password: 'Pa$$W0RD',
-      username: 'SirExample'
-    }
-  end
+  let(:account_attrs) { FactoryGirl.attributes_for(:user) }
 
   before do
     account

@@ -3,7 +3,9 @@ require 'spec_helper'
 describe Stormpath::Rails::DeleteRefreshToken, vcr: true, type: :service do
   let(:account) { create_test_account }
 
-  let(:password_grant_request) { Stormpath::Oauth::PasswordGrantRequest.new('jlc@example.com', 'Password1337') }
+  let(:password_grant_request) do
+    Stormpath::Oauth::PasswordGrantRequest.new(account.email, 'Password1337')
+  end
 
   let(:application) { Stormpath::Rails::Client.application }
 
