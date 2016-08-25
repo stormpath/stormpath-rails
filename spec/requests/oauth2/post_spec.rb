@@ -1,25 +1,17 @@
 require 'spec_helper'
 
 describe 'Oauth2 POST', type: :request, vcr: true do
-  let(:user) { Stormpath::Rails::Client.application.accounts.create(user_attrs) }
+  let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 
-  let(:user_attrs) do
-    {
-      email: 'example@test.com',
-      given_name: 'Example',
-      surname: 'Test',
-      password: 'Pa$$W0RD',
-      username: 'SirExample'
-    }
-  end
+  let(:account_attrs) { FactoryGirl.attributes_for(:account) }
 
-  before { user }
+  before { account }
 
   before do
     Rails.application.reload_routes!
   end
 
-  after { user.delete }
+  after { account.delete }
 
   describe 'HTTP_ACCEPT=application/json' do
     def json_oauth2_post(attrs = {})
@@ -27,7 +19,7 @@ describe 'Oauth2 POST', type: :request, vcr: true do
     end
 
     describe 'Client Credentials Grant Flow' do
-      let(:api_key) { user.api_keys.create({}) }
+      let(:api_key) { account.api_keys.create({}) }
       let(:api_key_id) { api_key.id }
       let(:api_key_secret) { api_key.secret }
 
@@ -108,8 +100,8 @@ describe 'Oauth2 POST', type: :request, vcr: true do
       it 'should return success on valid request' do
         json_oauth2_post(
           grant_type: :password,
-          username: user.email,
-          password: user_attrs[:password]
+          username: account.email,
+          password: account_attrs[:password]
         )
 
         expect(response).to match_json <<-JSON
@@ -125,7 +117,7 @@ describe 'Oauth2 POST', type: :request, vcr: true do
       it 'should return 400 on invalid request' do
         json_oauth2_post(
           grant_type: :password,
-          username: user.email,
+          username: account.email,
           password: 'WRONG PASSWORD'
         )
 
@@ -145,7 +137,7 @@ describe 'Oauth2 POST', type: :request, vcr: true do
         it 'should return 400 and error with unsupported_grant_type' do
           json_oauth2_post(
             grant_type: :password,
-            username: user.email,
+            username: account.email,
             password: 'WRONG PASSWORD'
           )
 
@@ -161,8 +153,8 @@ describe 'Oauth2 POST', type: :request, vcr: true do
     describe 'Refresh Grant Flow' do
       let(:refresh_token) do
         login_form = Stormpath::Rails::LoginForm.new(
-          user.email,
-          user_attrs[:password]
+          account.email,
+          account_attrs[:password]
         )
         login_form.save!.refresh_token
       end
@@ -255,7 +247,7 @@ describe 'Oauth2 POST', type: :request, vcr: true do
       it 'should return 400 and error with unsupported_grant_type' do
         json_oauth2_post(
           grant_type: :password,
-          username: user.email,
+          username: account.email,
           password: 'WRONG PASSWORD'
         )
 

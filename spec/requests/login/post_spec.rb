@@ -1,36 +1,28 @@
 require 'spec_helper'
 
 describe 'Login POST', type: :request, vcr: true do
-  let(:user) { Stormpath::Rails::Client.application.accounts.create(user_attrs) }
+  let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 
-  let(:user_attrs) do
-    {
-      email: 'example@test.com',
-      given_name: 'Example',
-      surname: 'Test',
-      password: 'Pa$$W0RD',
-      username: 'SirExample'
-    }
-  end
+  let(:account_attrs) { FactoryGirl.attributes_for(:account) }
 
-  before { user }
+  before { account }
 
   before do
     Rails.application.reload_routes!
   end
 
-  after { user.delete }
+  after { account.delete }
 
   describe 'HTTP_ACCEPT=text/html' do
     describe 'html is enabled' do
       it 'successfull login' do
-        post '/login', login: user_attrs[:email], password: user_attrs[:password]
+        post '/login', login: account_attrs[:email], password: account_attrs[:password]
         expect(response).to redirect_to('/')
         expect(response.status).to eq(302)
       end
 
       it 'failed login, wrong password' do
-        post '/login', login: user_attrs[:email], password: 'WR00N6'
+        post '/login', login: account_attrs[:email], password: 'WR00N6'
         expect(response.status).to eq(200)
         expect(response.body).to include('Invalid username or password')
       end
@@ -43,7 +35,7 @@ describe 'Login POST', type: :request, vcr: true do
       end
 
       it 'returns 404' do
-        post '/login', login: user_attrs[:email], password: user_attrs[:password]
+        post '/login', login: account_attrs[:email], password: account_attrs[:password]
         expect(response.status).to eq(404)
       end
     end
@@ -56,58 +48,58 @@ describe 'Login POST', type: :request, vcr: true do
 
     describe 'json is enabled' do
       it 'successfull login should result with 200' do
-        json_login_post(login: user_attrs[:email], password: user_attrs[:password])
+        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
         expect(response.status).to eq(200)
       end
 
       it 'successfull login with username should result with 200' do
-        json_login_post(login: user_attrs[:username], password: user_attrs[:password])
+        json_login_post(login: account_attrs[:username], password: account_attrs[:password])
         expect(response.status).to eq(200)
       end
 
       it 'successfull login should have content-type application/json' do
-        json_login_post(login: user_attrs[:email], password: user_attrs[:password])
+        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
         expect(response.content_type.to_s).to eq('application/json')
       end
 
       it 'successfull login should match schema' do
-        json_login_post(login: user_attrs[:email], password: user_attrs[:password])
+        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
         expect(response).to match_response_schema(:login_response, strict: true)
       end
 
       it 'successfull login should set cookies' do
-        json_login_post(login: user_attrs[:email], password: user_attrs[:password])
+        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
         expect(response.cookies['access_token']).to be
         expect(response.cookies['refresh_token']).to be
       end
 
       it 'successful login should match json' do
-        json_login_post(login: user_attrs[:email], password: user_attrs[:password])
+        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
         expect(response).to match_json <<-JSON
         {
            "account":{
               "href":"{string}",
-              "username":"SirExample",
+              "username":"#{account.username}",
               "modifiedAt":"{date_time_iso8601}",
               "status":"ENABLED",
               "createdAt":"{date_time_iso8601}",
-              "email":"example@test.com",
+              "email":"#{account.email}",
               "middleName":null,
-              "surname":"Test",
-              "givenName":"Example",
-              "fullName":"Example Test"
+              "surname":"#{account.surname}",
+              "givenName":"#{account.given_name}",
+              "fullName":"#{account.given_name} #{account.surname}"
            }
         }
         JSON
       end
 
       it 'failed login, wrong password should result with 400' do
-        json_login_post(login: user_attrs[:email], password: 'WR00N6')
+        json_login_post(login: account_attrs[:email], password: 'WR00N6')
         expect(response.status).to eq(400)
       end
 
       it 'failed login, wrong password should result with a message in the response body' do
-        json_login_post(login: user_attrs[:email], password: 'WR00N6')
+        json_login_post(login: account_attrs[:email], password: 'WR00N6')
 
         response_body = JSON.parse(response.body)
         expect(response_body['status']).to eq(400)
@@ -122,7 +114,7 @@ describe 'Login POST', type: :request, vcr: true do
       end
 
       it 'returns 404' do
-        json_login_post(login: user_attrs[:email], password: user_attrs[:password])
+        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
         expect(response.status).to eq(404)
       end
     end
@@ -135,35 +127,35 @@ describe 'Login POST', type: :request, vcr: true do
 
     describe 'json is enabled' do
       it 'successfull login should result with 200' do
-        login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
+        login_post_with_nil_http_accept(login: account_attrs[:email], password: account_attrs[:password])
         expect(response.status).to eq(200)
       end
 
       it 'successfull login with username should result with 200' do
         login_post_with_nil_http_accept(
-          login: user_attrs[:username],
-          password: user_attrs[:password]
+          login: account_attrs[:username],
+          password: account_attrs[:password]
         )
         expect(response.status).to eq(200)
       end
 
       it 'successfull login should have content-type application/json' do
-        login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
+        login_post_with_nil_http_accept(login: account_attrs[:email], password: account_attrs[:password])
         expect(response.content_type.to_s).to eq('application/json')
       end
 
       it 'successfull login should match schema' do
-        login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
+        login_post_with_nil_http_accept(login: account_attrs[:email], password: account_attrs[:password])
         expect(response).to match_response_schema(:login_response, strict: true)
       end
 
       it 'failed login, wrong password should result with 400' do
-        login_post_with_nil_http_accept(login: user_attrs[:email], password: 'WR00N6')
+        login_post_with_nil_http_accept(login: account_attrs[:email], password: 'WR00N6')
         expect(response.status).to eq(400)
       end
 
       it 'failed login, wrong password should result with a message in the response body' do
-        login_post_with_nil_http_accept(login: user_attrs[:email], password: 'WR00N6')
+        login_post_with_nil_http_accept(login: account_attrs[:email], password: 'WR00N6')
 
         response_body = JSON.parse(response.body)
         expect(response_body['status']).to eq(400)
@@ -178,7 +170,7 @@ describe 'Login POST', type: :request, vcr: true do
       end
 
       it 'returns 404' do
-        login_post_with_nil_http_accept(login: user_attrs[:email], password: user_attrs[:password])
+        login_post_with_nil_http_accept(login: account_attrs[:email], password: account_attrs[:password])
         expect(response.status).to eq(302)
       end
     end
@@ -191,7 +183,7 @@ describe 'Login POST', type: :request, vcr: true do
     end
 
     it 'returns 404' do
-      post '/login', login: user_attrs[:email], password: user_attrs[:password]
+      post '/login', login: account_attrs[:email], password: account_attrs[:password]
       expect(response.status).to eq(404)
     end
   end
@@ -200,7 +192,7 @@ describe 'Login POST', type: :request, vcr: true do
     before { allow(configuration.web.login).to receive(:next_uri).and_return('/abc') }
 
     it 'should redirect to next_uri' do
-      post '/login', login: user_attrs[:email], password: user_attrs[:password]
+      post '/login', login: account_attrs[:email], password: account_attrs[:password]
       expect(response).to redirect_to('/abc')
       expect(response.status).to eq(302)
     end
@@ -208,7 +200,7 @@ describe 'Login POST', type: :request, vcr: true do
 
   describe 'login sent with ?next=other_url' do
     it 'should redirect to next_uri' do
-      post '/login?next=/other', login: user_attrs[:email], password: user_attrs[:password]
+      post '/login?next=/other', login: account_attrs[:email], password: account_attrs[:password]
       expect(response).to redirect_to('/other')
       expect(response.status).to eq(302)
     end

@@ -5,18 +5,18 @@ describe 'access usage feature', type: :feature, vcr: true do
 
   describe 'POST /login' do
     describe 'proper email and password' do
-      let(:user) { create_test_account }
+      let(:account) { create_test_account }
 
       after { delete_test_account }
 
       it 'has access to his profile if signed in' do
         visit 'login'
-        fill_in 'Username or Email', with: user.email
+        fill_in 'Username or Email', with: account.email
         fill_in 'Password', with: 'Password1337'
         click_button 'Log in'
         expect(page).to have_content 'Root page'
         visit 'my_profile'
-        expect(page).to have_content user.email
+        expect(page).to have_content account.email
       end
 
       it "doesn't have access to his profile if not signed in" do
