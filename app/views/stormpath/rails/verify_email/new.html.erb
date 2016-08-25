@@ -43,7 +43,9 @@
           <% end %>
         </div>
       </div>
-      <%= link_to "Back to Log In", new_login_path, class: "forgot" %>
+      <% if Stormpath::Rails.config.web.login.enabled %>
+        <%= link_to "Back to Log In", new_login_path, class: "forgot" %>
+      <% end %>
     </div>
   </div>
 </div>

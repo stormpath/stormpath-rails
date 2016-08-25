@@ -14,6 +14,6 @@
       <%= render 'stormpath/rails/shared/input', form: form, input_config: Stormpath::Rails.config.web.register.form.fields.send(field), input_name: field.to_s.camelize(:lower), value: params[field.to_s.camelize(:lower)] %>
     <% end %>
 
-    <%= button_tag "Create Account", :class => "btn btn-register btn-sp-green", :type => "submit" %>
+    <%= button_tag "Create Account", class: "btn btn-register btn-sp-green", type: "submit" %>
   <% end %>
 </div>

@@ -77,6 +77,18 @@ describe 'the login feature', type: :feature, vcr: true do
       expect(page).to have_content('Log in')
     end
 
+    it 'does not blow up with wrong path helpers when verify_email is disabled' do
+      allow(configuration.web.verify_email).to receive(:enabled).and_return(false)
+
+      Rails.application.reload_routes!
+
+      visit 'login'
+
+      expect(page.status_code).to eq(200)
+      expect(page).not_to have_content('Click Here')
+      expect(page).to have_content('Log in')
+    end
+
     xit 'shows social logins when needed' do
     end
 
