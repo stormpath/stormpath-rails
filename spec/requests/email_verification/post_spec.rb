@@ -9,7 +9,7 @@ describe 'Email Verification POST', type: :request, vcr: true do
 
   let(:account) { test_dir_with_verification.accounts.create(account_attrs) }
 
-  let(:account_attrs) { FactoryGirl.attributes_for(:user) }
+  let(:account_attrs) { FactoryGirl.attributes_for(:account) }
 
   before do
     account

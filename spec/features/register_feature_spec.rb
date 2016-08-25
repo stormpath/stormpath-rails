@@ -120,7 +120,7 @@ describe 'the register feature', type: :feature, vcr: true do
         before do
           allow_any_instance_of(Stormpath::Rails::RegistrationForm).to receive(:account).and_return(
             Stormpath::Resource::Account.new(
-              FactoryGirl.attributes_for(:unverified_user, email: 'damir.svrtan@infinum-test.co')
+              FactoryGirl.attributes_for(:unverified_account, email: 'damir.svrtan@infinum-test.co')
             )
           )
         end

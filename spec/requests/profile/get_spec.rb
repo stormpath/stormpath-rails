@@ -7,7 +7,7 @@ describe 'Me GET', type: :request, vcr: true do
 
   let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 
-  let(:account_attrs) { FactoryGirl.attributes_for(:user) }
+  let(:account_attrs) { FactoryGirl.attributes_for(:account) }
 
   before do
     post '/login', login: account.email, password: account_attrs[:password]

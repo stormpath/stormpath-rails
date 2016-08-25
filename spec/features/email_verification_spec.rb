@@ -11,7 +11,7 @@ describe 'the email verification feature', type: :feature, vcr: true do
 
   let(:account) { test_dir_with_verification.accounts.create(account_attrs) }
 
-  let(:account_attrs) { FactoryGirl.attributes_for(:user) }
+  let(:account_attrs) { FactoryGirl.attributes_for(:account) }
 
   let(:sptoken) { account.email_verification_token.token }
 
