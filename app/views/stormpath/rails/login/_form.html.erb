@@ -1,6 +1,10 @@
 <div class="email-password-area col-xs-12 <%= box_class %>">
   <div class="header">
-    <span>Log in or <%= link_to "Create Account", new_register_path %></span>
+    <% if Stormpath::Rails.config.web.register.enabled %>
+      <span>Log in or <%= link_to "Create Account", new_register_path %></span>
+    <% else %>
+      <span>Log in</span>
+    <% end %>
   </div>
 
   <% if flash[:error] %>

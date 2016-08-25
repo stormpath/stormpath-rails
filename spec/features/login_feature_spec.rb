@@ -3,6 +3,8 @@ require 'spec_helper'
 describe 'the login feature', type: :feature, vcr: true do
   let(:login_config) { configuration.web.login }
 
+  before { Rails.application.reload_routes! }
+
   describe 'GET /login' do
     it 'has proper labels' do
       visit 'login'
@@ -51,6 +53,17 @@ describe 'the login feature', type: :feature, vcr: true do
       visit 'login'
 
       expect { find_field('login') }.to raise_error(Capybara::ElementNotFound)
+    end
+
+    it 'does not blow up with wrong path helpers when register is disabled' do
+      allow(configuration.web.register).to receive(:enabled).and_return(false)
+
+      Rails.application.reload_routes!
+
+      visit 'login'
+
+      expect(page.status_code).to eq(200)
+      expect(page).to have_content('Log in')
     end
 
     xit 'shows social logins when needed' do
