@@ -16,6 +16,7 @@ describe 'the register feature', type: :feature, vcr: true do
       type: 'text'
     )
     reload_form_class
+    Rails.application.reload_routes!
   end
 
   after do
@@ -46,6 +47,17 @@ describe 'the register feature', type: :feature, vcr: true do
       expect(find_field('phoneNumber')['placeholder']).to eq('Phone Number')
       expect(find_field('password')['placeholder']).to eq('Password')
       expect(find_field('confirmPassword')['placeholder']).to eq('Confirm Password')
+    end
+
+    it 'should render the page when login is disabled' do
+      allow(configuration.web.login).to receive(:enabled).and_return(false)
+
+      Rails.application.reload_routes!
+
+      visit 'register'
+      expect(page.status_code).to eq(200)
+      expect(page).to have_content('Create Account')
+      expect(page).not_to have_content('Back to Log In')
     end
   end
 

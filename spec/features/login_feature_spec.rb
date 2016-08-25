@@ -66,6 +66,17 @@ describe 'the login feature', type: :feature, vcr: true do
       expect(page).to have_content('Log in')
     end
 
+    it 'does not blow up with wrong path helpers when forgot_password is disabled' do
+      allow(configuration.web.forgot_password).to receive(:enabled).and_return(false)
+
+      Rails.application.reload_routes!
+
+      visit 'login'
+
+      expect(page.status_code).to eq(200)
+      expect(page).to have_content('Log in')
+    end
+
     xit 'shows social logins when needed' do
     end
 
