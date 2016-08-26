@@ -120,7 +120,7 @@ stormpath:
     # store for the defined Stormpath application has the email verification
     # workflow enabled.
     verifyEmail:
-      enabled: null
+      enabled: true
       uri: "/verify"
       nextUri: "/login?status=verified"
       view: "stormpath/rails/verify_email/new"
