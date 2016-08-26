@@ -138,6 +138,9 @@ describe 'the register feature', type: :feature, vcr: true do
         end
 
         it 'creates an account and redirects to login with status UNVERIFIED' do
+          allow(configuration.web.verify_email).to receive(:enabled).and_return(true)
+          Rails.application.reload_routes!
+
           visit 'register'
 
           fill_in 'givenName', with: 'Damir'
