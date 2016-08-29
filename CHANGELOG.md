@@ -1,8 +1,12 @@
 Stormpath Rails Changelog
 ============================
 
-Version 2.0.1
+Version 2.0.2
 -------------
+Released on Aug 29, 2016
+- Render path links depending on the configuration
+- Use Faker to generate random test data
+- Rename all user instances to account
 
 Released on Aug 22, 2016
 
