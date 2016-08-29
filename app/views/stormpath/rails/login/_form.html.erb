@@ -17,7 +17,12 @@
     <% case params[:status] %>
     <% when 'unverified' %>
       <div class="alert alert-success">
-        <p>Your account verification email has been sent! Before you can log into your account, you need to activate your account by clicking the link we sent to your inbox. Didn't get the email? <%= link_to "Click Here", Stormpath::Rails.config.web.verify_email.uri %></p>
+        <% if Stormpath::Rails.config.web.verify_email.enabled %>
+          <p>
+            Your account verification email has been sent! Before you can log into your account, you need to activate your account by clicking the link we sent to your inbox. Didn't get the email?
+            <%= link_to "Click Here", new_verify_email_path %>
+          </p>
+        <% end %>
       </div>
     <% when 'verified' %>
       <div class="alert alert-success">

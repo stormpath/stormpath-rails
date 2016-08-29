@@ -26,6 +26,7 @@ module Stormpath
           config.stormpath.application.href = dynamic_config.app.href
           config.stormpath.web.forgot_password.enabled = dynamic_config.forgot_password_enabled?
           config.stormpath.web.change_password.enabled = dynamic_config.change_password_enabled?
+          config.stormpath.web.verify_email.enabled = dynamic_config.verify_email_enabled?
         end
       end
 
