@@ -4,6 +4,7 @@
       <div class="box row">
         <%= render partial: 'stormpath/rails/register/form' %>
       </div>
+      <%= render 'stormpath/rails/shared/social_login' %>
       <%= link_to "Back to Log In", new_login_path, class: "to-login" %>
     </div>
   </div>

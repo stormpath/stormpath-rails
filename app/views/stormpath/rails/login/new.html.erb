@@ -7,6 +7,8 @@
       <% if Stormpath::Rails.config.web.forgot_password.enabled %>
         <%= link_to "Forgot Password?", new_forgot_password_path, class: "forgot" %>
       <% end %>
+
+      <%= render 'stormpath/rails/shared/social_login' %>
     </div>
   </div>
 </div>

@@ -1,0 +1,25 @@
+<div>
+  <% if Stormpath::Rails.config.web.facebook_app_id %>
+    <%= link_to 'Log in with Facebook', "https://www.facebook.com/dialog/oauth?client_id=#{Stormpath::Rails.config.web.facebook_app_id}&redirect_uri=#{facebook_callback_url}&scope=#{Stormpath::Rails.config.web.social.facebook.scope}" %>
+  <% end %>
+</div>
+
+<div>
+  <% if Stormpath::Rails.config.web.github_app_id %>
+    <%= link_to 'Log in with Github', "https://github.com/login/oauth/authorize?scope=#{Stormpath::Rails.config.web.social.github.scope}&client_id=#{Stormpath::Rails.config.web.github_app_id}&redirect_uri=#{github_callback_url}" %>
+  <% end %>
+</div>
+
+<div>
+  <%# TODO %>
+  <%# if Stormpath::Rails.config.web.google_app_id %>
+    <%#= link_to 'Log in with Facebook', "https://www.facebook.com/dialog/oauth?client_id=#{Stormpath::Rails.config.web.facebook_app_id}&redirect_uri=#{facebook_callback_url}" %>
+  <%# end %>
+</div>
+
+<div>
+  <% if Stormpath::Rails.config.web.linkedin_app_id %>
+    <%= link_to 'Log in with Linkedin', "https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=#{Stormpath::Rails.config.web.linkedin_app_id}&redirect_uri=#{linkedin_callback_url}&scope=#{Stormpath::Rails.config.web.social.linkedin.scope}&state=#{SecureRandom.hex(21)}" %>
+    <%# TODO: what to do with the state attribute? %>
+  <% end %>
+</div>

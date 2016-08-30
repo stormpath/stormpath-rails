@@ -26,6 +26,11 @@ module Stormpath
           config.stormpath.application.href = dynamic_config.app.href
           config.stormpath.web.forgot_password.enabled = dynamic_config.forgot_password_enabled?
           config.stormpath.web.change_password.enabled = dynamic_config.change_password_enabled?
+          config.stormpath.web.facebook_app_id = dynamic_config.facebook_app_id
+          config.stormpath.web.facebook_app_secret = dynamic_config.facebook_app_secret
+          config.stormpath.web.github_app_id = dynamic_config.github_app_id
+          config.stormpath.web.google_app_id = dynamic_config.google_app_id
+          config.stormpath.web.linkedin_app_id = dynamic_config.linkedin_app_id
         end
       end
 
