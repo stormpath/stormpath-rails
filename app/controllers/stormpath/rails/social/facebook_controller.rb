@@ -3,37 +3,40 @@ module Stormpath
     module Social
       class FacebookController < Stormpath::Rails::BaseController
         def create
-          uri = URI "https://graph.facebook.com/v2.7/oauth/access_token"
-          http = Net::HTTP.new(uri.host, uri.port)
-          http.use_ssl = true
+          begin
+            access_token = AuthorizationCodeExchanger.new(:facebook, root_url, params).access_token
+            request = Stormpath::Provider::AccountRequest.new(:facebook, :access_token, access_token)
+            account = Stormpath::Rails::Client.application.get_provider_account(request).account
+            login_the_account(account)
+            respond_with_success
+          rescue InvalidSptokenError, NoSptokenError => error
+            respond_with_error(error)
+          end
+        end
 
-          post_params = URI.encode_www_form(
-            client_id: Stormpath::Rails.config.web.facebook_app_id,
-            client_secret: Stormpath::Rails.config.web.facebook_app_secret,
-            redirect_uri: facebook_callback_url,
-            code: params[:code]
-          )
+        private
 
-          response = http.post(uri, post_params)
-          json_response = JSON.parse(response.body)
-          access_token = json_response['access_token']
-          token_type = json_response['token_type'].try(:capitalize)
-
-          request = Stormpath::Provider::AccountRequest.new(:facebook, :access_token, access_token)
-
-          provider_account = Stormpath::Rails::Client.application.get_provider_account(request)
-
-          account = provider_account.account
-
+        def login_the_account(account)
           AccountLoginWithStormpathToken.new(
             cookies, account,
             Stormpath::Rails::Client.application,
             Stormpath::Rails::Client.client.data_store.api_key
           ).call
+        end
 
+        def respond_with_success
           respond_to do |format|
-            format.json { render nothing: true, status: 404 }
+            format.json { render nothing: true, status: :ok }
             format.html { redirect_to stormpath_config.web.login.next_uri }
+          end
+        end
+
+        def respond_with_error(error)
+          respond_to do |format|
+            format.html { render stormpath_config.web.login.view }
+            format.json do
+              render json: { status: error.status, message: error.message }, status: error.status
+            end
           end
         end
       end
