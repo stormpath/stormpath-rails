@@ -2,7 +2,6 @@ module Stormpath
   module Rails
     module Social
       class SocialController < Stormpath::Rails::BaseController
-        
         def login_the_account(account)
           AccountLoginWithStormpathToken.new(
             cookies, account,
@@ -20,7 +19,10 @@ module Stormpath
 
         def respond_with_error(error)
           respond_to do |format|
-            format.html { render stormpath_config.web.login.view }
+            format.html do
+              flash.now[:error] = "An error occured and we couldn't log you in"
+              render stormpath_config.web.login.view
+            end
             format.json do
               render json: { status: error.status, message: error.message }, status: error.status
             end

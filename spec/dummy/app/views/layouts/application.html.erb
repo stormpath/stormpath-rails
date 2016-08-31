@@ -8,6 +8,10 @@
 </head>
 <body>
 
+<% if signed_in? %>
+  <p>Logged in as: <%= current_account.given_name %></p>
+<% end %>
+
 <%= yield %>
 
 </body>
