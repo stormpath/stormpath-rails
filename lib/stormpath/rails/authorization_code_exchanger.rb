@@ -17,7 +17,7 @@ module Stormpath
       private
 
       def exchange_auth_code
-        http.post(uri, encoded_params)
+        https.post(uri, encoded_params, {'Accept' => 'application/json'})
       end
 
       def fetch_access_token(response_body)
@@ -33,10 +33,10 @@ module Stormpath
         )
       end
 
-      def http
-        request = Net::HTTP.new(uri.host, uri.port)
-        request.use_ssl = true
-        request
+      def https
+        protocol = Net::HTTP.new(uri.host, uri.port)
+        protocol.use_ssl = true
+        protocol
       end
 
       def configure
@@ -47,11 +47,10 @@ module Stormpath
           @client_id = Stormpath::Rails.config.web.facebook_app_id
           @client_secret = Stormpath::Rails.config.web.facebook_app_secret
         when :github
-          # TODO
-        when :linkedin
-          # TODO
-        when :google
-          # TODO
+          @uri = URI 'https://github.com/login/oauth/access_token'
+          @redirect_uri = "#{root_url[0...-1]}#{Stormpath::Rails.config.web.social.github.uri}"
+          @client_id = Stormpath::Rails.config.web.github_app_id
+          @client_secret = Stormpath::Rails.config.web.github_app_secret
         else
           raise(NoSptokenError)
         end

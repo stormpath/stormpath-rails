@@ -39,6 +39,10 @@ module Stormpath
           github.try(:provider).try(:client_id)
         end
 
+        def github_app_secret
+          github.try(:provider).try(:client_secret)
+        end
+
         def google_app_id
           google.try(:provider).try(:client_id)
         end
