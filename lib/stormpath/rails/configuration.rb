@@ -32,6 +32,7 @@ module Stormpath
           config.stormpath.web.github_app_secret = dynamic_config.github_app_secret
           config.stormpath.web.google_app_id = dynamic_config.google_app_id
           config.stormpath.web.linkedin_app_id = dynamic_config.linkedin_app_id
+          config.stormpath.web.has_social_providers = dynamic_config.has_social_providers?
         end
       end
 

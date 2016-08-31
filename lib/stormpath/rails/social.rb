@@ -5,10 +5,15 @@ module Stormpath
 
       included do
         helper_method :facebook_login_enabled?, :facebook_app_id,
-                      :google_login_enabled?, :google_client_id, :social_auth?
+                      :google_login_enabled?, :google_client_id, :social_auth?,
+                      :social_providers_present?
       end
 
       private
+
+      def social_providers_present?
+        Stormpath::Rails.config.web.has_social_providers
+      end
 
       def facebook_login_enabled?
         false # facebook_app_id.present?

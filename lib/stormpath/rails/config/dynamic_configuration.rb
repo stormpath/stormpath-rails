@@ -51,6 +51,10 @@ module Stormpath
           linkedin.try(:provider).try(:client_id)
         end
 
+        def has_social_providers?
+          facebook_app_id || github_app_id || google_app_id || linkedin_app_id
+        end
+
         private
 
         def password_reset_enabled?

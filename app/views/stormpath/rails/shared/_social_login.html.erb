@@ -1,24 +1,24 @@
-<div>
+<div class="social-area col-xs-12 col-sm-4">
+  <div class="header">
+    &nbsp;
+  </div>
+
+  <label>Easy 1-click login:</label>
+
   <% if Stormpath::Rails.config.web.facebook_app_id %>
-    <%= link_to 'Log in with Facebook', facebook_oauth_url %>
+    <%= link_to 'Facebook', facebook_oauth_url, class: 'btn btn-social btn-facebook' %>
   <% end %>
-</div>
 
-<div>
-  <% if Stormpath::Rails.config.web.github_app_id %>
-    <%= link_to 'Log in with Github', github_oauth_url %>
-  <% end %>
-</div>
-
-<div>
   <% if Stormpath::Rails.config.web.google_app_id %>
-    <%= link_to 'Log in with Google', google_oauth_url %>
+    <%= link_to 'Google', google_oauth_url, class: 'btn btn-social btn-google' %>
   <% end %>
-</div>
 
-
-<div>
   <% if Stormpath::Rails.config.web.linkedin_app_id %>
-    <%= link_to 'Log in with LinkedIn', linkedin_oauth_url %>
+    <%= link_to 'LinkedIn', linkedin_oauth_url, class: 'btn btn-social btn-linkedin' %>
   <% end %>
+
+  <% if Stormpath::Rails.config.web.github_app_id %>
+    <%= link_to 'GitHub', github_oauth_url, class: 'btn btn-social btn-github' %>
+  <% end %>
+
 </div>
