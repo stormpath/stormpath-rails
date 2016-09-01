@@ -66,7 +66,86 @@ describe 'the login feature', type: :feature, vcr: true do
       expect(page).to have_content('Log in')
     end
 
-    xit 'shows social logins when needed' do
+    describe 'shows social logins if directories available' do
+      context 'when facebook is available' do
+        it 'should show a facebook login link' do
+          allow(configuration.web).to receive(:facebook_app_id).and_return('random_string')
+          Rails.application.reload_routes!
+
+          visit 'login'
+          expect(page).to have_content('Facebook')
+        end
+      end
+
+      context 'when facebook is not available' do
+        it 'should not show facebook login link' do
+          allow(configuration.web).to receive(:facebook_app_id).and_return(nil)
+          Rails.application.reload_routes!
+
+          visit 'login'
+          expect(page).not_to have_content('Facebook')
+        end
+      end
+
+      context 'when google is available' do
+        it 'should show a google login link' do
+          allow(configuration.web).to receive(:google_app_id).and_return('random_string')
+          Rails.application.reload_routes!
+
+          visit 'login'
+          expect(page).to have_content('Google')
+        end
+      end
+
+      context 'when google is not available' do
+        it 'should not show google login link' do
+          allow(configuration.web).to receive(:google_app_id).and_return(nil)
+          Rails.application.reload_routes!
+
+          visit 'login'
+          expect(page).not_to have_content('Google')
+        end
+      end
+
+      context 'when github is available' do
+        it 'should show a github login link' do
+          allow(configuration.web).to receive(:github_app_id).and_return('random_string')
+          Rails.application.reload_routes!
+
+          visit 'login'
+          expect(page).to have_content('GitHub')
+        end
+      end
+
+      context 'when github is not available' do
+        it 'should not show github login link' do
+          allow(configuration.web).to receive(:github_app_id).and_return(nil)
+          Rails.application.reload_routes!
+
+          visit 'login'
+          expect(page).not_to have_content('GitHub')
+        end
+      end
+
+      context 'when linkedin is available' do
+        it 'should show a linkedin login link' do
+          allow(configuration.web).to receive(:linkedin_app_id).and_return('random_string')
+          Rails.application.reload_routes!
+
+          visit 'login'
+          expect(page).to have_content('LinkedIn')
+        end
+      end
+
+      context 'when linkedin is not available' do
+        it 'should not show linkedin login link' do
+          allow(configuration.web).to receive(:linkedin_app_id).and_return(nil)
+          Rails.application.reload_routes!
+
+          visit 'login'
+          expect(page).not_to have_content('LinkedIn')
+        end
+      end
     end
 
     xit 'SAML' do
@@ -165,13 +244,6 @@ describe 'the login feature', type: :feature, vcr: true do
 
       it 'referered from another page'
     end
-  end
-
-  describe 'social login' do
-    it 'facebook'
-    it 'google'
-    it 'github'
-    it 'linkedin'
   end
 
   describe 'describe login referer' do
