@@ -29,7 +29,7 @@ module Stormpath
         URI.encode_www_form(
           client_id: Stormpath::Rails.config.web.facebook_app_id,
           client_secret: Stormpath::Rails.config.web.facebook_app_secret,
-          redirect_uri: "#{root_url[0...-1]}#{Stormpath::Rails.config.web.social.facebook.uri}",
+          redirect_uri: URI.join(root_url, Stormpath::Rails.config.web.social.facebook.uri).to_s,
           code: code
         )
       end
