@@ -10,6 +10,7 @@
 
 <% if signed_in? %>
   <p>Logged in as: <%= current_account.given_name %></p>
+  <%= button_to "Log out", logout_path %>
 <% end %>
 
 <%= yield %>
