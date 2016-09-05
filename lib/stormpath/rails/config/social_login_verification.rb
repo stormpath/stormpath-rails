@@ -2,12 +2,17 @@ module Stormpath
   module Rails
     module Config
       class SocialLoginVerification
-        attr_reader :app, :register_is_enabled, :facebook, :github, :google, :linkedin
+        attr_reader :app,
+                    :facebook_app_id,
+                    :facebook_app_secret,
+                    :github_app_id,
+                    :github_app_secret,
+                    :google_app_id,
+                    :linkedin_app_id
 
-        def initialize(app_href, register_is_enabled)
+        def initialize(app_href)
           @app = Stormpath::Rails::Client.client.applications.get(app_href)
-          @register_is_enabled = register_is_enabled
-          initialize_directories if register_is_enabled
+          initialize_directories
         end
 
         private
@@ -15,15 +20,18 @@ module Stormpath
         def initialize_directories
           app.account_store_mappings.each do |mapping|
             account_store = mapping.account_store
-            case account_store.try(:provider).try(:provider_id)
+            next unless account_store.class == Stormpath::Resource::Directory
+            case account_store.provider.provider_id
             when 'facebook'
-              @facebook = account_store
+              @facebook_app_id = account_store.provider.client_id
+              @facebook_app_secret = account_store.provider.client_secret
             when 'github'
-              @github = account_store
+              @github_app_id = account_store.provider.client_id
+              @github_app_secret = account_store.provider.client_secret
             when 'google'
-              @google = account_store
+              @google_app_id = account_store.provider.client_id
             when 'linkedin'
-              @linkedin = account_store
+              @linkedin_app_id = account_store.provider.client_id
             end
           end
         end

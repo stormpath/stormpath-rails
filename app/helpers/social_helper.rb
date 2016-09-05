@@ -11,9 +11,6 @@ module SocialHelper
     social_providers_present? ? 'col-sm-12' : 'col-sm-8'
   end
 
-  # TODO: What about the state checks? With them we could check if the request was created
-  #       by a third party
-
   def facebook_oauth_url
     client_id = Stormpath::Rails.config.web.facebook_app_id
     redirect_uri = facebook_callback_url

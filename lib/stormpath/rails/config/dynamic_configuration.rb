@@ -2,12 +2,21 @@ module Stormpath
   module Rails
     module Config
       class DynamicConfiguration
-        attr_reader :static_config, :facebook, :github, :linkedin, :google
+        attr_reader :static_config
+
+        delegate(
+          :facebook_app_id,
+          :facebook_app_secret,
+          :github_app_id,
+          :github_app_secret,
+          :google_app_id,
+          :linkedin_app_id,
+          to: :social_login_verification
+        )
 
         def initialize(static_config)
           @static_config = static_config
           proccess_account_store_verification
-          process_social_login_verification
         end
 
         def app
@@ -25,30 +34,6 @@ module Stormpath
         def change_password_enabled?
           return false if static_config.stormpath.web.change_password.enabled == false
           password_reset_enabled?
-        end
-
-        def facebook_app_id
-          facebook.try(:provider).try(:client_id)
-        end
-
-        def facebook_app_secret
-          facebook.try(:provider).try(:client_secret)
-        end
-
-        def github_app_id
-          github.try(:provider).try(:client_id)
-        end
-
-        def github_app_secret
-          github.try(:provider).try(:client_secret)
-        end
-
-        def google_app_id
-          google.try(:provider).try(:client_id)
-        end
-
-        def linkedin_app_id
-          linkedin.try(:provider).try(:client_id)
         end
 
         def has_social_providers?
@@ -74,13 +59,8 @@ module Stormpath
           ).call
         end
 
-        def process_social_login_verification
-          social_login_verification =
-            SocialLoginVerification.new(app.href, static_config.stormpath.web.register.enabled)
-          @facebook = social_login_verification.facebook
-          @github = social_login_verification.github
-          @linkedin = social_login_verification.linkedin
-          @google = social_login_verification.google
+        def social_login_verification
+          @social_login_verification ||= SocialLoginVerification.new(app.href)
         end
       end
     end
