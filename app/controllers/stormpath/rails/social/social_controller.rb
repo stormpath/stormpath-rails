@@ -20,7 +20,7 @@ module Stormpath
         def respond_with_error(error)
           respond_to do |format|
             format.html do
-              flash.now[:error] = "An error occured and we couldn't log you in"
+              flash.now[:error] = error.message
               render stormpath_config.web.login.view
             end
             format.json do

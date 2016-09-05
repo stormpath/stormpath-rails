@@ -19,6 +19,7 @@ module Stormpath
     autoload :RoutingConstraint, 'stormpath/rails/routing_constraint'
     autoload :InvalidSptokenError, 'stormpath/rails/errors/invalid_sptoken_error'
     autoload :NoSptokenError, 'stormpath/rails/errors/no_sptoken_error'
-    autoload :AuthorizationCodeExchanger, 'stormpath/rails/authorization_code_exchanger'
+    autoload :FacebookAuthCodeExchange, 'stormpath/rails/facebook_auth_code_exchange'
+    autoload :GithubAuthCodeExchange, 'stormpath/rails/github_auth_code_exchange'
   end
 end

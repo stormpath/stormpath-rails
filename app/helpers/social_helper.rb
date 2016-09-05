@@ -34,17 +34,15 @@ module SocialHelper
     client_id = Stormpath::Rails.config.web.google_app_id
     redirect_uri = google_callback_url
     scope = Stormpath::Rails.config.web.social.google.scope
-    response_type = 'code'
     url = 'https://accounts.google.com/o/oauth2/auth'
-    "#{url}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}&response_type=#{response_type}"
+    "#{url}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}&response_type=code"
   end
 
   def linkedin_oauth_url
     client_id = Stormpath::Rails.config.web.linkedin_app_id
     redirect_uri = linkedin_callback_url
     scope = Stormpath::Rails.config.web.social.linkedin.scope
-    response_type = 'code'
     url = 'https://www.linkedin.com/oauth/v2/authorization'
-    "#{url}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}&response_type=#{response_type}"
+    "#{url}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}&response_type=code"
   end
 end
