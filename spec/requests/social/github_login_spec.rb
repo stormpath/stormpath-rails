@@ -1,17 +1,17 @@
 require 'spec_helper'
 
-describe 'Facebook login', type: :request, vcr: true do
+describe 'Github login', type: :request, vcr: true do
   let(:app_href) { URI Stormpath::Rails::Client.application.href }
-  let(:auth_code_url) { 'https://www.facebook.com/dialog/oauth' }
-  let(:access_token_auth_url) { 'https://graph.facebook.com/v2.7/oauth/access_token' }
-  let(:authorization_code) { Stormpath::Social::Helpers.mocked_authorization_code_for(:facebook) }
-  let(:access_token) { Stormpath::Social::Helpers.mocked_access_token_for(:facebook) }
+  let(:auth_code_url) { 'https://github.com/login/oauth/authorize' }
+  let(:access_token_auth_url) { 'https://github.com/login/oauth/access_token' }
+  let(:authorization_code) { Stormpath::Social::Helpers.mocked_authorization_code_for(:github) }
+  let(:access_token) { Stormpath::Social::Helpers.mocked_access_token_for(:github) }
   let(:error_code) { Stormpath::Social::Helpers.access_denied_response }
   let(:error_token) { Stormpath::Social::Helpers.code_mismatch }
-  let(:mocked_account) { Stormpath::Social::Helpers.mocked_account(:facebook) }
+  let(:mocked_account) { Stormpath::Social::Helpers.mocked_account(:github) }
 
-  describe 'get https://www.facebook.com/dialog/oauth' do
-    context 'when user accepts on facebook' do
+  describe 'get https://github.com/login/oauth/authorize' do
+    context 'when user accepts on github' do
       it 'should return authorization code' do
         stub_request(:get, auth_code_url).to_return(body: authorization_code)
         response = JSON.parse(Net::HTTP.get(URI(auth_code_url)))
@@ -19,7 +19,7 @@ describe 'Facebook login', type: :request, vcr: true do
       end
     end
 
-    context 'when user denies on facebook' do
+    context 'when user denies on github' do
       it 'should return error response' do
         stub_request(:get, auth_code_url).to_return(body: error_code)
         response = JSON.parse(Net::HTTP.get(URI(auth_code_url)))
@@ -28,21 +28,21 @@ describe 'Facebook login', type: :request, vcr: true do
     end
   end
 
-  describe 'post https://graph.facebook.com/v2.7/oauth/access_token' do
-    let(:fb_oauth) { URI 'https://graph.facebook.com/v2.7/oauth/access_token' }
+  describe 'post https://github.com/login/oauth/access_token' do
+    let(:gh_oauth) { URI 'https://github.com/login/oauth/access_token' }
     context 'when authorization code matches url' do
       it 'should return access token' do
         stub_request(:post, access_token_auth_url).to_return(body: access_token)
-        protocol = Net::HTTP.new(fb_oauth.host, fb_oauth.port)
+        protocol = Net::HTTP.new(gh_oauth.host, gh_oauth.port)
         protocol.use_ssl = true
         response = JSON.parse(
           protocol.post(
-            fb_oauth, URI.encode_www_form(code: access_token), 'Accept' => 'application/json'
+            gh_oauth, URI.encode_www_form(code: access_token), 'Accept' => 'application/json'
           ).body
         )
         expect(response).to have_key('access_token')
         expect(response).to have_key('token_type')
-        expect(response).to have_key('expires_in')
+        expect(response).to have_key('scope')
       end
     end
 

@@ -33,16 +33,12 @@ module Stormpath
         end
       end
 
-      def self.access_denied_response(provider)
-        if provider.to_sym == :facebook
-          MultiJson.dump(FACEBOOK_ACCESS_DENIED)
-        end
+      def self.access_denied_response
+        MultiJson.dump(ACCESS_DENIED_RESPONSE)
       end
 
-      def self.code_mismatch(provider)
-        if provider.to_sym == :facebook
-          MultiJson.dump(FACEBOOK_ERROR_CODE)
-        end
+      def self.code_mismatch
+        MultiJson.dump(ERROR_CODE_RESPONSE)
       end
 
       FACEBOOK_AUTH_CODE = {
@@ -73,7 +69,7 @@ module Stormpath
         'code' => 'AQRrgr5mM_P2dUStbkKYWRhqao5wia8Ol8NHN84z1t3RF5yEbb1X-WCGjOt6UPfNkszBvmEwGWUsidhEPoi0c4MCzR32Fdbvfxf7e9XJR6hzYWjsAWk',
       }.freeze
 
-      FACEBOOK_ACCESS_DENIED = {
+      ACCESS_DENIED_RESPONSE = {
         'error' => 'access_denied',
         'error_code' => '200',
         'error_description' => 'Permissions error',
@@ -83,12 +79,11 @@ module Stormpath
         'format' => 'html'
       }.freeze
 
-      FACEBOOK_ERROR_CODE = {
+      ERROR_CODE_RESPONSE = {
         'error' => {
           'message' => 'Invalid verification code format.',
           'type' => 'OAuthException',
-          'code' => 100,
-          'fbtrace_id' => 'HJVbxmLanuZ'
+          'code' => 100
         }
       }.freeze
 
