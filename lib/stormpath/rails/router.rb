@@ -67,7 +67,7 @@ module Stormpath
 
           # VERIFY EMAIL
           if Stormpath::Rails.config.web.verify_email.enabled
-            get Stormpath::Rails.config.web.verify_email.uri => actions['verify_email#show']
+            get Stormpath::Rails.config.web.verify_email.uri => actions['verify_email#show'], as: :new_verify_email
             post Stormpath::Rails.config.web.verify_email.uri => actions['verify_email#create'], as: :verify_email
           end
 

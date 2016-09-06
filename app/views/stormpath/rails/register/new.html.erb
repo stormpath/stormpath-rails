@@ -4,7 +4,9 @@
       <div class="box row">
         <%= render partial: 'stormpath/rails/register/form' %>
       </div>
-      <%= link_to "Back to Log In", new_login_path, class: "to-login" %>
+      <% if Stormpath::Rails.config.web.login.enabled %>
+        <%= link_to "Back to Log In", new_login_path, class: "to-login" %>
+      <% end %>
     </div>
   </div>
 </div>

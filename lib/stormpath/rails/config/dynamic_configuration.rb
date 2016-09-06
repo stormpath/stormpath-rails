@@ -40,11 +40,21 @@ module Stormpath
           facebook_app_id || github_app_id || google_app_id || linkedin_app_id
         end
 
+        def verify_email_enabled?
+          return false if static_config.stormpath.web.verify_email.enabled == false
+          email_verification_enabled?
+        end
+
         private
 
         def password_reset_enabled?
           return false if default_account_store.nil?
           default_account_store.password_policy.reset_email_status == 'ENABLED'
+        end
+
+        def email_verification_enabled?
+          return false if default_account_store.nil?
+          default_account_store.account_creation_policy.verification_email_status == 'ENABLED'
         end
 
         def default_account_store

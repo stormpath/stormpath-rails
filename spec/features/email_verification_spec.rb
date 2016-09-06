@@ -44,6 +44,17 @@ describe 'the email verification feature', type: :feature, vcr: true do
           folder."
         )
       end
+
+      it 'does not blow up with wrong path helpers when login is disabled' do
+        allow(configuration.web.login).to receive(:enabled).and_return(false)
+
+        Rails.application.reload_routes!
+
+        visit 'verify'
+
+        expect(page.status_code).to eq(200)
+        expect(page).not_to have_content('Back to Log In')
+      end
     end
 
     describe 'with invalid sptoken' do
