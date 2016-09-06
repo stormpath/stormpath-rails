@@ -39,12 +39,6 @@ module Stormpath
         client.use_ssl = true
         client
       end
-
-      class NoGithubAuthorizationError < ArgumentError
-        def message
-          ''
-        end
-      end
     end
   end
 end
