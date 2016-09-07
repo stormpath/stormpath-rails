@@ -7,9 +7,9 @@ module Stormpath
         def call
           begin
             form.save!
-            set_cookies
+            set_cookies unless social_login?
             respond_with_success
-          rescue Stormpath::Error, LoginForm::FormError => error
+          rescue Stormpath::Error, LoginForm::FormError, SocialLoginForm::FormError => error
             respond_with_error(error)
           end
         end
@@ -17,7 +17,11 @@ module Stormpath
         private
 
         def form
-          @form ||= LoginForm.new(params[:login], params[:password])
+          @form ||= if social_login?
+                      SocialLoginForm.new(provider, access_token, cookies)
+                    else
+                      LoginForm.new(params[:login], params[:password])
+                    end
         end
 
         def respond_with_success
@@ -44,7 +48,11 @@ module Stormpath
         end
 
         def serialized_account
-          AccountSerializer.to_h(form.authentication_result.account)
+          if social_login?
+            AccountSerializer.to_h(form.account)
+          else
+            AccountSerializer.to_h(form.authentication_result.account)
+          end
         end
 
         def login_redirect_route
@@ -53,6 +61,18 @@ module Stormpath
           else
             stormpath_config.web.login.next_uri
           end
+        end
+
+        def provider
+          params[:providerData][:providerId]
+        end
+
+        def access_token
+          params[:providerData][:accessToken]
+        end
+
+        def social_login?
+          params[:providerData].present?
         end
       end
     end

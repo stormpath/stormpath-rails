@@ -9,42 +9,43 @@ describe 'Me GET', type: :request, vcr: true do
 
   let(:account_attrs) { FactoryGirl.attributes_for(:account) }
 
-  before do
-    post '/login', login: account.email, password: account_attrs[:password]
-  end
-
   after { account.delete }
 
-  context 'application/json' do
-    def json_me_get
-      get '/me', {}, 'HTTP_ACCEPT' => 'application/json'
+  context 'when logged in successfully' do
+    before do
+      post '/login', login: account.email, password: account_attrs[:password]
     end
 
-    context 'me enabled' do
-      before do
-        enable_profile
-        Rails.application.reload_routes!
+    context 'application/json' do
+      def json_me_get
+        get '/me', {}, 'HTTP_ACCEPT' => 'application/json'
       end
 
-      it 'return 200' do
-        json_me_get
-        expect(response.status).to eq(200)
-      end
+      context 'me enabled' do
+        before do
+          enable_profile
+          Rails.application.reload_routes!
+        end
 
-      it 'matches schema' do
-        json_me_get
-        expect(response).to match_response_schema(:login_response, strict: true)
-      end
+        it 'return 200' do
+          json_me_get
+          expect(response.status).to eq(200)
+        end
 
-      it 'sets proper headers' do
-        json_me_get
-        expect(response.headers['Cache-Control']).to eq('no-cache, no-store')
-        expect(response.headers['Pragma']).to eq('no-cache')
-      end
+        it 'matches schema' do
+          json_me_get
+          expect(response).to match_response_schema(:login_response, strict: true)
+        end
 
-      describe 'totally expanded' do
-        let(:expansion) do
-          OpenStruct.new(
+        it 'sets proper headers' do
+          json_me_get
+          expect(response.headers['Cache-Control']).to eq('no-cache, no-store')
+          expect(response.headers['Pragma']).to eq('no-cache')
+        end
+
+        describe 'totally expanded' do
+          let(:expansion) do
+            OpenStruct.new(
             api_keys: false,
             applications: true,
             custom_data: true,
@@ -53,56 +54,84 @@ describe 'Me GET', type: :request, vcr: true do
             groups: true,
             provider_data: true,
             tenant: true
-          )
-        end
+            )
+          end
 
+          before do
+            allow(web_config.me).to receive(:expand).and_return(expansion)
+          end
+
+          it 'matches schema' do
+            json_me_get
+            expect(response).to match_response_schema(:profile_response, strict: true)
+          end
+        end
+      end
+
+      context 'me disabled' do
         before do
-          allow(web_config.me).to receive(:expand).and_return(expansion)
+          disable_profile
+          Rails.application.reload_routes!
         end
 
-        it 'matches schema' do
+        it 'return 404' do
           json_me_get
-          expect(response).to match_response_schema(:profile_response, strict: true)
+          expect(response.status).to eq(404)
         end
       end
     end
 
-    context 'me disabled' do
-      before do
-        disable_profile
-        Rails.application.reload_routes!
+    context 'text/html' do
+      context 'me enabled' do
+        before do
+          enable_profile
+          Rails.application.reload_routes!
+        end
+
+        it 'renders json view' do
+          get '/me'
+          expect(response).to be_success
+        end
       end
 
-      it 'return 404' do
-        json_me_get
-        expect(response.status).to eq(404)
+      context 'me disabled' do
+        before do
+          disable_profile
+          Rails.application.reload_routes!
+        end
+
+        it 'renders 404' do
+          get '/me'
+          expect(response.status).to eq(404)
+        end
       end
     end
   end
 
-  context 'text/html' do
-    context 'me enabled' do
-      before do
-        enable_profile
-        Rails.application.reload_routes!
-      end
-
-      it 'renders json view' do
-        get '/me'
-        expect(response).to be_success
-      end
+  context 'when not logged in' do
+    def json_me_get
+      get '/me', {}, 'HTTP_ACCEPT' => 'application/json'
     end
 
-    context 'me disabled' do
-      before do
-        disable_profile
-        Rails.application.reload_routes!
-      end
+    before do
+      enable_profile
+      Rails.application.reload_routes!
+    end
 
-      it 'renders 404' do
-        get '/me'
-        expect(response.status).to eq(404)
-      end
+    it 'should render nothing' do
+      json_me_get
+      expect(response.body).to be_blank
+    end
+
+    it 'should have status 401' do
+      json_me_get
+      expect(response.status).to eq 401
+    end
+
+    it 'should have WWW-Authenticate headers' do
+      json_me_get
+      expect(response.headers).to include('WWW-Authenticate')
+      expect(response.headers['WWW-Authenticate']).to eq "Bearer realm=\"My Application\""
     end
   end
 end
