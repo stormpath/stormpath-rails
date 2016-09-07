@@ -9,7 +9,7 @@ describe 'Login POST', type: :request, vcr: true do
     {
       'providerData' => {
         'providerId' => 'facebook',
-        'accessToken' => 'EAAPyFJXxH5sBAFrtXNEZCnjM8SiHnhJekZClSLuBSwXcCMknV2gblksQBPgBxHB8ix5iyn7NcZC1cbi2x2FdRTc99RCd15jvhUM9oLTPrEr86LztKqC1kC0PpI4GxEHU2VAAWsvQEAlj1cV3YhR1MWa4PYDIIEKXVloyvXFPgZDZD'
+        'accessToken' => 'EAAPyFJXxH5sBAM0CtNNT9ZC23Cirog8ImjFN0n2N5rPDENjru0s6Vd36W3ftmdwFP1ZAHOel8bWVYrQObO7zJnW0TdiX4h7rhnCPXiVHjp8KV3JEj4p464EKZCmvfKbNP1w7H2VMZAMO97tpmrVKiKEPImhnrp4ZD'
       }
     }
   end
