@@ -12,3 +12,4 @@ spec/dummy/db/development.sqlite3
 spec/dummy/log/development.log
 spec/dummy/log/test.log
 spec/dummy/tmp
+docs/_build
