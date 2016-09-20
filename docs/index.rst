@@ -1,21 +1,17 @@
-.. Stormpath-Rails documentation master file, created by
-   sphinx-quickstart on Tue Sep 20 12:56:07 2016.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+Stormpath Rails Gem Guide
+=============================
 
-Welcome to Stormpath Rails's documentation!
-=========================================================
+Stormpath is the first easy, secure user management and authentication service for developers. This is the Rails gem to ease integration of its features with any Rails-based application.
 
-Contents:
+Stormpath makes it incredibly simple to add users and user data to your application. It aims to completely abstract away all user registration, login, authentication, and authorization problems, and make building secure websites painless.
+And the best part? **You don't even need a database!**
+
+User Guide
+----------
+
+This part of the documentation will show you how to get started with the Stormpath Rails Gem. If you're new to the gem, start here!
 
 .. toctree::
    :maxdepth: 2
 
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   about
