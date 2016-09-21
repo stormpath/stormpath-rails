@@ -18,3 +18,4 @@ This part of the documentation will show you how to get started with the Stormpa
    quickstart
    configuration
    user_data
+   help
