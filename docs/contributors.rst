@@ -51,3 +51,6 @@ Marko has contributed some features and updates to the project.
 
 - Github: https://github.com/cilim
 - Twitter: https://twitter.com/MarkoCilimkovic
+
+.. _Stormpath: https://stormpath.com/
+.. _an email: info@stormpath.com
