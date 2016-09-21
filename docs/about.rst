@@ -1,7 +1,7 @@
 .. _about:
 
 About
-=====
+=============================
 
 Are you building a web app, but not sure if the Stormpath Rails Gem is right for you?  This page will help you decide if it is a good fit!
 

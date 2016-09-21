@@ -2,7 +2,7 @@
 
 
 Quickstart
-=====
+=============================
 
 This section walks you through the basic setup for Stormpath Rails gem, by the end
 of this page you'll have setup the login and registration features for your
