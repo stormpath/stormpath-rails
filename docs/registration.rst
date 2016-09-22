@@ -213,8 +213,8 @@ automatically when they register.  This can be achieved with this config:
 
 By default the nextUri is to the ``/`` page, but you can modify this.
 
-Overriding Stormpath
---------------------
+Overriding Registration
+-----------------------
 
 Controllers
 ...........
