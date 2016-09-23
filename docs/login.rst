@@ -23,14 +23,12 @@ The form will render with two fields for login and password, and this form
 will be posted to ``/login``.  If login is successful, we will redirect the user
 to ``/``.  If you wish to change this, use the ``nextUri`` config option::
 
-    {
-      web: {
-        login: {
+.. code-block:: ruby
+
+      web:
+        login:
           enabled: true,
           nextUri: "/dashboard"
-        }
-      }
-    }
 
 
 Form Customization

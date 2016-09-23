@@ -21,6 +21,7 @@ This part of the documentation will show you how to get started with the Stormpa
    authentication
    registration
    login
+   social_login
    logout
    password_reset
    templates
