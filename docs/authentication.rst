@@ -283,7 +283,9 @@ uses it for future requests to your API.  Every time the mobile application uses
 this Access Token your server will verify that it's still valid, using Stormpath.
 
 When a user wants to login to your mobile application, the mobile application
-should make this request to your Rails application::
+should make this request to your Rails application:
+
+.. code-block:: sh
 
     POST /oauth/token HTTP/1.1
     Host: myapi.com

@@ -189,7 +189,7 @@ which generates these files::
     stormpath/rails/verify_email/new.html.erb
 
 
-Using ID Site #TODO: CHECK ALL OF THIS ONCE THE ID SITE IS IMPLEMENTED
+Using ID Site
 ----------------------------------------------------------------------
 
 Stormpath provides a hosted login application, known as ID Site.  This feature

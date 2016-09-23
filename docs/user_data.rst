@@ -35,7 +35,7 @@ Forcing Authentication
 
 If you require authentication for a route, you should use one of the
 authentication helper methods that are documented in the
-authentication section. #TODO: CHECK THIS WHEN AUTHENTICATION SECTION DONE
+:ref:`authentication` section.
 
 When you use these middlewares, we won't call your controller method unless the
 user is logged in.  If the user is not logged in, we bypass your middleware and
@@ -61,7 +61,7 @@ Modifying The Account
 
 The ``current_account`` context allows you to directly interact with the current
 ``account`` object.  This means you can perform *any* action on the ``account`` object
-directly.  For a full list of actions, see the `Account Object`_ in the `Stormpath Ruby SDK`_ # TODO: fix link when ruby doc is done
+directly.
 
 Perhaps you want to change a accounts's ``given_name`` (*first name*).  You could
 easily accomplish this with the following code:
@@ -154,6 +154,7 @@ You can expand any of these *"linked resources"*:
 - ``providerData`` - A user's provider data (*for social login providers*).
 - ``tenant`` - A user's tenant data.
 
+.. _me_api:
 
 Current User JSON API
 ---------------------

@@ -142,10 +142,6 @@ to work with the Stormpath Application, you can reference its object like this:
 
 where *app_href* is your application URL from Stormpath that you stored in a environment variable.
 
-
-This object is provided by the `Stormpath Ruby SDK`_ and is
-`documented here # TODO: WHEN RUBY DOCS FINISHED ADD URL
-
 .. _Web Configuration Defaults: https://github.com/stormpath/stormpath-rails/blob/master/lib/generators/stormpath/install/templates/default_config.yml
 .. _Stormpath applications: https://api.stormpath.com/v#!applications
 .. _Stormpath dashboard: https://api.stormpath.com/ui/dashboard

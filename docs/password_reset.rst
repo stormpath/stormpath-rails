@@ -3,7 +3,7 @@
 
 Password Reset
 ==============
-#TODO: VERIFY EMAIL PAGE
+
 Stormpath provides a self-service password reset flow for your users, allowing
 them to request a link that lets them reset their password.  This is a very
 secure feature and we highly suggest it for your application.
