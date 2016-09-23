@@ -59,8 +59,8 @@ The Application Controller gets the ``Stormpath::Rails::Controller`` module incl
 
 - ``current_account`` - get the current account
 - ``signed_in?`` - check if the user is signed in.
-- ``require_authentication!`` - a before filter to stop unauthenticated access.
-- ``require_no_authentication!`` - a before filter to stop authenticated access (a logged in user shouldn't be able to see the login form).
+- ``require_authentication!`` - a before action to stop unauthenticated access.
+- ``require_no_authentication!`` - a before action to stop authenticated access (a logged in user shouldn't be able to see the login form).
 
 By default, the ``current_account`` and ``signed_in?`` are marked as helper_methods and you can use them in your views.
 

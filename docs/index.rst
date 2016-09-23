@@ -23,6 +23,7 @@ This part of the documentation will show you how to get started with the Stormpa
    login
    logout
    password_reset
+   templates
    help
    contributors
    changelog
