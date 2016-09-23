@@ -15,7 +15,9 @@ module Stormpath
         'oauth2#new' => 'stormpath/rails/oauth2/new#call',
         'oauth2#create' => 'stormpath/rails/oauth2/create#call',
         'verify_email#show' => 'stormpath/rails/verify_email/show#call',
-        'verify_email#create' => 'stormpath/rails/verify_email/create#call'
+        'verify_email#create' => 'stormpath/rails/verify_email/create#call',
+        'id_site#login' => 'stormpath/rails/id_site/login#call',
+        'id_site#logout' => 'stormpath/rails/id_site/logout#call'
       }.freeze
 
       def stormpath_rails_routes(actions: {})
@@ -65,6 +67,12 @@ module Stormpath
           if Stormpath::Rails.config.web.verify_email.enabled
             get Stormpath::Rails.config.web.verify_email.uri => actions['verify_email#show'], as: :new_verify_email
             post Stormpath::Rails.config.web.verify_email.uri => actions['verify_email#create'], as: :verify_email
+          end
+
+          # ID SITE LOGIN
+          if Stormpath::Rails.config.web.id_site.enabled
+            get '/id_site_result' => actions['id_site#login'], as: :id_site_result
+            get '/logout_id_site' => actions['id_site#logout'], as: :logout_id_site
           end
         end
       end
