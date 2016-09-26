@@ -7,7 +7,7 @@ module Stormpath
             payload = { 'iat' => Time.now.to_i,
                         'iss' => ENV['STORMPATH_API_KEY_ID'],
                         'sub' => ENV['STORMPATH_APPLICATION_URL'],
-                        'cb_uri' => id_site_result_path,
+                        'cb_uri' => id_site_result_url,
                         'jti' => SecureRandom.uuid,
                         'path' => stormpath_config.web.id_site.registerUri,
                         'state' => '' }
