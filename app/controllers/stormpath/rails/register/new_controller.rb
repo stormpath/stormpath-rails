@@ -4,7 +4,16 @@ module Stormpath
       class NewController < BaseController
         def call
           if stormpath_config.web.id_site.enabled
-            redirect_to id_site_register_url
+            payload = { 'iat' => Time.now.to_i,
+                        'iss' => ENV['STORMPATH_API_KEY_ID'],
+                        'sub' => ENV['STORMPATH_APPLICATION_URL'],
+                        'cb_uri' => 'http://localhost:3000/id_site_result',
+                        'jti' => SecureRandom.uuid,
+                        'path' => '/#/register',
+                        'state' => '' }
+            secret = ENV['STORMPATH_API_KEY_SECRET']
+            jwt = JWT.encode(payload, secret, 'HS256')
+            redirect_to "https://api.stormpath.com/sso?jwtRequest=#{jwt}"
           elsif signed_in?
             redirect_to root_path
           else
