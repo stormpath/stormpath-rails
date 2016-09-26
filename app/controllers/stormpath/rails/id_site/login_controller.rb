@@ -9,9 +9,9 @@ module Stormpath
             jwt = JWT.decode(params[:jwtResponse], ENV['STORMPATH_API_KEY_SECRET'], 'HS256')
             account = Stormpath::Rails::Client.client.accounts.get(jwt.first['sub'])
             login_the_account(account)
-            redirect_to root_path
-          rescue Stormpath::Error, LoginForm::FormError => error
-            binding.pry
+            respond_with_success
+          rescue Stormpath::Error, JWT::VerificationError, JWT::ExpiredSignature => error
+            respond_with_error(error)
           end
         end
 
@@ -23,6 +23,33 @@ module Stormpath
             Stormpath::Rails::Client.application,
             Stormpath::Rails::Client.client.data_store.api_key
           ).call
+        end
+
+        def respond_with_success
+          respond_to do |format|
+            format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
+            format.json { render json: serialized_account }
+          end
+        end
+
+        def respond_with_error(error)
+          respond_to do |format|
+            format.html do
+              flash.now[:error] = error.message
+              render stormpath_config.web.login.view
+            end
+            format.json do
+              render json: { status: error.status, message: error.message }, status: error.status
+            end
+          end
+        end
+
+        def login_redirect_route
+          if params[:next]
+            URI(params[:next]).path
+          else
+            stormpath_config.web.login.next_uri
+          end
         end
       end
     end
