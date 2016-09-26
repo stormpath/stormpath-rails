@@ -204,10 +204,6 @@ ID site looks like this:
 
 .. image:: /_static/id-site-login.png
 
-For more information about how to use and customize the ID site, please see
-this documentation:
-
-http://docs.stormpath.com/guides/using-id-site/
 
 ID Site Configuration
 .....................
@@ -215,7 +211,11 @@ ID Site Configuration
 If you wish to use the ID Site feature, you will need to log in to the
 `Stormpath Admin Console`_ and configure the settings.  You need to change the
 **Authorized Redirect Uri** setting and set it to
-``http://localhost:3000/id_site_result``
+``http://localhost:3000/id_site_result`` in order to instruct Stormpath about the resource that
+handles all ID Site requests from Stormpath to your application. For example, if you want to support logging out
+of your application via ID Site, then you need to set the route to which you want to be redirected after a successful logout:
+
+.. image:: /_static/id-site-stormpath-config.png
 
 Then you want to enable ID Site in your rails stormpath configuration:
 
@@ -223,15 +223,20 @@ Then you want to enable ID Site in your rails stormpath configuration:
 
       web:
         idSite:
-          enabled: true,
-          uri: '/id_site_result'    # default setting
-          nextUri: '/'            # default setting
+          enabled: true
+          loginUri: ""
+          forgotUri: "/#/forgot"
+          registerUri: "/#/register"
 
 
 When ID Site is enabled, any request for ``/login`` or ``/register`` will cause a
 redirect to ID Site.  When the user is finished at ID Site they will be
-redirected to `/idSiteResult` on your application.  Our gem will handle
+redirected to `/id_site_result` on your application.  Our gem will handle
 this request, and then redirect the user to the ``nextUri``.
 
+For more information about how to use and customize the ID site, please see
+this documentation:
+
+http://docs.stormpath.com/guides/using-id-site/
 
 .. _Stormpath Admin Console: https://api.stormpath.com
