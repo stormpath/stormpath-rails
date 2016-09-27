@@ -55,6 +55,7 @@ RSpec.configure do |config|
   config.include Stormpath::Testing::Helpers, type: :request
   config.include Stormpath::Testing::Helpers, type: :feature
   config.include Stormpath::Testing::Helpers, type: :service
+  config.include Rails.application.routes.url_helpers, type: :service
   config.include MatchJson::Matchers
   config.include Capybara::DSL, type: :feature
   config.include ConfigSpecHelpers
@@ -81,3 +82,5 @@ MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] =
 Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app, headers: { 'HTTP_ACCEPT' => 'text/html' })
 end
+
+Rails.application.routes.default_url_options[:host]= 'localhost:3000' 
