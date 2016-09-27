@@ -1,7 +1,7 @@
 module Stormpath
   module Rails
-    module IdSite
-      class LoginController < BaseController
+    module IdSiteLogin
+      class CreateController < BaseController
         before_action :require_no_authentication!
 
         def call

@@ -8,7 +8,7 @@
 </head>
 <body>
 
-  <% if signed_in? %>
+  <% if signed_in? and Stormpath::Rails.config.web.id_site.enabled %>
     <p>Logged in as: <%= current_account.given_name %></p>
     <%= link_to "Log out", logout_id_site_path %>
   <% end %>
