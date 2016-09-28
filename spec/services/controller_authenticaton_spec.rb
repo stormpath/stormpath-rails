@@ -536,7 +536,7 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
     end
 
     describe 'with un encoded api key and secret' do
-      let(:credentials) { "#{unencodedapikeyid}:#{unencodedapikeysecret}" }
+      let(:credentials) { 'unencodedapikeyid:unencodedapikeysecret' }
 
       it 'raises an UnauthenticatedRequest error' do
         expect do
