@@ -9,6 +9,7 @@ before_install:
 - git config --global user.name "stormpath-rails documentation"
 install:
 - gem install bundler
+- bundle install --jobs=3 --retry=3
 - pip install --user sphinx
 script:
 - travis_retry rake
