@@ -7,7 +7,30 @@ before_install:
 - chmod 600 ~/.ssh/id_rsa
 - git config --global user.email "evangelists@stormpath.com"
 - git config --global user.name "stormpath-rails documentation"
-install: gem install bundler
+install:
+- gem install bundler
+- pip install --user sphinx
+script:
+- travis_retry rake
+# - cd docs
+# - make html
+# - cd ..
+after_success:
+- CURRENT_HASH=`git rev-parse HEAD`
+- RELEASE_VERSION=`git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort | awk '{print $4}' | tail -n 1`
+- RELEASE_HASH=`git rev-list $RELEASE_VERSION -n 1`
+- if [ "$CURRENT_HASH" = "$RELEASE_HASH" ]; then DEPLOY_DOCS=true; fi
+#- test -z "$DEPLOY_DOCS" || git clone git@github.com:stormpath/stormpath.github.io.git
+#- test -z "$DEPLOY_DOCS" || cd stormpath.github.io
+#- test -z "$DEPLOY_DOCS" || git fetch origin source:source
+#- test -z "$DEPLOY_DOCS" || git checkout source
+#- test -z "$DEPLOY_DOCS" || mkdir -p source/ruby/rails
+#- test -z "$DEPLOY_DOCS" || rm -rf source/ruby/rails/latest
+#- test -z "$DEPLOY_DOCS" || cp -r ../docs/_build/html source/ruby/rails/latest
+#- test -z "$DEPLOY_DOCS" || cp -r ../docs/_build/html source/ruby/rails/$RELEASE_VERSION
+#- test -z "$DEPLOY_DOCS" || git add --all
+#- test -z "$DEPLOY_DOCS" || git commit -m "stormpath-rails release $RELEASE_VERSION"
+#- test -z "$DEPLOY_DOCS" || git push origin source
 env:
   global:
   - STORMPATH_APPLICATION_URL=https://api.stormpath.com/v1/applications/3nZlLKVMIOPu71YC7TFR0o
