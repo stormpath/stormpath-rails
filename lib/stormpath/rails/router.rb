@@ -16,8 +16,8 @@ module Stormpath
         'oauth2#create' => 'stormpath/rails/oauth2/create#call',
         'verify_email#show' => 'stormpath/rails/verify_email/show#call',
         'verify_email#create' => 'stormpath/rails/verify_email/create#call',
-        'id_site_login#create' => 'stormpath/rails/id_site_login/create#call',
-        'id_site_logout#create' => 'stormpath/rails/id_site_logout/create#call'
+        'id_site_login#new' => 'stormpath/rails/id_site_login/new#call',
+        'id_site_logout#new' => 'stormpath/rails/id_site_logout/new#call'
       }.freeze
 
       def stormpath_rails_routes(actions: {})
@@ -71,8 +71,8 @@ module Stormpath
 
           # ID SITE LOGIN
           if Stormpath::Rails.config.web.id_site.enabled
-            get '/id_site_result' => actions['id_site_login#create'], as: :id_site_result
-            get '/logout_id_site' => actions['id_site_logout#create'], as: :logout_id_site
+            get '/id_site_result' => actions['id_site_login#new'], as: :id_site_result
+            get '/logout_id_site' => actions['id_site_logout#new'], as: :logout_id_site
           end
         end
       end

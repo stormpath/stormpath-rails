@@ -1,7 +1,7 @@
 module Stormpath
   module Rails
     module IdSiteLogin
-      class CreateController < BaseController
+      class NewController < BaseController
         before_action :require_no_authentication!
 
         def call
@@ -9,7 +9,7 @@ module Stormpath
             jwt = JWT.decode(params[:jwtResponse], ENV['STORMPATH_API_KEY_SECRET'], 'HS256')
             account = Stormpath::Rails::Client.client.accounts.get(account_href(jwt))
             login_the_account(account)
-            respond_with_success
+            respond_with_success(account)
           rescue Stormpath::Error, JWT::VerificationError, JWT::ExpiredSignature => error
             respond_with_error(error)
           end
@@ -25,10 +25,10 @@ module Stormpath
           ).call
         end
 
-        def respond_with_success
+        def respond_with_success(account)
           respond_to do |format|
             format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
-            format.json { render json: serialized_account }
+            format.json { render json: AccountSerializer.to_h(account) }
           end
         end
 
@@ -39,7 +39,7 @@ module Stormpath
               render stormpath_config.web.login.view
             end
             format.json do
-              render json: { status: error.status, message: error.message }, status: error.status
+              render json: { message: error.message }, status: error.try(:status)
             end
           end
         end
