@@ -5,8 +5,6 @@ gemspec
 
 gem 'sqlite3', '~> 1.3'
 gem 'sass-rails'
-gem 'bcrypt', '~> 3.1.11'
-gem 'devise'
 
 group :development do
   gem 'pry'
