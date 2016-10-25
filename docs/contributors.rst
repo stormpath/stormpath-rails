@@ -29,7 +29,7 @@ The people below have all contributed code to the project.
 Nenad Nikolić
 *************
 
-Nenad has contributed major features to the project.
+Nenad worked on the project since the beginning and has contributed major features to the project.
 
 - Github: https://github.com/nikone
 
@@ -37,7 +37,7 @@ Nenad has contributed major features to the project.
 Damir Svrtan
 ************
 
-Damir has contributed major features to the project.
+Damir worked on the project since the beginning and has contributed major features to the project.
 
 - Website: http://damir.svrtan.me/
 - Github: https://github.com/DamirSvrtan
@@ -47,7 +47,7 @@ Damir has contributed major features to the project.
 Marko Ćilimković
 ****************
 
-Marko has contributed some features and updates to the project.
+Marko has contributed major features and is currently working on the development of the project.
 
 - Github: https://github.com/cilim
 - Twitter: https://twitter.com/MarkoCilimkovic
