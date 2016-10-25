@@ -3,9 +3,12 @@ module Stormpath
     module IdSiteLogout
       class NewController < BaseController
         def call
-          jwt = PayloadBuilder.new(:logout, cb_uri: root_url).jwt
+          callback_url = Stormpath::Rails::Client.application.create_id_site_url(
+            callback_uri: root_url,
+            logout: true
+          )
           TokenAndCookiesCleaner.new(cookies).remove
-          redirect_to "https://api.stormpath.com/sso/logout?jwtRequest=#{jwt}"
+          redirect_to callback_url
         end
       end
     end

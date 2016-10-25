@@ -6,11 +6,11 @@ module Stormpath
 
         def call
           begin
-            jwt = JWT.decode(params[:jwtResponse], ENV['STORMPATH_API_KEY_SECRET'], 'HS256')
-            account = Stormpath::Rails::Client.client.accounts.get(account_href(jwt))
+            result = Stormpath::Rails::Client.application.handle_id_site_callback(request.url)
+            account = Stormpath::Rails::Client.client.accounts.get(result.account_href)
             login_the_account(account)
             respond_with_success(account)
-          rescue Stormpath::Error, JWT::VerificationError, JWT::ExpiredSignature => error
+          rescue Stormpath::Error => error
             respond_with_error(error)
           end
         end
@@ -50,10 +50,6 @@ module Stormpath
           else
             stormpath_config.web.login.next_uri
           end
-        end
-
-        def account_href(jwt)
-          jwt.first['sub']
         end
       end
     end
