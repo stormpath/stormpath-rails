@@ -97,9 +97,9 @@ describe 'IdSiteLogin GET', type: :request, vcr: true do
       describe 'expired' do
         let(:time) { Time.zone.now.to_i - 10.minutes }
 
-        it 'should respond with error message' do
+        it 'should raise error' do
           get '/id_site_result', { jwtResponse: jwt_response }, headers
-          expect(response.body).to include('message', 'Signature has expired')
+          expect(response.body).to include('message', 'Token is invalid')
         end
       end
 

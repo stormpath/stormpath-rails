@@ -10,7 +10,7 @@ module Stormpath
             account = Stormpath::Rails::Client.client.accounts.get(result.account_href)
             login_the_account(account)
             respond_with_success(account)
-          rescue Stormpath::Error => error
+          rescue Stormpath::Error, JWT::VerificationError => error
             respond_with_error(error)
           end
         end
