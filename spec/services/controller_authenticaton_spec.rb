@@ -392,6 +392,7 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
       end
 
       it 'retrieves the account from access token' do
+        binding.pry
         current_account = controller_authenticator.authenticate!
         expect(current_account).to eq(account)
       end

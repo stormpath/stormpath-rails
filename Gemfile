@@ -5,6 +5,7 @@ gemspec
 
 gem 'sqlite3', '~> 1.3'
 gem 'sass-rails'
+gem 'stormpath-sdk', git: 'https://github.com/stormpath/stormpath-sdk-ruby'
 
 group :development do
   gem 'pry'
