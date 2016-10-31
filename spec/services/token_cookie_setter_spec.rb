@@ -26,7 +26,7 @@ describe Stormpath::Rails::TokenCookieSetter, vcr: true, type: :service do
   end
 
   def expiration_from_token(token)
-    Time.zone.at(JWT.decode(token, ENV['STORMPATH_API_KEY_SECRET']).first['exp'])
+    Time.zone.at(JWT.decode(token, Stormpath::Rails::Client.client.data_store.api_key.secret).first['exp'])
   end
 
   describe 'default setup' do
