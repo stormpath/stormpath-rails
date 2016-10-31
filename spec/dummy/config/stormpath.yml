@@ -53,7 +53,7 @@ stormpath:
       enabled: true
       uri: "/register"
       nextUri: "/"
-      autoLogin: false
+      autoLogin: true
       form:
         fields:
           givenName:
