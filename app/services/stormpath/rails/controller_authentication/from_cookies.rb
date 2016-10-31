@@ -24,6 +24,9 @@ module Stormpath
             delete_access_token_cookie
             delete_refresh_token_cookie
             raise UnauthenticatedRequest
+          rescue ArgumentError
+            delete_access_token_cookie
+            delete_refresh_token_cookie
           end
         end
 
