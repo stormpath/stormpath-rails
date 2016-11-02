@@ -17,7 +17,7 @@ Add the stormpath-rails integration gem to your Gemfile.
 Stormpath is currently in beta so it is necessary to include the gem version:
 
 ```ruby
-gem 'stormpath-rails', '~> 2.0.0'
+gem 'stormpath-rails', '~> 2.1.0'
 ```
 
 Bundle the Gemfile
@@ -101,7 +101,7 @@ stormpath:
 
 Stormpath Rails responds to two formats: HTML & JSON. You can use it both as an API for building SPA's, mobile applications and as a standalone Rails application that renders HTML.
 
-By default the Stormpath integration will respond to JSON and HTML requests. 
+By default the Stormpath integration will respond to JSON and HTML requests.
 If a requested type isn't any of the two, the Stormpath integration will pass on the request, and allow the developer or Rails defaults to handle the response.
 
 However if you want use only one of those, modify the configuration file:
@@ -146,7 +146,7 @@ and update the routes to point to your new controller:
 
 ```ruby
 Rails.application.routes.draw do
-  stormpath_rails_routes(actions: { 
+  stormpath_rails_routes(actions: {
     'register#create' => 'create_account#call'
   })
 end
@@ -204,6 +204,28 @@ stormpath/rails/forgot_password/new.html.erb
 stormpath/rails/shared/_input.html.erb
 
 stormpath/rails/verify_email/new.html.erb
+```
+
+## Migrate Devise Account information to Stormpath
+
+If you already have a Rails application that uses devise and need to transfer all users, accounts, or however you named your model there's a nifty
+rake task that you can create in your codebase by running:
+
+```ruby
+rails generate stormpath:migration
+```
+
+This will create a rake task that has the most common use cases for transferring user data into Stormpath:
+
+```
+lib/tasks/stormpath.rake
+```
+
+When you're finished modifying the rake task (minimum required modification: `directory href` and `devise model` that holds the data)
+execute it with:
+
+```ruby
+rake stormpath:migrate
 ```
 
 ## Development
