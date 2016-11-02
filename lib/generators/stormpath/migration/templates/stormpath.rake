@@ -4,7 +4,7 @@ namespace :stormpath do
     # This is the migration script used for transferring users from your database to Stormpath.
     # You can tailor it by your needs from the examples below.
     # If you need different or additional specifications you can read our documentation:
-    # https://docs.stormpath.com/rest/product-guide/latest/accnt_mgmt.html
+    # https://docs.stormpath.com/ruby/product-guide/latest/accnt_mgmt.html
 
     # ==============================================================
     # Use an exhisting directory for storing your users
@@ -18,7 +18,7 @@ namespace :stormpath do
     # Migrate the users - this is the default approach (DEVISE) to migrating users from your db
     # to Stormpath without the registration workflow.
     # Hovewer, you can change it depending on your needs.
-    # https://docs.stormpath.com/rest/product-guide/latest/accnt_mgmt.html#importing-accounts
+    # https://docs.stormpath.com/ruby/product-guide/latest/accnt_mgmt.html#importing-accounts
     # ==============================================================
 
     User.all.find_each do |user|
@@ -53,7 +53,7 @@ namespace :stormpath do
 
     # ==============================================================
     # Store Additional User Information as Custom Data
-    # https://docs.stormpath.com/rest/product-guide/latest/accnt_mgmt.html#how-to-store-additional-user-information-as-custom-data
+    # https://docs.stormpath.com/ruby/product-guide/latest/accnt_mgmt.html#how-to-store-additional-user-information-as-custom-data
     # ==============================================================
 
     # User.all.find_each do |user|
