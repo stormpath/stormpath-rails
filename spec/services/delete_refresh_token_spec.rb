@@ -24,7 +24,7 @@ describe Stormpath::Rails::DeleteRefreshToken, vcr: true, type: :service do
 
   after { delete_test_account }
 
-  it 'deletes the access token' do
+  it 'deletes the refresh token' do
     expect do
       Stormpath::Rails::DeleteRefreshToken.new(refresh_token).call
     end.to change { account.refresh_tokens.count }.from(1).to(0)
