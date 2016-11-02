@@ -113,6 +113,8 @@ model:
 As you can see above -- storing custom information on a ``user`` account is
 extremely simple!
 
+For more information about the ``account`` object, please visit the `Ruby SDK Account Management`_ chapter.
+
 
 Automatic Expansion
 -------------------
@@ -211,3 +213,4 @@ If you wish to disable the ``/me`` route entirely, you can do that as well:
 
 .. _Account Object: https://docs.stormpath.com/ruby/quickstart/
 .. _Stormpath Ruby SDK: https://github.com/stormpath/stormpath-sdk-ruby
+.. _Ruby SDK Account Management: https://docs.stormpath.com/ruby/product-guide/latest/accnt_mgmt.html

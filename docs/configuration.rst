@@ -121,6 +121,8 @@ you can fetch it from the app object like this:
 
     client = Stormpath::Rails::Client.client
 
+The `client` object is also highly configurable through the use of the Ruby SDK. You can set how it is instantiated, custom caching options and the base URL for your enterprise application.
+For more detail concerning the `client` object, please visit the `Ruby SDK Documentation`_.
 
 Stormpath Application
 ---------------------
@@ -146,3 +148,4 @@ where *app_href* is your application URL from Stormpath that you stored in a env
 .. _Stormpath applications: https://api.stormpath.com/v#!applications
 .. _Stormpath dashboard: https://api.stormpath.com/ui/dashboard
 .. _Stormpath Ruby SDK: https://github.com/stormpath/stormpath-sdk-ruby
+.. _Ruby SDK Documentation: https://docs.stormpath.com/ruby/product-guide/latest/configuration.html

@@ -24,6 +24,7 @@ This part of the documentation will show you how to get started with the Stormpa
    social_login
    logout
    password_reset
+   devise_import
    templates
    help
    contributors
