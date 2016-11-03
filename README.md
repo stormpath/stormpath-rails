@@ -17,7 +17,7 @@ Add the stormpath-rails integration gem to your Gemfile.
 Stormpath is currently in beta so it is necessary to include the gem version:
 
 ```ruby
-gem 'stormpath-rails', '~> 2.0.0'
+gem 'stormpath-rails', '~> 2.1.0'
 ```
 
 Bundle the Gemfile
@@ -267,6 +267,28 @@ Social Directories are a kind of mirrored Directory, in that they are used to mi
 - visit the Applications section and click on the application you're using
 - click on Account Stores in the left sidebar and click on Add Account Store button
 - after you add your newly created LinkedIn directory try starting up your server and visit /login. You should see the 1-click LinkedIn login button
+
+## Migrate Devise Account information to Stormpath
+
+If you already have a Rails application that uses devise and need to transfer all users, accounts, or however you named your model there's a nifty
+rake task that you can create in your codebase by running:
+
+```ruby
+rails generate stormpath:migration
+```
+
+This will create a rake task that has the most common use cases for transferring user data into Stormpath:
+
+```
+lib/tasks/stormpath.rake
+```
+
+When you're finished modifying the rake task (minimum required modification: `directory href` and `devise model` that holds the data)
+execute it with:
+
+```ruby
+rake stormpath:migrate
+```
 
 ## Development
 

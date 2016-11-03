@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe 'Login POST', type: :request, vcr: true do
+  let(:app_href) { URI Stormpath::Rails::Client.application.href }
   let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 
   let(:account_attrs) { FactoryGirl.attributes_for(:account) }
@@ -9,7 +10,7 @@ describe 'Login POST', type: :request, vcr: true do
     {
       'providerData' => {
         'providerId' => 'facebook',
-        'accessToken' => 'EAAPyFJXxH5sBAM0CtNNT9ZC23Cirog8ImjFN0n2N5rPDENjru0s6Vd36W3ftmdwFP1ZAHOel8bWVYrQObO7zJnW0TdiX4h7rhnCPXiVHjp8KV3JEj4p464EKZCmvfKbNP1w7H2VMZAMO97tpmrVKiKEPImhnrp4ZD'
+        'accessToken' => 'EAAPyFJXxH5sBADjKxB158QUAJq8UvPZAR0V36F8o0YTckSIwTxuE70XZCyol8GcoOURJBlS5ZCRrqbqZCOu7oJCM27ZAqfyMrmlcdsogFs3CCujSuZBwcroGI21v6LSK15cf1ui2fu64x1PwTIXtlXDzLheSl05QgZD'
       }
     }
   end
@@ -119,6 +120,8 @@ describe 'Login POST', type: :request, vcr: true do
 
       context 'with providerData' do
         it 'successfull login should result with 200' do
+          stub_request(:post, "#{app_href}/accounts/")
+            .to_return(status: 200)
           json_login_post(provider_data)
           expect(response.status).to eq(200)
         end

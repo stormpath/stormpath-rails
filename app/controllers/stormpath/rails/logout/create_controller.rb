@@ -8,8 +8,7 @@ module Stormpath
           if bearer_authorization_header?
             DeleteAccessToken.call(bearer_access_token)
           else
-            delete_tokens
-            delete_cookies
+            TokenAndCookiesCleaner.new(cookies).remove
           end
           respond_with_success
         end
@@ -26,24 +25,6 @@ module Stormpath
 
         def authorization_header
           request.headers['Authorization']
-        end
-
-        def delete_tokens
-          DeleteAccessToken.call(cookies[access_token_cookie_name])
-          DeleteRefreshToken.call(cookies[refresh_token_cookie_name])
-        end
-
-        def delete_cookies
-          cookies.delete(access_token_cookie_name)
-          cookies.delete(refresh_token_cookie_name)
-        end
-
-        def access_token_cookie_name
-          stormpath_config.web.access_token_cookie.name
-        end
-
-        def refresh_token_cookie_name
-          stormpath_config.web.refresh_token_cookie.name
         end
 
         def respond_with_success
