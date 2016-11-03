@@ -34,7 +34,7 @@ after_success:
 #- test -z "$DEPLOY_DOCS" || git push origin source
 env:
   global:
-  - STORMPATH_APPLICATION_URL=https://api.stormpath.com/v1/applications/4BiS1Hc1LuBEbszdDrOwyz
-  - secure: BJyo9h7c1w0W65HYHKJ2KS1y5/hfQQb80J/33gvwegXaItmSofZrdpsN3akB4k+Tat5ib3Ge2i1fC8Pfws92H0TOl+4FsW8KNYKoJb44Dba2O+a2Dw/agAUmOYIK1y1GnfYDLp+keF7BH9Kv2sZk3lEcNGQP8KBYS6hLr9SbhHE=
-  - secure: KNg3cuDSCqYDGfB8gpYm9WyGecXjuJzAu6EOYDtH5M+FjhtKYoeKG+AO0ffw86fi9ckWXbSrZretxbe09B6xVEHi41b1J6InXCU+ywpym8REHj1/LkR2V41tWKz8Pf6miF6bu3b4fApzau9+o2CfUXHWNzMhWZlD0ysNECOR90s=
-  - secure: OWw8Sn31CH0+HGDkWjlxYzOJPm6sbWe+o5lzlQEIklAtaQTHwWujwqPZ95HEam8UTC9YxqsU4aHTdAVRYEXCtVAw4cY/pTd30eoNd6gBV6McxGZcug4ezVpPejof0X6yfz7pC5jzuL3NGYLkX4w8pAl5+yb11hh1HAq0EmGunXo=
+  - STORMPATH_APPLICATION_URL=https://api.stormpath.com/v1/applications/3nZlLKVMIOPu71YC7TFR0o
+  - secure: WJgw02cTjVKwGJMq+n3L8e7uVTK3mnEqxArw2w/X1h4s09XIQM0B2b8PuM/2o01rkQWUfhd6lTLDEsQE916lSS8REJbnbsZ1VyH83yeHL4VgJNaJDHvEAq+iFzHnvtLwWkyWm8fEb7DCnEXXA7M3sGt1girhfs0xfITpXputCHE=
+  - secure: JpErPQAz1b/l3rpwt/N9J7SZiy4/UB1DOI+9Kq4OrC9kuq2vUw3VIAKIojqvwy+7OaKAxyWcsx1kQ3BCLOPV/OkORq1/bMpP4SL0/0KYX+WjBWZ+En+gx3aCY3kOLkkVpDS6gD2pulOeHubGNwhDrFLjKFtbuUBfZuEuAGVNnP8=
+  - secure: hgaOzbsR8H6i5gYXLpqUTsPsio39aCjaPbMwk5ylbI7HRD91qfQbJwuzsAa7+ocLi6NQ7LBL1xa317mLBO2uqWIhN85sTRIut2bO6S+8cgS7GWikMKnwkgU8gpUdNjGYh0Y8nrgwPDo5PZTv0jyUZNCeEqoa1HhDF3DjTMFrXHA=
