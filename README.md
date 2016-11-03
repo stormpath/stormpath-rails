@@ -85,7 +85,6 @@ Check below on how to override default routes.
 ## Configuration
 
 The gem is highly configurable through it's configuration file (config/stormpath.yml).
-Currently the only configurations not working are for social logins and ID Site (because they are still not implemented in the gem).
 
 You can use embedded ruby (ERB) in the configuration file:
 
@@ -177,11 +176,11 @@ Stormpath::Rails::Profile::ShowController
 Stormpath::Rails::Oauth2::NewController
 Stormpath::Rails::Oauth2::CreateController
 
-Stormpath::Rails::Social::SocialController
-Stormpath::Rails::Social::FacebookController
-Stormpath::Rails::Social::GithubController
-Stormpath::Rails::Social::GoogleController
-Stormpath::Rails::Social::LinkedinController
+Stormpath::Rails::SocialController
+Stormpath::Rails::Facebook::CreateController
+Stormpath::Rails::Github::CreateController
+Stormpath::Rails::Google::CreateController
+Stormpath::Rails::Linkedin::CreateController
 ```
 
 ### Routes

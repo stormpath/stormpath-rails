@@ -12,34 +12,52 @@ module SocialHelper
   end
 
   def facebook_oauth_url
-    client_id = Stormpath::Rails.config.web.facebook_app_id
-    redirect_uri = facebook_callback_url
-    scope = Stormpath::Rails.config.web.social.facebook.scope
-    url = 'https://www.facebook.com/dialog/oauth'
-    "#{url}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}"
+    URI::HTTPS.build(
+      host: 'www.facebook.com',
+      path: '/dialog/oauth',
+      query: {
+        client_id: Stormpath::Rails.config.web.facebook_app_id,
+        redirect_uri: facebook_callback_url,
+        scope: Stormpath::Rails.config.web.social.facebook.scope
+      }.to_query
+    ).to_s
   end
 
   def github_oauth_url
-    client_id = Stormpath::Rails.config.web.github_app_id
-    redirect_uri = github_callback_url
-    scope = Stormpath::Rails.config.web.social.github.scope
-    url = 'https://github.com/login/oauth/authorize'
-    "#{url}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}"
+    URI::HTTPS.build(
+      host: 'www.github.com',
+      path: '/login/oauth/authorize',
+      query: {
+        client_id: Stormpath::Rails.config.web.github_app_id,
+        redirect_uri: github_callback_url,
+        scope: Stormpath::Rails.config.web.social.github.scope
+      }.to_query
+    ).to_s
   end
 
   def google_oauth_url
-    client_id = Stormpath::Rails.config.web.google_app_id
-    redirect_uri = google_callback_url
-    scope = Stormpath::Rails.config.web.social.google.scope
-    url = 'https://accounts.google.com/o/oauth2/auth'
-    "#{url}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}&response_type=code"
+    URI::HTTPS.build(
+      host: 'accounts.google.com',
+      path: '/o/oauth2/auth',
+      query: {
+        client_id: Stormpath::Rails.config.web.google_app_id,
+        redirect_uri: google_callback_url,
+        scope: Stormpath::Rails.config.web.social.google.scope,
+        response_type: 'code'
+      }.to_query
+    ).to_s
   end
 
   def linkedin_oauth_url
-    client_id = Stormpath::Rails.config.web.linkedin_app_id
-    redirect_uri = linkedin_callback_url
-    scope = Stormpath::Rails.config.web.social.linkedin.scope
-    url = 'https://www.linkedin.com/oauth/v2/authorization'
-    "#{url}?client_id=#{client_id}&redirect_uri=#{redirect_uri}&scope=#{scope}&response_type=code"
+    URI::HTTPS.build(
+      host: 'www.linkedin.com',
+      path: '/oauth/v2/authorization',
+      query: {
+        client_id: Stormpath::Rails.config.web.linkedin_app_id,
+        redirect_uri: linkedin_callback_url,
+        scope: Stormpath::Rails.config.web.social.linkedin.scope,
+        response_type: 'code'
+      }.to_query
+    ).to_s
   end
 end

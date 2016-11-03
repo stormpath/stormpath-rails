@@ -16,10 +16,10 @@ module Stormpath
         'oauth2#create' => 'stormpath/rails/oauth2/create#call',
         'verify_email#show' => 'stormpath/rails/verify_email/show#call',
         'verify_email#create' => 'stormpath/rails/verify_email/create#call',
-        'facebook#create' => 'stormpath/rails/social/facebook#create',
-        'github#create' => 'stormpath/rails/social/github#create',
-        'google#create' => 'stormpath/rails/social/google#create',
-        'linkedin#create' => 'stormpath/rails/social/linkedin#create'
+        'facebook#create' => 'stormpath/rails/facebook/create#call',
+        'github#create' => 'stormpath/rails/github/create#call',
+        'google#create' => 'stormpath/rails/google/create#call',
+        'linkedin#create' => 'stormpath/rails/linkedin/create#call'
       }.freeze
 
       def stormpath_rails_routes(actions: {})

@@ -48,11 +48,7 @@ module Stormpath
         end
 
         def serialized_account
-          if social_login?
-            AccountSerializer.to_h(form.account)
-          else
-            AccountSerializer.to_h(form.authentication_result.account)
-          end
+          AccountSerializer.to_h(form.account)
         end
 
         def login_redirect_route
