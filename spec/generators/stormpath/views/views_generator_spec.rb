@@ -14,6 +14,7 @@ describe Stormpath::Generators::ViewsGenerator, :generator do
       stormpath/rails/register/new.html.erb
       stormpath/rails/register/_form.html.erb
       stormpath/rails/shared/_input.html.erb
+      stormpath/rails/shared/_social_login.html.erb
       stormpath/rails/verify_email/new.html.erb
     )
 

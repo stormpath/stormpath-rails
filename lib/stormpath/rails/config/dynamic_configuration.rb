@@ -4,6 +4,16 @@ module Stormpath
       class DynamicConfiguration
         attr_reader :static_config
 
+        delegate(
+          :facebook_app_id,
+          :facebook_app_secret,
+          :github_app_id,
+          :github_app_secret,
+          :google_app_id,
+          :linkedin_app_id,
+          to: :social_login_verification
+        )
+
         def initialize(static_config)
           @static_config = static_config
           proccess_account_store_verification
@@ -24,6 +34,10 @@ module Stormpath
         def change_password_enabled?
           return false if static_config.stormpath.web.change_password.enabled == false
           password_reset_enabled?
+        end
+
+        def has_social_providers?
+          facebook_app_id || github_app_id || google_app_id || linkedin_app_id
         end
 
         def verify_email_enabled?
@@ -53,6 +67,10 @@ module Stormpath
             app.href,
             static_config.stormpath.web.register.enabled
           ).call
+        end
+
+        def social_login_verification
+          @social_login_verification ||= SocialLoginVerification.new(app.href)
         end
       end
     end

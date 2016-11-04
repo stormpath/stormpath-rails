@@ -16,6 +16,10 @@ module Stormpath
         'oauth2#create' => 'stormpath/rails/oauth2/create#call',
         'verify_email#show' => 'stormpath/rails/verify_email/show#call',
         'verify_email#create' => 'stormpath/rails/verify_email/create#call',
+        'facebook#create' => 'stormpath/rails/facebook/create#call',
+        'github#create' => 'stormpath/rails/github/create#call',
+        'google#create' => 'stormpath/rails/google/create#call',
+        'linkedin#create' => 'stormpath/rails/linkedin/create#call',
         'id_site_login#new' => 'stormpath/rails/id_site_login/new#call',
         'id_site_logout#new' => 'stormpath/rails/id_site_logout/new#call'
       }.freeze
@@ -67,6 +71,23 @@ module Stormpath
           if Stormpath::Rails.config.web.verify_email.enabled
             get Stormpath::Rails.config.web.verify_email.uri => actions['verify_email#show'], as: :new_verify_email
             post Stormpath::Rails.config.web.verify_email.uri => actions['verify_email#create'], as: :verify_email
+          end
+
+          # SOCIAL LOGINS
+          if Stormpath::Rails.config.web.facebook_app_id
+            get Stormpath::Rails.config.web.social.facebook.uri => actions['facebook#create'], as: :facebook_callback
+          end
+
+          if Stormpath::Rails.config.web.github_app_id
+            get Stormpath::Rails.config.web.social.github.uri => actions['github#create'], as: :github_callback
+          end
+
+          if Stormpath::Rails.config.web.google_app_id
+            get Stormpath::Rails.config.web.social.google.uri => actions['google#create'], as: :google_callback
+          end
+
+          if Stormpath::Rails.config.web.linkedin_app_id
+            get Stormpath::Rails.config.web.social.linkedin.uri => actions['linkedin#create'], as: :linkedin_callback
           end
 
           # ID SITE LOGIN

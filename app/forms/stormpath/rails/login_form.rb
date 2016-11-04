@@ -3,6 +3,7 @@ module Stormpath
     class LoginForm
       attr_accessor :login, :password
       attr_accessor :authentication_result
+      delegate :account, to: :authentication_result
 
       def initialize(login, password)
         @login = login
@@ -16,17 +17,6 @@ module Stormpath
           400
         end
       end
-
-      # def save
-      #   return false if invalid?
-      #   result = Client.authenticate_oauth(password_grant_request)
-      #
-      #   if result.success?
-      #     self.authentication_result = result.authentication_result
-      #   else
-      #     errors.add(:base, result.error_message) && false
-      #   end
-      # end
 
       def save!
         self.authentication_result = application.authenticate_oauth(password_grant_request)

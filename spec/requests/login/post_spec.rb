@@ -1,9 +1,19 @@
 require 'spec_helper'
 
 describe 'Login POST', type: :request, vcr: true do
+  let(:app_href) { URI Stormpath::Rails::Client.application.href }
   let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 
   let(:account_attrs) { FactoryGirl.attributes_for(:account) }
+
+  let(:provider_data) do
+    {
+      'providerData' => {
+        'providerId' => 'facebook',
+        'accessToken' => 'EAAPyFJXxH5sBADjKxB158QUAJq8UvPZAR0V36F8o0YTckSIwTxuE70XZCyol8GcoOURJBlS5ZCRrqbqZCOu7oJCM27ZAqfyMrmlcdsogFs3CCujSuZBwcroGI21v6LSK15cf1ui2fu64x1PwTIXtlXDzLheSl05QgZD'
+      }
+    }
+  end
 
   before { account }
 
@@ -47,63 +57,74 @@ describe 'Login POST', type: :request, vcr: true do
     end
 
     describe 'json is enabled' do
-      it 'successfull login should result with 200' do
-        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
-        expect(response.status).to eq(200)
+      context 'with username and password' do
+        it 'successfull login should result with 200' do
+          json_login_post(login: account_attrs[:email], password: account_attrs[:password])
+          expect(response.status).to eq(200)
+        end
+
+        it 'successfull login with username should result with 200' do
+          json_login_post(login: account_attrs[:username], password: account_attrs[:password])
+          expect(response.status).to eq(200)
+        end
+
+        it 'successfull login should have content-type application/json' do
+          json_login_post(login: account_attrs[:email], password: account_attrs[:password])
+          expect(response.content_type.to_s).to eq('application/json')
+        end
+
+        it 'successfull login should match schema' do
+          json_login_post(login: account_attrs[:email], password: account_attrs[:password])
+          expect(response).to match_response_schema(:login_response, strict: true)
+        end
+
+        it 'successfull login should set cookies' do
+          json_login_post(login: account_attrs[:email], password: account_attrs[:password])
+          expect(response.cookies['access_token']).to be
+          expect(response.cookies['refresh_token']).to be
+        end
+
+        it 'successful login should match json' do
+          json_login_post(login: account_attrs[:email], password: account_attrs[:password])
+          expect(response).to match_json <<-JSON
+          {
+             "account":{
+                "href":"{string}",
+                "username":"#{account.username}",
+                "modifiedAt":"{date_time_iso8601}",
+                "status":"ENABLED",
+                "createdAt":"{date_time_iso8601}",
+                "email":"#{account.email}",
+                "middleName":null,
+                "surname":"#{account.surname}",
+                "givenName":"#{account.given_name}",
+                "fullName":"#{account.given_name} #{account.surname}"
+             }
+          }
+          JSON
+        end
+
+        it 'failed login, wrong password should result with 400' do
+          json_login_post(login: account_attrs[:email], password: 'WR00N6')
+          expect(response.status).to eq(400)
+        end
+
+        it 'failed login, wrong password should result with a message in the response body' do
+          json_login_post(login: account_attrs[:email], password: 'WR00N6')
+
+          response_body = JSON.parse(response.body)
+          expect(response_body['status']).to eq(400)
+          expect(response_body['message']).to eq('Invalid username or password.')
+        end
       end
 
-      it 'successfull login with username should result with 200' do
-        json_login_post(login: account_attrs[:username], password: account_attrs[:password])
-        expect(response.status).to eq(200)
-      end
-
-      it 'successfull login should have content-type application/json' do
-        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
-        expect(response.content_type.to_s).to eq('application/json')
-      end
-
-      it 'successfull login should match schema' do
-        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
-        expect(response).to match_response_schema(:login_response, strict: true)
-      end
-
-      it 'successfull login should set cookies' do
-        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
-        expect(response.cookies['access_token']).to be
-        expect(response.cookies['refresh_token']).to be
-      end
-
-      it 'successful login should match json' do
-        json_login_post(login: account_attrs[:email], password: account_attrs[:password])
-        expect(response).to match_json <<-JSON
-        {
-           "account":{
-              "href":"{string}",
-              "username":"#{account.username}",
-              "modifiedAt":"{date_time_iso8601}",
-              "status":"ENABLED",
-              "createdAt":"{date_time_iso8601}",
-              "email":"#{account.email}",
-              "middleName":null,
-              "surname":"#{account.surname}",
-              "givenName":"#{account.given_name}",
-              "fullName":"#{account.given_name} #{account.surname}"
-           }
-        }
-        JSON
-      end
-
-      it 'failed login, wrong password should result with 400' do
-        json_login_post(login: account_attrs[:email], password: 'WR00N6')
-        expect(response.status).to eq(400)
-      end
-
-      it 'failed login, wrong password should result with a message in the response body' do
-        json_login_post(login: account_attrs[:email], password: 'WR00N6')
-
-        response_body = JSON.parse(response.body)
-        expect(response_body['status']).to eq(400)
-        expect(response_body['message']).to eq('Invalid username or password.')
+      context 'with providerData' do
+        it 'successfull login should result with 200' do
+          stub_request(:post, "#{app_href}/accounts/")
+            .to_return(status: 200)
+          json_login_post(provider_data)
+          expect(response.status).to eq(200)
+        end
       end
     end
 
