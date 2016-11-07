@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe SocialHelper, type: :helper do
   describe '#box_class' do
-    context 'facebook enabled' do
+    context 'social providers present' do
       before do
-        allow(helper).to receive(:facebook_login_enabled?).and_return(true)
+        allow(helper).to receive(:social_providers_present?).and_return(true)
       end
 
       it 'returnes col-sm-8' do
@@ -12,9 +12,9 @@ describe SocialHelper, type: :helper do
       end
     end
 
-    context 'facebook disabled' do
+    context 'social providers absent' do
       before do
-        allow(helper).to receive(:facebook_login_enabled?).and_return(false)
+        allow(helper).to receive(:social_providers_present?).and_return(false)
       end
 
       it 'returnes col-sm-12' do
@@ -24,9 +24,9 @@ describe SocialHelper, type: :helper do
   end
 
   describe '#label_class' do
-    context 'facebook enabled' do
+    context 'social providers present' do
       before do
-        allow(helper).to receive(:facebook_login_enabled?).and_return(true)
+        allow(helper).to receive(:social_providers_present?).and_return(true)
       end
 
       it 'returnes col-sm-12' do
@@ -34,9 +34,9 @@ describe SocialHelper, type: :helper do
       end
     end
 
-    context 'facebook disabled' do
+    context 'social providers absent' do
       before do
-        allow(helper).to receive(:facebook_login_enabled?).and_return(false)
+        allow(helper).to receive(:social_providers_present?).and_return(false)
       end
 
       it 'returnes col-sm-4' do
@@ -46,9 +46,9 @@ describe SocialHelper, type: :helper do
   end
 
   describe '#input_class' do
-    context 'facebook enabled' do
+    context 'social providers present' do
       before do
-        allow(helper).to receive(:facebook_login_enabled?).and_return(true)
+        allow(helper).to receive(:social_providers_present?).and_return(true)
       end
 
       it 'returnes col-sm-12' do
@@ -56,9 +56,9 @@ describe SocialHelper, type: :helper do
       end
     end
 
-    context 'facebook disabled' do
+    context 'social providers absent' do
       before do
-        allow(helper).to receive(:facebook_login_enabled?).and_return(false)
+        allow(helper).to receive(:social_providers_present?).and_return(false)
       end
 
       it 'returnes col-sm-8' do

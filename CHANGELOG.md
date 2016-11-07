@@ -1,6 +1,19 @@
 Stormpath Rails Changelog
 ============================
 
+Version 2.2.0
+-------------
+Released on Nov 07, 2016
+- Implement Authentication with Social Providers (Facebook, Google, Linkedin, Github)
+
+
+Version 2.1.0
+-------------
+Released on Nov 02, 2016
+- Create script for generating a rake task responsible for transferring users from devise to Stormpath
+- Implement ID Site Authentication
+
+
 Version 2.0.2
 -------------
 Released on Aug 29, 2016

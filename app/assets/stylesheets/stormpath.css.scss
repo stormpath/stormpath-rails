@@ -60,6 +60,7 @@ p {
   color: #fff;
   font-size: 16px;
   border-radius: 3px;
+  padding: 9px 12px;
 }
 .btn-social:hover,
 .btn-social:focus {
@@ -92,6 +93,35 @@ p {
   background: linear-gradient(#ea604e 50%, #e8503c 50%);
   filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#e8503c, endColorstr=#ea604e);
   -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#e8503c, endColorstr=#ea604e)";
+}
+.btn-github {
+  background: -webkit-linear-gradient(#848282 50%, #7B7979 50%);
+  background: linear-gradient(#848282 50%, #7B7979 50%);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#848282, endColorstr=#7B7979);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#848282, endColorstr=#7B7979)";
+}
+.btn-github:hover,
+.btn-github:focus {
+  color: #fff;
+  background: -webkit-linear-gradient(#8C8888 50%, #848080 50%);
+  background: linear-gradient(#8C8888 50%, #848080 50%);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#8C8888, endColorstr=#848080);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#8C8888, endColorstr=#848080)";
+}
+.btn-linkedin {
+  background: -webkit-linear-gradient(#007cbc 50%, #0077B5 50%);
+  background: linear-gradient(#007cbc 50%, #0077B5 50%);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#007cbc, endColorstr=#0077B5);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#007cbc, endColorstr=#0077B5)";
+}
+
+.btn-linkedin:hover,
+.btn-linkedin:focus {
+  color: #fff;
+  background: -webkit-linear-gradient(#007cbc 50%, #0077B5 50%);
+  background: linear-gradient(#007cbc 50%, #0077B5 50%);
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, startColorstr=#007cbc, endColorstr=#0077B5);
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#007cbc, endColorstr=#0077B5)";
 }
 .btn-register {
   font-size: 16px;
@@ -274,7 +304,7 @@ p {
     padding: 0px;
   }
 }
-.login-view .social-area button {
+.login-view .social-area button, .login-view .social-area .btn {
   display: block;
   width: 100%;
   margin-bottom: 15px;
