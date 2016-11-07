@@ -348,13 +348,13 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
       it 'raises an UnauthenticatedRequest error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(ArgumentError, 'Token is not an access token')
+        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
       end
 
       it 'deletes cookies' do
         begin
           controller_authenticator.authenticate!
-        rescue ArgumentError
+        rescue Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest
         end
         expect(controller.send(:cookies)['access_token']).not_to be
         expect(controller.send(:cookies)['refresh_token']).not_to be
