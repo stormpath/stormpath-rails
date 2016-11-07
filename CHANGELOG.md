@@ -1,6 +1,12 @@
 Stormpath Rails Changelog
 ============================
 
+Version 2.2.0
+-------------
+Released on Nov 07, 2016
+- Implement Authentication with Social Providers (Facebook, Google, Linkedin, Github)
+
+
 Version 2.1.0
 -------------
 Released on Nov 02, 2016
