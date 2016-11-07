@@ -46,14 +46,14 @@ describe 'Me GET', type: :request, vcr: true do
         describe 'totally expanded' do
           let(:expansion) do
             OpenStruct.new(
-            api_keys: false,
-            applications: true,
-            custom_data: true,
-            directory: true,
-            group_memberships: true,
-            groups: true,
-            provider_data: true,
-            tenant: true
+              api_keys: false,
+              applications: true,
+              custom_data: true,
+              directory: true,
+              group_memberships: true,
+              groups: true,
+              provider_data: true,
+              tenant: true
             )
           end
 
