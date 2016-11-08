@@ -30,6 +30,7 @@ require 'factories'
 require 'support/generator_spec_helpers'
 require 'support/config_spec_helpers'
 require 'support/stormpath_testing_helpers'
+require 'support/stormpath_social_helpers'
 require 'json_matchers/rspec'
 require 'match_json'
 require 'capybara/rails'
@@ -49,9 +50,11 @@ RSpec.configure do |config|
   config.include Stormpath::Testing::Helpers, type: :request
   config.include Stormpath::Testing::Helpers, type: :feature
   config.include Stormpath::Testing::Helpers, type: :service
+  config.include Rails.application.routes.url_helpers, type: :service
   config.include MatchJson::Matchers
   config.include Capybara::DSL, type: :feature
   config.include ConfigSpecHelpers
+  config.include Stormpath::Social::Helpers
 
   RSpec::Matchers.alias_matcher :match_json, :include_json
 
@@ -75,3 +78,5 @@ MatchJson::Matchers::IncludeJson::PATTERNS['date_time_iso8601'] =
 Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app, headers: { 'HTTP_ACCEPT' => 'text/html' })
 end
+
+Rails.application.routes.default_url_options[:host]= 'localhost:3000' 
