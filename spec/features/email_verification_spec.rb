@@ -84,8 +84,7 @@ describe 'the email verification feature', type: :feature, vcr: true do
           allow(configuration.web.register).to receive(:auto_login).and_return(true)
         end
 
-        xit 'redirects to root and sets cookies' do
-          # TODO: important to fix
+        it 'redirects to root and sets cookies' do
           visit "verify?sptoken=#{sptoken}"
 
           expect(current_path).to eq('/')
