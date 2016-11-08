@@ -4,7 +4,7 @@ module Stormpath
       class CreateController < BaseController
         def call
           form.save!
-          login_the_account if auto_login_enabled?
+          login_the_account if auto_login_enabled? && !email_verification_enabled?
           respond_with_success
         rescue RegistrationForm::FormError => error
           respond_with_error(error)
