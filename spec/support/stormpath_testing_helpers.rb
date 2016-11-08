@@ -18,6 +18,10 @@ module Stormpath
       def delete_account(email)
         Stormpath::Rails::Client.application.accounts.search(email: email).first.delete
       end
+
+      def test_application
+        Stormpath::Rails::Client.client.applications.get(ENV['STORMPATH_APPLICATION_URL'])
+      end
     end
   end
 end
