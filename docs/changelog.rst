@@ -6,6 +6,13 @@ Change Log
 
 Gem changes until version 2.0.1, in descending order.
 
+Version 2.3.0
+-------------
+Released on Nov 08, 2016
+- Add sphinx documentation
+- Fix bug when autoLogin and email verification are both enabled
+
+
 Version 2.2.0
 -------------
 Released on Nov 07, 2016

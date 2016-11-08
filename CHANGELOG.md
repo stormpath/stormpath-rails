@@ -1,6 +1,13 @@
 Stormpath Rails Changelog
 ============================
 
+Version 2.3.0
+-------------
+Released on Nov 08, 2016
+- Add sphinx documentation
+- Fix bug when autoLogin and email verification are both enabled
+
+
 Version 2.2.0
 -------------
 Released on Nov 07, 2016
@@ -21,6 +28,7 @@ Released on Aug 29, 2016
 - Render path links depending on the configuration
 - Use Faker to generate random test data
 - Rename all user instances to account
+
 
 Version 2.0.1
 -------------
