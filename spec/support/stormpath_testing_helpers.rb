@@ -18,6 +18,10 @@ module Stormpath
       def delete_account(email)
         Stormpath::Rails::Client.application.accounts.search(email: email).first.delete
       end
+
+      def default_domain
+        '@testmail.stormpath.com'
+      end
     end
   end
 end
