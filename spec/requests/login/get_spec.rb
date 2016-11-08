@@ -49,9 +49,21 @@ describe 'Login GET', type: :request, vcr: true do
       xit 'login should show account stores' do
       end
 
-      xit 'if id site enabled should redirect' do
-        json_login_get
-        expect(response.status).to eq(400)
+      describe 'if id site is enabled' do
+        before do
+          allow(web_config.id_site).to receive(:enabled).and_return(true)
+          Rails.application.reload_routes!
+        end
+
+        after do
+          allow(web_config.id_site).to receive(:enabled).and_return(false)
+          Rails.application.reload_routes!
+        end
+
+        it 'should redirect' do
+          json_login_get
+          expect(response.status).to eq(302)
+        end
       end
     end
 
