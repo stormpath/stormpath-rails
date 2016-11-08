@@ -30,6 +30,7 @@ require 'factories'
 require 'support/generator_spec_helpers'
 require 'support/config_spec_helpers'
 require 'support/stormpath_testing_helpers'
+require 'support/stormpath_social_helpers'
 require 'json_matchers/rspec'
 require 'match_json'
 require 'capybara/rails'
@@ -59,6 +60,7 @@ RSpec.configure do |config|
   config.include MatchJson::Matchers
   config.include Capybara::DSL, type: :feature
   config.include ConfigSpecHelpers
+  config.include Stormpath::Social::Helpers
 
   RSpec::Matchers.alias_matcher :match_json, :include_json
 

@@ -21,14 +21,15 @@
           "items": {
             "anyOf": [
               { "type": "object",
-                "required": ["href", "createdAt", "modifiedAt", "name", "description", "status"],
+                "required": ["href", "createdAt", "modifiedAt", "name", "description", "status", "authorizedCallbackUris"],
                 "properties": {
                   "href": { "type": "string" },
                   "createdAt": { "type": ["string", "null"] },
                   "modifiedAt": { "type": ["string", "null"] },
                   "name": { "type": "string" },
                   "description": { "type": "string" },
-                  "status": { "type": "string" }
+                  "status": { "type": "string" },
+                  "authorizedCallbackUris": { "type": "array" }
                 }
               }
             ]
