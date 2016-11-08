@@ -32,7 +32,7 @@ Adjust Workflow in Config File
 
 Make sure that you enable the workflow in your ``stormpath.yml`` configuration file
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       forgotPassword:
@@ -75,7 +75,7 @@ We recommend these settings for security purposes, but if you wish to automatica
 log the user in after they reset their password you can enable that functionality
 with this option:
 
- .. code-block:: ruby
+ .. code-block:: yaml
 
       web:
         changePassword:

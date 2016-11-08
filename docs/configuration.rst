@@ -92,7 +92,7 @@ We enable many features by default, but you might not want to use all of them.
 For example, if you wanted to disable all the default features, you would use
 this configuration:
 
- .. code-block:: ruby
+ .. code-block:: yaml
 
     stormpath:
       web:

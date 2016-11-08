@@ -35,7 +35,7 @@ know where it is.  You do this by telling us the specific path to the file.
 For example, if you had a folder named ``views`` in the root of your project,
 you would declare it like this:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
       web:
         register:

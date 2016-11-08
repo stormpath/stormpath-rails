@@ -27,7 +27,7 @@ Configuration Options
 If you wish to change the logout URI or the redirect url, you can provide the
 following configuration:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       logout:

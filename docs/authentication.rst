@@ -23,10 +23,10 @@ Cookie Authentication
 ---------------------
 
 If you are building a web application that serves traditional HTML pages, or a
-Single Page Application (Angular/React), this library will handle the cookie
-sessions for you.  No special configuration is necessary.
+Single Page Application (Angular/React), this library will handle the cookies
+for you.  No special configuration is necessary.
 
-To use cookie authentication, simply use the ``require_authentication!`` before callback:
+To use cookie authentication, simply use the ``require_authentication!`` before action:
 
 .. code-block:: ruby
 
@@ -70,7 +70,7 @@ that are set on these cookies.
 
 Here is an example configuration block, with the default settings:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       accessTokenCookie:
@@ -110,7 +110,7 @@ This table describes each setting in detail:
 Token Validation Strategy
 .........................
 
-When a request comes into your server, this gem will use the Access Token
+When a request comes to your server, this gem will use the Access Token
 and Refresh Token cookies to make an authentication decision.  The default
 validation strategy (``local``) works like this:
 
@@ -133,7 +133,7 @@ or the account has been disabled or deleted, the request will be rejected.
 
 Opt-in to ``stormpath`` validation with this configuration:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       oauth2:
@@ -193,7 +193,7 @@ If you are building an API service and you have complex needs around
 authorization and security, this strategy should be used.  In this situation
 the developer does a one-time exchange of their API Keys for an Access Token.
 This Access Token is time limited and must be periodically refreshed.  This adds a
-layer of security, at the cost of being less simple than HTTP Basic
+layer of security, at the cost of being more complex than HTTP Basic
 Authentication.
 
 If you're not sure which strategy to use, it's best to start with HTTP Basic
@@ -257,7 +257,7 @@ By default the Access Tokens are valid for one hour.  If you want to change
 the expiration of these tokens you will need to configure it in the server
 configuration, like this:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
       web:
         oauth2:

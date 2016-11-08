@@ -21,7 +21,7 @@ Configuration Options
 This feature supports several options.  This example shows what is possible,
 we will cover them in detail below:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
       web:
         register:
@@ -55,7 +55,7 @@ Configure First Name and Last Name as Optional
 If you would like to show the fields for first name and last name, but not
 require them, you can set required to false:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       register:
@@ -76,7 +76,7 @@ Disabling First Name and Last Name
 
 If you want to remove these fields entirely, you can set enabled to false:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       register:
@@ -101,7 +101,7 @@ automatically added to the user's custom data object when they register
 successfully. You can define a custom field by defining a new field object,
 like this:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       register:
@@ -143,7 +143,7 @@ Changing Field Order
 If you want to change the order of the fields, you can do so by specifying the
 ``fieldOrder`` array:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       register:
@@ -203,7 +203,7 @@ Auto Login
 If you are *not* using email verificaion (not recommended) you may log users in
 automatically when they register.  This can be achieved with this config:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       register:

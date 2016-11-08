@@ -23,7 +23,7 @@ The form will render with two fields for login and password, and this form
 will be posted to ``/login``.  If login is successful, we will redirect the user
 to ``/``.  If you wish to change this, use the ``nextUri`` config option::
 
-.. code-block:: ruby
+.. code-block:: yaml
 
       web:
         login:
@@ -37,7 +37,7 @@ Form Customization
 The label and placeholder values can be changed by modifying the login form
 field configuration:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
     web:
       login:
@@ -219,7 +219,7 @@ of your application via ID Site, then you need to set the route to which you wan
 
 Then you want to enable ID Site in your rails stormpath configuration:
 
-.. code-block:: ruby
+.. code-block:: yaml
 
       web:
         idSite:
