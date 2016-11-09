@@ -62,45 +62,48 @@ describe 'the register feature', type: :feature, vcr: true do
   end
 
   describe 'POST /register' do
+    let(:account_attrs) { FactoryGirl.attributes_for(:account) }
+    let(:name) { account_attrs[:given_name] }
+    let(:surname) { account_attrs[:surname] }
+    let(:email) { account_attrs[:email] }
+    let(:phone) { account_attrs[:phone_number] }
+    let(:password) { account_attrs[:password] }
+
     describe 'incorrect submission' do
       it 'prompts error' do
         visit 'register'
 
-        fill_in 'givenName', with: 'Damir'
-        fill_in 'surname', with: 'Svrtan'
-        fill_in 'email', with: 'damir.svrtan@infinum-test.co'
-        fill_in 'phoneNumber', with: '0931323232223'
-        fill_in 'password', with: 'pa$$W0Rd'
-        fill_in 'confirmPassword', with: 'pa$$W0Rtttt'
+        fill_in 'givenName', with: name
+        fill_in 'surname', with: surname
+        fill_in 'email', with: email
+        fill_in 'phoneNumber', with: phone
+        fill_in 'password', with: password
+        fill_in 'confirmPassword', with: 'wrongpasswordconfirmation'
 
         click_button 'Create Account'
         expect(page).to have_content 'Passwords do not match'
 
-        expect(find_field('givenName').value).to eq('Damir')
-        expect(find_field('surname').value).to eq('Svrtan')
+        expect(find_field('givenName').value).to eq(name)
+        expect(find_field('surname').value).to eq(surname)
         expect(find_field('middleName').value).to eq('')
-        expect(find_field('phoneNumber').value).to eq('0931323232223')
+        expect(find_field('phoneNumber').value).to eq(phone)
         expect(find_field('password').value).to eq('')
         expect(find_field('confirmPassword').value).to eq('')
       end
     end
 
-    def delete_test_account
-      Stormpath::Rails::Client.application.accounts.search(email: 'damir.svrtan@infinum-test.co').first.delete
-    end
-
     describe 'correct submission' do
-      after { delete_test_account }
+      after { delete_account(email) }
 
       it 'creates an account' do
         visit 'register'
 
-        fill_in 'givenName', with: 'Damir'
-        fill_in 'surname', with: 'Svrtan'
-        fill_in 'email', with: 'damir.svrtan@infinum-test.co'
-        fill_in 'phoneNumber', with: '0931323232223'
-        fill_in 'password', with: 'pa$$W0Rd'
-        fill_in 'confirmPassword', with: 'pa$$W0Rd'
+        fill_in 'givenName', with: name
+        fill_in 'surname', with: surname
+        fill_in 'email', with: email
+        fill_in 'phoneNumber', with: phone
+        fill_in 'password', with: password
+        fill_in 'confirmPassword', with: password
 
         click_button 'Create Account'
 
@@ -116,12 +119,12 @@ describe 'the register feature', type: :feature, vcr: true do
         it 'creates an account and redirect to root page' do
           visit 'register'
 
-          fill_in 'givenName', with: 'Damir'
-          fill_in 'surname', with: 'Svrtan'
-          fill_in 'email', with: 'damir.svrtan@infinum-test.co'
-          fill_in 'phoneNumber', with: '0931323232223'
-          fill_in 'password', with: 'pa$$W0Rd'
-          fill_in 'confirmPassword', with: 'pa$$W0Rd'
+          fill_in 'givenName', with: name
+          fill_in 'surname', with: surname
+          fill_in 'email', with: email
+          fill_in 'phoneNumber', with: phone
+          fill_in 'password', with: password
+          fill_in 'confirmPassword', with: password
 
           click_button 'Create Account'
           expect(page).to have_current_path('/')
@@ -132,7 +135,7 @@ describe 'the register feature', type: :feature, vcr: true do
         before do
           allow_any_instance_of(Stormpath::Rails::RegistrationForm).to receive(:account).and_return(
             Stormpath::Resource::Account.new(
-              FactoryGirl.attributes_for(:unverified_account, email: 'damir.svrtan@infinum-test.co')
+              FactoryGirl.attributes_for(:unverified_account, email: email)
             )
           )
         end
@@ -143,12 +146,12 @@ describe 'the register feature', type: :feature, vcr: true do
 
           visit 'register'
 
-          fill_in 'givenName', with: 'Damir'
-          fill_in 'surname', with: 'Svrtan'
-          fill_in 'email', with: 'damir.svrtan@infinum-test.co'
-          fill_in 'phoneNumber', with: '0931323232223'
-          fill_in 'password', with: 'pa$$W0Rd'
-          fill_in 'confirmPassword', with: 'pa$$W0Rd'
+          fill_in 'givenName', with: name
+          fill_in 'surname', with: surname
+          fill_in 'email', with: email
+          fill_in 'phoneNumber', with: phone
+          fill_in 'password', with: password
+          fill_in 'confirmPassword', with: password
 
           click_button 'Create Account'
 

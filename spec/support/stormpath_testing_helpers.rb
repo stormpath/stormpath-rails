@@ -22,6 +22,10 @@ module Stormpath
       def test_application
         Stormpath::Rails::Client.client.applications.get(ENV['STORMPATH_APPLICATION_URL'])
       end
+
+      def default_domain
+        '@testmail.stormpath.com'
+      end
     end
   end
 end
