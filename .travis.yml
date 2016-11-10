@@ -8,10 +8,31 @@ before_install:
 install:
 - gem install bundler
 - bundle install --jobs=3 --retry=3
-- pip install --user sphinx
+- test -z "$BUILD_DOCS" || pip install --user sphinx
 script:
 - travis_retry rake
+- test -z "$BUILD_DOCS" || cd docs
+- test -z "$BUILD_DOCS" || make html
+- test -z "$BUILD_DOCS" || cd ..
 after_success:
+- test -z "$BUILD_DOCS" || CURRENT_HASH=`git rev-parse HEAD`
+- test -z "$BUILD_DOCS" || RELEASE_VERSION=`git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort | awk '{print $4}' | tail -n 1`
+- test -z "$BUILD_DOCS" || RELEASE_HASH=`git rev-list $RELEASE_VERSION -n 1`
+- test -z "$BUILD_DOCS" || if [ "$CURRENT_HASH" = "$RELEASE_HASH" ]; then DEPLOY_DOCS=true; fi
+- test -z "$DEPLOY_DOCS" || git config --global user.email "evangelists@stormpath.com"
+- test -z "$DEPLOY_DOCS" || git config --global user.name "stormpath-rails Auto Doc Build"
+- test -z "$DEPLOY_DOCS" || git clone git@github.com:stormpath/stormpath.github.io.git
+- test -z "$DEPLOY_DOCS" || cd stormpath.github.io
+- test -z "$DEPLOY_DOCS" || git fetch origin source:source
+- test -z "$DEPLOY_DOCS" || git checkout source
+- test -z "$DEPLOY_DOCS" || mkdir -p source/ruby/rails/latest
+- test -z "$DEPLOY_DOCS" || rm -rf source/ruby/rails/latest
+- test -z "$DEPLOY_DOCS" || cp -r ../docs/_build/html source/ruby/rails/latest
+- test -z "$DEPLOY_DOCS" || cp -r ../docs/_build/html source/ruby/rails/$RELEASE_VERSION
+- test -z "$DEPLOY_DOCS" || git add --all
+- test -z "$DEPLOY_DOCS" || git commit -m "stormpath-rails release $RELEASE_VERSION"
+- test -z "$DEPLOY_DOCS" || git push origin source
+matrix:
 env:
   global:
   - STORMPATH_APPLICATION_URL=https://api.stormpath.com/v1/applications/4xz3y2Hrid4aqp5YwbNTvk
