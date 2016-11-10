@@ -29,8 +29,8 @@ describe Stormpath::Rails::Controller, vcr: true, type: :request do
   let(:directory) { test_client.directories.first }
   let(:account_attrs) { FactoryGirl.attributes_for(:account) }
   let(:account) { application.accounts.create(account_attrs) }
-  let(:application2) { test_client.applications.create(name: 'ruby sdk another test app') }
-  let(:directory2) { test_client.directories.create(name: 'ruby sdk another test dir') }
+  let(:application2) { test_client.applications.create(FactoryGirl.attributes_for(:application)) }
+  let(:directory2) { test_client.directories.create(FactoryGirl.attributes_for(:directory)) }
   let(:map_another_directory) { map_account_store(application2, directory2, 0, true, true) }
   let(:account2) { application2.accounts.create(account_attrs) }
   let(:expired_token) do
