@@ -23,5 +23,6 @@ module Stormpath
     autoload :NoGithubAuthorizationError, 'stormpath/rails/errors/no_github_authorization_error'
     autoload :FacebookAuthCodeExchange, 'stormpath/rails/facebook_auth_code_exchange'
     autoload :GithubAuthCodeExchange, 'stormpath/rails/github_auth_code_exchange'
+    autoload :EnvNamesWarning, 'stormpath/rails/env_names_warning'
   end
 end

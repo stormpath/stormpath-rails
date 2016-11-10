@@ -19,7 +19,7 @@ module Stormpath
         end
 
         def jwt_data
-          @jwt_data ||= JWT.decode(access_token, ENV['STORMPATH_API_KEY_SECRET'])
+          @jwt_data ||= JWT.decode(access_token, Stormpath::Rails::Client.client.data_store.api_key.secret)
         end
       end
     end

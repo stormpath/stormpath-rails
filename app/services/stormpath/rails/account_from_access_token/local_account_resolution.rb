@@ -22,7 +22,7 @@ module Stormpath
 
         def jwt_data
           begin
-            @jwt_data ||= JWT.decode(access_token, ENV['STORMPATH_API_KEY_SECRET'])
+            @jwt_data ||= JWT.decode(access_token, Stormpath::Rails::Client.client.data_store.api_key.secret)
           rescue JWT::ExpiredSignature
             raise Stormpath::Oauth::Error, :jwt_expired
           end

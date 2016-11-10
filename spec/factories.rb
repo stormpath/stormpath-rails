@@ -9,7 +9,7 @@ FactoryGirl.define do
   end
 
   factory :account_without_username, class: Stormpath::Resource::Account do
-    sequence(:email) { |n| "dev#{n}@example.com" }
+    sequence(:email) { |n| "dev#{n}@testmail.stormpath.com" }
     password 'Password1337'
     given_name { Faker::Name.first_name }
     surname { Faker::Name.last_name }

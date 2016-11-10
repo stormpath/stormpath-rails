@@ -20,7 +20,7 @@ module Stormpath
       end
 
       def test_application
-        Stormpath::Rails::Client.client.applications.get(ENV['STORMPATH_APPLICATION_URL'])
+        Stormpath::Rails::Client.client.applications.get(ENV['STORMPATH_APPLICATION_HREF'] || ENV['STORMPATH_APPLICATION_URL'])
       end
 
       def default_domain
