@@ -36,6 +36,10 @@ module Stormpath
           is_default_group_store: default_group_store
         )
       end
+
+      def default_domain
+        '@testmail.stormpath.com'
+      end
     end
   end
 end
