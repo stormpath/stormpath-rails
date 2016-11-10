@@ -40,10 +40,11 @@ describe Stormpath::Rails::Controller, vcr: true, type: :request do
   let(:access_token) { aquire_token.access_token }
   let(:api_key) { account.api_keys.create({}) }
   let(:encoded_api_key) { Base64.encode64("#{api_key.id}:#{api_key.secret}") }
-
   let(:get_profile) do
     get '/me', {}, header => value
   end
+
+  after { account.delete }
 
   describe 'from cookies' do
     let(:header) { 'HTTP_COOKIE' }
