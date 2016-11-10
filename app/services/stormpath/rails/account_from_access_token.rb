@@ -8,7 +8,7 @@ module Stormpath
       DifferentIssuerError = Class.new(ArgumentError)
 
       def initialize(access_token)
-        raise(NoAccessToken) if access_token.nil?
+        raise(NoAccessToken) if access_token.blank?
         @access_token = access_token
       end
 

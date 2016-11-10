@@ -53,9 +53,7 @@ end
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.include FactoryGirl::Syntax::Methods
-  config.include Stormpath::Testing::Helpers, type: :request
-  config.include Stormpath::Testing::Helpers, type: :feature
-  config.include Stormpath::Testing::Helpers, type: :service
+  config.include Stormpath::Testing::Helpers
   config.include Rails.application.routes.url_helpers, type: :service
   config.include MatchJson::Matchers
   config.include Capybara::DSL, type: :feature
@@ -85,4 +83,4 @@ Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app, headers: { 'HTTP_ACCEPT' => 'text/html' })
 end
 
-Rails.application.routes.default_url_options[:host]= 'localhost:3000' 
+Rails.application.routes.default_url_options[:host]= 'localhost:3000'
