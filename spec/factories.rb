@@ -18,4 +18,9 @@ FactoryGirl.define do
   factory :unverified_account, parent: :account do
     status 'UNVERIFIED'
   end
+
+  factory :directory, class: Stormpath::Resource::Directory do
+    sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-directory" }
+    description 'rails test directory'
+  end
 end

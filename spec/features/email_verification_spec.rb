@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'the email verification feature', type: :feature, vcr: true do
   let(:application) { test_application }
   let(:test_dir_with_verification) do
-    Stormpath::Rails::Client.client.directories.create(name: 'rails test dir with verification')
+    Stormpath::Rails::Client.client.directories.create(FactoryGirl.attributes_for(:directory))
   end
   let(:account) { test_dir_with_verification.accounts.create(account_attrs) }
   let(:account_attrs) { FactoryGirl.attributes_for(:account) }
