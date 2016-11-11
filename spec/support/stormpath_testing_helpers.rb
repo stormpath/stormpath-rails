@@ -19,6 +19,24 @@ module Stormpath
         Stormpath::Rails::Client.application.accounts.search(email: email).first.delete
       end
 
+      def test_application
+        Stormpath::Rails::Client.application
+      end
+
+      def test_client
+        Stormpath::Rails::Client.client
+      end
+
+      def map_account_store(app, store, index, default_account_store, default_group_store)
+        test_client.account_store_mappings.create(
+          application: app,
+          account_store: store,
+          list_index: index,
+          is_default_account_store: default_account_store,
+          is_default_group_store: default_group_store
+        )
+      end
+
       def default_domain
         '@testmail.stormpath.com'
       end

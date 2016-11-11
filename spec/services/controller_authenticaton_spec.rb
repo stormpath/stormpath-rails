@@ -415,10 +415,10 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Bearer #{expired_token}")
       end
 
-      it 'raises an UnauthenticatedRequest error' do
+      it 'raises an JWT Verification error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end.to raise_error(JWT::VerificationError, 'Signature verification raised')
       end
 
       describe 'with stormpath validation strategy' do
@@ -428,10 +428,10 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
           ).to receive(:validation_strategy).and_return('stormpath')
         end
 
-        it 'raises an UnauthenticatedRequest error' do
+        it 'raises an JWT Verification error' do
           expect do
             controller_authenticator.authenticate!
-          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+          end.to raise_error(JWT::VerificationError, 'Signature verification raised')
         end
       end
     end
@@ -441,10 +441,10 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Bearer INVALID-TOKEN")
       end
 
-      it 'raises an UnauthenticatedRequest error' do
+      it 'raises an JWT Decode error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end.to raise_error(JWT::DecodeError, 'Not enough or too many segments')
       end
 
       describe 'with stormpath validation strategy' do
@@ -454,10 +454,10 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
           ).to receive(:validation_strategy).and_return('stormpath')
         end
 
-        it 'raises an UnauthenticatedRequest error' do
+        it 'raises an JWT Decode error' do
           expect do
             controller_authenticator.authenticate!
-          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+          end.to raise_error(JWT::DecodeError, 'Not enough or too many segments')
         end
       end
     end
@@ -467,10 +467,10 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
         ActionDispatch::Request.new('HTTP_AUTHORIZATION' => "Bearer  ")
       end
 
-      it 'raises an UnauthenticatedRequest error' do
+      it 'raises an JWT Decode error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end.to raise_error(JWT::DecodeError, 'Not enough or too many segments')
       end
 
       describe 'with stormpath validation strategy' do
@@ -480,10 +480,10 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
           ).to receive(:validation_strategy).and_return('stormpath')
         end
 
-        it 'raises an UnauthenticatedRequest error' do
+        it 'raises an JWT Decode error' do
           expect do
             controller_authenticator.authenticate!
-          end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+          end.to raise_error(JWT::DecodeError, 'Not enough or too many segments')
         end
       end
     end
@@ -508,50 +508,50 @@ describe Stormpath::Rails::ControllerAuthentication, vcr: true, type: :service d
     describe 'with only api key and no secret' do
       let(:credentials) { Base64.encode64(api_key.id) }
 
-      it 'raises an UnauthenticatedRequest error' do
+      it 'raises a Stormpath error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Error)
       end
     end
 
     describe 'with non-existing api key and secret' do
       let(:credentials) { Base64.encode64("dahgf3q4234fsd:bvcbfgt54332") }
 
-      it 'raises an UnauthenticatedRequest error' do
+      it 'raises an Stormpath error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Error)
       end
     end
 
     describe 'with api key and wrong secret' do
       let(:credentials) { Base64.encode64("#{api_key.id}:2aAbsa3TDFDF") }
 
-      it 'raises an UnauthenticatedRequest error' do
+      it 'raises an Stormpath error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Error)
       end
     end
 
     describe 'with un encoded api key and secret' do
       let(:credentials) { 'unencodedapikeyid:unencodedapikeysecret' }
 
-      it 'raises an UnauthenticatedRequest error' do
+      it 'raises an Stormpath error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Error)
       end
     end
 
     describe 'with empty token' do
       let(:credentials) { '' }
 
-      it 'raises an UnauthenticatedRequest error' do
+      it 'raises an Stormpath error' do
         expect do
           controller_authenticator.authenticate!
-        end.to raise_error(Stormpath::Rails::ControllerAuthentication::UnauthenticatedRequest)
+        end.to raise_error(Stormpath::Error)
       end
     end
   end

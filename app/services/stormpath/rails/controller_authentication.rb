@@ -18,9 +18,16 @@ module Stormpath
         if any_auth_cookie_present?
           FromCookies.new(cookies).authenticate!
         elsif bearer_authorization_header?
-          FromBearerAuth.new(authorization_header).authenticate!
+          Stormpath::Authentication::HttpBearerAuthentication.new(
+            Stormpath::Rails::Client.application,
+            authorization_header,
+            local: validation_strategy
+          ).authenticate!.account
         elsif basic_authorization_header?
-          FromBasicAuth.new(authorization_header).authenticate!
+          Stormpath::Authentication::HttpBasicAuthentication.new(
+            Stormpath::Rails::Client.application,
+            authorization_header
+          ).authenticate!.account
         else
           raise UnauthenticatedRequest
         end
@@ -38,6 +45,14 @@ module Stormpath
 
       def basic_authorization_header?
         authorization_header =~ BASIC_PATTERN
+      end
+
+      def validation_strategy
+        if Stormpath::Rails.config.web.oauth2.password.validation_strategy == 'stormpath'
+          true
+        else
+          false
+        end
       end
     end
   end
