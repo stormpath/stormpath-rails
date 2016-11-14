@@ -21,7 +21,7 @@
           "items": {
             "anyOf": [
               { "type": "object",
-                "required": ["href", "createdAt", "modifiedAt", "name", "description", "status", "authorizedCallbackUris"],
+                "required": ["href", "createdAt", "modifiedAt", "name", "description", "status", "authorizedCallbackUris", "authorizedOriginUris"],
                 "properties": {
                   "href": { "type": "string" },
                   "createdAt": { "type": ["string", "null"] },
@@ -29,7 +29,8 @@
                   "name": { "type": "string" },
                   "description": { "type": "string" },
                   "status": { "type": "string" },
-                  "authorizedCallbackUris": { "type": "array" }
+                  "authorizedCallbackUris": { "type": "array" },
+                  "authorizedOriginUris": { "type": "array" }
                 }
               }
             ]
