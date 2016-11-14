@@ -2,25 +2,42 @@ language: ruby
 rvm:
 - 2.1.5
 before_install:
-- openssl aes-256-cbc -K $encrypted_57ed81c5c9ab_key -iv $encrypted_57ed81c5c9ab_iv
+- test -z "$BUILD_DOCS" || openssl aes-256-cbc -K $encrypted_57ed81c5c9ab_key -iv $encrypted_57ed81c5c9ab_iv
   -in keypair.enc -out ~/.ssh/id_rsa -d
-- chmod 600 ~/.ssh/id_rsa
-- git config --global user.email "evangelists@stormpath.com"
-- git config --global user.name "stormpath-rails documentation"
+- test -z "$BUILD_DOCS" || chmod 600 ~/.ssh/id_rsa
 install:
 - gem install bundler
 - bundle install --jobs=3 --retry=3
-- pip install --user sphinx
+- test -z "$BUILD_DOCS" || pip install --user sphinx
 script:
 - travis_retry rake
+- test -z "$BUILD_DOCS" || cd docs
+- test -z "$BUILD_DOCS" || make html
+- test -z "$BUILD_DOCS" || cd ..
 after_success:
-- CURRENT_HASH=`git rev-parse HEAD`
-- RELEASE_VERSION=`git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort
-  | awk '{print $4}' | tail -n 1`
-- RELEASE_HASH=`git rev-list $RELEASE_VERSION -n 1`
-- if [ "$CURRENT_HASH" = "$RELEASE_HASH" ]; then DEPLOY_DOCS=true; fi
+- test -z "$BUILD_DOCS" || CURRENT_HASH=`git rev-parse HEAD`
+- test -z "$BUILD_DOCS" || RELEASE_VERSION=`git tag | xargs -I@ git log --format=format:"%ai @%n" -1 @ | sort | awk '{print $4}' | tail -n 1`
+- test -z "$BUILD_DOCS" || RELEASE_HASH=`git rev-list $RELEASE_VERSION -n 1`
+- test -z "$BUILD_DOCS" || if [ "$CURRENT_HASH" = "$RELEASE_HASH" ]; then DEPLOY_DOCS=true; fi
+- test -z "$DEPLOY_DOCS" || git config --global user.email "evangelists@stormpath.com"
+- test -z "$DEPLOY_DOCS" || git config --global user.name "stormpath-rails Auto Doc Build"
+- test -z "$DEPLOY_DOCS" || git clone git@github.com:stormpath/stormpath.github.io.git
+- test -z "$DEPLOY_DOCS" || cd stormpath.github.io
+- test -z "$DEPLOY_DOCS" || git fetch origin source:source
+- test -z "$DEPLOY_DOCS" || git checkout source
+- test -z "$DEPLOY_DOCS" || mkdir -p source/ruby/rails/latest
+- test -z "$DEPLOY_DOCS" || rm -rf source/ruby/rails/latest
+- test -z "$DEPLOY_DOCS" || cp -r ../docs/_build/html source/ruby/rails/latest
+- test -z "$DEPLOY_DOCS" || cp -r ../docs/_build/html source/ruby/rails/$RELEASE_VERSION
+- test -z "$DEPLOY_DOCS" || git add --all
+- test -z "$DEPLOY_DOCS" || git commit -m "stormpath-rails release $RELEASE_VERSION"
+- test -z "$DEPLOY_DOCS" || git push origin source
 env:
   global:
   - STORMPATH_APPLICATION_HREF=https://api.stormpath.com/v1/applications/4xz3y2Hrid4aqp5YwbNTvk
   - secure: fuZU/DCNpezx1qrhpt/b+eeZRF83AiAwJnUNgA0D2fH4KGleN+BGfz5wEy6oOu5QKDWWAWepHDuwUjTP6QL504QId8+QZbycr52tFM0NXDSzpzhGkoaAEIALjuJ+DBto032yr8hoFjM+P5M1057p2jZKyr5CMkB66j4g3oWwA5k=
   - secure: F0+m4wWKgqZLWpouKwn3BQB1/DXkbwmKEE6E+XFSEJB3rIsf8J4stP6OslqGmkdOzbx/4Dl/V3EXMmWk6R8hnQ5rmr60FGN6FBXUTA+s/9ZULl1I3+J/PsV5azFUwuP+87hbS9QQTVxbG7S3Gpmuy3JCSjySQ4vfXo8fZPz6Plk=
+matrix:
+  include:
+  - env: BUILD_DOCS=true
+    rvm: 2.1.5

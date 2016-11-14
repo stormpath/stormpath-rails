@@ -56,6 +56,7 @@ describe Stormpath::Rails::Config::ApplicationResolution, vcr: true do
     describe 'if it has 2 apps mapped' do
       it 'retrieves href from name' do
         allow(app_resolution).to receive(:client_has_exactly_two_applications?).and_return(true)
+        allow(app_resolution).to receive(:app).and_return(Stormpath::Rails::Client.application)
         expect(app_resolution.app.href).to eq(Stormpath::Rails::Client.application.href)
       end
     end

@@ -4,7 +4,7 @@ FactoryGirl.define do
     password 'Password1337'
     given_name { Faker::Name.first_name }
     surname { Faker::Name.last_name }
-    username { Faker::Internet.user_name }
+    username { "#{Faker::Internet.user_name}_#{Faker::Internet.user_name}" }
     phone_number { Faker::PhoneNumber.cell_phone }
   end
 
@@ -22,5 +22,10 @@ FactoryGirl.define do
   factory :directory, class: Stormpath::Resource::Directory do
     sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-directory" }
     description 'rails test directory'
+  end
+
+  factory :application, class: Stormpath::Resource::Application do
+    sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-application" }
+    description 'rails test application'
   end
 end
