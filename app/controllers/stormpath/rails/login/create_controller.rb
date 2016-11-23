@@ -20,7 +20,7 @@ module Stormpath
           @form ||= if social_login?
                       SocialLoginForm.new(provider, access_token, cookies)
                     else
-                      LoginForm.new(params[:login], params[:password])
+                      LoginForm.new(params[:login], params[:password], organization: organization)
                     end
         end
 
@@ -69,6 +69,14 @@ module Stormpath
 
         def social_login?
           params[:providerData].present?
+        end
+
+        def organization
+          Stormpath::Rails::OrganizationResolver.new(request).organization if multitenancy.enabled
+        end
+
+        def multitenancy
+          stormpath_config.web.multi_tenancy
         end
       end
     end

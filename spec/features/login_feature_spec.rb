@@ -161,7 +161,6 @@ describe 'the login feature', type: :feature, vcr: true do
 
     it 'does not blow up with wrong path helpers when verify_email is disabled' do
       allow(configuration.web.verify_email).to receive(:enabled).and_return(false)
-
       Rails.application.reload_routes!
 
       visit 'login'

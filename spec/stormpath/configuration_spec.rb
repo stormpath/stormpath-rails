@@ -27,6 +27,25 @@ describe Stormpath::Rails::Configuration, vcr: true do
     expect(configuration.web.change_password.enabled).to be(true)
   end
 
+  context 'multitenancy not set correctly' do
+    let(:user_defined_config_hash) do
+      {
+        stormpath: {
+          web: {
+            multi_tenancy: {
+              enabled: true,
+              strategy: 'invalid'
+            }
+          }
+        }
+      }.deep_stringify_keys!
+    end
+
+    it 'should raise error' do
+      expect { stormpath_rails_config.config_object }.to raise_error(Stormpath::Rails::InvalidConfiguration)
+    end
+  end
+
   describe 'set forgot password enabled to false' do
     let(:user_defined_config_hash) do
       {

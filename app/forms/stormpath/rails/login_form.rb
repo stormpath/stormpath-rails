@@ -1,13 +1,13 @@
 module Stormpath
   module Rails
     class LoginForm
-      attr_accessor :login, :password
-      attr_accessor :authentication_result
+      attr_accessor :login, :password, :authentication_result, :organization_name_key
       delegate :account, to: :authentication_result
 
-      def initialize(login, password)
+      def initialize(login, password, options = {})
         @login = login
         @password = password
+        @organization_name_key = options[:organization].try(:name_key) || nil
         validate_login_presence
         validate_password_presence
       end
@@ -39,7 +39,9 @@ module Stormpath
       end
 
       def password_grant_request
-        Stormpath::Oauth::PasswordGrantRequest.new(login, password)
+        Stormpath::Oauth::PasswordGrantRequest.new(login,
+                                                   password,
+                                                   organization_name_key: organization_name_key)
       end
 
       def application

@@ -25,16 +25,67 @@ describe 'Login POST', type: :request, vcr: true do
 
   describe 'HTTP_ACCEPT=text/html' do
     describe 'html is enabled' do
-      it 'successfull login' do
-        post '/login', login: account_attrs[:email], password: account_attrs[:password]
-        expect(response).to redirect_to('/')
-        expect(response.status).to eq(302)
+      context 'multitenancy disabled' do
+        it 'successfull login' do
+          post '/login', login: account_attrs[:email], password: account_attrs[:password]
+          expect(response).to redirect_to('/')
+          expect(response.status).to eq(302)
+        end
+
+        it 'failed login, wrong password' do
+          post '/login', login: account_attrs[:email], password: 'WR00N6'
+          expect(response.status).to eq(200)
+          expect(response.body).to include('Invalid username or password')
+        end
       end
 
-      it 'failed login, wrong password' do
-        post '/login', login: account_attrs[:email], password: 'WR00N6'
-        expect(response.status).to eq(200)
-        expect(response.body).to include('Invalid username or password')
+      context 'multitenancy enabled' do
+        let(:multitenancy_config) { configuration.web.multi_tenancy }
+        let(:directory) { test_client.directories.create(name: 'rails-multitenancy-dir') }
+        let(:organization) do
+          test_client.organizations.create(name: 'rails-organization-multi',
+                                           name_key: 'rails-organization-multi')
+        end
+        let(:multi_account_attrs) { FactoryGirl.attributes_for(:account) }
+
+        before do
+          allow(multitenancy_config).to receive(:enabled).and_return(true)
+          allow(multitenancy_config).to receive(:strategy).and_return('subdomain')
+          allow(configuration.web).to receive(:domain_name).and_return('infinum.co')
+          map_account_store(test_application, directory, 10, false, false)
+          map_account_store(test_application, organization, 11, false, false)
+          map_organization_store(directory, organization, true)
+          organization.accounts.create(multi_account_attrs)
+        end
+
+        after do
+          organization.delete
+          directory.delete
+        end
+
+        context 'existing organization' do
+          let(:request_host) do
+            { 'HTTP_HOST' => "#{organization.name_key}.#{configuration.web.domain_name}" }
+          end
+
+          it 'successfull login' do
+            post '/login', { login: multi_account_attrs[:email], password: multi_account_attrs[:password] }, request_host
+            expect(response.status).to eq(302)
+            expect(response).to redirect_to('/')
+          end
+        end
+
+        context 'non-existing organization' do
+          let(:request_host) do
+            { 'HTTP_HOST' => "non-existing-rails-org.#{configuration.web.domain_name}" }
+          end
+
+          it 'should log in successfully because the organization_name_key is nil' do
+            post '/login', { login: multi_account_attrs[:email], password: multi_account_attrs[:password] }, request_host
+            expect(response.status).to eq(302)
+            expect(response).to redirect_to('/')
+          end
+        end
       end
     end
 

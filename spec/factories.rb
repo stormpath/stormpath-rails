@@ -19,13 +19,18 @@ FactoryGirl.define do
     status 'UNVERIFIED'
   end
 
+  factory :application, class: Stormpath::Resource::Application do
+    sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-application" }
+    description 'rails test application'
+  end
+
   factory :directory, class: Stormpath::Resource::Directory do
     sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-directory" }
     description 'rails test directory'
   end
 
-  factory :application, class: Stormpath::Resource::Application do
-    sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-application" }
-    description 'rails test application'
+  factory :organization, class: Stormpath::Resource::Organization do
+    sequence(:name) { |n| "rails-org-#{n}-#{Faker::Lorem.word}" }
+    sequence(:name_key) { |n| "rails-org-#{n}-#{Faker::Lorem.word}" }
   end
 end
