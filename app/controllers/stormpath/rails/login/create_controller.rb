@@ -72,7 +72,10 @@ module Stormpath
         end
 
         def organization
-          Stormpath::Rails::OrganizationResolver.new(request).organization if multitenancy.enabled
+          if multitenancy.enabled
+            Stormpath::Rails::OrganizationResolver.new(request, params[:organization_name_key])
+                                                  .organization
+          end
         end
 
         def multitenancy

@@ -64,14 +64,24 @@ describe 'Login POST', type: :request, vcr: true do
         end
 
         context 'existing organization' do
-          let(:request_host) do
-            { 'HTTP_HOST' => "#{organization.name_key}.#{configuration.web.domain_name}" }
+          context 'organization_name_key is in request.host' do
+            let(:request_host) do
+              { 'HTTP_HOST' => "#{organization.name_key}.#{configuration.web.domain_name}" }
+            end
+
+            it 'successfull login' do
+              post '/login', { login: multi_account_attrs[:email], password: multi_account_attrs[:password] }, request_host
+              expect(response.status).to eq(302)
+              expect(response).to redirect_to('/')
+            end
           end
 
-          it 'successfull login' do
-            post '/login', { login: multi_account_attrs[:email], password: multi_account_attrs[:password] }, request_host
-            expect(response.status).to eq(302)
-            expect(response).to redirect_to('/')
+          context 'organization_name_key is in request.body' do
+            it 'successfull login' do
+              post '/login', login: multi_account_attrs[:email], password: multi_account_attrs[:password], organization_name_key: organization.name_key
+              expect(response.status).to eq(302)
+              expect(response).to redirect_to('/')
+            end
           end
         end
 

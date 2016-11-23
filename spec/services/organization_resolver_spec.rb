@@ -3,17 +3,31 @@ require 'spec_helper'
 describe Stormpath::Rails::OrganizationResolver, vcr: true do
   let(:application) { test_application }
   let(:organization) { test_client.organizations.create(attributes_for(:organization)) }
-  let(:resolver) { Stormpath::Rails::OrganizationResolver.new(request) }
+  let(:resolver) do
+    Stormpath::Rails::OrganizationResolver.new(request, org_name_key)
+  end
   let(:request) { OpenStruct.new(subdomain: subdomain) }
+  let(:org_name_key) { nil }
 
   before { map_account_store(application, organization, 10, false, false) }
   after { organization.delete }
 
   describe 'existing organization and mapped to application' do
-    let(:subdomain) { organization.name_key }
+    context 'from host' do
+      let(:subdomain) { organization.name_key }
 
-    it 'should return the organization from subdomain' do
-      expect(resolver.organization).to eq organization
+      it 'should return the organization' do
+        expect(resolver.organization).to eq organization
+      end
+    end
+
+    context 'from body' do
+      let(:subdomain) { 'bad-org-name-key' }
+      let(:org_name_key) { organization.name_key }
+
+      it 'should return the organization' do
+        expect(resolver.organization).to eq organization
+      end
     end
   end
 
