@@ -8,7 +8,15 @@ module Stormpath
       end
 
       def organization
-        Stormpath::Rails::Client.client.organizations.search(name_key: subdomain).try(:first)
+        application.account_store_mappings.find do |mapping|
+          mapping.account_store.try(:name_key) == subdomain
+        end.try(:account_store)
+      end
+
+      private
+
+      def application
+        Stormpath::Rails::Client.application
       end
     end
   end
