@@ -15,6 +15,7 @@ module Stormpath
     autoload :Controller, 'stormpath/rails/controller'
     autoload :Version, 'stormpath/rails/version'
     autoload :Social, 'stormpath/rails/social'
+    autoload :ApiKey, 'stormpath/rails/api_key'
     autoload :ContentTypeNegotiator, 'stormpath/rails/content_type_negotiator'
     autoload :RoutingConstraint, 'stormpath/rails/routing_constraint'
     autoload :InvalidSptokenError, 'stormpath/rails/errors/invalid_sptoken_error'

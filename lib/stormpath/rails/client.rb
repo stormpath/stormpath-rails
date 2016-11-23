@@ -24,15 +24,11 @@ module Stormpath
       end
 
       def self.client
-        self.connection ||= Stormpath::Client.new(api_key: locate_api_key)
+        self.connection ||= Stormpath::Client.new(api_key: api_key.credentials)
       end
 
-      def self.locate_api_key
-        EnvNamesWarning.check_env_variable_names
-        {
-          id: ENV['STORMPATH_CLIENT_APIKEY_ID'] || ENV['STORMPATH_API_KEY_ID'],
-          secret: ENV['STORMPATH_CLIENT_APIKEY_SECRET'] || ENV['STORMPATH_API_KEY_SECRET']
-        }
+      def self.api_key
+        Stormpath::Rails::ApiKey.new
       end
     end
   end
