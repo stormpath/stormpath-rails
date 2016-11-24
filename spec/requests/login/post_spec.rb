@@ -4,7 +4,7 @@ describe 'Login POST', type: :request, vcr: true do
   let(:app_href) { URI Stormpath::Rails::Client.application.href }
   let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
 
-  let(:account_attrs) { FactoryGirl.attributes_for(:account) }
+  let(:account_attrs) { attributes_for(:account) }
 
   let(:provider_data) do
     {
@@ -41,12 +41,9 @@ describe 'Login POST', type: :request, vcr: true do
 
       context 'multitenancy enabled' do
         let(:multitenancy_config) { configuration.web.multi_tenancy }
-        let(:directory) { test_client.directories.create(name: 'rails-multitenancy-dir') }
-        let(:organization) do
-          test_client.organizations.create(name: 'rails-organization-multi',
-                                           name_key: 'rails-organization-multi')
-        end
-        let(:multi_account_attrs) { FactoryGirl.attributes_for(:account) }
+        let(:directory) { test_client.directories.create(attributes_for(:directory)) }
+        let(:organization) { test_client.organizations.create(attributes_for(:organization)) }
+        let(:multi_account_attrs) { attributes_for(:account) }
 
         before do
           allow(multitenancy_config).to receive(:enabled).and_return(true)
