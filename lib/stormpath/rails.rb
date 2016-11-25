@@ -15,6 +15,7 @@ module Stormpath
     autoload :Controller, 'stormpath/rails/controller'
     autoload :Version, 'stormpath/rails/version'
     autoload :Social, 'stormpath/rails/social'
+    autoload :ApiKey, 'stormpath/rails/api_key'
     autoload :ContentTypeNegotiator, 'stormpath/rails/content_type_negotiator'
     autoload :RoutingConstraint, 'stormpath/rails/routing_constraint'
     autoload :InvalidSptokenError, 'stormpath/rails/errors/invalid_sptoken_error'
@@ -23,5 +24,6 @@ module Stormpath
     autoload :NoGithubAuthorizationError, 'stormpath/rails/errors/no_github_authorization_error'
     autoload :FacebookAuthCodeExchange, 'stormpath/rails/facebook_auth_code_exchange'
     autoload :GithubAuthCodeExchange, 'stormpath/rails/github_auth_code_exchange'
+    autoload :EnvNamesWarning, 'stormpath/rails/env_names_warning'
   end
 end

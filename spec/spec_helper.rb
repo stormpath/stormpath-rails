@@ -1,17 +1,5 @@
-TEST_ENV_REQUIRED_VARS = [
-  :STORMPATH_API_KEY_ID,
-  :STORMPATH_API_KEY_SECRET,
-  :STORMPATH_SDK_TEST_DIRECTORY_WITH_VERIFICATION_URL
-].freeze
-
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 ENV['RAILS_ENV'] ||= 'test'
-require 'simplecov'
-SimpleCov.start
-
-require 'coveralls'
-Coveralls.wear!
-
 require 'webmock/rspec'
 require 'vcr'
 require 'pry'
@@ -42,12 +30,6 @@ VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.hook_into :webmock
   c.configure_rspec_metadata!
-  c.ignore_request do |request|
-    request.uri == Stormpath::Rails.config.application.href
-  end
-  c.ignore_request do |request|
-    request.uri == ENV['STORMPATH_SDK_TEST_DIRECTORY_WITH_VERIFICATION_URL']
-  end
 end
 
 RSpec.configure do |config|
@@ -59,15 +41,7 @@ RSpec.configure do |config|
   config.include Capybara::DSL, type: :feature
   config.include ConfigSpecHelpers
   config.include Stormpath::Social::Helpers
-
   RSpec::Matchers.alias_matcher :match_json, :include_json
-
-  config.before(:suite) do
-    missing_env_vars = TEST_ENV_REQUIRED_VARS.reject { |var| ENV[var.to_s] }
-    if missing_env_vars.any?
-      raise "Missing the following ENV vars to run the specs: #{missing_env_vars.join(', ')}"
-    end
-  end
 
   config.before(:each) do
     Timecop.freeze(
@@ -83,4 +57,4 @@ Capybara.register_driver :rack_test do |app|
   Capybara::RackTest::Driver.new(app, headers: { 'HTTP_ACCEPT' => 'text/html' })
 end
 
-Rails.application.routes.default_url_options[:host]= 'localhost:3000'
+Rails.application.routes.default_url_options[:host] = 'localhost:3000'
