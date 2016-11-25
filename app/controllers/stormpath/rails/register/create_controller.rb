@@ -74,11 +74,28 @@ module Stormpath
         end
 
         def form
-          @form ||= RegistrationForm.new(params.except(*excluded_root_params))
+          @form ||= RegistrationForm.new(permitted_params)
         end
 
         def excluded_root_params
           [:controller, :action, :format, :create, :utf8, :button, :authenticity_token]
+        end
+
+        def permitted_params
+          if stormpath_config.web.multi_tenancy.enabled
+            params.except(*excluded_root_params).merge(organization_name_key: current_organization.name_key)
+          else
+            params.except(*excluded_root_params)
+          end
+        end
+
+        def current_organization
+          Stormpath::Rails::OrganizationResolver.new(req).organization
+        end
+        helper_method :current_organization
+
+        def req
+          request
         end
       end
     end

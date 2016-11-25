@@ -88,6 +88,7 @@ describe 'Login POST', type: :request, vcr: true do
           end
 
           it 'should log in successfully because the organization_name_key is nil' do
+            #TODO: change this so it raises an error
             post '/login', { login: multi_account_attrs[:email], password: multi_account_attrs[:password] }, request_host
             expect(response.status).to eq(302)
             expect(response).to redirect_to('/')

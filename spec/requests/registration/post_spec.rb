@@ -376,7 +376,7 @@ describe 'Registration POST', type: :request, vcr: true do
         before do
           allow(multitenancy_config).to receive(:enabled).and_return(true)
           allow(multitenancy_config).to receive(:strategy).and_return('subdomain')
-          allow(configuration.web).to receive(:domain_name).and_return('infinum.co')
+          allow(configuration.web).to receive(:domain_name).and_return('stormpath.dev')
           map_account_store(test_application, directory, 10, false, false)
           map_account_store(test_application, organization, 11, false, false)
           map_organization_store(directory, organization, true)
@@ -396,16 +396,16 @@ describe 'Registration POST', type: :request, vcr: true do
             it 'should successfully register' do
               post '/register', account_attrs, request_host
               expect(response.status).to eq(302)
-              expect(response).to redirect_to('/')
+              expect(response).to redirect_to('/login?status=created')
               expect(organization.accounts.count).to eq 1
             end
           end
 
           context 'organization_name_key is in request.body' do
             it 'successfull login' do
-              post '/login', login: multi_account_attrs[:email], password: multi_account_attrs[:password], organization_name_key: organization.name_key
+              post '/register', account_attrs.merge(organization_name_key: organization.name_key)
               expect(response.status).to eq(302)
-              expect(response).to redirect_to('/')
+              expect(response).to redirect_to('/login?status=created')
             end
           end
         end
@@ -416,7 +416,8 @@ describe 'Registration POST', type: :request, vcr: true do
           end
 
           it 'should log in successfully because the organization_name_key is nil' do
-            post '/login', { login: multi_account_attrs[:email], password: multi_account_attrs[:password] }, request_host
+            #TODO: change this so it raises an error
+            post '/login', account_attrs, request_host
             expect(response.status).to eq(302)
             expect(response).to redirect_to('/')
           end
