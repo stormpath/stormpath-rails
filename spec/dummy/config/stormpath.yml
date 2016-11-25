@@ -1,6 +1,6 @@
 stormpath:
   application:
-    href: <%= ENV['STORMPATH_APPLICATION_URL'] %>
+    href: <%= ENV['STORMPATH_APPLICATION_HREF'] || ENV['STORMPATH_APPLICATION_URL'] %>
     name: null
 
   web:

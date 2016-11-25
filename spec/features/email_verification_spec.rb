@@ -1,27 +1,26 @@
 require 'spec_helper'
 
 describe 'the email verification feature', type: :feature, vcr: true do
-  let(:verify_email_config) { configuration.web.verify_email }
-
+  let(:application) { test_application }
   let(:test_dir_with_verification) do
-    Stormpath::Rails::Client.client.directories.get(
-      ENV.fetch('STORMPATH_SDK_TEST_DIRECTORY_WITH_VERIFICATION_URL')
-    )
+    Stormpath::Rails::Client.client.directories.create(FactoryGirl.attributes_for(:directory))
   end
-
   let(:account) { test_dir_with_verification.accounts.create(account_attrs) }
-
   let(:account_attrs) { FactoryGirl.attributes_for(:account) }
-
   let(:sptoken) { account.email_verification_token.token }
 
   before do
-    account
+    enable_email_verification_for(test_dir_with_verification)
+    map_account_store(application, test_dir_with_verification, 2, false, false)
     enable_email_verification
     Rails.application.reload_routes!
+    account
   end
 
-  after { account.delete }
+  after do
+    test_dir_with_verification.delete
+    account.delete
+  end
 
   describe 'GET /verify' do
     describe 'with no sptoken' do

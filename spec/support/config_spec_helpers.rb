@@ -74,4 +74,21 @@ module ConfigSpecHelpers
     Stormpath::Rails.send(:remove_const, 'RegistrationForm') if defined?(Stormpath::Rails::RegistrationForm)
     load('stormpath/rails/registration_form.rb')
   end
+
+  def map_account_store(app, store, index, default_account_store, default_group_store)
+    Stormpath::Rails::Client.client.account_store_mappings.create(
+      application: app,
+      account_store: store,
+      list_index: index,
+      is_default_account_store: default_account_store,
+      is_default_group_store: default_group_store
+    )
+  end
+
+  def enable_email_verification_for(directory)
+    directory.account_creation_policy.verification_email_status = 'ENABLED'
+    directory.account_creation_policy.verification_success_email_status = 'ENABLED'
+    directory.account_creation_policy.welcome_email_status = 'ENABLED'
+    directory.account_creation_policy.save
+  end
 end

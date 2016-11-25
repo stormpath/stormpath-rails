@@ -24,12 +24,11 @@ module Stormpath
       end
 
       def self.client
-        self.connection ||= Stormpath::Client.new(
-          api_key: {
-            id: ENV['STORMPATH_API_KEY_ID'],
-            secret: ENV['STORMPATH_API_KEY_SECRET']
-          }
-        )
+        self.connection ||= Stormpath::Client.new(api_key: api_key.credentials)
+      end
+
+      def self.api_key
+        Stormpath::Rails::ApiKey.new
       end
     end
   end
