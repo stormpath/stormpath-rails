@@ -8,9 +8,6 @@ ENV['RAILS_ENV'] ||= 'test'
 require 'simplecov'
 SimpleCov.start
 
-require 'coveralls'
-Coveralls.wear!
-
 require 'webmock/rspec'
 require 'vcr'
 require 'pry'

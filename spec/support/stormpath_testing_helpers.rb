@@ -48,6 +48,10 @@ module Stormpath
       def default_domain
         '@testmail.stormpath.com'
       end
+
+      def random_name
+        "rails-#{SecureRandom.hex(10)}"
+      end
     end
   end
 end

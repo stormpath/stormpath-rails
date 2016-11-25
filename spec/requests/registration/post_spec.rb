@@ -19,15 +19,15 @@ describe 'Registration POST', type: :request, vcr: true do
       Stormpath::Rails::Client.application.accounts.get(response_body['account']['href']).delete
     end
 
-    let(:account_attrs) { FactoryGirl.attributes_for(:account_without_username) }
+    let(:account_attrs) { attributes_for(:account_without_username) }
     let(:account_attrs_with_blank_given_name) do
-      FactoryGirl.attributes_for(:account_without_username, given_name: nil)
+      attributes_for(:account_without_username, given_name: nil)
     end
     let(:account_attrs_with_blank_email) do
-      FactoryGirl.attributes_for(:account_without_username, email: nil)
+      attributes_for(:account_without_username, email: nil)
     end
     let(:account_attrs_with_blank_password) do
-      FactoryGirl.attributes_for(:account_without_username, password: nil)
+      attributes_for(:account_without_username, password: nil)
     end
 
     describe 'json is enabled' do
@@ -363,6 +363,63 @@ describe 'Registration POST', type: :request, vcr: true do
           json_register_post(account_attrs.merge(middleName: 'Hako'))
           expect(response.status).to eq(400)
           expect(error_message).to eq("Can't submit arbitrary data: middle_name")
+        end
+      end
+    end
+
+    describe 'json is disabled' do
+      context 'multitenancy enabled' do
+        let(:multitenancy_config) { configuration.web.multi_tenancy }
+        let(:directory) { test_client.directories.create(attributes_for(:directory)) }
+        let(:organization) { test_client.organizations.create(attributes_for(:organization)) }
+
+        before do
+          allow(multitenancy_config).to receive(:enabled).and_return(true)
+          allow(multitenancy_config).to receive(:strategy).and_return('subdomain')
+          allow(configuration.web).to receive(:domain_name).and_return('infinum.co')
+          map_account_store(test_application, directory, 10, false, false)
+          map_account_store(test_application, organization, 11, false, false)
+          map_organization_store(directory, organization, true)
+        end
+
+        after do
+          organization.delete
+          directory.delete
+        end
+
+        context 'existing organization' do
+          context 'organization_name_key is in request.host' do
+            let(:request_host) do
+              { 'HTTP_HOST' => "#{organization.name_key}.#{configuration.web.domain_name}" }
+            end
+
+            it 'should successfully register' do
+              post '/register', account_attrs, request_host
+              expect(response.status).to eq(302)
+              expect(response).to redirect_to('/')
+              expect(organization.accounts.count).to eq 1
+            end
+          end
+
+          context 'organization_name_key is in request.body' do
+            it 'successfull login' do
+              post '/login', login: multi_account_attrs[:email], password: multi_account_attrs[:password], organization_name_key: organization.name_key
+              expect(response.status).to eq(302)
+              expect(response).to redirect_to('/')
+            end
+          end
+        end
+
+        context 'non-existing organization' do
+          let(:request_host) do
+            { 'HTTP_HOST' => "non-existing-rails-org.#{configuration.web.domain_name}" }
+          end
+
+          it 'should log in successfully because the organization_name_key is nil' do
+            post '/login', { login: multi_account_attrs[:email], password: multi_account_attrs[:password] }, request_host
+            expect(response.status).to eq(302)
+            expect(response).to redirect_to('/')
+          end
         end
       end
     end

@@ -6,7 +6,7 @@ stormpath:
   web:
     basePath: null
 
-    domainName: null  # Required if using subdomain-based multi-tenancy
+    domainName: 'stormpath.dev'  # Required if using subdomain-based multi-tenancy
 
     multiTenancy:
 
@@ -19,7 +19,7 @@ stormpath:
       # order to authenticate.  If they visit the parent domain, they will be
       # required to identify the organization they wish to use.
 
-      enabled: false
+      enabled: true
       strategy: "subdomain"
 
 

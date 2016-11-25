@@ -2,14 +2,18 @@
   <div class="va-wrapper">
     <div class="view login-view container">
       <div class="box row">
-        <%= render partial: 'stormpath/rails/login/form' %>
+        <% if Stormpath::Rails.config.web.multi_tenancy.enabled && current_organization.nil? %>
+          <%= render partial: 'stormpath/rails/shared/specify_organization' %>
+        <% else %>
+          <%= render partial: 'stormpath/rails/login/form' %>
 
-        <% if Stormpath::Rails.config.web.has_social_providers %>
-          <%= render 'stormpath/rails/shared/social_login' %>
+          <% if Stormpath::Rails.config.web.has_social_providers %>
+            <%= render 'stormpath/rails/shared/social_login' %>
+          <% end %>
         <% end %>
       </div>
 
-      <% if Stormpath::Rails.config.web.forgot_password.enabled %>
+      <% if Stormpath::Rails.config.web.forgot_password.enabled && !Stormpath::Rails.config.web.multi_tenancy.enabled %>
         <%= link_to "Forgot Password?", new_forgot_password_path, class: "forgot" %>
       <% end %>
     </div>

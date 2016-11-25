@@ -1,0 +1,29 @@
+<div class="email-password-area col-xs-12">
+  <div class="header">
+    <span>Specify Organization</span>
+  </div>
+
+  <% if flash[:error] %>
+    <div class="alert alert-danger bad-login">
+      <p><%= flash[:error] %></p>
+    </div>
+  <% end %>
+
+  <%= form_for '', url: login_path(next: params[:next]), html: {class: "login-form form-horizontal"} do |form| %>
+    <div class="form-group group-email">
+      <%= form.label :organization_name_key, 'Organization Name Key', class: 'col-sm-12' %>
+      <div class="<%= input_class %>">
+        <%= form.text_field :organization_name_key,
+            value: params[:organization_name_key],
+            name: :organization_name_key,
+            placeholder: 'Stormpath',
+            required: true,
+            class: "form-control"
+        %>
+      </div>
+    </div>
+    <div>
+      <%= button_tag 'Go to login', class: 'login btn btn-login btn-sp-green', type: 'submit' %>
+    </div>
+  <% end %>
+</div>
