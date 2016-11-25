@@ -54,7 +54,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
         let(:name_key) { random_name }
 
         it 'should redirect to parent domain' do
-          allow_any_instance_of(new_controller).to receive(:should_resolve_organization?).and_return(false)
+          allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
           visit 'login'
           expect(page).to have_css('label', text: 'Organization Name Key')
         end
@@ -66,7 +66,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
       let(:name_key) { random_name }
 
       it 'should show the organization name key field' do
-        allow_any_instance_of(new_controller).to receive(:should_resolve_organization?).and_return(false)
+        allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
         visit 'login'
         expect(page).to have_css('label', text: 'Organization Name Key')
       end
@@ -94,7 +94,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
       describe "and organization doesn't match subdomain" do
         let(:name_key) { random_name }
         before do
-          allow_any_instance_of(new_controller).to receive(:should_resolve_organization?).and_return(false)
+          allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
         end
 
         describe 'submit correct organization name key' do
@@ -128,7 +128,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
       let(:subdomain) { '' }
       let(:name_key) { random_name }
       before do
-        allow_any_instance_of(new_controller).to receive(:should_resolve_organization?).and_return(false)
+        allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
       end
 
       describe 'submit correct organization name key' do

@@ -6,13 +6,7 @@ module Stormpath
 
         def call
           redirect_to callback_url if stormpath_config.web.id_site.enabled
-
-          if should_resolve_organization?
-            if current_organization.nil?
-              redirect_to parent_login_url
-              return
-            end
-          end
+          return redirect_to(parent_login_url) if organization_unresolved?
 
           respond_to do |format|
             format.json { render json: LoginNewSerializer.to_h }
@@ -29,13 +23,10 @@ module Stormpath
           )
         end
 
-        def req
-          request
-        end
-
-        def should_resolve_organization?
+        def organization_unresolved?
           stormpath_config.web.multi_tenancy.enabled &&
-            req.host != stormpath_config.web.domain_name
+            req.host != stormpath_config.web.domain_name &&
+            !current_organization
         end
 
         def current_organization
@@ -44,7 +35,16 @@ module Stormpath
         helper_method :current_organization
 
         def parent_login_url
-          "#{req.scheme}://#{stormpath_config.web.domain_name}#{stormpath_config.web.login.uri}"
+          (req.scheme == 'https' ? URI::HTTPS : URI::HTTP).build(host_and_path).to_s
+        end
+
+        def host_and_path
+          { host: stormpath_config.web.domain_name,
+            path: stormpath_config.web.login.uri }
+        end
+
+        def req
+          request
         end
       end
     end

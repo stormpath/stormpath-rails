@@ -19,21 +19,21 @@ module Stormpath
         def form
           @form ||= if social_login?
                       SocialLoginForm.new(provider, access_token, cookies)
-                    elsif organization_assessment?
+                    elsif organization_resolution?
                       OrganizationForm.new(params[:organization_name_key])
                     else
-                      LoginForm.new(params[:login], params[:password], organization: current_organization)
+                      LoginForm.new(params[:login],
+                                    params[:password],
+                                    organization: current_organization)
                     end
         end
 
         def respond_with_success
-          if organization_assessment?
-            redirect_to subdomain_login_url
-          else
-            respond_to do |format|
-              format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
-              format.json { render json: serialized_account }
-            end
+          return redirect_to subdomain_login_url if organization_resolution?
+
+          respond_to do |format|
+            format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
+            format.json { render json: serialized_account }
           end
         end
 
@@ -58,11 +58,7 @@ module Stormpath
         end
 
         def login_redirect_route
-          if params[:next]
-            URI(params[:next]).path
-          else
-            stormpath_config.web.login.next_uri
-          end
+          params[:next] ? URI(params[:next]).path : stormpath_config.web.login.next_uri
         end
 
         def provider
@@ -74,31 +70,32 @@ module Stormpath
         end
 
         def account_login?
-          !social_login? && !organization_assessment?
+          !social_login? && !organization_resolution?
         end
 
         def social_login?
           params[:providerData].present?
         end
 
-        def organization_assessment?
+        def organization_resolution?
           params[:organization_name_key].present?
         end
 
         def current_organization
-          if multitenancy.enabled
+          if stormpath_config.web.multi_tenancy.enabled
             Stormpath::Rails::OrganizationResolver.new(req, params[:organization_name_key])
                                                   .organization
           end
         end
         helper_method :current_organization
 
-        def multitenancy
-          stormpath_config.web.multi_tenancy
+        def subdomain_login_url
+          (req.scheme == 'https' ? URI::HTTPS : URI::HTTP).build(host_and_path).to_s
         end
 
-        def subdomain_login_url
-          "#{req.scheme}://#{params[:organization_name_key]}.#{stormpath_config.web.domain_name}#{stormpath_config.web.login.uri}"
+        def host_and_path
+          { host: "#{params[:organization_name_key]}.#{stormpath_config.web.domain_name}",
+            path: stormpath_config.web.login.uri }
         end
 
         def req
