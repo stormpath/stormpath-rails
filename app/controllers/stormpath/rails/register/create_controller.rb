@@ -4,15 +4,17 @@ module Stormpath
       class CreateController < BaseController
         def call
           form.save!
-          login_the_account if auto_login_enabled? && !email_verification_enabled?
+          login_the_account if auto_login_enabled? && !email_verification_enabled? && !organization_resolution?
           respond_with_success
-        rescue RegistrationForm::FormError => error
+        rescue RegistrationForm::FormError, OrganizationForm::FormError => error
           respond_with_error(error)
         end
 
         private
 
         def respond_with_success
+          return redirect_to subdomain_register_url if organization_resolution?
+
           respond_to do |format|
             format.html { redirect_to success_redirect_route }
             format.json { render json: serialized_account }
@@ -74,7 +76,11 @@ module Stormpath
         end
 
         def form
-          @form ||= RegistrationForm.new(permitted_params)
+          @form ||= if organization_resolution?
+                      OrganizationForm.new(params[:organization_name_key])
+                    else
+                      RegistrationForm.new(permitted_params)
+                    end
         end
 
         def excluded_root_params
@@ -90,10 +96,23 @@ module Stormpath
           end
         end
 
+        def organization_resolution?
+          params[:organization_name_key].present?
+        end
+
         def current_organization
           Stormpath::Rails::OrganizationResolver.new(req).organization
         end
         helper_method :current_organization
+
+        def subdomain_register_url
+          (req.scheme == 'https' ? URI::HTTPS : URI::HTTP).build(host_and_path).to_s
+        end
+
+        def host_and_path
+          { host: "#{params[:organization_name_key]}.#{stormpath_config.web.domain_name}",
+            path: stormpath_config.web.register.uri }
+        end
 
         def req
           request
