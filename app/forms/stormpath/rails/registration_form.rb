@@ -49,7 +49,7 @@ module Stormpath
       private
 
       def account_resource
-        if multitenancy_enabled?
+        if organization_resolved?
           organization.accounts.create(new_account)
         else
           Stormpath::Rails::Client.application.accounts.create(new_account)
@@ -60,12 +60,21 @@ module Stormpath
         Stormpath::Resource::Account.new(stormpath_registration_params)
       end
 
+      def organization_resolved?
+        raise FormError, 'Organization not found.' if multitenancy_enabled? && organization.nil?
+        true
+      end
+
       def multitenancy_enabled?
-        !organization_name_key.blank?
+        Stormpath::Rails.config.web.multi_tenancy.enabled
       end
 
       def organization
-        Stormpath::Rails::Client.client.organizations.search(name_key: organization_name_key).first
+        begin
+          @organization ||= Stormpath::Rails::Client.client.organizations.search(name_key: organization_name_key).first
+        rescue Stormpath::Error
+          nil
+        end
       end
 
       def validate_presence_of_required_attributes

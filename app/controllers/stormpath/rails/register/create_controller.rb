@@ -83,7 +83,8 @@ module Stormpath
 
         def permitted_params
           if stormpath_config.web.multi_tenancy.enabled
-            params.except(*excluded_root_params).merge(organization_name_key: current_organization.name_key)
+            params.except(*excluded_root_params)
+                  .merge(organization_name_key: current_organization.try(:name_key))
           else
             params.except(*excluded_root_params)
           end

@@ -7,7 +7,7 @@ module Stormpath
       def initialize(login, password, options = {})
         @login = login
         @password = password
-        @organization_name_key = options[:organization].try(:name_key) || nil
+        @organization_name_key = validate_organization_name_key(options) if options.key?(:organization)
         validate_login_presence
         validate_password_presence
       end
@@ -46,6 +46,11 @@ module Stormpath
 
       def application
         Stormpath::Rails::Client.application
+      end
+
+      def validate_organization_name_key(options)
+        return unless options[:organization].try(:name_key).nil?
+        raise FormError, 'Organization not found.'
       end
     end
   end

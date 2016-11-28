@@ -87,11 +87,10 @@ describe 'Login POST', type: :request, vcr: true do
             { 'HTTP_HOST' => "non-existing-rails-org.#{configuration.web.domain_name}" }
           end
 
-          it 'should log in successfully because the organization_name_key is nil' do
-            #TODO: change this so it raises an error
+          it 'should raise FormError since no organization is found' do
             post '/login', { login: multi_account_attrs[:email], password: multi_account_attrs[:password] }, request_host
-            expect(response.status).to eq(302)
-            expect(response).to redirect_to('/')
+            expect(response.status).to eq(200)
+            expect(response.body).to include('Organization not found.')
           end
         end
       end

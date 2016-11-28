@@ -415,11 +415,10 @@ describe 'Registration POST', type: :request, vcr: true do
             { 'HTTP_HOST' => "non-existing-rails-org.#{configuration.web.domain_name}" }
           end
 
-          it 'should log in successfully because the organization_name_key is nil' do
-            #TODO: change this so it raises an error
-            post '/login', account_attrs, request_host
-            expect(response.status).to eq(302)
-            expect(response).to redirect_to('/')
+          it 'should raise error' do
+            post '/register', account_attrs, request_host
+            expect(response.status).to eq(200)
+            expect(response.body).to include('Organization not found.')
           end
         end
       end
