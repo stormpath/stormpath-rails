@@ -2,8 +2,8 @@
   <div class="va-wrapper">
     <div class="view registration-view container">
       <div class="box row">
-        <% if Stormpath::Rails.config.web.multi_tenancy.enabled && current_organization.nil? %>
-          <%= render partial: 'stormpath/rails/shared/specify_organization', locals: { url: register_path } %>
+        <% if Stormpath::Rails.config.web.multi_tenancy.enabled && current_organization_name_key.nil? %>
+          <%= render partial: 'stormpath/rails/shared/select_organization', locals: { url: register_path } %>
         <% else %>
           <%= render partial: 'stormpath/rails/register/form' %>
         <% end %>

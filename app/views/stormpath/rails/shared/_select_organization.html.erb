@@ -1,6 +1,6 @@
 <div class="email-password-area col-xs-12">
   <div class="header">
-    <span>Specify Organization</span>
+    <span>Select your Organization</span>
   </div>
 
   <% if flash[:error] %>
@@ -11,12 +11,12 @@
 
   <%= form_for '', url: url, html: {class: "login-form form-horizontal"} do |form| %>
     <div class="form-group group-email">
-      <%= form.label :organization_name_key, 'Organization Name Key', class: 'col-sm-12' %>
+      <%= form.label :organization_name_key, 'Enter your organization name to continue', class: 'col-sm-12' %>
       <div class="<%= input_class %>">
         <%= form.text_field :organization_name_key,
             value: params[:organization_name_key],
             name: :organization_name_key,
-            placeholder: 'Stormpath',
+            placeholder: 'e.g. my-company',
             required: true,
             class: "form-control"
         %>

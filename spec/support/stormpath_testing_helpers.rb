@@ -50,7 +50,7 @@ module Stormpath
       end
 
       def random_name
-        "rails-#{SecureRandom.hex(10)}"
+        "rails-#{Faker::Lorem.word}-#{SecureRandom.hex(10)}"
       end
     end
   end

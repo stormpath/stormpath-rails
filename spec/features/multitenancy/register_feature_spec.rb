@@ -57,7 +57,7 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
         it 'should redirect to parent domain' do
           allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
           visit 'register'
-          expect(page).to have_css('label', text: 'Organization Name Key')
+          expect(page).to have_css('label', text: 'Enter your organization name to continue')
         end
       end
     end
@@ -69,7 +69,7 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
       it 'should show the organization name key field' do
         allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
         visit 'register'
-        expect(page).to have_css('label', text: 'Organization Name Key')
+        expect(page).to have_css('label', text: 'Enter your organization name to continue')
       end
     end
   end
@@ -110,9 +110,9 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
         describe 'submit correct organization name key' do
           it 'should redirect back to register' do
             visit 'register'
-            expect(page).to have_css('label', text: 'Organization Name Key')
+            expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
-            fill_in 'Organization Name Key', with: name_key
+            fill_in 'Enter your organization name to continue', with: name_key
             allow_any_instance_of(new_controller).to receive(:current_organization).and_return(organization)
             click_button 'Submit'
             expect(page).to have_css('label', text: 'Email')
@@ -123,12 +123,12 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
         describe 'submit incorrect organization name key' do
           it 'should show warning' do
             visit 'register'
-            expect(page).to have_css('label', text: 'Organization Name Key')
+            expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
-            fill_in 'Organization Name Key', with: 'incorrect-name-key'
+            fill_in 'Enter your organization name to continue', with: 'incorrect-name-key'
             click_button 'Submit'
 
-            expect(page).to have_content 'Organization is not found'
+            expect(page).to have_content 'Organization could not be found'
           end
         end
       end
@@ -144,25 +144,26 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
       describe 'submit correct organization name key' do
         it 'should redirect back to register' do
           visit 'register'
-          expect(page).to have_css('label', text: 'Organization Name Key')
+          expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
-          fill_in 'Organization Name Key', with: name_key
+          fill_in 'Enter your organization name to continue', with: name_key
           allow_any_instance_of(new_controller).to receive(:current_organization).and_return(organization)
           click_button 'Submit'
           expect(page).to have_css('label', text: 'Email')
           expect(page).to have_css('label', text: 'Password')
+          expect(page.body).not_to include('First Name is required.')
         end
       end
 
       describe 'submit incorrect organization name key' do
         it 'should show warning' do
           visit 'register'
-          expect(page).to have_css('label', text: 'Organization Name Key')
+          expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
-          fill_in 'Organization Name Key', with: 'incorrect-name-key'
+          fill_in 'Enter your organization name to continue', with: 'incorrect-name-key'
           click_button 'Submit'
 
-          expect(page).to have_content 'Organization is not found'
+          expect(page).to have_content 'Organization could not be found'
         end
       end
     end

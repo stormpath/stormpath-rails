@@ -56,7 +56,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
         it 'should redirect to parent domain' do
           allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
           visit 'login'
-          expect(page).to have_css('label', text: 'Organization Name Key')
+          expect(page).to have_css('label', text: 'Enter your organization name to continue')
         end
       end
     end
@@ -68,7 +68,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
       it 'should show the organization name key field' do
         allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
         visit 'login'
-        expect(page).to have_css('label', text: 'Organization Name Key')
+        expect(page).to have_css('label', text: 'Enter your organization name to continue')
       end
     end
   end
@@ -82,12 +82,55 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
 
         let!(:account) { organization.accounts.create(multi_account_attrs) }
 
-        it 'should successfully log in and redirect to root page' do
-          visit 'login'
-          fill_in 'Username or Email', with: account.email
-          fill_in 'Password', with: 'Password1337'
-          click_button 'Log in'
-          expect(page).to have_content 'Root page'
+        context 'when the account is in the directory and organization' do
+          it 'should successfully log in and redirect to root page' do
+            visit 'login'
+            fill_in 'Username or Email', with: account.email
+            fill_in 'Password', with: 'Password1337'
+            click_button 'Log in'
+            expect(page).to have_content 'Root page'
+          end
+        end
+
+        context 'when the account is in another directory and organization' do
+          let(:another_dir) { test_client.directories.create(attributes_for(:directory)) }
+          let(:another_org) { test_client.organizations.create(attributes_for(:organization)) }
+          before do
+            map_account_store(test_application, another_dir, 10, false, false)
+            map_account_store(test_application, another_org, 11, false, false)
+            map_organization_store(another_dir, another_org, true)
+          end
+          let!(:another_account) { another_org.accounts.create(attributes_for(:account)) }
+          after do
+            another_org.delete
+            another_dir.delete
+          end
+
+          it 'should raise error' do
+            visit 'login'
+            fill_in 'Username or Email', with: another_account.email
+            fill_in 'Password', with: 'Password1337'
+            click_button 'Log in'
+            expect(page).to have_content 'Invalid username or password.'
+          end
+        end
+
+        context 'when the account is in the same directory but different organization' do
+          let(:org3) { test_client.organizations.create(attributes_for(:organization)) }
+          before do
+            map_account_store(test_application, org3, 13, false, false)
+            map_organization_store(directory, org3, true)
+          end
+          let!(:account3) { org3.accounts.create(attributes_for(:account)) }
+          after { org3.delete }
+
+          it 'should successfully log in and redirect to root page' do
+            visit 'login'
+            fill_in 'Username or Email', with: account3.email
+            fill_in 'Password', with: 'Password1337'
+            click_button 'Log in'
+            expect(page).to have_content 'Root page'
+          end
         end
       end
 
@@ -100,9 +143,9 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
         describe 'submit correct organization name key' do
           it 'should redirect back to login' do
             visit 'login'
-            expect(page).to have_css('label', text: 'Organization Name Key')
+            expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
-            fill_in 'Organization Name Key', with: name_key
+            fill_in 'Enter your organization name to continue', with: name_key
             allow_any_instance_of(new_controller).to receive(:current_organization).and_return(organization)
             click_button 'Submit'
             expect(page).to have_css('label', text: 'Username or Email')
@@ -113,12 +156,12 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
         describe 'submit incorrect organization name key' do
           it 'should show warning' do
             visit 'login'
-            expect(page).to have_css('label', text: 'Organization Name Key')
+            expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
-            fill_in 'Organization Name Key', with: 'incorrect-name-key'
+            fill_in 'Enter your organization name to continue', with: 'incorrect-name-key'
             click_button 'Submit'
 
-            expect(page).to have_content 'Organization is not found'
+            expect(page).to have_content 'Organization could not be found'
           end
         end
       end
@@ -134,9 +177,9 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
       describe 'submit correct organization name key' do
         it 'should redirect back to login' do
           visit 'login'
-          expect(page).to have_css('label', text: 'Organization Name Key')
+          expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
-          fill_in 'Organization Name Key', with: name_key
+          fill_in 'Enter your organization name to continue', with: name_key
           allow_any_instance_of(new_controller).to receive(:current_organization).and_return(organization)
           click_button 'Submit'
           expect(page).to have_css('label', text: 'Username or Email')
@@ -147,12 +190,12 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
       describe 'submit incorrect organization name key' do
         it 'should show warning' do
           visit 'login'
-          expect(page).to have_css('label', text: 'Organization Name Key')
+          expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
-          fill_in 'Organization Name Key', with: 'incorrect-name-key'
+          fill_in 'Enter your organization name to continue', with: 'incorrect-name-key'
           click_button 'Submit'
 
-          expect(page).to have_content 'Organization is not found'
+          expect(page).to have_content 'Organization could not be found'
         end
       end
     end

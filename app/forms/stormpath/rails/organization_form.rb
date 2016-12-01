@@ -1,11 +1,11 @@
 module Stormpath
   module Rails
     class OrganizationForm
-      attr_accessor :name_key
+      attr_reader :name_key
 
       def initialize(name_key)
         @name_key = name_key
-        validate_organization_name_key_presence
+        raise FormError, "Organization Name Key can't be blank" if name_key.blank?
       end
 
       class FormError < ArgumentError
@@ -15,20 +15,11 @@ module Stormpath
       end
 
       def save!
-        raise FormError, 'Organization is not found' unless organization_by_name_key(name_key)
-      end
-
-      private
-
-      def validate_organization_name_key_presence
-        return if name_key.present?
-        raise FormError, "Organization Name Key can't be blank"
-      end
-
-      def organization_by_name_key(key)
-        Stormpath::Rails::OrganizationResolver.new(
-          OpenStruct.new(subdomain: key)
-        ).organization
+        begin
+          Stormpath::Rails::OrganizationResolver.new(OpenStruct.new(subdomain: name_key)).organization
+        rescue Stormpath::Rails::OrganizationResolver::Error
+          raise FormError, 'Organization could not be found'
+        end
       end
     end
   end

@@ -4,7 +4,7 @@ module Stormpath
       class CreateController < BaseController
         def call
           form.save!
-          login_the_account if auto_login_enabled? && !email_verification_enabled? && !organization_resolution?
+          login_the_account if valid_for_login?
           respond_with_success
         rescue RegistrationForm::FormError, OrganizationForm::FormError => error
           respond_with_error(error)
@@ -59,6 +59,10 @@ module Stormpath
           render stormpath_config.web.register.view
         end
 
+        def valid_for_login?
+          auto_login_enabled? && !email_verification_enabled? && !organization_resolution?
+        end
+
         def auto_login_enabled?
           stormpath_config.web.register.auto_login
         end
@@ -88,34 +92,16 @@ module Stormpath
         end
 
         def permitted_params
-          if stormpath_config.web.multi_tenancy.enabled
-            params.except(*excluded_root_params)
-                  .merge(organization_name_key: current_organization.try(:name_key))
-          else
-            params.except(*excluded_root_params)
-          end
+          params.except(*excluded_root_params)
+                .merge(organization_name_key: current_organization_name_key)
         end
-
-        def organization_resolution?
-          params[:organization_name_key].present?
-        end
-
-        def current_organization
-          Stormpath::Rails::OrganizationResolver.new(req).organization
-        end
-        helper_method :current_organization
 
         def subdomain_register_url
-          (req.scheme == 'https' ? URI::HTTPS : URI::HTTP).build(host_and_path).to_s
-        end
-
-        def host_and_path
-          { host: "#{params[:organization_name_key]}.#{stormpath_config.web.domain_name}",
-            path: stormpath_config.web.register.uri }
-        end
-
-        def req
-          request
+          UrlBuilder.create(
+            req,
+            "#{params[:organization_name_key]}.#{stormpath_config.web.domain_name}",
+            stormpath_config.web.register.uri
+          )
         end
       end
     end

@@ -39,16 +39,20 @@ describe Stormpath::Rails::OrganizationResolver, vcr: true do
 
     after { unmapped_organization.delete }
 
-    it 'shoult return nil' do
-      expect(resolver.organization).to be_nil
+    it 'shoult raise error' do
+      expect do
+        resolver.organization
+      end.to raise_error(Stormpath::Rails::OrganizationResolver::Error)
     end
   end
 
   describe 'non-existing organization' do
     let(:subdomain) { 'non-existing-org' }
 
-    it 'should return nil' do
-      expect(resolver.organization).to be_nil
+    it 'shoult raise error' do
+      expect do
+        resolver.organization
+      end.to raise_error(Stormpath::Rails::OrganizationResolver::Error)
     end
   end
 
@@ -57,9 +61,11 @@ describe Stormpath::Rails::OrganizationResolver, vcr: true do
     let!(:app2) { test_client.applications.create(attributes_for(:application)) }
     after { app2.delete }
 
-    it 'should return nil' do
+    it 'shoult raise error' do
       allow(resolver).to receive(:application).and_return(app2)
-      expect(resolver.organization).to be_nil
+      expect do
+        resolver.organization
+      end.to raise_error(Stormpath::Rails::OrganizationResolver::Error)
     end
   end
 end

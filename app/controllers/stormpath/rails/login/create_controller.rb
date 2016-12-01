@@ -9,7 +9,7 @@ module Stormpath
             form.save!
             set_cookies if account_login?
             respond_with_success
-          rescue Stormpath::Error, LoginForm::FormError, SocialLoginForm::FormError, OrganizationForm::FormError => error
+          rescue Stormpath::Error, LoginForm::FormError, SocialLoginForm::FormError, OrganizationForm::FormError, OrganizationResolver::Error => error
             respond_with_error(error)
           end
         end
@@ -24,7 +24,7 @@ module Stormpath
                     else
                       LoginForm.new(params[:login],
                                     params[:password],
-                                    organization: current_organization)
+                                    organization_name_key: current_organization.name_key)
                     end
         end
 
@@ -77,29 +77,12 @@ module Stormpath
           params[:providerData].present?
         end
 
-        def organization_resolution?
-          params[:organization_name_key].present?
-        end
-
-        def current_organization
-          if stormpath_config.web.multi_tenancy.enabled
-            Stormpath::Rails::OrganizationResolver.new(req, params[:organization_name_key])
-                                                  .organization
-          end
-        end
-        helper_method :current_organization
-
         def subdomain_login_url
-          (req.scheme == 'https' ? URI::HTTPS : URI::HTTP).build(host_and_path).to_s
-        end
-
-        def host_and_path
-          { host: "#{params[:organization_name_key]}.#{stormpath_config.web.domain_name}",
-            path: stormpath_config.web.login.uri }
-        end
-
-        def req
-          request
+          UrlBuilder.create(
+            req,
+            "#{params[:organization_name_key]}.#{stormpath_config.web.domain_name}",
+            stormpath_config.web.login.uri
+          )
         end
       end
     end

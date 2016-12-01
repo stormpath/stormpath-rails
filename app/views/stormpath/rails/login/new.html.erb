@@ -2,8 +2,8 @@
   <div class="va-wrapper">
     <div class="view login-view container">
       <div class="box row">
-        <% if Stormpath::Rails.config.web.multi_tenancy.enabled && current_organization.nil? %>
-          <%= render partial: 'stormpath/rails/shared/specify_organization', locals: {url: login_path(next: params[:next])} %>
+        <% if Stormpath::Rails.config.web.multi_tenancy.enabled && current_organization_name_key.nil? %>
+          <%= render partial: 'stormpath/rails/shared/select_organization', locals: {url: login_path(next: params[:next])} %>
         <% else %>
           <%= render partial: 'stormpath/rails/login/form' %>
 
