@@ -24,7 +24,7 @@ module Stormpath
                     else
                       LoginForm.new(params[:login],
                                     params[:password],
-                                    organization_name_key: current_organization.name_key)
+                                    organization_name_key: current_organization.try(:name_key))
                     end
         end
 
