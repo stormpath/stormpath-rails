@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :account, class: Stormpath::Resource::Account do
-    sequence(:email) { |n| "rails-#{n}-#{Faker::Lorem.word}@testmail.stormpath.com" }
+    sequence(:email) { |n| "rails-#{n}-#{Faker::Lorem.word}-#{SecureRandom.hex(10)}@testmail.stormpath.com" }
     password 'Password1337'
     given_name { Faker::Name.first_name }
     surname { Faker::Name.last_name }
@@ -10,7 +10,7 @@ FactoryGirl.define do
   end
 
   factory :account_without_username, class: Stormpath::Resource::Account do
-    sequence(:email) { |n| "rails-#{n}-#{Faker::Lorem.word}@testmail.stormpath.com" }
+    sequence(:email) { |n| "rails-#{n}-#{Faker::Lorem.word}-#{SecureRandom.hex(10)}@testmail.stormpath.com" }
     password 'Password1337'
     given_name { Faker::Name.first_name }
     surname { Faker::Name.last_name }
@@ -21,17 +21,17 @@ FactoryGirl.define do
   end
 
   factory :application, class: Stormpath::Resource::Application do
-    sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-application" }
+    sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-#{SecureRandom.hex(10)}-application" }
     description 'rails test application'
   end
 
   factory :directory, class: Stormpath::Resource::Directory do
-    sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-directory" }
+    sequence(:name) { |n| "rails-#{n}-#{Faker::Lorem.word}-#{SecureRandom.hex(10)}-directory" }
     description 'rails test directory'
   end
 
   factory :organization, class: Stormpath::Resource::Organization do
-    sequence(:name) { |n| "rails-org-#{n}-#{Faker::Lorem.word}" }
-    sequence(:name_key) { |n| "rails-org-#{n}-#{Faker::Lorem.word}" }
+    sequence(:name) { |n| "rails-org-#{n}-#{Faker::Lorem.word}-#{SecureRandom.hex(10)}" }
+    sequence(:name_key) { |n| "rails-org-#{n}-#{Faker::Lorem.word}-#{SecureRandom.hex(10)}" }
   end
 end
