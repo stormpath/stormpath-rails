@@ -7,7 +7,7 @@ stormpath:
     basePath: null
 
     # Required if using subdomain-based multi-tenancy
-    domainName: null
+    domainName: 'stormpath.dev'
 
     # When enabled, the framework will require the user to authenticate against
     # a specific Organization.  The authenticated organization is persisted in
@@ -18,7 +18,7 @@ stormpath:
     # order to authenticate.  If they visit the parent domain, they will be
     # required to identify the organization they wish to use.
     multiTenancy:
-      enabled: false
+      enabled: true
       strategy: "subdomain"
 
     oauth2:

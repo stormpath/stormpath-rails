@@ -26,7 +26,7 @@ module Stormpath
       end
 
       def organization_resolution?
-        params.key?(:organization_name_key) && !params.key?(:password)
+        params.key?(:organization_resolution)
       end
 
       def organization_unresolved?

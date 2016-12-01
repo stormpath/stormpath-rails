@@ -1,24 +1,25 @@
 require 'spec_helper'
 
-describe 'the multitenant register feature', type: :feature, vcr: true do
-  let(:new_controller) { Stormpath::Rails::Register::NewController }
-  let(:create_controller) { Stormpath::Rails::Register::CreateController }
-  let(:new_login_controller) { Stormpath::Rails::Login::NewController }
+describe 'the multitenant forgot password feature', type: :feature, vcr: true do
+  let(:new_controller) { Stormpath::Rails::ForgotPassword::NewController }
+  let(:login_controller) { Stormpath::Rails::Login::NewController }
+  let(:create_controller) { Stormpath::Rails::ForgotPassword::CreateController }
   let(:request) do
-    OpenStruct.new(original_url: "http://#{subdomain}.#{domain}/login",
+    OpenStruct.new(original_url: "http://#{subdomain}.#{domain}/forgot",
                    scheme: 'http',
                    host: "#{subdomain}.#{domain}",
                    domain: domain,
                    subdomain: subdomain,
-                   path: '/register')
+                   path: '/forgot')
   end
-  let(:register_config) { configuration.web.register }
+  let(:forgot_password_config) { configuration.web.forgot_password }
   let(:multitenancy_config) { configuration.web.multi_tenancy }
   let(:directory) { test_client.directories.create(attributes_for(:directory)) }
   let(:organization) do
     test_client.organizations.create(attributes_for(:organization, name_key: name_key))
   end
-  let(:multi_account_attrs) { attributes_for(:account) }
+  let(:account_attrs) { attributes_for(:account) }
+  let(:account) { organization.accounts.create(account_attrs) }
   let(:domain) { 'stormpath.dev' }
 
   before do
@@ -30,6 +31,8 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
     map_organization_store(directory, organization, true)
     allow_any_instance_of(new_controller).to receive(:req).and_return(request)
     allow_any_instance_of(create_controller).to receive(:req).and_return(request)
+    allow_any_instance_of(login_controller).to receive(:req).and_return(request)
+    account
   end
 
   after do
@@ -37,17 +40,16 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
     directory.delete
   end
 
-  describe 'GET /register' do
+  describe 'GET /forgot' do
     describe 'when subdomain present' do
       let(:subdomain) { random_name }
 
       describe 'and organization matches subdomain' do
         let(:name_key) { subdomain }
 
-        it 'has proper labels on register page' do
-          visit 'register'
+        it 'has proper labels on forgot page' do
+          visit 'forgot'
           expect(page).to have_css('label', text: 'Email')
-          expect(page).to have_css('label', text: 'Password')
         end
       end
 
@@ -56,7 +58,7 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
 
         it 'should redirect to parent domain' do
           allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
-          visit 'register'
+          visit 'forgot'
           expect(page).to have_css('label', text: 'Enter your organization name to continue')
         end
       end
@@ -68,36 +70,25 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
 
       it 'should show the organization name key field' do
         allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
-        visit 'register'
+        visit 'forgot'
         expect(page).to have_css('label', text: 'Enter your organization name to continue')
       end
     end
   end
 
-  describe 'POST /register' do
-    let(:name) { multi_account_attrs[:given_name] }
-    let(:surname) { multi_account_attrs[:surname] }
-    let(:email) { multi_account_attrs[:email] }
-    let(:phone) { multi_account_attrs[:phone_number] }
-    let(:password) { multi_account_attrs[:password] }
-
+  describe 'POST /forgot' do
     describe 'when subdomain present' do
       let(:subdomain) { random_name }
 
       describe 'and organization matches subdomain' do
         let(:name_key) { subdomain }
 
-        it 'should successfully register and redirect to login page' do
-          allow_any_instance_of(new_login_controller).to receive(:organization_unresolved?).and_return(false)
-          allow_any_instance_of(new_login_controller).to receive(:current_organization).and_return(organization)
-          visit 'register'
-          fill_in 'givenName', with: name
-          fill_in 'surname', with: surname
-          fill_in 'email', with: email
-          fill_in 'password', with: password
-
-          click_button 'Create Account'
-          expect(page).to have_content 'Log in'
+        it 'should redirect to login page' do
+          visit 'forgot'
+          fill_in 'Email', with: account.email
+          click_button 'Submit'
+          expect(page).to have_current_path('/login?status=forgot')
+          expect(page).to have_content 'Password Reset Requested. If an account exists for the email provided, you will receive an email shortly.'
         end
       end
 
@@ -108,21 +99,20 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
         end
 
         describe 'submit correct organization name key' do
-          it 'should redirect back to register' do
-            visit 'register'
+          it 'should redirect back to forgot' do
+            visit 'forgot'
             expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
             fill_in 'Enter your organization name to continue', with: name_key
             allow_any_instance_of(new_controller).to receive(:current_organization).and_return(organization)
             click_button 'Submit'
             expect(page).to have_css('label', text: 'Email')
-            expect(page).to have_css('label', text: 'Password')
           end
         end
 
         describe 'submit incorrect organization name key' do
           it 'should show warning' do
-            visit 'register'
+            visit 'forgot'
             expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
             fill_in 'Enter your organization name to continue', with: 'incorrect-name-key'
@@ -142,22 +132,20 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
       end
 
       describe 'submit correct organization name key' do
-        it 'should redirect back to register' do
-          visit 'register'
+        it 'should redirect back to forgot' do
+          visit 'forgot'
           expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
           fill_in 'Enter your organization name to continue', with: name_key
           allow_any_instance_of(new_controller).to receive(:current_organization).and_return(organization)
           click_button 'Submit'
           expect(page).to have_css('label', text: 'Email')
-          expect(page).to have_css('label', text: 'Password')
-          expect(page.body).not_to include('First Name is required.')
         end
       end
 
       describe 'submit incorrect organization name key' do
         it 'should show warning' do
-          visit 'register'
+          visit 'forgot'
           expect(page).to have_css('label', text: 'Enter your organization name to continue')
 
           fill_in 'Enter your organization name to continue', with: 'incorrect-name-key'

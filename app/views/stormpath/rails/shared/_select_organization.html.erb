@@ -10,6 +10,7 @@
   <% end %>
 
   <%= form_for '', url: url, html: {class: "login-form form-horizontal"} do |form| %>
+    <%= form.hidden_field :organization_resolution %>
     <div class="form-group group-email">
       <%= form.label :organization_name_key, 'Enter your organization name to continue', class: 'col-sm-12' %>
       <div class="<%= input_class %>">
