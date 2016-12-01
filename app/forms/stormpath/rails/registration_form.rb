@@ -61,8 +61,11 @@ module Stormpath
       end
 
       def organization_resolved?
-        raise FormError, 'Organization not found.' if multitenancy_enabled? && organization.nil?
-        true
+        if multitenancy_enabled?
+          organization.present? ? true : raise(FormError, 'Organization not found.')
+        else
+          false
+        end
       end
 
       def multitenancy_enabled?

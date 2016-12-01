@@ -44,7 +44,7 @@ module Stormpath
 
       def current_organization_name_key
         begin
-          current_organization.name_key
+          current_organization.try(:name_key)
         rescue Stormpath::Rails::OrganizationResolver::Error
           nil
         end
