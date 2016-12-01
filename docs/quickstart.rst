@@ -30,8 +30,8 @@ prompt you to download your key pair.
 
 Once you've downloaded your `apiKey.properties` file, save it and be sure to set up the following environment variables:
 
- - STORMPATH_API_KEY_ID
- - STORMPATH_API_KEY_SECRET
+ - STORMPATH_CLIENT_APIKEY_ID
+ - STORMPATH_CLIENT_APIKEY_SECRET
 
 Environment variables should be set up in you .bashrc file (or .zshrc if you use myzsh).
 
@@ -39,8 +39,8 @@ Example setup:
 
 .. code-block:: sh
 
-    export STORMPATH_API_KEY_ID=6U4HZMHGVHN0U765BGW
-    export STORMPATH_API_KEY_SECRET=0e0TuVZKYiPiLTDLNnswEwpPpa5nPv
+    export STORMPATH_CLIENT_APIKEY_ID=6U4HZMHGVHN0U765BGW
+    export STORMPATH_CLIENT_APIKEY_SECRET=0e0TuVZKYiPiLTDLNnswEwpPpa5nPv
 
 Find Your Stormpath Application
 -------------------------------
@@ -73,7 +73,7 @@ Now that you have your application HREF, make sure to set up another environment
 
 .. code-block:: sh
 
-    export STORMPATH_APPLICATION_URL=https://api.stormpath.com/v1/applications/24kkU5XOz4tQlZ7sBtPUN6
+    export STORMPATH_APPLICATION_HREF=https://api.stormpath.com/v1/applications/24kkU5XOz4tQlZ7sBtPUN6
 
 
 You're ready to bundle Stormpath Rails gem into your project!

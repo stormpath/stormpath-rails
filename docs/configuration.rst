@@ -23,9 +23,9 @@ by running the following commands in the shell:
 
 .. code-block:: bash
 
-    export STORMPATH_API_KEY_ID=YOUR_ID_HERE
-    export STORMPATH_API_KEY_SECRET=YOUR_SECRET_HERE
-    export STORMPATH_APPLICATION_URL=YOUR_APP_HREF
+    export STORMPATH_CLIENT_APIKEY_ID=YOUR_ID_HERE
+    export STORMPATH_CLIENT_APIKEY_SECRET=YOUR_SECRET_HERE
+    export STORMPATH_APPLICATION_HREF=YOUR_APP_HREF
 
 or by using any text editor and adding the environment variables to .bashrc (or .zshrc if you're using ohmyzsh)
 
@@ -35,9 +35,9 @@ or by using any text editor and adding the environment variables to .bashrc (or 
 
     .. code-block:: bash
 
-        set STORMPATH_API_KEY_ID=YOUR_ID_HERE
-        set STORMPATH_API_KEY_SECRET=YOUR_SECRET_HERE
-        set STORMPATH_APPLICATION_URL=YOUR_APP_HREF
+        set STORMPATH_CLIENT_APIKEY_ID=YOUR_ID_HERE
+        set STORMPATH_CLIENT_APIKEY_SECRET=YOUR_SECRET_HERE
+        set STORMPATH_APPLICATION_HREF=YOUR_APP_HREF
 
 The examples above show you the 3 mandatory settings you need to configure to
 make stormpath-rails work.  These settings can be configured via environment

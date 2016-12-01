@@ -16,7 +16,7 @@ Add the stormpath-rails integration gem to your Gemfile.
 Stormpath is currently in beta so it is necessary to include the gem version:
 
 ```ruby
-gem 'stormpath-rails', '~> 2.3.0'
+gem 'stormpath-rails', '~> 2.3.1'
 ```
 
 Bundle the Gemfile
@@ -37,16 +37,16 @@ rails generate stormpath:install
 
 Create a Stormpath account if you haven't already, and be sure to set up the following environment variables:
 
- - STORMPATH_API_KEY_ID
- - STORMPATH_API_KEY_SECRET
+ - STORMPATH_CLIENT_APIKEY_ID
+ - STORMPATH_CLIENT_APIKEY_SECRET
 
 Environment variables should be set up in you .bashrc file (or .zshrc if you use myzsh).
 
 Example setup:
 
 ```sh
-export STORMPATH_API_KEY_ID=6U4HZMHGVHN0U765BGW
-export STORMPATH_API_KEY_SECRET=0e0TuVZKYiPiLTDLNnswEwpPpa5nPv
+export STORMPATH_CLIENT_APIKEY_ID=6U4HZMHGVHN0U765BGW
+export STORMPATH_CLIENT_APIKEY_SECRET=0e0TuVZKYiPiLTDLNnswEwpPpa5nPv
 ```
 
 Alternatively you can use gems such as [Dotenv](https://github.com/bkeepers/dotenv) or [Figaro](https://github.com/laserlemon/figaro) to preload environment variables.
@@ -90,7 +90,7 @@ You can use embedded ruby (ERB) in the configuration file:
 ```yaml
 stormpath:
   application:
-    href: <%= ENV['STORMPATH_APPLICATION_URL'] %>
+    href: <%= ENV['STORMPATH_APPLICATION_HREF'] %>
 ```
 
 ## Usage
@@ -297,12 +297,9 @@ If you wish to contribute to the gem, please follow these steps:
 
 1. Create a Stormpath Application.
 2. Export the following env variables:
-  - STORMPATH_API_KEY_ID
-  - STORMPATH_API_KEY_SECRET
+  - STORMPATH_CLIENT_APIKEY_ID
+  - STORMPATH_CLIENT_APIKEY_SECRET
 3. Create a Directory and associate it to the app. Make it the default account and group store for the app.
-4. Create a Directory With a Verification Workflow and associate it to the app.
-5. Export the following env variable:
-  - STORMPATH_SDK_TEST_DIRECTORY_WITH_VERIFICATION_URL
 
 ### Specs
 

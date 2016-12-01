@@ -18,7 +18,6 @@ group :test do
   gem 'webmock'
   gem 'vcr', '3.0.1'
   gem 'ammeter', git: 'https://github.com/alexrothenberg/ammeter'
-  gem 'simplecov', require: false
   gem 'json_matchers'
   gem 'match_json', '0.0.5'
   gem 'capybara'

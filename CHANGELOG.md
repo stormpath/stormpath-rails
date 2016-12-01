@@ -1,6 +1,12 @@
 Stormpath Rails Changelog
 ============================
 
+Version 2.3.1
+-------------
+Released on Nov 28, 2016
+- Refactored specs and changed environment variable names to match the other SDK's
+
+
 Version 2.3.0
 -------------
 Released on Nov 08, 2016

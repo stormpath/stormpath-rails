@@ -9,8 +9,8 @@ describe 'IdSiteLogin GET', type: :request, vcr: true do
   let(:path) { '' }
   let(:tenant_name) { application.tenant.name }
   let(:tenant_domain) { "https://#{tenant_name}.id.stormpath.io" }
-  let(:api_key_secret) { ENV['STORMPATH_API_KEY_SECRET'] }
-  let(:aud) { ENV['STORMPATH_API_KEY_ID'] }
+  let(:api_key_secret) { Stormpath::Rails::Client.client.data_store.api_key.secret }
+  let(:aud) { Stormpath::Rails::Client.client.data_store.api_key.id }
   let(:account) { application.accounts.create(account_attrs) }
   let(:account_attrs) { FactoryGirl.attributes_for(:account) }
   let(:jwt_response) do
