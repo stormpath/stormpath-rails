@@ -18,7 +18,7 @@ stormpath:
     # order to authenticate.  If they visit the parent domain, they will be
     # required to identify the organization they wish to use.
     multiTenancy:
-      enabled: true
+      enabled: false
       strategy: "subdomain"
 
     oauth2:
