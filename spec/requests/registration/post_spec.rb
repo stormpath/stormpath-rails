@@ -369,16 +369,19 @@ describe 'Registration POST', type: :request, vcr: true do
 
     describe 'json is disabled' do
       context 'multitenancy enabled' do
+        let(:application) { test_client.applications.create(attributes_for(:application)) }
         let(:multitenancy_config) { configuration.web.multi_tenancy }
         let(:directory) { test_client.directories.create(attributes_for(:directory)) }
         let(:organization) { test_client.organizations.create(attributes_for(:organization)) }
+        let(:config) { Stormpath::Rails::Configuration }
 
         before do
           allow(multitenancy_config).to receive(:enabled).and_return(true)
           allow(multitenancy_config).to receive(:strategy).and_return('subdomain')
           allow(configuration.web).to receive(:domain_name).and_return('stormpath.dev')
-          map_account_store(test_application, directory, 10, false, false)
-          map_account_store(test_application, organization, 11, false, false)
+          allow_any_instance_of(config).to receive(:application).and_return(application)
+          map_account_store(application, directory, 0, true, false)
+          map_account_store(application, organization, 11, false, false)
           map_organization_store(directory, organization, true)
           web_config.register.form.fields.middle_name.enabled = true
           web_config.register.form.fields.middle_name.required = false
@@ -390,6 +393,7 @@ describe 'Registration POST', type: :request, vcr: true do
           web_config.register.form.fields.middle_name.required = false
           organization.delete
           directory.delete
+          application.delete
         end
 
         context 'existing organization' do
