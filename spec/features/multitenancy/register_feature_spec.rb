@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 describe 'the multitenant register feature', type: :feature, vcr: true do
+  let(:application) { test_client.applications.create(attributes_for(:application)) }
   let(:new_controller) { Stormpath::Rails::Register::NewController }
   let(:create_controller) { Stormpath::Rails::Register::CreateController }
   let(:new_login_controller) { Stormpath::Rails::Login::NewController }
+  let(:config) { Stormpath::Rails::Configuration }
   let(:request) do
     OpenStruct.new(original_url: "http://#{subdomain}.#{domain}/login",
                    scheme: 'http',
@@ -25,9 +27,10 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
     allow(multitenancy_config).to receive(:enabled).and_return(true)
     allow(multitenancy_config).to receive(:strategy).and_return('subdomain')
     allow(configuration.web).to receive(:domain_name).and_return('stormpath.dev')
-    map_account_store(test_application, directory, 10, false, false)
-    map_account_store(test_application, organization, 11, false, false)
+    map_account_store(application, directory, 0, true, false)
+    map_account_store(application, organization, 11, false, false)
     map_organization_store(directory, organization, true)
+    allow_any_instance_of(config).to receive(:application).and_return(application)
     allow_any_instance_of(new_controller).to receive(:req).and_return(request)
     allow_any_instance_of(create_controller).to receive(:req).and_return(request)
   end
@@ -35,6 +38,7 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
   after do
     organization.delete
     directory.delete
+    application.delete
   end
 
   describe 'GET /register' do
