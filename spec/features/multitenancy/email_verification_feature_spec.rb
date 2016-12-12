@@ -1,12 +1,14 @@
 require 'spec_helper'
 
 describe 'the multitenant email verification feature', type: :feature, vcr: true do
+  let(:application) { test_client.applications.create(attributes_for(:application)) }
   let(:directory) { test_client.directories.create(attributes_for(:directory)) }
   let(:sptoken) { account.email_verification_token.token }
   let(:show_controller) { Stormpath::Rails::VerifyEmail::ShowController }
   let(:create_controller) { Stormpath::Rails::VerifyEmail::CreateController }
   let(:login_controller) { Stormpath::Rails::Login::NewController }
   let(:domain) { 'stormpath.dev' }
+  let(:config) { Stormpath::Rails::Configuration }
   let(:request) do
     OpenStruct.new(original_url: "http://#{subdomain}.#{domain}/verify",
                    scheme: 'http',
@@ -23,12 +25,13 @@ describe 'the multitenant email verification feature', type: :feature, vcr: true
   let(:account) { organization.accounts.create(account_attrs) }
 
   before do
+    allow_any_instance_of(config).to receive(:application).and_return(application)
     allow(multitenancy_config).to receive(:enabled).and_return(true)
     allow(multitenancy_config).to receive(:strategy).and_return('subdomain')
     allow(configuration.web).to receive(:domain_name).and_return('stormpath.dev')
     enable_email_verification_for(directory)
-    map_account_store(test_application, directory, 20, false, false)
-    map_account_store(test_application, organization, 20, false, false)
+    map_account_store(application, directory, 0, true, false)
+    map_account_store(application, organization, 20, false, false)
     map_organization_store(directory, organization, true)
     enable_email_verification
     Rails.application.reload_routes!
@@ -42,6 +45,7 @@ describe 'the multitenant email verification feature', type: :feature, vcr: true
   after do
     organization.delete
     directory.delete
+    application.delete
   end
 
   describe 'GET /verify' do
