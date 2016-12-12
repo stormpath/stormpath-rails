@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe 'the multitenant login feature', type: :feature, vcr: true do
+  let(:application) { test_client.applications.create(attributes_for(:application)) }
   let(:new_controller) { Stormpath::Rails::Login::NewController }
   let(:create_controller) { Stormpath::Rails::Login::CreateController }
+  let(:config) { Stormpath::Rails::Configuration }
   let(:request) do
     OpenStruct.new(original_url: "http://#{subdomain}.#{domain}/login",
                    scheme: 'http',
@@ -11,7 +13,6 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
                    subdomain: subdomain,
                    path: '/login')
   end
-  let(:login_config) { configuration.web.login }
   let(:multitenancy_config) { configuration.web.multi_tenancy }
   let(:directory) { test_client.directories.create(attributes_for(:directory)) }
   let(:organization) do
@@ -24,9 +25,10 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
     allow(multitenancy_config).to receive(:enabled).and_return(true)
     allow(multitenancy_config).to receive(:strategy).and_return('subdomain')
     allow(configuration.web).to receive(:domain_name).and_return('stormpath.dev')
-    map_account_store(test_application, directory, 10, false, false)
-    map_account_store(test_application, organization, 11, false, false)
+    map_account_store(application, directory, 10, true, false)
+    map_account_store(application, organization, 11, false, false)
     map_organization_store(directory, organization, true)
+    allow_any_instance_of(config).to receive(:application).and_return(application)
     allow_any_instance_of(new_controller).to receive(:req).and_return(request)
     allow_any_instance_of(create_controller).to receive(:req).and_return(request)
   end
@@ -34,6 +36,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
   after do
     organization.delete
     directory.delete
+    application.delete
   end
 
   describe 'GET /login' do
@@ -96,8 +99,8 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
           let(:another_dir) { test_client.directories.create(attributes_for(:directory)) }
           let(:another_org) { test_client.organizations.create(attributes_for(:organization)) }
           before do
-            map_account_store(test_application, another_dir, 10, false, false)
-            map_account_store(test_application, another_org, 11, false, false)
+            map_account_store(application, another_dir, 10, false, false)
+            map_account_store(application, another_org, 11, false, false)
             map_organization_store(another_dir, another_org, true)
           end
           let!(:another_account) { another_org.accounts.create(attributes_for(:account)) }
@@ -118,7 +121,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
         context 'when the account is in the same directory but different organization' do
           let(:org3) { test_client.organizations.create(attributes_for(:organization)) }
           before do
-            map_account_store(test_application, org3, 13, false, false)
+            map_account_store(application, org3, 13, false, false)
             map_organization_store(directory, org3, true)
           end
           let!(:account3) { org3.accounts.create(attributes_for(:account)) }
