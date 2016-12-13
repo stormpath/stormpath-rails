@@ -12,6 +12,7 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
                    host: "#{subdomain}.#{domain}",
                    domain: domain,
                    subdomain: subdomain,
+                   subdomains: subdomains,
                    path: '/register')
   end
   let(:register_config) { configuration.web.register }
@@ -22,6 +23,7 @@ describe 'the multitenant register feature', type: :feature, vcr: true do
   end
   let(:multi_account_attrs) { attributes_for(:account) }
   let(:domain) { 'stormpath.dev' }
+  let(:subdomains) { [subdomain] }
 
   before do
     allow(multitenancy_config).to receive(:enabled).and_return(true)

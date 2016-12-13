@@ -16,7 +16,7 @@ module Stormpath
 
       def save!
         begin
-          Stormpath::Rails::OrganizationResolver.new(OpenStruct.new(subdomain: name_key)).organization
+          Stormpath::Rails::OrganizationResolver.new(OpenStruct.new(subdomains: [name_key])).organization
         rescue Stormpath::Rails::OrganizationResolver::Error
           raise FormError, 'Organization could not be found'
         end

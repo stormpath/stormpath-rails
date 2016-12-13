@@ -11,6 +11,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
                    host: "#{subdomain}.#{domain}",
                    domain: domain,
                    subdomain: subdomain,
+                   subdomains: subdomains,
                    path: '/login')
   end
   let(:multitenancy_config) { configuration.web.multi_tenancy }
@@ -20,6 +21,7 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
   end
   let(:multi_account_attrs) { attributes_for(:account) }
   let(:domain) { 'stormpath.dev' }
+  let(:subdomains) { [subdomain] }
 
   before do
     allow(multitenancy_config).to receive(:enabled).and_return(true)
@@ -72,6 +74,22 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
         allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)
         visit 'login'
         expect(page).to have_css('label', text: 'Enter your organization name to continue')
+      end
+    end
+
+    describe 'when there are multiple subdomains' do
+      let(:domain) { 'docs.stormpath.dev' }
+      let(:subdomain) { random_name }
+      let(:subdomains) { [subdomain, 'docs'] }
+
+      describe 'and organization matches subdomain' do
+        let(:name_key) { subdomain }
+
+        it 'has proper labels on login page' do
+          visit 'login'
+          expect(page).to have_css('label', text: 'Username or Email')
+          expect(page).to have_css('label', text: 'Password')
+        end
       end
     end
   end

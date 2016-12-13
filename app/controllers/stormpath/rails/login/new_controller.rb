@@ -6,9 +6,9 @@ module Stormpath
 
         def call
           if stormpath_config.web.id_site.enabled
-            return redirect_to(callback_url)
+            redirect_to(callback_url)
           elsif organization_unresolved?
-            return redirect_to(parent_login_url)
+            redirect_to(parent_login_url)
           else
             respond_to do |format|
               format.json { render json: LoginNewSerializer.to_h }

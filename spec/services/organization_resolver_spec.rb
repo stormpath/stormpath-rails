@@ -7,7 +7,7 @@ describe Stormpath::Rails::OrganizationResolver, vcr: true do
     Stormpath::Rails::OrganizationResolver.new(request, org_name_key)
   end
   let(:config) { Stormpath::Rails::Configuration }
-  let(:request) { OpenStruct.new(subdomain: subdomain) }
+  let(:request) { OpenStruct.new(subdomains: [subdomain]) }
   let(:org_name_key) { nil }
 
   before do

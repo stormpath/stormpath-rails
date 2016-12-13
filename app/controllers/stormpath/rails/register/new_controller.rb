@@ -5,11 +5,11 @@ module Stormpath
 
         def call
           if stormpath_config.web.id_site.enabled
-            return redirect_to(callback_url)
+            redirect_to(callback_url)
           elsif signed_in?
-            return redirect_to(root_path)
+            redirect_to(root_path)
           elsif organization_unresolved?
-            return redirect_to(parent_register_url)
+            redirect_to(parent_register_url)
           else
             respond_to do |format|
               format.json { render json: RegistrationFormSerializer.to_h }

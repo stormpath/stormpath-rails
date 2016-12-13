@@ -7,7 +7,6 @@ describe 'the multitenant email verification feature', type: :feature, vcr: true
   let(:show_controller) { Stormpath::Rails::VerifyEmail::ShowController }
   let(:create_controller) { Stormpath::Rails::VerifyEmail::CreateController }
   let(:login_controller) { Stormpath::Rails::Login::NewController }
-  let(:domain) { 'stormpath.dev' }
   let(:config) { Stormpath::Rails::Configuration }
   let(:request) do
     OpenStruct.new(original_url: "http://#{subdomain}.#{domain}/verify",
@@ -15,6 +14,7 @@ describe 'the multitenant email verification feature', type: :feature, vcr: true
                    host: "#{subdomain}.#{domain}",
                    domain: domain,
                    subdomain: subdomain,
+                   subdomains: subdomains,
                    path: '/verify')
   end
   let(:multitenancy_config) { configuration.web.multi_tenancy }
@@ -23,6 +23,8 @@ describe 'the multitenant email verification feature', type: :feature, vcr: true
   end
   let(:account_attrs) { attributes_for(:account) }
   let(:account) { organization.accounts.create(account_attrs) }
+  let(:domain) { 'stormpath.dev' }
+  let(:subdomains) { [subdomain] }
 
   before do
     allow_any_instance_of(config).to receive(:application).and_return(application)

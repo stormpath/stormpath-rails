@@ -4,12 +4,11 @@ module Stormpath
       class ShowController < BaseController
         def call
           begin
-            if organization_unresolved?
-              return redirect_to(parent_verify_email_url)
-            else
-              account = VerifyEmailToken.new(params[:sptoken]).call
-              login_the_account(account) if stormpath_config.web.register.auto_login
-            end
+            return redirect_to(parent_verify_email_url) if organization_unresolved?
+
+            account = VerifyEmailToken.new(params[:sptoken]).call
+            login_the_account(account) if stormpath_config.web.register.auto_login
+
             respond_with_success
           rescue InvalidSptokenError, NoSptokenError => error
             respond_to_error(error)

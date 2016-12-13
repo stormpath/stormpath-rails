@@ -31,8 +31,12 @@ module Stormpath
 
       def organization_unresolved?
         stormpath_config.web.multi_tenancy.enabled &&
-          req.host != stormpath_config.web.domain_name &&
+          not_on_parent_domain? &&
           current_organization_name_key.nil?
+      end
+
+      def not_on_parent_domain?
+        req.host != stormpath_config.web.domain_name
       end
 
       def current_organization

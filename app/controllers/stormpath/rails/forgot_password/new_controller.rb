@@ -4,7 +4,7 @@ module Stormpath
       class NewController < Stormpath::Rails::BaseController
         def call
           if organization_unresolved?
-            return redirect_to(parent_forgot_password_url)
+            redirect_to(parent_forgot_password_url)
           else
             respond_to do |format|
               format.json { render nothing: true, status: 404 }
