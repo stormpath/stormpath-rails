@@ -24,11 +24,15 @@ module Stormpath
       end
 
       def self.client
-        self.connection ||= Stormpath::Client.new(api_key: api_key.credentials)
+        self.connection ||= Stormpath::Client.new(api_key: api_key.credentials, base_url: base_url)
       end
 
       def self.api_key
         Stormpath::Rails::ApiKey.new
+      end
+
+      def self.base_url
+        Stormpath::Rails.config.merged_config_hashes['stormpath']['web']['base_path']
       end
     end
   end

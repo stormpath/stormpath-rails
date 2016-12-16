@@ -2,12 +2,7 @@ require 'spec_helper'
 
 describe Stormpath::Rails::Configuration, vcr: true do
   let(:stormpath_config_class) { Stormpath::Rails::Configuration }
-
-  let(:stormpath_rails_config) do
-    stormpath_config_class.new(
-      user_defined_config_hash
-    )
-  end
+  let(:stormpath_rails_config) { stormpath_config_class.new(user_defined_config_hash) }
 
   let(:user_defined_config_hash) do
     Stormpath::Rails::ReadConfigFile.new(
@@ -84,6 +79,37 @@ describe Stormpath::Rails::Configuration, vcr: true do
       expect(stormpath_rails_config.application.href).to be(
         Stormpath::Rails::Client.application.href
       )
+    end
+  end
+
+  describe 'base_path config' do
+    let(:user_defined_config_hash) do
+      {
+        stormpath: {
+          application: {
+            href: Stormpath::Rails::Client.application.href
+          },
+          web: {
+            base_path: base_url
+          }
+        }
+      }.deep_stringify_keys!
+    end
+
+    context 'when nil' do
+      let(:base_url) { nil }
+
+      it 'should be nil' do
+        expect(stormpath_rails_config.web.base_path).to be_nil
+      end
+    end
+
+    context 'when set' do
+      let(:base_url) { 'https://eu.stormpath.io' }
+
+      it 'should be set' do
+        expect(stormpath_rails_config.web.base_path).to eq base_url
+      end
     end
   end
 end
