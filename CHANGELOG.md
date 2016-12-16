@@ -1,6 +1,12 @@
 Stormpath Rails Changelog
 ============================
 
+Version 2.3.2
+-------------
+Released on Dec 16, 2016
+- Fix error with setting custom base path during client initialization
+
+
 Version 2.3.1
 -------------
 Released on Nov 28, 2016
