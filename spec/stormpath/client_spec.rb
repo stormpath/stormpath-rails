@@ -6,7 +6,7 @@ describe Stormpath::Rails::Client, vcr: true do
   let(:stormpath_client) { Stormpath::Rails::Client }
   let(:api_key) { Stormpath::Rails::ApiKey.new }
 
-  describe 'custom base url set' do
+  describe 'custom base url set without permissions' do
     before do
       stormpath_client.connection = nil
       allow(stormpath_client).to receive(:base_url).and_return(custom_base_url)
