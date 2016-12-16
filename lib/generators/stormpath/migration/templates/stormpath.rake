@@ -23,11 +23,7 @@ namespace :stormpath do
 
     User.all.find_each do |user|
       directory.accounts.create(
-        { username: "rex#{user.id}",
-          email: user.email,
-          given_name: 'Captain',
-          middle_name: '12345',
-          surname: 'Rex',
+        { email: user.email,
           password: user.encrypted_password },
         password_format: 'mcf'
       )
@@ -58,10 +54,7 @@ namespace :stormpath do
 
     # User.all.find_each do |user|
     #   account = directory.accounts.create(
-    #     { username: "rex#{user.id}",
-    #       email: user.email,
-    #       given_name: 'Jean-Luc',
-    #       surname: 'Picard',
+    #     { email: user.email,
     #       password: user.encrypted_password,
     #       custom_data: {
     #         rank: 'Captain',
@@ -70,6 +63,14 @@ namespace :stormpath do
     #     password_format: 'mcf'
     #   )
     #   puts "#{user.email} with custom data #{account.custom_data['favorite_drink']} migrated."
+    # end
+
+    # ==============================================================
+    # Use your directories account schema configuration if you have required fields on your account
+    # ==============================================================
+
+    # directory.account_schema.fields.each do |field|
+    #   puts field.name if field.required
     # end
   end
 end
