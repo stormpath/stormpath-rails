@@ -7,11 +7,9 @@ describe 'the multitenant forgot password feature', type: :feature, vcr: true do
   let(:create_controller) { Stormpath::Rails::ForgotPassword::CreateController }
   let(:config) { Stormpath::Rails::Configuration }
   let(:request) do
-    OpenStruct.new(original_url: "http://#{subdomain}.#{domain}/forgot",
-                   scheme: 'http',
-                   host: "#{subdomain}.#{domain}",
+    OpenStruct.new(scheme: 'http',
+                   host: "#{subdomains.join('.')}.#{domain}",
                    domain: domain,
-                   subdomain: subdomain,
                    subdomains: subdomains,
                    path: '/forgot')
   end
@@ -71,7 +69,6 @@ describe 'the multitenant forgot password feature', type: :feature, vcr: true do
     end
 
     describe 'when subdomain not present' do
-      let(:subdomain) { '' }
       let(:subdomains) { [] }
       let(:name_key) { random_name }
 
@@ -132,7 +129,6 @@ describe 'the multitenant forgot password feature', type: :feature, vcr: true do
     end
 
     describe 'when subdomain missing' do
-      let(:subdomain) { '' }
       let(:subdomains) { [] }
       let(:name_key) { random_name }
       before do

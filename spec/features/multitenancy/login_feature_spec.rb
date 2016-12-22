@@ -6,11 +6,9 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
   let(:create_controller) { Stormpath::Rails::Login::CreateController }
   let(:config) { Stormpath::Rails::Configuration }
   let(:request) do
-    OpenStruct.new(original_url: "http://#{subdomain}.#{domain}/login",
-                   scheme: 'http',
-                   host: "#{subdomain}.#{domain}",
+    OpenStruct.new(scheme: 'http',
+                   host: "#{subdomains.join('.')}.#{domain}",
                    domain: domain,
-                   subdomain: subdomain,
                    subdomains: subdomains,
                    path: '/login')
   end
@@ -67,7 +65,6 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
     end
 
     describe 'when subdomain not present' do
-      let(:subdomain) { '' }
       let(:subdomains) { [] }
       let(:name_key) { random_name }
 
@@ -190,7 +187,6 @@ describe 'the multitenant login feature', type: :feature, vcr: true do
     end
 
     describe 'when subdomain missing' do
-      let(:subdomain) { '' }
       let(:subdomains) { [] }
       let(:name_key) { random_name }
       before do

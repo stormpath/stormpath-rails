@@ -9,11 +9,9 @@ describe 'the multitenant email verification feature', type: :feature, vcr: true
   let(:login_controller) { Stormpath::Rails::Login::NewController }
   let(:config) { Stormpath::Rails::Configuration }
   let(:request) do
-    OpenStruct.new(original_url: "http://#{subdomain}.#{domain}/verify",
-                   scheme: 'http',
-                   host: "#{subdomain}.#{domain}",
+    OpenStruct.new(scheme: 'http',
+                   host: "#{subdomains.join('.')}.#{domain}",
                    domain: domain,
-                   subdomain: subdomain,
                    subdomains: subdomains,
                    path: '/verify')
   end
@@ -135,7 +133,6 @@ describe 'the multitenant email verification feature', type: :feature, vcr: true
     end
 
     describe 'when subdomain not present' do
-      let(:subdomain) { '' }
       let(:subdomains) { [] }
       let(:name_key) { random_name }
 
@@ -201,7 +198,6 @@ describe 'the multitenant email verification feature', type: :feature, vcr: true
       end
 
       describe 'when subdomain missing' do
-        let(:subdomain) { '' }
         let(:subdomains) { [] }
         let(:name_key) { random_name }
         before do
