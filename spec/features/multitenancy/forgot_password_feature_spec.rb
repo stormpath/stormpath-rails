@@ -72,6 +72,7 @@ describe 'the multitenant forgot password feature', type: :feature, vcr: true do
 
     describe 'when subdomain not present' do
       let(:subdomain) { '' }
+      let(:subdomains) { [] }
       let(:name_key) { random_name }
 
       it 'should show the organization name key field' do
@@ -132,6 +133,7 @@ describe 'the multitenant forgot password feature', type: :feature, vcr: true do
 
     describe 'when subdomain missing' do
       let(:subdomain) { '' }
+      let(:subdomains) { [] }
       let(:name_key) { random_name }
       before do
         allow_any_instance_of(new_controller).to receive(:organization_unresolved?).and_return(false)

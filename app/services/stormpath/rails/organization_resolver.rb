@@ -4,7 +4,7 @@ module Stormpath
       attr_reader :subdomain_name, :organization_name_key
 
       def initialize(request, organization_name_key = nil)
-        @subdomain_name = request.subdomains.try(:first)
+        @subdomain_name = request.subdomains.first
         @organization_name_key = organization_name_key
       end
 

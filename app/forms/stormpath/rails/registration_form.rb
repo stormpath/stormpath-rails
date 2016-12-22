@@ -49,11 +49,11 @@ module Stormpath
       private
 
       def account_resource
-        if organization_resolved?
-          organization.accounts.create(new_account)
-        else
-          Stormpath::Rails::Client.application.accounts.create(new_account)
-        end
+        account_store.accounts.create(new_account)
+      end
+
+      def account_store
+        organization_resolved? ? organization : Stormpath::Rails::Client.application
       end
 
       def new_account
