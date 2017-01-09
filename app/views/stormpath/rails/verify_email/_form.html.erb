@@ -1,0 +1,31 @@
+<div class="email-password-area col-xs-12 large col-sm-12">
+  <div class="header">
+    <span>Resend Account Verification Email?</span>
+      <% if params[:sptoken].nil? %>
+        <p>
+          Enter your email address below and we'll resend your account
+          verification email.  You will be sent an email which you will
+          need to open to continue. You may need to check your spam
+          folder.
+        </p>
+      <% end %>
+  </div>
+
+  <% if flash[:error] %>
+    <div class="alert alert-danger bad-login">
+      <p><%= flash[:error] %></p>
+    </div>
+  <% end %>
+
+  <%= form_for :verify_email, html: { class: "login-form form-horizontal" }, url: verify_email_path do |form| %>
+    <div class="form-group group-email">
+      <%= form.label :email, class: "col-sm-4" %>
+      <div class="col-sm-8">
+        <%= form.text_field :email, placeholder: 'Email', class: "form-control", name: :email, type: :email, required: true %>
+      </div>
+    </div>
+    <div>
+      <%= button_tag "Submit", :class => "login btn btn-login btn-sp-green", :type => "submit" %>
+    </div>
+  <% end %>
+</div>

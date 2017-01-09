@@ -3,7 +3,7 @@ module Stormpath
     class RegistrationForm
       include ActiveModel::Model
       attr_accessor(*RegistrationFormFields.enabled_field_names)
-      attr_accessor :account
+      attr_accessor :account, :organization_name_key
 
       validate :validate_presence_of_required_attributes
       validate :validate_password_repeated_twice_matches?
@@ -22,7 +22,7 @@ module Stormpath
         params = params.except(:customData).merge(custom_data_params)
         params = params.stringify_keys.transform_keys(&:underscore).symbolize_keys
 
-        arbitrary_param_names = params.keys - RegistrationFormFields.enabled_field_names
+        arbitrary_param_names = params.keys - RegistrationFormFields.enabled_field_names.push(:organization_name_key)
 
         if arbitrary_param_names.any?
           raise ArbitraryDataSubmitted, "Can't submit arbitrary data: #{arbitrary_param_names.join(', ')}"
@@ -35,9 +35,7 @@ module Stormpath
         return false if invalid?
 
         begin
-          self.account = Stormpath::Rails::Client.application.accounts.create(
-            Stormpath::Resource::Account.new(stormpath_registration_params)
-          )
+          self.account = account_resource
         rescue Stormpath::Error => error
           errors.add(:base, error.message) && false
         end
@@ -49,6 +47,38 @@ module Stormpath
       end
 
       private
+
+      def account_resource
+        account_store.accounts.create(new_account)
+      end
+
+      def account_store
+        organization_resolved? ? organization : Stormpath::Rails::Client.application
+      end
+
+      def new_account
+        Stormpath::Resource::Account.new(stormpath_registration_params)
+      end
+
+      def organization_resolved?
+        if multitenancy_enabled?
+          organization.present? ? true : raise(FormError, 'Organization not found.')
+        else
+          false
+        end
+      end
+
+      def multitenancy_enabled?
+        Stormpath::Rails.config.web.multi_tenancy.enabled
+      end
+
+      def organization
+        begin
+          @organization ||= Stormpath::Rails::Client.client.organizations.search(name_key: organization_name_key).first
+        rescue Stormpath::Error
+          nil
+        end
+      end
 
       def validate_presence_of_required_attributes
         RegistrationFormFields.required_fields.each do |required_field, properties|
@@ -65,7 +95,8 @@ module Stormpath
       end
 
       def stormpath_registration_params
-        predefined_registration_params.merge(custom_data: custom_registration_params)
+        predefined_registration_params.merge(custom_data: custom_registration_params,
+                                             organization_name_key: organization_name_key)
       end
 
       def predefined_registration_params

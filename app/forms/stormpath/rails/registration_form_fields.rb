@@ -8,7 +8,8 @@ module Stormpath
         :username,
         :email,
         :password,
-        :confirm_password
+        :confirm_password,
+        :organization_name_key
       ].freeze
 
       class << self

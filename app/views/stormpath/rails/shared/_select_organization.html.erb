@@ -1,0 +1,30 @@
+<div class="email-password-area col-xs-12">
+  <div class="header">
+    <span>Select your Organization</span>
+  </div>
+
+  <% if flash[:error] %>
+    <div class="alert alert-danger bad-login">
+      <p><%= flash[:error] %></p>
+    </div>
+  <% end %>
+
+  <%= form_for '', url: url, html: {class: "login-form form-horizontal"} do |form| %>
+    <%= form.hidden_field :organization_resolution %>
+    <div class="form-group group-email">
+      <%= form.label :organization_name_key, 'Enter your organization name to continue', class: 'col-sm-12' %>
+      <div class="<%= input_class %>">
+        <%= form.text_field :organization_name_key,
+            value: params[:organization_name_key],
+            name: :organization_name_key,
+            placeholder: 'e.g. my-company',
+            required: true,
+            class: "form-control"
+        %>
+      </div>
+    </div>
+    <div>
+      <%= button_tag 'Submit', class: 'login btn btn-login btn-sp-green', type: 'submit' %>
+    </div>
+  <% end %>
+</div>

@@ -19,15 +19,15 @@ describe 'Registration POST', type: :request, vcr: true do
       Stormpath::Rails::Client.application.accounts.get(response_body['account']['href']).delete
     end
 
-    let(:account_attrs) { FactoryGirl.attributes_for(:account_without_username) }
+    let(:account_attrs) { attributes_for(:account_without_username) }
     let(:account_attrs_with_blank_given_name) do
-      FactoryGirl.attributes_for(:account_without_username, given_name: nil)
+      attributes_for(:account_without_username, given_name: nil)
     end
     let(:account_attrs_with_blank_email) do
-      FactoryGirl.attributes_for(:account_without_username, email: nil)
+      attributes_for(:account_without_username, email: nil)
     end
     let(:account_attrs_with_blank_password) do
-      FactoryGirl.attributes_for(:account_without_username, password: nil)
+      attributes_for(:account_without_username, password: nil)
     end
 
     describe 'json is enabled' do
@@ -363,6 +363,72 @@ describe 'Registration POST', type: :request, vcr: true do
           json_register_post(account_attrs.merge(middleName: 'Hako'))
           expect(response.status).to eq(400)
           expect(error_message).to eq("Can't submit arbitrary data: middle_name")
+        end
+      end
+    end
+
+    describe 'json is disabled' do
+      context 'multitenancy enabled' do
+        let(:application) { test_client.applications.create(attributes_for(:application)) }
+        let(:multitenancy_config) { configuration.web.multi_tenancy }
+        let(:directory) { test_client.directories.create(attributes_for(:directory)) }
+        let(:organization) { test_client.organizations.create(attributes_for(:organization)) }
+        let(:config) { Stormpath::Rails::Configuration }
+
+        before do
+          allow(multitenancy_config).to receive(:enabled).and_return(true)
+          allow(multitenancy_config).to receive(:strategy).and_return('subdomain')
+          allow(configuration.web).to receive(:domain_name).and_return('stormpath.dev')
+          allow_any_instance_of(config).to receive(:application).and_return(application)
+          map_account_store(application, directory, 0, true, false)
+          map_account_store(application, organization, 11, false, false)
+          map_organization_store(directory, organization, true)
+          web_config.register.form.fields.middle_name.enabled = true
+          web_config.register.form.fields.middle_name.required = false
+          reload_form_class
+        end
+
+        after do
+          web_config.register.form.fields.middle_name.enabled = true
+          web_config.register.form.fields.middle_name.required = false
+          organization.delete
+          directory.delete
+          application.delete
+        end
+
+        context 'existing organization' do
+          context 'organization_name_key is in request.host' do
+            let(:request_host) do
+              { 'HTTP_HOST' => "#{organization.name_key}.#{configuration.web.domain_name}" }
+            end
+
+            it 'should successfully register' do
+              post '/register', account_attrs, request_host
+              expect(response.status).to eq(302)
+              expect(response).to redirect_to('/login?status=created')
+              expect(organization.accounts.count).to eq 1
+            end
+          end
+
+          context 'organization_name_key is in request.body' do
+            it 'successfull successfully register' do
+              post '/register', account_attrs.merge(organization_name_key: organization.name_key)
+              expect(response.status).to eq(302)
+              expect(response).to redirect_to('/login?status=created')
+            end
+          end
+        end
+
+        context 'non-existing organization' do
+          let(:request_host) do
+            { 'HTTP_HOST' => "non-existing-rails-org.#{configuration.web.domain_name}" }
+          end
+
+          it 'should raise error' do
+            post '/register', account_attrs, request_host
+            expect(response.status).to eq(200)
+            expect(response.body).to include('Organization not found.')
+          end
         end
       end
     end

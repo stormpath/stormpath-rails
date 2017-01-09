@@ -1,0 +1,24 @@
+<div class="email-password-area col-xs-12 large col-sm-12">
+  <div class="header">
+    <span>Forgot your password?</span>
+    <p>Enter your email address below to reset your password. You will be sent an email which you will need to open to continue. You may need to check your spam folder.</p>
+  </div>
+
+  <% if flash[:error] %>
+    <div class="alert alert-danger bad-login">
+      <p><%= flash[:error] %></p>
+    </div>
+  <% end %>
+
+  <%= form_for :password, html: { class: "login-form form-horizontal" }, url: forgot_password_path do |form| %>
+    <div class="form-group group-email">
+      <%= form.label :email, class: "col-sm-4" %>
+      <div class="col-sm-8">
+        <%= form.email_field :email, placeholder: 'Email', class: "form-control", name: :email %>
+      </div>
+    </div>
+    <div>
+      <%= button_tag "Submit", class: "login btn btn-login btn-sp-green", type: "submit" %>
+    </div>
+  <% end %>
+</div>

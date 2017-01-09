@@ -8,6 +8,16 @@
 </head>
 <body>
 
+  <% if current_account %>
+    <%= button_to 'Logout', logout_path, method: :post %>
+  <% end %>
+
+  <% if flash[:notice] %>
+    <p class='notice'>
+      <%= flash[:notice] %>
+    </p>
+  <% end %>
+
 <%= yield %>
 
 </body>

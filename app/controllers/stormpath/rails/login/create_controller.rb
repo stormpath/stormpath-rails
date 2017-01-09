@@ -7,9 +7,9 @@ module Stormpath
         def call
           begin
             form.save!
-            set_cookies unless social_login?
+            set_cookies if account_login?
             respond_with_success
-          rescue Stormpath::Error, LoginForm::FormError, SocialLoginForm::FormError => error
+          rescue Stormpath::Error, LoginForm::FormError, SocialLoginForm::FormError, OrganizationForm::FormError, OrganizationResolver::Error => error
             respond_with_error(error)
           end
         end
@@ -19,12 +19,18 @@ module Stormpath
         def form
           @form ||= if social_login?
                       SocialLoginForm.new(provider, access_token, cookies)
+                    elsif organization_resolution?
+                      OrganizationForm.new(params[:organization_name_key])
                     else
-                      LoginForm.new(params[:login], params[:password])
+                      LoginForm.new(params[:login],
+                                    params[:password],
+                                    organization_name_key: current_organization.try(:name_key))
                     end
         end
 
         def respond_with_success
+          return redirect_to subdomain_login_url if organization_resolution?
+
           respond_to do |format|
             format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
             format.json { render json: serialized_account }
@@ -52,11 +58,7 @@ module Stormpath
         end
 
         def login_redirect_route
-          if params[:next]
-            URI(params[:next]).path
-          else
-            stormpath_config.web.login.next_uri
-          end
+          params[:next] ? URI(params[:next]).path : stormpath_config.web.login.next_uri
         end
 
         def provider
@@ -67,8 +69,20 @@ module Stormpath
           params[:providerData][:accessToken]
         end
 
+        def account_login?
+          !social_login? && !organization_resolution?
+        end
+
         def social_login?
           params[:providerData].present?
+        end
+
+        def subdomain_login_url
+          UrlBuilder.create(
+            req,
+            "#{params[:organization_name_key]}.#{stormpath_config.web.domain_name}",
+            stormpath_config.web.login.uri
+          )
         end
       end
     end

@@ -4,8 +4,11 @@ module Stormpath
       class ShowController < BaseController
         def call
           begin
+            return redirect_to(parent_verify_email_url) if organization_unresolved?
+
             account = VerifyEmailToken.new(params[:sptoken]).call
             login_the_account(account) if stormpath_config.web.register.auto_login
+
             respond_with_success
           rescue InvalidSptokenError, NoSptokenError => error
             respond_to_error(error)
@@ -23,6 +26,8 @@ module Stormpath
         end
 
         def respond_with_success
+          return redirect_to parent_verify_email_url if organization_resolution?
+
           respond_to do |format|
             format.html { redirect_to success_redirect_route }
             format.json { render nothing: true, status: 200 }
@@ -44,6 +49,14 @@ module Stormpath
               render json: { status: error.status, message: error.message }, status: error.status
             end
           end
+        end
+
+        def parent_verify_email_url
+          UrlBuilder.create(
+            req,
+            stormpath_config.web.domain_name,
+            stormpath_config.web.verify_email.uri
+          )
         end
       end
     end

@@ -37,8 +37,20 @@ module Stormpath
         )
       end
 
+      def map_organization_store(account_store, organization, default_account_store = false)
+        test_client.organization_account_store_mappings.create(
+          account_store: { href: account_store.href },
+          organization: { href: organization.href },
+          is_default_account_store: default_account_store
+        )
+      end
+
       def default_domain
         '@testmail.stormpath.com'
+      end
+
+      def random_name
+        "rails-#{Faker::Lorem.word}-#{SecureRandom.hex(10)}"
       end
     end
   end
