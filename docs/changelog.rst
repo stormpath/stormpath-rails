@@ -6,6 +6,12 @@ Change Log
 
 Gem changes until version 2.0.1, in descending order.
 
+Version 2.5.0
+-------------
+Released on Jan 09, 2017
+- Implement Multi-tenancy
+
+
 Version 2.4.0
 -------------
 Released on Dec 16, 2016

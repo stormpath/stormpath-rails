@@ -1,6 +1,12 @@
 Stormpath Rails Changelog
 ============================
 
+Version 2.5.0
+-------------
+Released on Jan 09, 2017
+- Implement Multi-tenancy
+
+
 Version 2.4.0
 -------------
 Released on Dec 16, 2016
