@@ -8,7 +8,7 @@ before_install:
 install:
 - gem install bundler
 - bundle install --jobs=3 --retry=3
-- test -z "$BUILD_DOCS" || pip install --user sphinx
+- test -z "$BUILD_DOCS" || pip install --user -r requirements.txt
 script:
 - travis_retry rake
 - test -z "$BUILD_DOCS" || cd docs
