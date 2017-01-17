@@ -24,15 +24,15 @@ module Stormpath
         end
 
         def respond_with_success
-          if id_site_result.status == 'AUTHENTICATED'
-            respond_to do |format|
-              format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
-              format.json { render json: AccountSerializer.to_h(account) }
-            end
-          else
+          if id_site_result.status == 'LOGOUT'
             respond_to do |format|
               format.html { redirect_to stormpath_config.web.logout.next_uri, notice: 'Successfully logged out' }
               format.json { head :no_content }
+            end
+          else
+            respond_to do |format|
+              format.html { redirect_to login_redirect_route, notice: 'Successfully signed in' }
+              format.json { render json: AccountSerializer.to_h(account) }
             end
           end
         end

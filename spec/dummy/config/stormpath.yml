@@ -194,7 +194,7 @@ stormpath:
     # login, registration, and password reset.  They should also be redirected
     # through ID Site on logout.
     idSite:
-      enabled: true
+      enabled: false
       loginUri: ""
       forgotUri: "/#/forgot"
       registerUri: "/#/register"
