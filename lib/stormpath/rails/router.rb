@@ -21,7 +21,7 @@ module Stormpath
         'google#create' => 'stormpath/rails/google/create#call',
         'linkedin#create' => 'stormpath/rails/linkedin/create#call',
         'id_site_login#new' => 'stormpath/rails/id_site_login/new#call',
-        'id_site_logout#new' => 'stormpath/rails/id_site_logout/new#call'
+        'id_site_logout#create' => 'stormpath/rails/id_site_logout/create#call'
       }.freeze
 
       def stormpath_rails_routes(actions: {})
@@ -40,7 +40,7 @@ module Stormpath
           end
 
           # LOGOUT
-          if Stormpath::Rails.config.web.logout.enabled
+          if Stormpath::Rails.config.web.logout.enabled && !Stormpath::Rails.config.web.id_site.enabled
             post Stormpath::Rails.config.web.logout.uri => actions['logout#create'], as: :logout
           end
 
@@ -93,7 +93,7 @@ module Stormpath
           # ID SITE LOGIN
           if Stormpath::Rails.config.web.id_site.enabled
             get Stormpath::Rails.config.web.callback.uri => actions['id_site_login#new'], as: :id_site_result
-            get '/logout_id_site' => actions['id_site_logout#new'], as: :logout_id_site
+            post Stormpath::Rails.config.web.logout.uri => actions['id_site_logout#create'], as: :logout
           end
         end
       end

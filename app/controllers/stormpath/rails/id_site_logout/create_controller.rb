@@ -1,7 +1,7 @@
 module Stormpath
   module Rails
     module IdSiteLogout
-      class NewController < BaseController
+      class CreateController < BaseController
         def call
           TokenAndCookiesCleaner.new(cookies).remove
           redirect_to callback_url

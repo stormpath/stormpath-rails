@@ -27,11 +27,7 @@ module Stormpath
         end
 
         def parent_login_url
-          UrlBuilder.create(
-            req,
-            stormpath_config.web.domain_name,
-            stormpath_config.web.login.uri
-          )
+          UrlBuilder.create(req, stormpath_config.web.domain_name, stormpath_config.web.login.uri)
         end
       end
     end

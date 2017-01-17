@@ -10,7 +10,7 @@
 
   <% if current_account %>
     <%= current_account.email %>
-    <%= link_to 'Logout', logout_id_site_path #TODO: this is bad too. We should create one logout_url that will call the id_site_logout controller if id site enabled, and if not, then the normal logout controller %>
+    <%= button_to 'Logout', logout_path, method: :post %>
   <% end %>
 
   <% if flash[:notice] %>
