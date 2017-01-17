@@ -8,7 +8,7 @@ module Stormpath
           begin
             result = Stormpath::Rails::Client.application.handle_id_site_callback(request.url)
             account = Stormpath::Rails::Client.client.accounts.get(result.account_href)
-            login_the_account(account)
+            login_the_account(account) # TODO: This needs changing. Because of this the user appears to be logged in and the logout message is screwed. We can investigate the JWT and depending on the status call the login or logout functionality
             respond_with_success(account)
           rescue Stormpath::Error, JWT::VerificationError => error
             respond_with_error(error)
