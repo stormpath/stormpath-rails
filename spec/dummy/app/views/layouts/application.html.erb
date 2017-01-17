@@ -9,6 +9,7 @@
 <body>
 
   <% if current_account %>
+    <%= current_account.email %>
     <%= button_to 'Logout', logout_path, method: :post %>
   <% end %>
 

@@ -92,7 +92,7 @@ module Stormpath
 
           # ID SITE LOGIN
           if Stormpath::Rails.config.web.id_site.enabled
-            get '/id_site_result' => actions['id_site_login#new'], as: :id_site_result
+            get Stormpath::Rails.config.web.callback.uri => actions['id_site_login#new'], as: :id_site_result
             get '/logout_id_site' => actions['id_site_logout#new'], as: :logout_id_site
           end
         end

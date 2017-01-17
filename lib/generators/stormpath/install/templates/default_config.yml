@@ -205,7 +205,7 @@ stormpath:
     # Stormpath handled social login, webhooks, and other messages from Stormpath.
     callback:
       enabled: true
-      uri: "/stormpathCallback"
+      uri: "/id_site_result"
 
     # Social login configuration.  This defines the callback URIs for OAuth
     # flows, and the scope that is requested of each provider.  Some providers

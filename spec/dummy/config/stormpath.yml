@@ -194,7 +194,7 @@ stormpath:
     # login, registration, and password reset.  They should also be redirected
     # through ID Site on logout.
     idSite:
-      enabled: false
+      enabled: true
       loginUri: ""
       forgotUri: "/#/forgot"
       registerUri: "/#/register"
@@ -204,7 +204,7 @@ stormpath:
     # Stormpath handled social login, webhooks, and other messages from Stormpath.
     callback:
       enabled: true
-      uri: "/stormpathCallback"
+      uri: "/id_site_result"
 
     # Social login configuration.  This defines the callback URIs for OAuth
     # flows, and the scope that is requested of each provider.  Some providers
