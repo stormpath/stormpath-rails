@@ -48,7 +48,7 @@ describe 'Github login', type: :request, vcr: true do
 
     context "when authorization code doesn't match in the url" do
       it 'should return error response' do
-        stub_request(:post, access_token_auth_url).to_return(body: error_token)
+        stub_request(:get, access_token_auth_url).to_return(body: error_token)
         response = JSON.parse(Net::HTTP.get(URI(access_token_auth_url)))
         expect(response).to have_key('error')
       end

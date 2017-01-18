@@ -184,7 +184,7 @@ describe 'Login POST', type: :request, vcr: true do
       end
 
       context 'with providerData' do
-        it 'successfull login should result with 200' do
+        xit 'successfull login should result with 200' do
           stub_request(:post, "#{app_href}/accounts/")
             .to_return(status: 200)
           json_login_post(provider_data)
