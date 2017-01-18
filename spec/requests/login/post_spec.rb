@@ -3,6 +3,7 @@ require 'spec_helper'
 describe 'Login POST', type: :request, vcr: true do
   let(:app_href) { URI Stormpath::Rails::Client.application.href }
   let(:account) { Stormpath::Rails::Client.application.accounts.create(account_attrs) }
+  let(:mocked_account) { Stormpath::Social::Helpers.mocked_account(:facebook) }
 
   let(:account_attrs) { attributes_for(:account) }
 
@@ -184,9 +185,11 @@ describe 'Login POST', type: :request, vcr: true do
       end
 
       context 'with providerData' do
-        xit 'successfull login should result with 200' do
-          stub_request(:post, "#{app_href}/accounts/")
-            .to_return(status: 200)
+        it 'successfull login should result with 200' do
+          stub_request(:post, "#{app_href}/accounts").to_return(status: 200)
+          stub_request(:post, "#{app_href}/oauth/token").to_return(body: mocked_account)
+          allow_any_instance_of(Stormpath::Rails::SocialLoginForm).to receive(:save!).and_return(mocked_account)
+          allow_any_instance_of(Stormpath::Rails::AccountSerializer).to receive(:to_h).and_return(mocked_account)
           json_login_post(provider_data)
           expect(response.status).to eq(200)
         end
