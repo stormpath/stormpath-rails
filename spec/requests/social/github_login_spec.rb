@@ -30,6 +30,7 @@ describe 'Github login', type: :request, vcr: true do
 
   describe 'post https://github.com/login/oauth/access_token' do
     let(:gh_oauth) { URI 'https://github.com/login/oauth/access_token' }
+
     context 'when authorization code matches url' do
       it 'should return access token' do
         stub_request(:post, access_token_auth_url).to_return(body: access_token)
@@ -48,8 +49,14 @@ describe 'Github login', type: :request, vcr: true do
 
     context "when authorization code doesn't match in the url" do
       it 'should return error response' do
-        stub_request(:get, access_token_auth_url).to_return(body: error_token)
-        response = JSON.parse(Net::HTTP.get(URI(access_token_auth_url)))
+        stub_request(:post, access_token_auth_url).to_return(body: error_token)
+        protocol = Net::HTTP.new(gh_oauth.host, gh_oauth.port)
+        protocol.use_ssl = true
+        response = JSON.parse(
+          protocol.post(
+            gh_oauth, URI.encode_www_form(code: access_token), 'Accept' => 'application/json'
+          ).body
+        )
         expect(response).to have_key('error')
       end
     end
