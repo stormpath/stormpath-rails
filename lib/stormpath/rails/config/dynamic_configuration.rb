@@ -18,6 +18,7 @@ module Stormpath
           @static_config = static_config
           proccess_account_store_verification
           process_multitenancy_verification if static_config.stormpath.web.multi_tenancy.enabled
+          process_id_site_verification if static_config.stormpath.web.id_site.enabled
         end
 
         def app
@@ -72,6 +73,10 @@ module Stormpath
 
         def process_multitenancy_verification
           MultitenancyVerification.new(static_config.stormpath.web).call
+        end
+
+        def process_id_site_verification
+          IdSiteVerification.new(static_config.stormpath.web).call
         end
 
         def social_login_verification
