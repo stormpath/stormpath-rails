@@ -5,7 +5,10 @@ module Stormpath
         BEARER_PATTERN = /^Bearer /
 
         def call
-          if bearer_authorization_header?
+          if stormpath_config.web.id_site.enabled
+            TokenAndCookiesCleaner.new(cookies).remove
+            return redirect_to(stormpath_id_site_logout_url)
+          elsif bearer_authorization_header?
             DeleteAccessToken.call(bearer_access_token)
           else
             TokenAndCookiesCleaner.new(cookies).remove
@@ -35,6 +38,11 @@ module Stormpath
             end
             format.json { render nothing: true, status: 200 }
           end
+        end
+
+        def stormpath_id_site_logout_url
+          Stormpath::Rails::Client.application.create_id_site_url(callback_uri: id_site_result_url,
+                                                                  logout: true)
         end
       end
     end
