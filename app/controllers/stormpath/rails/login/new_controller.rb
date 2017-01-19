@@ -6,7 +6,7 @@ module Stormpath
 
         def call
           if stormpath_config.web.id_site.enabled
-            redirect_to(callback_url)
+            redirect_to(stormpath_id_site_login_url)
           elsif organization_unresolved?
             redirect_to(parent_login_url)
           else
@@ -19,7 +19,7 @@ module Stormpath
 
         private
 
-        def callback_url
+        def stormpath_id_site_login_url
           Stormpath::Rails::Client.application.create_id_site_url(
             callback_uri: id_site_result_url,
             path: Stormpath::Rails.config.web.id_site.login_uri
@@ -27,11 +27,7 @@ module Stormpath
         end
 
         def parent_login_url
-          UrlBuilder.create(
-            req,
-            stormpath_config.web.domain_name,
-            stormpath_config.web.login.uri
-          )
+          UrlBuilder.create(req, stormpath_config.web.domain_name, stormpath_config.web.login.uri)
         end
       end
     end

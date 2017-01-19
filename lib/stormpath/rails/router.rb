@@ -20,8 +20,7 @@ module Stormpath
         'github#create' => 'stormpath/rails/github/create#call',
         'google#create' => 'stormpath/rails/google/create#call',
         'linkedin#create' => 'stormpath/rails/linkedin/create#call',
-        'id_site_login#new' => 'stormpath/rails/id_site_login/new#call',
-        'id_site_logout#new' => 'stormpath/rails/id_site_logout/new#call'
+        'id_site_callback#new' => 'stormpath/rails/id_site_callback/new#call'
       }.freeze
 
       def stormpath_rails_routes(actions: {})
@@ -90,10 +89,9 @@ module Stormpath
             get Stormpath::Rails.config.web.social.linkedin.uri => actions['linkedin#create'], as: :linkedin_callback
           end
 
-          # ID SITE LOGIN
-          if Stormpath::Rails.config.web.id_site.enabled
-            get '/id_site_result' => actions['id_site_login#new'], as: :id_site_result
-            get '/logout_id_site' => actions['id_site_logout#new'], as: :logout_id_site
+          # CALLBACK
+          if Stormpath::Rails.config.web.callback.enabled
+            get Stormpath::Rails.config.web.callback.uri => actions['id_site_callback#new'], as: :id_site_result
           end
         end
       end

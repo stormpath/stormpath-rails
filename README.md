@@ -175,6 +175,8 @@ Stormpath::Rails::Profile::ShowController
 Stormpath::Rails::Oauth2::NewController
 Stormpath::Rails::Oauth2::CreateController
 
+Stormpath::Rails::IdSiteCallback::NewController
+
 Stormpath::Rails::SocialController
 Stormpath::Rails::Facebook::CreateController
 Stormpath::Rails::Github::CreateController
