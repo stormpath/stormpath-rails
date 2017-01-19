@@ -16,7 +16,7 @@
   <% end %>
 
   <% if Stormpath::Rails.config.web.linkedin_app_id %>
-  <%= link_to 'LinkedIn', linkedin_oauth_url, class: 'btn btn-social btn-linkedin' %>
+    <%= link_to 'LinkedIn', linkedin_oauth_url, class: 'btn btn-social btn-linkedin' %>
     <%= link_to 'LinkedIn', social_authorization.linkedin_login_url, class: 'btn btn-social btn-linkedin' %>
   <% end %>
 
