@@ -1,6 +1,12 @@
 Stormpath Rails Changelog
 ============================
 
+Version 2.5.1
+-------------
+Released on Jan 19, 2017
+- Fix bug with callback uri not being set properly on IDSite logout
+- Rewrite the IDSite authentication workflow
+
 Version 2.5.0
 -------------
 Released on Jan 09, 2017
