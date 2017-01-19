@@ -55,6 +55,11 @@ module Stormpath
       end
       helper_method :current_organization_name_key
 
+      def social_authorization
+        @social_authorization ||= SocialAuthorization.build_login_urls(req)
+      end
+      helper_method :social_authorization
+
       def req
         request
       end

@@ -90,9 +90,13 @@ module Stormpath
             get Stormpath::Rails.config.web.social.linkedin.uri => actions['linkedin#create'], as: :linkedin_callback
           end
 
-          # ID SITE LOGIN
-          if Stormpath::Rails.config.web.id_site.enabled
+          # CALLBACK
+          if Stormpath::Rails.config.web.callback.enabled
             get Stormpath::Rails.config.web.callback.uri => actions['id_site_login#new'], as: :id_site_result
+          end
+
+          # ID SITE
+          if Stormpath::Rails.config.web.id_site.enabled
             post Stormpath::Rails.config.web.logout.uri => actions['id_site_logout#create'], as: :logout
           end
         end
