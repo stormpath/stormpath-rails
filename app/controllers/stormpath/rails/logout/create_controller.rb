@@ -6,7 +6,6 @@ module Stormpath
 
         def call
           if stormpath_config.web.id_site.enabled
-            TokenAndCookiesCleaner.new(cookies).remove
             return redirect_to(stormpath_id_site_logout_url)
           elsif bearer_authorization_header?
             DeleteAccessToken.call(bearer_access_token)
