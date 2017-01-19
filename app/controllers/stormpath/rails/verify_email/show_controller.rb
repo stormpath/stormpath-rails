@@ -5,7 +5,10 @@ module Stormpath
         def call
           begin
             return redirect_to(parent_verify_email_url) if organization_unresolved?
-            login_the_account if stormpath_config.web.register.auto_login
+
+            account = VerifyEmailToken.new(params[:sptoken]).call
+            login_the_account(account) if stormpath_config.web.register.auto_login
+
             respond_with_success
           rescue InvalidSptokenError, NoSptokenError => error
             respond_to_error(error)
@@ -14,7 +17,7 @@ module Stormpath
 
         private
 
-        def login_the_account
+        def login_the_account(account)
           AccountLoginWithStormpathToken.new(
             cookies, account,
             Stormpath::Rails::Client.application,
@@ -46,10 +49,6 @@ module Stormpath
               render json: { status: error.status, message: error.message }, status: error.status
             end
           end
-        end
-
-        def account
-          @account ||= VerifyEmailToken.new(params[:sptoken]).call
         end
 
         def parent_verify_email_url
