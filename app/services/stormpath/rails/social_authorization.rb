@@ -25,7 +25,7 @@ module Stormpath
 
       def generate_url(directory)
         URI.unescape(URI::HTTPS.build(
-          host: application.web_config.domain_name,
+          host: Stormpath::Rails.config.web.client_api.domain_name,
           path: '/authorize',
           query: {
             response_type: 'stormpath_token',
@@ -49,7 +49,7 @@ module Stormpath
         if instance_variable_names.include? "@#{method_name}"
           instance_variable_get "@#{method_name}"
         else
-          super
+          ''
         end
       end
 

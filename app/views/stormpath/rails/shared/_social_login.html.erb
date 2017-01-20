@@ -4,25 +4,15 @@
   </div>
 
   <label>Easy 1-click login:</label>
-
-  <% if Stormpath::Rails.config.web.facebook_app_id %>
-    <%= link_to 'Facebook', facebook_oauth_url, class: 'btn btn-social btn-facebook' %>
-    <%= link_to 'Facebook', social_authorization.facebook_login_url, class: 'btn btn-social btn-facebook' %>
+  <% if social_login_v2 %>
+    <%= link_to_facebook_login(social_authorization&.facebook_login_url) %>
+    <%= link_to_google_login(social_authorization&.google_login_url) %>
+    <%= link_to_linkedin_login(social_authorization&.linkedin_login_url) %>
+    <%= link_to_github_login(social_authorization&.github_login_url) %>
+  <% else %>
+    <%= link_to_facebook_login(facebook_oauth_url) %>
+    <%= link_to_google_login(google_oauth_url) %>
+    <%= link_to_linkedin_login(linkedin_oauth_url) %>
+    <%= link_to_github_login(github_oauth_url) %>
   <% end %>
-
-  <% if Stormpath::Rails.config.web.google_app_id %>
-    <%= link_to 'Google', google_oauth_url, class: 'btn btn-social btn-google' %>
-    <%= link_to 'Google', social_authorization.google_login_url, class: 'btn btn-social btn-google' %>
-  <% end %>
-
-  <% if Stormpath::Rails.config.web.linkedin_app_id %>
-    <%= link_to 'LinkedIn', linkedin_oauth_url, class: 'btn btn-social btn-linkedin' %>
-    <%= link_to 'LinkedIn', social_authorization.linkedin_login_url, class: 'btn btn-social btn-linkedin' %>
-  <% end %>
-
-  <% if Stormpath::Rails.config.web.github_app_id %>
-    <%= link_to 'GitHub', github_oauth_url, class: 'btn btn-social btn-github' %>
-    <%= link_to 'GitHub', social_authorization.github_login_url, class: 'btn btn-social btn-github' %>
-  <% end %>
-
 </div>

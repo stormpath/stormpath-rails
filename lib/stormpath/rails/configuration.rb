@@ -34,6 +34,8 @@ module Stormpath
           config.stormpath.web.linkedin_app_id = dynamic_config.linkedin_app_id
           config.stormpath.web.has_social_providers = dynamic_config.has_social_providers?
           config.stormpath.web.verify_email.enabled = dynamic_config.verify_email_enabled?
+          config.stormpath.web.client_api = { enabled: dynamic_config.client_api_enabled,
+                                              domain_name: dynamic_config.client_api_domain }
         end
       end
 

@@ -36,8 +36,8 @@ describe Stormpath::Rails::SocialAuthorization, vcr: true, type: :service do
   end
 
   describe 'application with 1 unmapped social account store' do
-    it 'should raise error if trying to get login url' do
-      expect { social_authorization.google_login_url }.to raise_error(NoMethodError)
+    it 'should return empty string when login url called' do
+      expect(social_authorization.google_login_url).to eq('')
     end
   end
 

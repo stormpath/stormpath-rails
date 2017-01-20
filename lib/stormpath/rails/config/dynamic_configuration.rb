@@ -13,6 +13,7 @@ module Stormpath
           :linkedin_app_id,
           to: :social_login_verification
         )
+        delegate(:client_api_enabled, :client_api_domain, to: :application_client_api)
 
         def initialize(static_config)
           @static_config = static_config
@@ -68,6 +69,10 @@ module Stormpath
             app.href,
             static_config.stormpath.web.register.enabled
           ).call
+        end
+
+        def application_client_api
+          ApplicationClientApi.new(app)
         end
 
         def process_multitenancy_verification
