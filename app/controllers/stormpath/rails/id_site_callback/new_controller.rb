@@ -1,12 +1,16 @@
 module Stormpath
   module Rails
-    module IdSiteLogin
+    module IdSiteCallback
       class NewController < BaseController
-        before_action :require_no_authentication!
 
         def call
           begin
-            login_the_account unless id_site_result.status == 'LOGOUT'
+            if id_site_result.status == 'LOGOUT'
+              TokenAndCookiesCleaner.new(cookies).remove
+            else
+              login_the_account
+            end
+
             respond_with_success
           rescue Stormpath::Error, JWT::VerificationError => error
             respond_with_error(error)

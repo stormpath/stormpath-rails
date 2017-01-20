@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'IdSiteLogin GET', type: :request, vcr: true do
+describe 'IdSiteCallback GET', type: :request, vcr: true do
   let(:application) { Stormpath::Rails::Client.application }
   Timecop.freeze(Time.zone.now) do
     let(:time) { Time.zone.now.to_i }

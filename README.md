@@ -16,7 +16,7 @@ Add the stormpath-rails integration gem to your Gemfile.
 Stormpath is currently in beta so it is necessary to include the gem version:
 
 ```ruby
-gem 'stormpath-rails', '~> 2.5.0'
+gem 'stormpath-rails', '~> 2.5.1'
 ```
 
 Bundle the Gemfile
@@ -175,7 +175,7 @@ Stormpath::Rails::Profile::ShowController
 Stormpath::Rails::Oauth2::NewController
 Stormpath::Rails::Oauth2::CreateController
 
-Stormpath::Rails::IdSiteLogin::NewController
+Stormpath::Rails::IdSiteCallback::NewController
 
 Stormpath::Rails::SocialController
 Stormpath::Rails::Facebook::CreateController
