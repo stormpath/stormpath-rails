@@ -4,11 +4,11 @@
   </div>
 
   <label>Easy 1-click login:</label>
-  <% if social_login_v2 %>
-    <%= link_to_facebook_login(social_authorization&.facebook_login_url) %>
-    <%= link_to_google_login(social_authorization&.google_login_url) %>
-    <%= link_to_linkedin_login(social_authorization&.linkedin_login_url) %>
-    <%= link_to_github_login(social_authorization&.github_login_url) %>
+  <% if social_login_v2_enabled? %>
+    <%= link_to_facebook_login(social_auth&.facebook_login_url) %>
+    <%= link_to_google_login(social_auth&.google_login_url) %>
+    <%= link_to_linkedin_login(social_auth&.linkedin_login_url) %>
+    <%= link_to_github_login(social_auth&.github_login_url) %>
   <% else %>
     <%= link_to_facebook_login(facebook_oauth_url) %>
     <%= link_to_google_login(google_oauth_url) %>

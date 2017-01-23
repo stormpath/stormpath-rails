@@ -11,7 +11,7 @@ module SocialHelper
     social_providers_present? ? 'col-sm-12' : 'col-sm-8'
   end
 
-  def social_login_v2
+  def social_login_v2_enabled?
     Stormpath::Rails.config.web.callback.enabled &&
       Stormpath::Rails.config.web.client_api.enabled &&
       Stormpath::Rails.config.web.client_api.domain_name.present?
