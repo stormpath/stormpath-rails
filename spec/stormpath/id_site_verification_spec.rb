@@ -11,20 +11,19 @@ describe Stormpath::Rails::Config::IdSiteVerification, vcr: true do
       allow(configuration.web.callback).to receive(:enabled).and_return(true)
     end
 
-    it 'should return' do
+    it 'should not raise error' do
       expect { verification.call }.not_to raise_error
     end
   end
 
   context 'configuration not set properly' do
-    before { allow(configuration.web.id_site).to receive(:enabled).and_return(true) }
+    before do
+      allow(configuration.web.id_site).to receive(:enabled).and_return(true)
+      allow(configuration.web.callback).to receive(:enabled).and_return(false)
+    end
 
-    context 'callback not enabled' do
-      before { allow(configuration.web.callback).to receive(:enabled).and_return(false) }
-
-      it 'should raise InvalidConfiguration' do
-        expect { verification.call }.to raise_error(Stormpath::Rails::InvalidConfiguration)
-      end
+    it 'should raise InvalidConfiguration error' do
+      expect { verification.call }.to raise_error(Stormpath::Rails::InvalidConfiguration)
     end
   end
 end
