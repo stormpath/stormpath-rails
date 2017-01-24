@@ -54,9 +54,14 @@ describe 'ForgotPassword GET', type: :request, vcr: true do
           Rails.application.reload_routes!
         end
 
-        it 'should redirect' do
+        it 'should respond with 302' do
           get '/forgot'
           expect(response.status).to eq(302)
+        end
+
+        it 'should redirect to id site' do
+          get '/forgot'
+          expect(response.headers['Location']).to include('https://api.stormpath.com/sso')
         end
       end
     end
