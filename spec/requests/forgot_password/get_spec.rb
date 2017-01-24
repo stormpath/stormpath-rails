@@ -42,6 +42,23 @@ describe 'ForgotPassword GET', type: :request, vcr: true do
         get '/forgot'
         expect(response.status).to eq(200)
       end
+
+      describe 'if id site is enabled' do
+        before do
+          allow(web_config.id_site).to receive(:enabled).and_return(true)
+          Rails.application.reload_routes!
+        end
+
+        after do
+          allow(web_config.id_site).to receive(:enabled).and_return(false)
+          Rails.application.reload_routes!
+        end
+
+        it 'should redirect' do
+          get '/forgot'
+          expect(response.status).to eq(302)
+        end
+      end
     end
 
     context 'password reset disabled' do
