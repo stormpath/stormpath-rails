@@ -18,7 +18,7 @@ module Stormpath
           return if id_site_set_correctly?
           raise(
             InvalidConfiguration,
-            "ID site is not set correctly in the configuration file. Make sure the 'callback' is enabled and a uri specified."
+            "ID site is not set correctly in the configuration file. Make sure the 'callback' is enabled and a uri is specified."
           )
         end
 
