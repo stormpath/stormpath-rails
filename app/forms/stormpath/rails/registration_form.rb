@@ -74,7 +74,10 @@ module Stormpath
 
       def organization
         begin
-          @organization ||= Stormpath::Rails::Client.client.organizations.search(name_key: organization_name_key).first
+          @organization ||=
+            Stormpath::Rails::Client.client.organizations.search(
+              name_key: organization_name_key
+            ).first
         rescue Stormpath::Error
           nil
         end

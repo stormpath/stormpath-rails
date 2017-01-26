@@ -16,8 +16,10 @@ module Stormpath
       private
 
       def delete_token
-        token_resource.delete
-      rescue JWT::ExpiredSignature, JWT::DecodeError
+        begin
+          token_resource.delete
+        rescue JWT::ExpiredSignature, JWT::DecodeError
+        end
       end
 
       def token_resource

@@ -24,10 +24,8 @@ module Stormpath
       end
 
       def host_and_path
-        {
-          host: host,
-          path: path
-        }
+        { host: host,
+          path: path }
       end
     end
   end
