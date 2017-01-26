@@ -1,4 +1,3 @@
-# frozen_string_literal: true
 module Stormpath
   module Rails
     class ContentTypeNegotiator
@@ -43,7 +42,7 @@ module Stormpath
           HTTP_ACCEPT_JSON
         elsif accept_header.include?(HTTP_ACCEPT_HTML)
           HTTP_ACCEPT_HTML
-                end
+        end
       end
     end
   end

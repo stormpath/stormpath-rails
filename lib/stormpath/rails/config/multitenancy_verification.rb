@@ -18,7 +18,8 @@ module Stormpath
           return if multitenancy_set_correctly?
           raise(
             InvalidConfiguration,
-            "Multitenancy is not set correctly in the configuration file. It needs to have a domainName and multitenancy strategy set to 'subdomain'"
+            'Multitenancy is not set correctly in the configuration file. '\
+            "It needs to have a domainName and multitenancy strategy set to 'subdomain'"
           )
         end
 

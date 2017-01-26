@@ -56,19 +56,15 @@ module Stormpath
 
         def verify_application_href
           if href && href !~ /applications/
-            raise(
-              InvalidConfiguration,
-              "#{href} is not a valid Stormpath Application href."
-            )
+            raise(InvalidConfiguration, "#{href} is not a valid Stormpath Application href.")
           end
         end
 
         def app_from_name
           application = Stormpath::Rails::Client.client.applications.search(name: name).first
-          application || raise(
-            InvalidConfiguration,
-            "The provided application could not be found. The provided application name was: #{name}"
-          )
+          application || raise(InvalidConfiguration,
+                               'The provided application could not be found. The provided'\
+                               " application name was: #{name}")
         end
       end
     end
