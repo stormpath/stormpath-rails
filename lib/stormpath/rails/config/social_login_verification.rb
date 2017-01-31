@@ -18,9 +18,7 @@ module Stormpath
         private
 
         def initialize_directories
-          app.account_store_mappings.each do |mapping|
-            account_store = mapping.account_store
-            next unless account_store.class == Stormpath::Resource::Directory
+          social_directories.each do |account_store|
             case account_store.provider.provider_id
             when 'facebook'
               @facebook_app_id = account_store.provider.client_id
@@ -34,6 +32,10 @@ module Stormpath
               @linkedin_app_id = account_store.provider.client_id
             end
           end
+        end
+
+        def social_directories
+          @social_directories ||= SocialDirectories.for(app)
         end
       end
     end
