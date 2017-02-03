@@ -6,6 +6,7 @@ module Stormpath
           form.save!
 
           login_the_account if valid_for_login?
+
           respond_with_success
         rescue RegistrationForm::FormError, OrganizationForm::FormError => error
           respond_with_error(error)

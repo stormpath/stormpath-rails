@@ -41,8 +41,9 @@ module Stormpath
 
       def current_organization
         if stormpath_config.web.multi_tenancy.enabled
-          Stormpath::Rails::OrganizationResolver.new(req, params[:organization_name_key])
-                                                .organization
+          Stormpath::Rails::OrganizationResolver.new(
+            req, params[:organization_name_key]
+          ).organization
         end
       end
 

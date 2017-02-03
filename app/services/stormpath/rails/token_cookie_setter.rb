@@ -58,7 +58,9 @@ class SingleTokenCookieSetter
   end
 
   def expires
-    Time.zone.at(JWT.decode(token, Stormpath::Rails::Client.client.data_store.api_key.secret).first['exp'])
+    Time.zone.at(
+      JWT.decode(token, Stormpath::Rails::Client.client.data_store.api_key.secret).first['exp']
+    )
   end
 
   def http_only
