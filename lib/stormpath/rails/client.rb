@@ -32,7 +32,9 @@ module Stormpath
       end
 
       def self.base_url
-        Stormpath::Rails.config.merged_config_hashes['stormpath']['web']['base_path']
+        Stormpath::Rails::BaseUrlInitializer.call(
+          Stormpath::Rails.config.merged_config_hashes['stormpath']['application']['href']
+        )
       end
     end
   end
