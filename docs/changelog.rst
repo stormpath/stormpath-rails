@@ -6,6 +6,14 @@ Change Log
 
 Gem changes until version 2.0.1, in descending order.
 
+Version 2.7.0
+-------------
+Released on Feb 06, 2017
+- Social login now uses the Client API for authentication (Social login v2)
+- Automatically initialize base href from application href (after this version you don't have to set the basePath explicitly in the stormpath.yml)
+- Code refactoring
+
+
 Version 2.6.0
 -------------
 Released on Jan 24, 2017
