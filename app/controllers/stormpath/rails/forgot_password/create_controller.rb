@@ -12,7 +12,8 @@ module Stormpath
             respond_with_success
           rescue SendPasswordResetEmail::UnexistingEmailError
             respond_with_success
-          rescue SendPasswordResetEmail::NoEmailError, Stormpath::Rails::OrganizationForm::FormError => error
+          rescue SendPasswordResetEmail::NoEmailError,
+                 Stormpath::Rails::OrganizationForm::FormError => error
             respond_with_error(error)
           end
         end

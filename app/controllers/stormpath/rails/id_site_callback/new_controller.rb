@@ -32,7 +32,10 @@ module Stormpath
         def respond_with_success
           if id_site_result.status == 'LOGOUT'
             respond_to do |format|
-              format.html { redirect_to stormpath_config.web.logout.next_uri, notice: 'You have been logged out successfully.' }
+              format.html do
+                redirect_to(stormpath_config.web.logout.next_uri,
+                            notice: 'You have been logged out successfully.')
+              end
               format.json { render nothing: true, status: 200 }
             end
           elsif id_site_result.status == 'AUTHENTICATED'
@@ -91,7 +94,8 @@ module Stormpath
         end
 
         def id_site_result
-          @id_site_result ||= Stormpath::Rails::Client.application.handle_id_site_callback(request.url)
+          @id_site_result ||=
+            Stormpath::Rails::Client.application.handle_id_site_callback(request.url)
         end
 
         def account

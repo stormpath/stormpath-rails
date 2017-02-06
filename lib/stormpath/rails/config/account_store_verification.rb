@@ -20,7 +20,8 @@ module Stormpath
           return if app_has_account_store_mappings?
           raise(
             InvalidConfiguration,
-            'No account stores are mapped to the specified application. Account stores are required for login and registration.'
+            'No account stores are mapped to the specified application. Account stores are '\
+            'required for login and registration.'
           )
         end
 
@@ -28,7 +29,8 @@ module Stormpath
           return if app_has_default_account_store_mapping?
           raise(
             InvalidConfiguration,
-            'No default account store is mapped to the specified application. A default account store is required for registration.'
+            'No default account store is mapped to the specified application. A default account '\
+            'store is required for registration.'
           )
         end
 

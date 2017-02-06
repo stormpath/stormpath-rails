@@ -40,8 +40,9 @@ module Stormpath
         end
 
         def stormpath_id_site_logout_url
-          Stormpath::Rails::Client.application.create_id_site_url(callback_uri: id_site_result_url,
-                                                                  logout: true)
+          Stormpath::Rails::Client.application.create_id_site_url(
+            callback_uri: id_site_result_url, logout: true
+          )
         end
       end
     end

@@ -9,7 +9,8 @@ module Stormpath
             form.save!
             set_cookies if account_login?
             respond_with_success
-          rescue Stormpath::Error, LoginForm::FormError, SocialLoginForm::FormError, OrganizationForm::FormError, OrganizationResolver::Error => error
+          rescue Stormpath::Error, LoginForm::FormError, SocialLoginForm::FormError,
+                 OrganizationForm::FormError, OrganizationResolver::Error => error
             respond_with_error(error)
           end
         end

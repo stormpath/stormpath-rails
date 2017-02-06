@@ -2,13 +2,9 @@ module Stormpath
   module Rails
     module Config
       class SocialLoginVerification
-        attr_reader :app,
-                    :facebook_app_id,
-                    :facebook_app_secret,
-                    :github_app_id,
-                    :github_app_secret,
-                    :google_app_id,
-                    :linkedin_app_id
+        attr_reader :app, :facebook_app_id, :facebook_app_secret,
+                    :github_app_id, :github_app_secret,
+                    :google_app_id, :linkedin_app_id
 
         def initialize(app_href)
           @app = Stormpath::Rails::Client.client.applications.get(app_href)
