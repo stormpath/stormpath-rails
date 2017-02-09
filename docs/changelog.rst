@@ -6,6 +6,12 @@ Change Log
 
 Gem changes until version 2.0.1, in descending order.
 
+Version 2.8.0
+-------------
+Released on Feb 09, 2017
+- Bump SDK dependency version to support SAML IdP
+
+
 Version 2.7.0
 -------------
 Released on Feb 06, 2017

@@ -1,6 +1,12 @@
 Stormpath Rails Changelog
 ============================
 
+Version 2.8.0
+-------------
+Released on Feb 09, 2017
+- Bump SDK dependency version to support SAML IdP
+
+
 Version 2.7.0
 -------------
 Released on Feb 06, 2017
