@@ -4,10 +4,14 @@ module Stormpath
       include Stormpath::Rails::Controller
 
       before_action :setup_accept_header
-      skip_before_action :verify_authenticity_token, if: :api_request?
-      skip_before_action :verify_authenticity_token, if: :in_development?
+      if respond_to?(:verify_authenticity_token)
+        skip_before_action :verify_authenticity_token, if: :api_request?
+        skip_before_action :verify_authenticity_token, if: :in_development?
+      end
 
-      layout 'stormpath/rails/layouts/stormpath'
+      if respond_to?(:layout)
+        layout 'stormpath/rails/layouts/stormpath'
+      end
 
       private
 
@@ -54,14 +58,18 @@ module Stormpath
           nil
         end
       end
-      helper_method :current_organization_name_key
+      if respond_to?(:helper_method)
+        helper_method :current_organization_name_key
+      end
 
       def social_auth
         @social_auth ||= SocialLoginUrlBuilder.call(
           req.base_url, organization_name_key: current_organization_name_key
         )
       end
-      helper_method :social_auth
+      if respond_to?(:helper_method)
+        helper_method :social_auth
+      end
 
       def req
         request

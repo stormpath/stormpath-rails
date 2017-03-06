@@ -14,6 +14,13 @@ module Stormpath
 
       def current_account
         @current_account ||= begin
+          cookies =
+            if respond_to?(:cookies)
+              cookies
+            else
+              {}
+            end
+
           ControllerAuthentication.new(cookies, request.headers['Authorization']).authenticate!
         rescue ControllerAuthentication::UnauthenticatedRequest, Stormpath::Error, JWT::DecodeError
           nil

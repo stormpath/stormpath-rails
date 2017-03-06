@@ -4,7 +4,9 @@ module Stormpath
       extend ActiveSupport::Concern
 
       included do
-        helper_method :social_providers_present?
+        if respond_to?(:helper_method)
+          helper_method :social_providers_present?
+        end
       end
 
       private
